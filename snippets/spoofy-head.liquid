@@ -1,0 +1,13 @@
+{%- comment -%}
+  Section heading: script eyebrow + tracked caps title + optional text.
+  Accepts: eyebrow, title, text (rich text), tag (default h2), class
+{%- endcomment -%}
+{%- if eyebrow != blank or title != blank or text != blank -%}
+  <div class="sp-head {{ class }}">
+    {%- if eyebrow != blank -%}<span class="sp-eyebrow">{{ eyebrow | escape }}</span>{%- endif -%}
+    {%- if title != blank -%}
+      <{{ tag | default: 'h2' }} class="sp-title">{{ title | escape }}</{{ tag | default: 'h2' }}>
+    {%- endif -%}
+    {%- if text != blank -%}<div class="sp-sub">{{ text }}</div>{%- endif -%}
+  </div>
+{%- endif -%}

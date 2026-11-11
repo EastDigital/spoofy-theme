@@ -1,1 +1,432 @@
-{"sections":{"slideshow_tBCD9z":{"type":"slideshow","blocks":{"slide_item_887zhr":{"type":"_slide-item","disabled":true,"settings":{"image":"shopify:\/\/shop_images\/Spoofy_Banner3_78c5f5d0-ef65-4e3b-9565-13607fd09d92.png","image_mb":"shopify:\/\/shop_images\/Spoofy_Banner3_Mobile_0a1a4c51-dafb-4eb7-8a1d-aa8e3a9b3be9.png","url":"","banner_target":false,"color_scheme":"scheme-561334e2-603c-4f57-9575-ba5ab20ad971","content_position":"center-start","alignment":"left","content_position_mb":"center-start","alignment_mb":"left","background_content":false,"bg_opacity":0,"box_square":false,"content_rounded":false,"use_border_content":false,"border_opacity":0,"border_style":"none","border_pd_dk":0,"padding_vertical":30,"padding_horizontal":30,"min_width_content":350,"border_pd":0},"blocks":{}},"slide_item_Hzzaha":{"type":"_slide-item","settings":{"image":"shopify:\/\/shop_images\/Top_banner_1.png","image_mb":"shopify:\/\/shop_images\/Spoofy_Banner3_Mobile_0a1a4c51-dafb-4eb7-8a1d-aa8e3a9b3be9.png","url":"","banner_target":false,"color_scheme":"scheme-561334e2-603c-4f57-9575-ba5ab20ad971","content_position":"center-start","alignment":"left","content_position_mb":"center-start","alignment_mb":"left","background_content":false,"bg_opacity":0,"box_square":false,"content_rounded":false,"use_border_content":false,"border_opacity":0,"border_style":"none","border_pd_dk":0,"padding_vertical":30,"padding_horizontal":30,"min_width_content":350,"border_pd":0},"blocks":{}},"slide_item_ADdKxA":{"type":"_slide-item","disabled":true,"settings":{"image":"shopify:\/\/shop_images\/banner_775826ff-44e8-43dc-a472-beb0c93325a8.webp","url":"shopify:\/\/collections\/dogs","banner_target":false,"color_scheme":"scheme-561334e2-603c-4f57-9575-ba5ab20ad971","content_position":"center-start","alignment":"left","content_position_mb":"center-start","alignment_mb":"left","background_content":false,"bg_opacity":0,"box_square":false,"content_rounded":false,"use_border_content":false,"border_opacity":0,"border_style":"none","border_pd_dk":0,"padding_vertical":30,"padding_horizontal":30,"min_width_content":350,"border_pd":0},"blocks":{}},"slide_item_gg4Qqt":{"type":"_slide-item","disabled":true,"settings":{"url":"","banner_target":false,"color_scheme":"scheme-561334e2-603c-4f57-9575-ba5ab20ad971","content_position":"center-start","alignment":"left","content_position_mb":"center-start","alignment_mb":"left","background_content":false,"bg_opacity":0,"box_square":false,"content_rounded":false,"use_border_content":false,"border_opacity":0,"border_style":"none","border_pd_dk":0,"padding_vertical":30,"padding_horizontal":30,"min_width_content":350,"border_pd":0},"blocks":{"paragraph_hY8HBq":{"type":"paragraph","settings":{"text":"<p>Discreet<br\/>Style<\/p>","ffamily":"","lheight":"hdt-lh-sm","fsize":80,"fweight":"","text_color":"","custom":false,"color":"","class_custom":""},"blocks":{}},"spacer_gbfMpB":{"type":"spacer","settings":{"direction":false,"space_lg":16,"space_md":16,"space":10},"blocks":{}},"text_9UWfdg":{"type":"text","settings":{"text":"<p>From casual to formal, we've got you covered<\/p>","icon_source":"","icon":"car","hidden_br_mobile":false,"hidden_on_mobile":true,"text_size":"custom","font_weight":"","text_color":"hdt-s-text","font_size_text_lg":20,"font_size_text_md":14,"font_size_text":14,"font_weight_text":400,"letter_spacing_text":0},"blocks":{}},"spacer_6qGECh":{"type":"spacer","settings":{"direction":false,"space_lg":46,"space_md":30,"space":20},"blocks":{}},"button_FC7mme":{"type":"button","settings":{"label":"Shop collection","link":"shopify:\/\/collections\/new-arrival","open_in_new_tab":false,"full_width":false,"style_class":"solid","font_size":"xl","font_weight":"semibold","font_size_btn":14,"padding_btn":30,"min_width_btn":100,"min_width_dt_btn":100,"min_height_btn":40,"icon":"arrow_simple","icon_position":"after","icon_height":13,"icon_spacing":8},"blocks":{}}},"block_order":["paragraph_hY8HBq","spacer_gbfMpB","text_9UWfdg","spacer_6qGECh","button_FC7mme"]}},"block_order":["slide_item_887zhr","slide_item_Hzzaha","slide_item_ADdKxA","slide_item_gg4Qqt"],"custom_css":["@media (max-width: 767px) {.hdt-button-block {font-size: 1.6rem; }}"],"settings":{"image_height":"adapt_image_first","fixed_height":860,"image_height_mb":"adapt_image_first","fixed_height_mb":400,"is_fade":false,"loop":true,"auto_play":7,"pause_hover":true,"navUI":false,"nav_des":"default","nav_rounded_full":false,"dotUI":true,"dot_vertical":false,"dot_style":"default","dot_align":"center","dot_space":50,"color_scheme":"scheme-520ad02b-40d8-4a1f-8e26-a94b78df548e","full_width":true,"rounded":"none","padding_top":0,"padding_bottom":0,"padding_rate":75}},"marquee_FXkGAA":{"type":"marquee","blocks":{"item_FDmm6p":{"type":"item","disabled":true,"settings":{"text":"<p>Get 5% extra on all prepaid orders.<\/p>","icon_svg":"smile","custom_svg":"","image":"shopify:\/\/shop_images\/ico.png","icon_width":40,"icon_width_mb":14}},"item_zTWfjr":{"type":"item","settings":{"text":"<p>Cash on Delivery Available <\/p>","icon_svg":"smile","custom_svg":"","image":"shopify:\/\/shop_images\/ico.png","icon_width":40,"icon_width_mb":14}},"item_LkKUpM":{"type":"item","disabled":true,"settings":{"text":"<p>Free Shipping over 999<\/p>","icon_svg":"smile","custom_svg":"","image":"shopify:\/\/shop_images\/ico.png","icon_width":40,"icon_width_mb":14}}},"block_order":["item_FDmm6p","item_zTWfjr","item_LkKUpM"],"settings":{"space_item":48,"speed":0.3,"direction":"rtl","marquee_pause_when_hover":true,"text_fs":"h6","font_size_heading_lg":50,"font_size_heading_md":30,"font_size_heading":24,"font_weight_heading":600,"letter_spacing_heading":0,"text_uppercase":false,"adding_border":true,"border_bottom":false,"icon_position_between":false,"color_scheme":"scheme-4f7d5921-8567-40ac-8211-ef87792674d6","padding_top":10,"padding_bottom":10,"padding_rate":75}},"featured_collection_grid_tVcyDG":{"type":"featured-collection-grid","blocks":{"load_more_hPDqaA":{"type":"_load-more","disabled":true,"settings":{"paginate_pos":"center","dis_pagination":80,"btn_label":"","btn_style":"outline","size":"m","btn_fw":"medium"},"blocks":{}},"collection-grid":{"type":"section-heading","static":true,"settings":{"alignment":"left","row_gap":20,"margin_bottom":20},"blocks":{"heading_VyGzpc":{"type":"heading","settings":{"heading":"<h5><strong>Best Seller<\/strong><\/h5>","hidden_br_mobile":false,"hidden_on_mobile":false,"line_height":"","heading_size":"h4","font_weight":"bold","text_color":"hdt-s-text","font_size_heading_lg":42,"font_size_heading_md":30,"font_size_heading":32,"font_weight_heading":400,"letter_spacing_heading":0},"blocks":{}},"text_hDkQjt":{"type":"text","disabled":true,"settings":{"text":"<p>Shop the Latest Styles: Stay ahead of the curve with our newest arrivals<\/p>","icon_source":"","icon":"car","hidden_br_mobile":true,"hidden_on_mobile":false,"text_size":"custom","font_weight":"","text_color":"hdt-text-secondary","font_size_text_lg":16,"font_size_text_md":14,"font_size_text":14,"font_weight_text":400,"letter_spacing_text":0},"blocks":{}}},"block_order":["heading_VyGzpc","text_hDkQjt"]}},"block_order":["load_more_hPDqaA"],"custom_css":["@media (min-width: 1440px) {.hdt-row-grid {row-gap: 80px; }}"],"settings":{"collection":"acana-brand","product_list":[],"product_des":"4","image_ratio":"asos","image_size":true,"show_vendor":false,"pr_border":"in_image","products_count":6,"col_dk":"6","col_tb":"4","col_mb":"2","section_fullwidth":false,"boxed_fullwidth":false,"color_scheme":"scheme-5","padding_top":20,"padding_bottom":40,"padding_rate":72}},"hero_image_zJazX7":{"type":"hero-image","blocks":{"heading_agjfpn":{"type":"heading","disabled":true,"settings":{"heading":"<h2>Heading<\/h2>","hidden_br_mobile":false,"hidden_on_mobile":false,"line_height":"","heading_size":"h2","font_weight":"","text_color":"hdt-s-text","font_size_heading_lg":50,"font_size_heading_md":30,"font_size_heading":24,"font_weight_heading":600,"letter_spacing_heading":0},"blocks":{}},"spacer_bTthQe":{"type":"spacer","disabled":true,"settings":{"direction":false,"space_lg":10,"space_md":10,"space":10},"blocks":{}},"paragraph_3wyBnz":{"type":"paragraph","disabled":true,"settings":{"text":"<p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue<\/p>","ffamily":"","lheight":"","fsize":0,"fweight":"","text_color":"","custom":false,"color":"","class_custom":""},"blocks":{}},"spacer_T4QQEt":{"type":"spacer","disabled":true,"settings":{"direction":false,"space_lg":10,"space_md":10,"space":10},"blocks":{}},"button_LV3ydW":{"type":"button","disabled":true,"settings":{"label":"Button label","link":"","open_in_new_tab":false,"full_width":false,"style_class":"solid","font_size":"m","font_weight":"normal","font_size_btn":14,"padding_btn":30,"min_width_btn":100,"min_width_dt_btn":100,"min_height_btn":40,"icon":"none","icon_position":"after","icon_height":14,"icon_spacing":5},"blocks":{}},"spacer_LcdzWk":{"type":"spacer","disabled":true,"settings":{"direction":false,"space_lg":10,"space_md":10,"space":10},"blocks":{}}},"block_order":["heading_agjfpn","spacer_bTthQe","paragraph_3wyBnz","spacer_T4QQEt","button_LV3ydW","spacer_LcdzWk"],"name":"t:sections.hero-image.name","settings":{"image":"shopify:\/\/shop_images\/Offer_banner_2.png","link_img":"","target":false,"image_height":"adapt_image","fixed_height":860,"image_height_mb":"adapt_image","fixed_height_mb":300,"image_behavior":"none","use_overlay":false,"use_bg_content":false,"content_position":"center","content_align":"left","content_position_mb":"center","content_align_mb":"center","full_width":true,"boxed_fullwidth":false,"color_scheme":"","padding_top":0,"padding_bottom":0,"padding_rate":75}},"collections_list_AAE7q3":{"type":"collections-list","blocks":{"collection_item_wfePNM":{"type":"collection_item","settings":{"collection":"accessories","image":"shopify:\/\/shop_images\/Accessories_jpg.jpg","title":"ACCESSORIES ","collection_link":""}},"collection_item_tztt6p":{"type":"collection_item","settings":{"collection":"toys-store","image":"shopify:\/\/shop_images\/Toys_jpg.jpg","title":"TOYS","collection_link":""}},"collection_item_pfMnAm":{"type":"collection_item","settings":{"collection":"treats","image":"shopify:\/\/shop_images\/Treats_jpg.jpg","title":"treats","collection_link":""}},"collection_item_C7m36c":{"type":"collection_item","settings":{"collection":"cat-food","image":"shopify:\/\/shop_images\/Food_jpg.jpg","title":"Food","collection_link":""}},"collection_item_GM99rm":{"type":"collection_item","settings":{"collection":"summer-wear","image":"shopify:\/\/shop_images\/Clothes_jpg.jpg","title":"Clothes","collection_link":""}},"collection_item_Jwy93n":{"type":"collection_item","settings":{"collection":"wellness","image":"shopify:\/\/shop_images\/wellness_jpg.jpg","title":"Wellness","collection_link":""}},"collection_item_LxnFXX":{"type":"collection_item","settings":{"collection":"grooming","image":"shopify:\/\/shop_images\/Grooming_jpg.jpg","title":"Grooming","collection_link":""}},"collection_item_mJq4Jj":{"type":"collection_item","settings":{"collection":"bowls","image":"shopify:\/\/shop_images\/Bowls_jpg.jpg","title":"Bowls","collection_link":""}}},"block_order":["collection_item_wfePNM","collection_item_tztt6p","collection_item_pfMnAm","collection_item_C7m36c","collection_item_GM99rm","collection_item_Jwy93n","collection_item_LxnFXX","collection_item_mJq4Jj"],"name":"t:sections.collection_list.name","settings":{"heading_align":"start","sec_heading":"","heading_tag":"h4","heading_size":"h4","sec_subheading":"<h4><strong>Shop by Category<\/strong><\/h4>","subheading_size":"lg","heading_reverse":false,"btn_heading_collection":false,"heading_gap":18,"sec_heading_spacing":30,"collection_list":[],"collection_des":"4","content_size":"base","content_weight":"semibold","text_transform":true,"content_position":"center","content_padding":5,"image_ratio":"square","image_size":true,"col_dk":"6","col_tb":"4","col_mb":"2","space_items":"x","half_item":false,"navUI":true,"btn_vi":"hover","nav_des":"outline","nav_icon":"chrvon","nav_pos":"middle_in","dotUI":false,"dots_pos":"default","section_fullwidth":false,"boxed_fullwidth":false,"boxed_content":false,"color_scheme":"","padding_top":20,"padding_bottom":30,"padding_rate":75}},"banner_XLyhhN":{"type":"banner","blocks":{"banner_item_zECLjW":{"type":"_banner-item","settings":{"banner_url":"shopify:\/\/collections\/dogs","banner_target":false,"img_effect":"none","b_effect":"none","rounded":"none","color_scheme":"","content_position":"center","alignment":"center","content_position_mb":"center","alignment_mb":"center"},"blocks":{"heading_PE7G6w":{"type":"heading","disabled":true,"settings":{"heading":"<p>SALE OFF UP TO 70%<\/p>","hidden_br_mobile":false,"hidden_on_mobile":false,"line_height":"","heading_size":"h5","font_weight":"","text_color":"hdt-s-text","font_size_heading_lg":50,"font_size_heading_md":30,"font_size_heading":24,"font_weight_heading":600,"letter_spacing_heading":0},"blocks":{}},"text_LxGCnF":{"type":"text","disabled":true,"settings":{"text":"<p>SS 2025 New Arrival<\/p>","icon_source":"","icon":"car","hidden_br_mobile":false,"hidden_on_mobile":false,"text_size":"4xl","font_weight":"","text_color":"hdt-s-text","font_size_text_lg":16,"font_size_text_md":14,"font_size_text":14,"font_weight_text":400,"letter_spacing_text":0},"blocks":{}},"spacer_cmTXTY":{"type":"spacer","disabled":true,"settings":{"direction":false,"space_lg":50,"space_md":50,"space":50},"blocks":{}},"button_ke78eY":{"type":"button","disabled":true,"settings":{"label":"Shop now","link":"","open_in_new_tab":false,"full_width":false,"style_class":"solid","font_size":"m","font_weight":"normal","font_size_btn":14,"padding_btn":30,"min_width_btn":100,"min_width_dt_btn":100,"min_height_btn":40,"icon":"none","icon_position":"after","icon_height":16,"icon_spacing":5},"blocks":{}},"banner-media":{"type":"_media","static":true,"settings":{"source":"image","image":"shopify:\/\/shop_images\/Dog_banner.png","external_video_url":"https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"},"blocks":{}}},"block_order":["heading_PE7G6w","text_LxGCnF","spacer_cmTXTY","button_ke78eY"]},"banner_item_VfRELU":{"type":"_banner-item","settings":{"banner_url":"shopify:\/\/collections\/cats","banner_target":false,"img_effect":"none","b_effect":"none","rounded":"none","color_scheme":"","content_position":"center","alignment":"center","content_position_mb":"center","alignment_mb":"center"},"blocks":{"heading_XLXyki":{"type":"heading","disabled":true,"settings":{"heading":"<p>SALE OFF UP TO 70%<\/p>","hidden_br_mobile":false,"hidden_on_mobile":false,"line_height":"","heading_size":"h5","font_weight":"","text_color":"hdt-s-text","font_size_heading_lg":50,"font_size_heading_md":30,"font_size_heading":24,"font_weight_heading":600,"letter_spacing_heading":0},"blocks":{}},"text_Qd6hFD":{"type":"text","disabled":true,"settings":{"text":"<p>SS 2025 New Arrival<\/p>","icon_source":"","icon":"car","hidden_br_mobile":false,"hidden_on_mobile":false,"text_size":"4xl","font_weight":"","text_color":"hdt-s-text","font_size_text_lg":16,"font_size_text_md":14,"font_size_text":14,"font_weight_text":400,"letter_spacing_text":0},"blocks":{}},"spacer_GCcKx4":{"type":"spacer","disabled":true,"settings":{"direction":false,"space_lg":50,"space_md":50,"space":50},"blocks":{}},"button_bCknb4":{"type":"button","disabled":true,"settings":{"label":"Shop now","link":"","open_in_new_tab":false,"full_width":false,"style_class":"solid","font_size":"m","font_weight":"normal","font_size_btn":14,"padding_btn":30,"min_width_btn":100,"min_width_dt_btn":100,"min_height_btn":40,"icon":"none","icon_position":"after","icon_height":16,"icon_spacing":5},"blocks":{}},"banner-media":{"type":"_media","static":true,"settings":{"source":"image","image":"shopify:\/\/shop_images\/Cat_banner.png","external_video_url":"https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"},"blocks":{}}},"block_order":["heading_XLXyki","text_Qd6hFD","spacer_GCcKx4","button_bCknb4"]},"banner-heading":{"type":"section-heading","static":true,"settings":{"alignment":"left","row_gap":15,"margin_bottom":30},"blocks":{"heading_WGRwG3":{"type":"heading","name":"t:blocks.heading.name","settings":{"heading":"<h5><strong>Shop by Pets<\/strong><\/h5>","hidden_br_mobile":false,"hidden_on_mobile":false,"line_height":"","heading_size":"h4","font_weight":"bold","text_color":"hdt-s-text","font_size_heading_lg":50,"font_size_heading_md":30,"font_size_heading":24,"font_weight_heading":600,"letter_spacing_heading":0},"blocks":{}}},"block_order":["heading_WGRwG3"]}},"block_order":["banner_item_zECLjW","banner_item_VfRELU"],"name":"t:sections.banner.name","settings":{"image_height":"adapt_image","fixed_height":400,"image_height_mb":"adapt_image","fixed_height_mb":300,"col_dk":"2","col_tb":"2","col_mb":"1","scrollnap":false,"color_scheme":"","full_width":false,"box_content":false,"gap_r":20,"gap_c":20,"gap_r_tb":20,"gap_c_tb":20,"gap_r_mb":20,"gap_c_mb":20,"padding_top":20,"padding_bottom":30,"padding_rate":49}},"brands_RyH9nP":{"type":"brands","blocks":{"logo_item_cpVgmA":{"type":"_logo-item","settings":{"image":"shopify:\/\/shop_images\/spoofy_brand_logo_0001_kong_logo.jpg","url":"shopify:\/\/collections\/kong-brand"},"blocks":{}},"logo_item_Pf6t3K":{"type":"_logo-item","settings":{"image":"shopify:\/\/shop_images\/spoofy_brand_logo_0009_chuckit_logo.jpg","url":""},"blocks":{}},"logo_item_LGP47P":{"type":"_logo-item","settings":{"image":"shopify:\/\/shop_images\/spoofy_brand_logo_0010_Layer_0.jpg","url":"shopify:\/\/collections\/acana-brand"},"blocks":{}},"logo_item_yz68CE":{"type":"_logo-item","settings":{"image":"shopify:\/\/shop_images\/spoofy_brand_logo_0003_jerhigh_logo.jpg","url":"shopify:\/\/collections\/jer-high-brand"},"blocks":{}},"logo_item_FVDLpG":{"type":"_logo-item","settings":{"image":"shopify:\/\/shop_images\/spoofy_brand_logo_0000_Big_Paw_logo.jpg","url":""},"blocks":{}},"logo_item_Bx9PR3":{"type":"_logo-item","settings":{"image":"shopify:\/\/shop_images\/spoofy_brand_logo_0008_earthbath.jpg","url":""},"blocks":{}},"logo-list-heading":{"type":"section-heading","static":true,"settings":{"alignment":"left","row_gap":15,"margin_bottom":30},"blocks":{"heading_p9niVY":{"type":"heading","settings":{"heading":"<h5><strong>Shop by Brands<\/strong><\/h5>","hidden_br_mobile":false,"hidden_on_mobile":false,"line_height":"","heading_size":"h4","font_weight":"bold","text_color":"hdt-s-text","font_size_heading_lg":50,"font_size_heading_md":30,"font_size_heading":24,"font_weight_heading":600,"letter_spacing_heading":0},"blocks":{}}},"block_order":["heading_p9niVY"]}},"block_order":["logo_item_cpVgmA","logo_item_Pf6t3K","logo_item_LGP47P","logo_item_yz68CE","logo_item_FVDLpG","logo_item_Bx9PR3"],"name":"t:sections.brands.label","settings":{"color_scheme":"","border_item":false,"url_target":"_self","navUI":true,"btn_vi":"hover","nav_des":"default","nav_shape":"rounded","nav_size":"small","nav_pos":"on_border","nav_icon":"arrow_right","dotUI":false,"col_dk":"6","animated":"none","col_tb":"4","col_mb":"2","padding_top":20,"padding_bottom":20,"padding_rate":75}},"icon_box_pGVH8b":{"type":"icon-box","blocks":{"icon_block_hUeW7M":{"type":"_icon_block","settings":{"icon":"box","svg_upload":"<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" class=\"\" width=\"29\" height=\"30\" viewBox=\"0 0 29 30\"><path d=\"M14.2504 30L0 22.8814V7.01669L14.2504 0L28.5009 7.01273V22.8814L14.2504 30ZM2.64633 21.246L14.2504 27.0388L25.8546 21.242V8.66276L14.2504 2.95069L2.64633 8.66276V21.246ZM15.5736 28.5207H12.9273V15.0152L0.739716 9.02798L1.90671 6.64627L15.5736 13.3666V28.5207ZM15.5736 28.5207H12.9273V13.3665L26.5942 6.6515L27.7612 9.03321L15.5736 15.0152V28.5207ZM14.2504 15.6596L0.739716 9.02798L1.90671 6.64627L14.2504 12.717L26.5942 6.65292L27.7612 9.03457L14.2504 15.6596Z\"><\/path><\/svg>","width_lg":30,"width_md":30,"width":30},"blocks":{"heading_KcYzmQ":{"type":"heading","settings":{"heading":"<p>Free Shipping<\/p>","hidden_br_mobile":false,"hidden_on_mobile":false,"line_height":"","heading_size":"h_custom","font_weight":"","text_color":"hdt-s-text","font_size_heading_lg":18,"font_size_heading_md":18,"font_size_heading":18,"font_weight_heading":600,"letter_spacing_heading":0},"blocks":{}},"spacer_eqLkg9":{"type":"spacer","settings":{"direction":false,"space_lg":10,"space_md":6,"space":6},"blocks":{}},"text_GWhaRB":{"type":"text","settings":{"text":"<p>You will love at great low prices<\/p>","icon_source":"","icon":"car","hidden_br_mobile":false,"hidden_on_mobile":false,"text_size":"base","font_weight":"","text_color":"hdt-s-text","font_size_text_lg":16,"font_size_text_md":14,"font_size_text":14,"font_weight_text":400,"letter_spacing_text":0},"blocks":{}}},"block_order":["heading_KcYzmQ","spacer_eqLkg9","text_GWhaRB"]},"icon_block_9aBndX":{"type":"_icon_block","settings":{"icon":"car","svg_upload":"<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" class=\"\" width=\"30\" height=\"22\" viewBox=\"0 0 30 22\"><path d=\"M0 0H29.4643V22H0V0ZM27.5 1.9643H1.9643V20.0357H27.5V1.9643ZM0 4.97617H29.4643V11.9167H0V4.97617ZM27.5 6.94047H1.9643V9.95238H27.5V6.94047Z\"><\/path><\/svg>","width_lg":30,"width_md":30,"width":30},"blocks":{"heading_AcwArq":{"type":"heading","settings":{"heading":"<p>Flexible Payment<\/p>","hidden_br_mobile":false,"hidden_on_mobile":false,"line_height":"","heading_size":"h_custom","font_weight":"","text_color":"hdt-s-text","font_size_heading_lg":18,"font_size_heading_md":18,"font_size_heading":18,"font_weight_heading":600,"letter_spacing_heading":0},"blocks":{}},"spacer_aqMHzA":{"type":"spacer","settings":{"direction":false,"space_lg":10,"space_md":6,"space":6},"blocks":{}},"text_eAUWNF":{"type":"text","settings":{"text":"<p>Pay with Multiple Credit Cards<\/p>","icon_source":"","icon":"car","hidden_br_mobile":false,"hidden_on_mobile":false,"text_size":"base","font_weight":"","text_color":"hdt-s-text","font_size_text_lg":16,"font_size_text_md":14,"font_size_text":14,"font_weight_text":400,"letter_spacing_text":0},"blocks":{}}},"block_order":["heading_AcwArq","spacer_aqMHzA","text_eAUWNF"]},"icon_block_n4fL3B":{"type":"_icon_block","settings":{"icon":"car","svg_upload":"<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" class=\"\" width=\"29\" height=\"18\" viewBox=\"0 0 29 18\"><path d=\"M25.5 1.5V7.5H5.745L11.115 2.115L9 0L0 9L9 18L11.115 15.885L5.745 10.5H28.5V1.5H25.5Z\"><\/path><\/svg>","width_lg":30,"width_md":30,"width":30},"blocks":{"heading_3nLQ9B":{"type":"heading","settings":{"heading":"<p>14 Day Returns<\/p>","hidden_br_mobile":false,"hidden_on_mobile":false,"line_height":"","heading_size":"h_custom","font_weight":"","text_color":"hdt-s-text","font_size_heading_lg":18,"font_size_heading_md":18,"font_size_heading":18,"font_weight_heading":600,"letter_spacing_heading":0},"blocks":{}},"spacer_yxMpAJ":{"type":"spacer","settings":{"direction":false,"space_lg":10,"space_md":6,"space":6},"blocks":{}},"text_kzhfBb":{"type":"text","settings":{"text":"<p>Within 30 days for an exchange<\/p>","icon_source":"","icon":"car","hidden_br_mobile":false,"hidden_on_mobile":false,"text_size":"base","font_weight":"","text_color":"hdt-s-text","font_size_text_lg":16,"font_size_text_md":14,"font_size_text":14,"font_weight_text":400,"letter_spacing_text":0},"blocks":{}}},"block_order":["heading_3nLQ9B","spacer_yxMpAJ","text_kzhfBb"]},"icon_block_QnjyzU":{"type":"_icon_block","settings":{"icon":"car","svg_upload":"<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" class=\"\" width=\"30\" height=\"30\" viewBox=\"0 0 30 30\"><path d=\"M27.5 10H26.82C25.862 4.334 20.934 0 15 0C9.066 0 4.137 4.334 3.18 10H2.5C1.83712 10.0005 1.20154 10.2641 0.732818 10.7328C0.264092 11.2015 0.000529668 11.8371 0 12.5V17.5C0 18.879 1.121 20 2.5 20H4C4.26522 20 4.51957 19.8946 4.70711 19.7071C4.89464 19.5196 5 19.2652 5 19V12C5 6.486 9.486 2 15 2C20.514 2 25 6.486 25 12V18C25 23.514 20.514 28 15 28C14.7348 28 14.4804 28.1054 14.2929 28.2929C14.1054 28.4804 14 28.7348 14 29C14 29.2652 14.1054 29.5196 14.2929 29.7071C14.4804 29.8946 14.7348 30 15 30C20.935 30 25.863 25.666 26.82 20H27.5C28.879 20 30 18.879 30 17.5V12.5C30 11.121 28.879 10 27.5 10ZM2 17.5V12.5C2 12.229 2.229 12 2.5 12H3V18H2.5C2.36788 17.9984 2.2416 17.9453 2.14817 17.8518C2.05474 17.7584 2.00156 17.6321 2 17.5ZM28 17.5C28 17.771 27.771 18 27.5 18H27V12H27.5C27.771 12 28 12.229 28 12.5V17.5ZM23 17V12C23 7.589 19.411 4 15 4C10.589 4 7 7.589 7 12V17C7 21.411 10.589 25 15 25C19.411 25 23 21.411 23 17ZM9 17V12C9 8.691 11.691 6 15 6C18.309 6 21 8.691 21 12V17C21 20.309 18.309 23 15 23C11.691 23 9 20.309 9 17Z\"><\/path><\/svg>","width_lg":30,"width_md":30,"width":30},"blocks":{"heading_HLJaxV":{"type":"heading","settings":{"heading":"<p>Premium Support<\/p>","hidden_br_mobile":false,"hidden_on_mobile":false,"line_height":"","heading_size":"h_custom","font_weight":"","text_color":"hdt-s-text","font_size_heading_lg":18,"font_size_heading_md":18,"font_size_heading":18,"font_weight_heading":600,"letter_spacing_heading":0},"blocks":{}},"spacer_tPT6UC":{"type":"spacer","settings":{"direction":false,"space_lg":10,"space_md":6,"space":6},"blocks":{}},"text_QY4BRW":{"type":"text","settings":{"text":"<p>Outstanding premium support<\/p>","icon_source":"","icon":"car","hidden_br_mobile":false,"hidden_on_mobile":false,"text_size":"base","font_weight":"","text_color":"hdt-s-text","font_size_text_lg":16,"font_size_text_md":14,"font_size_text":14,"font_weight_text":400,"letter_spacing_text":0},"blocks":{}}},"block_order":["heading_HLJaxV","spacer_tPT6UC","text_QY4BRW"]},"icon-box":{"type":"section-heading","disabled":true,"static":true,"settings":{"alignment":"left","row_gap":15,"margin_bottom":30},"blocks":{}}},"block_order":["icon_block_hUeW7M","icon_block_9aBndX","icon_block_n4fL3B","icon_block_QnjyzU"],"custom_css":[".hdt-text-warry {line-height: 21.59px;}"],"settings":{"icon_circle":false,"border_style":"style_1","icon_vertical":true,"heading_uppercase":false,"carousel_mobile":true,"background_item":true,"background_item_color":"#ffcb56","background_item_percent":100,"col_dk":"4","col_tb":"4","col_mb":"2","spacing_dk":10,"spacing_tb":20,"spacing_mb":15,"full_width":false,"box_content":false,"color_scheme":"scheme-1","color_wrap":"container","padding_top":20,"padding_bottom":20,"padding_rate":75}},"store_locator_GJKqkF":{"type":"store-locator","blocks":{"store_item_gRYeqG":{"type":"store_item","settings":{"title":"Store name","address_content":"66 Mott St, New York, New York, Zip Code: 10006, AS","phone_content":"(623) 934-2400","email_content":"Ecomus@example.com","map":""}},"store_item_egmykB":{"type":"store_item","settings":{"title":"Store name","address_content":"66 Mott St, New York, New York, Zip Code: 10006, AS","phone_content":"(623) 934-2400","email_content":"Ecomus@example.com","map":""}}},"block_order":["store_item_gRYeqG","store_item_egmykB"],"disabled":true,"name":"t:sections.store_locator.name","settings":{"section_fullwidth":false,"color_scheme":"","padding_top":0,"padding_bottom":52,"padding_rate":75}},"hero_image_fPm6jK":{"type":"hero-image","blocks":{"heading_K8HHAn":{"type":"heading","disabled":true,"settings":{"heading":"<h2>Heading<\/h2>","hidden_br_mobile":false,"hidden_on_mobile":false,"line_height":"","heading_size":"h2","font_weight":"","text_color":"hdt-s-text","font_size_heading_lg":50,"font_size_heading_md":30,"font_size_heading":24,"font_weight_heading":600,"letter_spacing_heading":0},"blocks":{}},"spacer_axU6rM":{"type":"spacer","disabled":true,"settings":{"direction":false,"space_lg":10,"space_md":10,"space":10},"blocks":{}},"paragraph_Qh6aTX":{"type":"paragraph","disabled":true,"settings":{"text":"<p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue<\/p>","ffamily":"","lheight":"","fsize":0,"fweight":"","text_color":"","custom":false,"color":"","class_custom":""},"blocks":{}},"spacer_jUm8KE":{"type":"spacer","disabled":true,"settings":{"direction":false,"space_lg":10,"space_md":10,"space":10},"blocks":{}},"button_j4TCGE":{"type":"button","disabled":true,"settings":{"label":"Button label","link":"","open_in_new_tab":false,"full_width":false,"style_class":"solid","font_size":"m","font_weight":"normal","font_size_btn":14,"padding_btn":30,"min_width_btn":100,"min_width_dt_btn":100,"min_height_btn":40,"icon":"none","icon_position":"after","icon_height":14,"icon_spacing":5},"blocks":{}},"spacer_B6MFa9":{"type":"spacer","disabled":true,"settings":{"direction":false,"space_lg":10,"space_md":10,"space":10},"blocks":{}}},"block_order":["heading_K8HHAn","spacer_axU6rM","paragraph_Qh6aTX","spacer_jUm8KE","button_j4TCGE","spacer_B6MFa9"],"name":"t:sections.hero-image.name","settings":{"image":"shopify:\/\/shop_images\/pet_v3.png","link_img":"","target":false,"image_height":"adapt_image","fixed_height":860,"image_height_mb":"adapt_image","fixed_height_mb":300,"image_behavior":"none","use_overlay":false,"use_bg_content":false,"content_position":"center","content_align":"left","content_position_mb":"center","content_align_mb":"center","full_width":true,"boxed_fullwidth":false,"color_scheme":"","padding_top":0,"padding_bottom":0,"padding_rate":75}}},"order":["slideshow_tBCD9z","marquee_FXkGAA","featured_collection_grid_tVcyDG","hero_image_zJazX7","collections_list_AAE7q3","banner_XLyhhN","brands_RyH9nP","icon_box_pGVH8b","store_locator_GJKqkF","hero_image_fPm6jK"]}
+{
+  "sections": {
+    "hero": {
+      "type": "spoofy-hero",
+      "settings": {
+        "image": "shopify://shop_images/Top_banner_1.png",
+        "image_mobile": "shopify://shop_images/Spoofy_Banner3_Mobile_0a1a4c51-dafb-4eb7-8a1d-aa8e3a9b3be9.png",
+        "alt": "Spoofy: everything your pet loves",
+        "link": "",
+        "eyebrow": "",
+        "title": "",
+        "text": "",
+        "button_label": ""
+      }
+    },
+    "intro": {
+      "type": "spoofy-intro",
+      "blocks": {
+        "dogs": {
+          "type": "button",
+          "settings": {
+            "label": "Shop Dogs",
+            "link": "shopify://collections/dogs",
+            "style": "solid"
+          }
+        },
+        "cats": {
+          "type": "button",
+          "settings": {
+            "label": "Shop Cats",
+            "link": "shopify://collections/cats",
+            "style": "ghost"
+          }
+        }
+      },
+      "block_order": [
+        "dogs",
+        "cats"
+      ],
+      "settings": {
+        "eyebrow": "welcome to",
+        "title": "Spoofy",
+        "text": "<p>Food, treats, toys and everyday care for dogs and cats.</p>",
+        "heading_tag": "h2",
+        "background": "ivory"
+      }
+    },
+    "promises": {
+      "type": "spoofy-promise",
+      "blocks": {
+        "promise_0": {
+          "type": "promise",
+          "settings": {
+            "icon": "truck",
+            "title": "Free Shipping",
+            "text": "You will love at great low prices"
+          }
+        },
+        "promise_1": {
+          "type": "promise",
+          "settings": {
+            "icon": "card",
+            "title": "Flexible Payment",
+            "text": "Pay with Multiple Credit Cards"
+          }
+        },
+        "promise_2": {
+          "type": "promise",
+          "settings": {
+            "icon": "return",
+            "title": "14 Day Returns",
+            "text": "Within 30 days for an exchange"
+          }
+        },
+        "promise_3": {
+          "type": "promise",
+          "settings": {
+            "icon": "chat",
+            "title": "Premium Support",
+            "text": "Outstanding premium support"
+          }
+        }
+      },
+      "block_order": [
+        "promise_0",
+        "promise_1",
+        "promise_2",
+        "promise_3"
+      ],
+      "settings": {}
+    },
+    "pets": {
+      "type": "spoofy-tiles",
+      "blocks": {
+        "dogs": {
+          "type": "tile",
+          "settings": {
+            "image": "shopify://shop_images/Dog_banner.png",
+            "eyebrow": "for your",
+            "title": "Dogs",
+            "text": "",
+            "cta": "Shop dogs",
+            "link": "shopify://collections/dogs"
+          }
+        },
+        "cats": {
+          "type": "tile",
+          "settings": {
+            "image": "shopify://shop_images/Cat_banner.png",
+            "eyebrow": "for your",
+            "title": "Cats",
+            "text": "",
+            "cta": "Shop cats",
+            "link": "shopify://collections/cats"
+          }
+        }
+      },
+      "block_order": [
+        "dogs",
+        "cats"
+      ],
+      "settings": {
+        "eyebrow": "shop by",
+        "title": "Pet",
+        "text": "",
+        "columns": 2,
+        "ratio": "auto",
+        "background": "ivory"
+      }
+    },
+    "categories": {
+      "type": "spoofy-categories",
+      "blocks": {
+        "cat_wfePNM": {
+          "type": "category",
+          "settings": {
+            "collection": "accessories",
+            "image": "shopify://shop_images/Accessories_jpg.jpg",
+            "title": "Accessories"
+          }
+        },
+        "cat_tztt6p": {
+          "type": "category",
+          "settings": {
+            "collection": "toys-store",
+            "image": "shopify://shop_images/Toys_jpg.jpg",
+            "title": "Toys"
+          }
+        },
+        "cat_pfMnAm": {
+          "type": "category",
+          "settings": {
+            "collection": "treats",
+            "image": "shopify://shop_images/Treats_jpg.jpg",
+            "title": "Treats"
+          }
+        },
+        "cat_C7m36c": {
+          "type": "category",
+          "settings": {
+            "collection": "cat-food",
+            "image": "shopify://shop_images/Food_jpg.jpg",
+            "title": "Food"
+          }
+        },
+        "cat_GM99rm": {
+          "type": "category",
+          "settings": {
+            "collection": "summer-wear",
+            "image": "shopify://shop_images/Clothes_jpg.jpg",
+            "title": "Clothes"
+          }
+        },
+        "cat_Jwy93n": {
+          "type": "category",
+          "settings": {
+            "collection": "wellness",
+            "image": "shopify://shop_images/wellness_jpg.jpg",
+            "title": "Wellness"
+          }
+        },
+        "cat_LxnFXX": {
+          "type": "category",
+          "settings": {
+            "collection": "grooming",
+            "image": "shopify://shop_images/Grooming_jpg.jpg",
+            "title": "Grooming"
+          }
+        },
+        "cat_mJq4Jj": {
+          "type": "category",
+          "settings": {
+            "collection": "bowls",
+            "image": "shopify://shop_images/Bowls_jpg.jpg",
+            "title": "Bowls"
+          }
+        }
+      },
+      "block_order": [
+        "cat_wfePNM",
+        "cat_tztt6p",
+        "cat_pfMnAm",
+        "cat_C7m36c",
+        "cat_GM99rm",
+        "cat_Jwy93n",
+        "cat_LxnFXX",
+        "cat_mJq4Jj"
+      ],
+      "settings": {
+        "eyebrow": "shop by",
+        "title": "Category",
+        "show_count": false,
+        "hide_empty": true,
+        "background": "sand"
+      }
+    },
+    "bestsellers": {
+      "type": "spoofy-products",
+      "settings": {
+        "eyebrow": "most loved",
+        "title": "Best Seller",
+        "collection": "acana-brand",
+        "limit": 8,
+        "hide_soldout": true,
+        "show_vendor": true,
+        "quick_add": true,
+        "button_label": "View all",
+        "background": "ivory"
+      }
+    },
+    "offer": {
+      "type": "spoofy-banner",
+      "settings": {
+        "eyebrow": "",
+        "title": "",
+        "image": "shopify://shop_images/Offer_banner_2.png",
+        "alt": "Current offer",
+        "link": "",
+        "background": "ivory"
+      }
+    },
+    "toys": {
+      "type": "spoofy-products",
+      "settings": {
+        "eyebrow": "play time",
+        "title": "Toys",
+        "collection": "toys-store",
+        "limit": 8,
+        "hide_soldout": true,
+        "show_vendor": true,
+        "quick_add": true,
+        "button_label": "View all",
+        "background": "sand"
+      }
+    },
+    "treats": {
+      "type": "spoofy-products",
+      "settings": {
+        "eyebrow": "good boys & girls",
+        "title": "Treats",
+        "collection": "treats",
+        "limit": 8,
+        "hide_soldout": true,
+        "show_vendor": true,
+        "quick_add": true,
+        "button_label": "View all",
+        "background": "ivory"
+      }
+    },
+    "brands": {
+      "type": "spoofy-brands",
+      "blocks": {
+        "kong": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/spoofy_brand_logo_0001_kong_logo.jpg",
+            "name": "Kong",
+            "link": "shopify://collections/kong-brand"
+          }
+        },
+        "chuckit": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/spoofy_brand_logo_0009_chuckit_logo.jpg",
+            "name": "Chuckit",
+            "link": ""
+          }
+        },
+        "acana": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/spoofy_brand_logo_0010_Layer_0.jpg",
+            "name": "Acana",
+            "link": "shopify://collections/acana-brand"
+          }
+        },
+        "jerhigh": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/spoofy_brand_logo_0003_jerhigh_logo.jpg",
+            "name": "Jerhigh",
+            "link": "shopify://collections/jer-high-brand"
+          }
+        },
+        "bigpaw": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/spoofy_brand_logo_0000_Big_Paw_logo.jpg",
+            "name": "Big Paw",
+            "link": ""
+          }
+        },
+        "earthbath": {
+          "type": "brand",
+          "settings": {
+            "image": "shopify://shop_images/spoofy_brand_logo_0008_earthbath.jpg",
+            "name": "Earthbath",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "kong",
+        "chuckit",
+        "acana",
+        "jerhigh",
+        "bigpaw",
+        "earthbath"
+      ],
+      "settings": {
+        "eyebrow": "shop by",
+        "title": "Brands",
+        "background": "sand"
+      }
+    },
+    "prices": {
+      "type": "spoofy-pill-links",
+      "blocks": {
+        "p999": {
+          "type": "link",
+          "settings": {
+            "label": "Under ₹999",
+            "link": "shopify://collections/under-999"
+          }
+        },
+        "p1999": {
+          "type": "link",
+          "settings": {
+            "label": "Under ₹1,999",
+            "link": "shopify://collections/under-1999"
+          }
+        },
+        "p2999": {
+          "type": "link",
+          "settings": {
+            "label": "Under ₹2,999",
+            "link": "shopify://collections/under-2999"
+          }
+        },
+        "p4999": {
+          "type": "link",
+          "settings": {
+            "label": "Under ₹4,999",
+            "link": "shopify://collections/under-4999"
+          }
+        }
+      },
+      "block_order": [
+        "p999",
+        "p1999",
+        "p2999",
+        "p4999"
+      ],
+      "settings": {
+        "eyebrow": "for every budget",
+        "heading": "Shop by price",
+        "text": "",
+        "background": "ivory"
+      }
+    },
+    "visit": {
+      "type": "spoofy-intro",
+      "blocks": {
+        "go": {
+          "type": "button",
+          "settings": {
+            "label": "Visit us",
+            "link": "shopify://pages/spoofy-cafe",
+            "style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "go"
+      ],
+      "settings": {
+        "eyebrow": "more than a store",
+        "title": "Spoofy Spa & Cafe",
+        "text": "<p>Spoofy, 12-S, Peacock court, Wave City Centre, Sector 32, Noida, Uttar Pradesh 201307</p>",
+        "heading_tag": "h2",
+        "background": "sand"
+      }
+    },
+    "pets_banner": {
+      "type": "spoofy-hero",
+      "settings": {
+        "image": "shopify://shop_images/pet_v3.png",
+        "alt": "",
+        "link": "",
+        "eyebrow": "",
+        "title": "",
+        "text": "",
+        "button_label": ""
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "intro",
+    "promises",
+    "pets",
+    "categories",
+    "bestsellers",
+    "offer",
+    "toys",
+    "treats",
+    "brands",
+    "prices",
+    "visit",
+    "pets_banner"
+  ]
+}

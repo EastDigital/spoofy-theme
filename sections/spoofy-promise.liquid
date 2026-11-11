@@ -1,0 +1,46 @@
+<div class="sp-section sp-section--flush sp-promise">
+  <div class="sp-wrap">
+    <ul class="sp-promise__list" role="list">
+      {%- for block in section.blocks -%}
+        <li class="sp-promise__item" {{ block.shopify_attributes }}>
+          {%- case block.settings.icon -%}
+            {%- when 'truck' -%}
+              <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 8h17v14H2zM19 13h6l5 5v4h-11z"/><circle cx="9" cy="23.5" r="2.5"/><circle cx="24" cy="23.5" r="2.5"/></svg>
+            {%- when 'card' -%}
+              <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="7" width="26" height="18" rx="2"/><path d="M3 13h26M8 20h6"/></svg>
+            {%- when 'return' -%}
+              <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 12h14a7 7 0 010 14H10"/><path d="M11 7l-5 5 5 5"/></svg>
+            {%- when 'chat' -%}
+              <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 6h22v16H14l-6 5v-5H5z"/><path d="M11 13h10M11 17h6"/></svg>
+            {%- else -%}
+              <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="10" cy="11" r="2.5"/><circle cx="22" cy="11" r="2.5"/><circle cx="5.5" cy="18" r="2.5"/><circle cx="26.5" cy="18" r="2.5"/><path d="M16 15c-4 0-7 4-7 7.5 0 3 3.5 3 7 1.5 3.5 1.5 7 1.5 7-1.5C23 19 20 15 16 15z"/></svg>
+          {%- endcase -%}
+          <div>
+            <div class="sp-promise__title">{{ block.settings.title | escape }}</div>
+            {%- if block.settings.text != blank -%}<div class="sp-promise__text">{{ block.settings.text | escape }}</div>{%- endif -%}
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Spoofy promises",
+  "class": "sp-promise-section",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "promise",
+      "name": "Promise",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "options": [{ "value": "truck", "label": "Delivery" }, { "value": "card", "label": "Payment" }, { "value": "return", "label": "Returns" }, { "value": "chat", "label": "Support" }, { "value": "paw", "label": "Paw" }], "default": "paw" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Free Shipping" },
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Spoofy promises", "blocks": [{ "type": "promise" }, { "type": "promise" }, { "type": "promise" }, { "type": "promise" }] }]
+}
+{% endschema %}

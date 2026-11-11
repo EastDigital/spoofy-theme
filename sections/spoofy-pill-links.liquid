@@ -1,0 +1,50 @@
+{%- comment -%}
+  Spoofy redesign: a heading with a row of rounded "pill" links.
+  Used on the homepage for "Shop by price"; reusable anywhere via the theme editor.
+{%- endcomment -%}
+<div class="sp-section{% if section.settings.background == 'sand' %} sp-section--sand{% endif %}" id="{{ section.id }}">
+  <div class="sp-wrap">
+    {%- render 'spoofy-head', eyebrow: section.settings.eyebrow, title: section.settings.heading, text: section.settings.text -%}
+    <ul class="sp-pills" role="list">
+      {%- for block in section.blocks -%}
+        <li {{ block.shopify_attributes }}>
+          <a class="sp-pill" href="{{ block.settings.link | default: '#' }}">{{ block.settings.label | escape }}</a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Pill links",
+  "class": "hdt-section spoofy-pills-section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Script line", "default": "for every budget" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by price" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "select", "id": "background", "label": "Background", "options": [{ "value": "ivory", "label": "Ivory" }, { "value": "sand", "label": "Sand" }], "default": "ivory" }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Under ₹999" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pill links",
+      "blocks": [
+        { "type": "link", "settings": { "label": "Under ₹999" } },
+        { "type": "link", "settings": { "label": "Under ₹1,999" } },
+        { "type": "link", "settings": { "label": "Under ₹2,999" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

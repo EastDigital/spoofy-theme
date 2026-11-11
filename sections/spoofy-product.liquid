@@ -1,0 +1,226 @@
+{%- liquid
+  assign s = section.settings
+  assign sp_variant = product.selected_or_first_available_variant
+  assign sp_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media
+  assign sp_form_id = 'SpoofyProductForm-' | append: section.id
+  assign sp_images = product.media | where: 'media_type', 'image'
+  assign sp_first_collection = product.collections | first
+-%}
+<div class="sp-section sp-section--flush sp-product" data-sp-product>
+  <div class="sp-wrap">
+    <nav class="sp-crumbs" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span>
+      {%- if collection -%}
+        <a href="{{ collection.url }}">{{ collection.title | escape }}</a><span aria-hidden="true">/</span>
+      {%- elsif sp_first_collection -%}
+        <a href="{{ sp_first_collection.url }}">{{ sp_first_collection.title | escape }}</a><span aria-hidden="true">/</span>
+      {%- endif -%}
+      <span aria-current="page">{{ product.title | escape }}</span>
+    </nav>
+
+    <div class="sp-product__layout">
+      <div class="sp-gallery{% if sp_images.size > 1 %} sp-gallery--thumbs{% endif %}">
+        <div class="sp-gallery__stage" data-sp-stage>
+          {%- if sp_media -%}
+            {%- assign sp_media_alt = sp_media.alt | default: product.title -%}
+            {{ sp_media | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '400, 600, 800, 1000, 1200, 1600', sizes: '(min-width: 900px) 46vw, 100vw', alt: sp_media_alt }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag }}
+          {%- endif -%}
+        </div>
+        {%- if sp_images.size > 1 -%}
+          <div class="sp-gallery__thumbs" role="group" aria-label="Product images">
+            {%- for media in sp_images -%}
+              {%- assign sp_thumb_alt = media.alt | default: product.title -%}
+              <button type="button" class="sp-gallery__thumb" data-sp-thumb="{{ media.id }}"
+                data-src="{{ media | image_url: width: 1200 }}"
+                data-srcset="{{ media | image_url: width: 600 }} 600w, {{ media | image_url: width: 1000 }} 1000w, {{ media | image_url: width: 1600 }} 1600w"
+                data-alt="{{ sp_thumb_alt | escape }}"
+                aria-current="{% if media.id == sp_media.id %}true{% else %}false{% endif %}">
+                {{ media | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+                <span class="sp-vh">Show image {{ forloop.index }}</span>
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="sp-product__info">
+        {%- if s.show_vendor and product.vendor != blank -%}
+          <a class="sp-product__vendor" href="{{ product.vendor | url_for_vendor }}">{{ product.vendor | escape }}</a>
+        {%- endif -%}
+        <h1 class="sp-product__title">{{ product.title | escape }}</h1>
+
+        <div class="sp-product__price" data-sp-price data-sp-price-save>
+          {%- render 'spoofy-price', price: sp_variant.price, compare: sp_variant.compare_at_price, show_save: true -%}
+        </div>
+        {%- if s.tax_note != blank -%}<div class="sp-product__tax">{{ s.tax_note }}</div>{%- endif -%}
+
+        {%- if s.show_stock -%}
+          <div class="sp-stock{% unless sp_variant.available %} sp-stock--out{% endunless %}" data-sp-stock>
+            {%- if sp_variant.available -%}In stock{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <fieldset class="sp-option" data-sp-option>
+              <legend>{{ option.name | escape }}</legend>
+              <div class="sp-option__values">
+                {%- for value in option.values -%}
+                  {%- assign sp_opt_id = 'SpoofyOpt-' | append: section.id | append: '-' | append: option.position | append: '-' | append: forloop.index -%}
+                  <input type="radio" id="{{ sp_opt_id }}" name="spoofy-option-{{ option.position }}" value="{{ value | escape }}"{% if option.selected_value == value %} checked{% endif %}>
+                  <label for="{{ sp_opt_id }}">{{ value | escape }}</label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        {%- form 'product', product, id: sp_form_id, data-sp-add: '' -%}
+          <input type="hidden" name="id" value="{{ sp_variant.id }}" data-sp-variant-id>
+          <p class="sp-product__error" data-sp-error role="alert" hidden></p>
+          <span class="sp-label" id="SpoofyQtyLabel-{{ section.id }}">{{ 'products.product.quantity.label' | t }}</span>
+          <div class="sp-buy">
+            <div class="sp-qty" data-sp-qty>
+              <button type="button" data-sp-qty-step="-1"><span aria-hidden="true">&minus;</span><span class="sp-vh">{{ 'products.product.quantity.decrease' | t: product: product.title | escape }}</span></button>
+              <input type="number" name="quantity" value="1" min="1" inputmode="numeric" aria-labelledby="SpoofyQtyLabel-{{ section.id }}">
+              <button type="button" data-sp-qty-step="1"><span aria-hidden="true">+</span><span class="sp-vh">{{ 'products.product.quantity.increase' | t: product: product.title | escape }}</span></button>
+            </div>
+            <button type="submit" class="sp-btn" data-sp-buy-btn{% unless sp_variant.available %} disabled data-sp-soldout{% endunless %}>
+              <span data-sp-btn-label>
+                {%- if sp_variant.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
+              </span>
+            </button>
+          </div>
+          {%- if s.show_dynamic_checkout -%}
+            <div class="sp-product__dynamic">{{ form | payment_button }}</div>
+          {%- endif -%}
+        {%- endform -%}
+
+        {%- assign sp_assure = section.blocks | where: 'type', 'assurance' -%}
+        {%- if sp_assure.size > 0 -%}
+          <ul class="sp-assure" role="list">
+            {%- for block in sp_assure -%}
+              <li {{ block.shopify_attributes }}>
+                {%- case block.settings.icon -%}
+                  {%- when 'truck' -%}
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 8h17v14H2zM19 13h6l5 5v4h-11z"/><circle cx="9" cy="23.5" r="2.5"/><circle cx="24" cy="23.5" r="2.5"/></svg>
+                  {%- when 'cash' -%}
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="8" width="26" height="16" rx="2"/><circle cx="16" cy="16" r="4"/><path d="M7 12v8M25 12v8"/></svg>
+                  {%- when 'return' -%}
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 12h14a7 7 0 010 14H10"/><path d="M11 7l-5 5 5 5"/></svg>
+                  {%- else -%}
+                    <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 6h22v16H14l-6 5v-5H5z"/><path d="M11 13h10M11 17h6"/></svg>
+                {%- endcase -%}
+                <span>{{ block.settings.text }}</span>
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if s.show_description and product.description != blank -%}
+          <details class="sp-acc" open>
+            <summary>{{ s.description_title | escape }}</summary>
+            <div class="sp-acc__body">{{ product.description }}</div>
+          </details>
+        {%- endif -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'accordion' -%}
+            {%- liquid
+              assign sp_acc_content = block.settings.content
+              if block.settings.page != blank
+                assign sp_acc_content = block.settings.page.content
+              endif
+            -%}
+            {%- if sp_acc_content != blank -%}
+              <details class="sp-acc" {{ block.shopify_attributes }}>
+                <summary>{{ block.settings.title | escape }}</summary>
+                <div class="sp-acc__body">{{ sp_acc_content }}</div>
+              </details>
+            {%- endif -%}
+          {%- elsif block.type == '@app' -%}
+            <div {{ block.shopify_attributes }}>{% render block %}</div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" data-sp-product-json>
+    {
+      "money_format": {{ shop.money_format | json }},
+      "strings": {
+        "add": {{ 'products.product.add_to_cart' | t | json }},
+        "soldout": {{ 'products.product.sold_out' | t | json }},
+        "unavailable": {{ 'products.product.unavailable' | t | json }},
+        "sale": {{ 'products.product.price.sale_price' | t | json }},
+        "regular": {{ 'products.product.price.regular_price' | t | json }},
+        "instock": "In stock",
+        "save": "Save"
+      },
+      "variants": [
+        {%- for variant in product.variants -%}
+          {
+            "id": {{ variant.id }},
+            "available": {{ variant.available | json }},
+            "price": {{ variant.price }},
+            "compare_at_price": {{ variant.compare_at_price | default: 0 }},
+            "options": {{ variant.options | json }},
+            "featured_media_id": {{ variant.featured_media.id | default: 'null' }}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+</div>
+
+<div class="sp-stickybuy" data-sp-stickybuy>
+  <div class="sp-stickybuy__info">
+    <div class="sp-stickybuy__title">{{ product.title | escape }}</div>
+    <div class="sp-stickybuy__price" data-sp-price>
+      {%- render 'spoofy-price', price: sp_variant.price, compare: sp_variant.compare_at_price -%}
+    </div>
+  </div>
+  <button type="submit" form="{{ sp_form_id }}" class="sp-btn" data-sp-buy-btn{% unless sp_variant.available %} disabled data-sp-soldout{% endunless %}>
+    <span data-sp-btn-label>
+      {%- if sp_variant.available -%}{{ 'products.product.add_to_cart' | t }}{%- else -%}{{ 'products.product.sold_out' | t }}{%- endif -%}
+    </span>
+  </button>
+</div>
+
+{% schema %}
+{
+  "name": "Spoofy product",
+  "class": "sp-product-section",
+  "settings": [
+    { "type": "checkbox", "id": "show_vendor", "label": "Show brand", "default": true },
+    { "type": "checkbox", "id": "show_stock", "label": "Show stock status", "default": true },
+    { "type": "inline_richtext", "id": "tax_note", "label": "Note under the price" },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show Buy it now button", "default": false },
+    { "type": "checkbox", "id": "show_description", "label": "Show product description", "default": true },
+    { "type": "text", "id": "description_title", "label": "Description heading", "default": "Description" }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "assurance",
+      "name": "Reassurance line",
+      "limit": 4,
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "options": [{ "value": "truck", "label": "Delivery" }, { "value": "cash", "label": "Cash" }, { "value": "return", "label": "Returns" }, { "value": "chat", "label": "Support" }], "default": "truck" },
+        { "type": "inline_richtext", "id": "text", "label": "Text", "default": "Cash on Delivery available" }
+      ]
+    },
+    {
+      "type": "accordion",
+      "name": "Accordion",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Refund Policy" },
+        { "type": "richtext", "id": "content", "label": "Content" },
+        { "type": "page", "id": "page", "label": "Or show a page", "info": "If set, the page content replaces the text above." }
+      ]
+    }
+  ]
+}
+{% endschema %}

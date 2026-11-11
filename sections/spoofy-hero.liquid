@@ -1,0 +1,48 @@
+{%- liquid
+  assign s = section.settings
+  assign sp_has_text = false
+  if s.eyebrow != blank or s.title != blank
+    assign sp_has_text = true
+  endif
+-%}
+<div class="sp-section sp-section--flush sp-hero">
+  {%- if s.link != blank and sp_has_text == false -%}<a class="sp-hero__media" href="{{ s.link }}">{%- else -%}<div class="sp-hero__media{% if sp_has_text %} sp-hero__media--cover{% endif %}">{%- endif -%}
+    {%- if s.image_mobile != blank -%}
+      <span class="sp-hero__only-mobile">{%- render 'spoofy-img', image: s.image_mobile, sizes: '100vw', lazy: false, alt: s.alt -%}</span>
+      <span class="sp-hero__only-desktop">{%- render 'spoofy-img', image: s.image, sizes: '100vw', lazy: false, alt: s.alt, placeholder: 'hero-apparel-1' -%}</span>
+    {%- else -%}
+      {%- render 'spoofy-img', image: s.image, sizes: '100vw', lazy: false, alt: s.alt, placeholder: 'hero-apparel-1' -%}
+    {%- endif -%}
+    {%- if sp_has_text -%}
+      <div class="sp-hero__overlay">
+        <div class="sp-wrap">
+          <div class="sp-hero__box">
+            {%- render 'spoofy-head', eyebrow: s.eyebrow, title: s.title, text: s.text, tag: 'p', class: 'sp-head--left' -%}
+            {%- if s.button_label != blank -%}
+              <div class="sp-actions sp-actions--left"><a class="sp-btn" href="{{ s.link | default: '#' }}">{{ s.button_label | escape }}</a></div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  {%- if s.link != blank and sp_has_text == false -%}</a>{%- else -%}</div>{%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Spoofy hero",
+  "class": "sp-hero-section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image", "info": "Optional. A taller crop for phones." },
+    { "type": "text", "id": "alt", "label": "Image description", "info": "Read out by screen readers." },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "header", "content": "Text over the image", "info": "Leave empty when the banner artwork already has its own text." },
+    { "type": "text", "id": "eyebrow", "label": "Script line" },
+    { "type": "text", "id": "title", "label": "Heading" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "text", "id": "button_label", "label": "Button label" }
+  ],
+  "presets": [{ "name": "Spoofy hero" }]
+}
+{% endschema %}

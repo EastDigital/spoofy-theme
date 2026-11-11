@@ -1,0 +1,43 @@
+{%- if section.blocks.size > 0 -%}
+  <div class="sp-announce" role="region" aria-label="Announcements">
+    <div class="sp-announce__track">
+      {%- for i in (1..2) -%}
+        <div class="sp-announce__group"{% if i == 2 %} aria-hidden="true"{% endif %}>
+          {%- for n in (1..section.settings.repeat) -%}
+            {%- for block in section.blocks -%}
+              <span class="sp-announce__item" {% if i == 1 and n == 1 %}{{ block.shopify_attributes }}{% endif %}>
+                {%- if block.settings.link != blank and i == 1 -%}
+                  <a href="{{ block.settings.link }}">{{ block.settings.text | escape }}</a>
+                {%- else -%}
+                  {{- block.settings.text | escape -}}
+                {%- endif -%}
+              </span>
+            {%- endfor -%}
+          {%- endfor -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Spoofy announcement",
+  "class": "sp-announce-section",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "range", "id": "repeat", "label": "Repeat messages", "info": "Raise this if the bar looks empty on wide screens.", "min": 1, "max": 8, "step": 1, "default": 4 }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Message",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Cash on Delivery available" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Spoofy announcement", "blocks": [{ "type": "message" }] }]
+}
+{% endschema %}

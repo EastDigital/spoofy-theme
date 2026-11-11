@@ -54,12 +54,12 @@
         {%- if show_qty -%}
         <hdt-quantity-wrapp class="hdt-quantity-wrapp">
           <button class="hdt-quantity__button no-js-hidden disabled" name="minus" type="button">
-            <span class="sr-only hdt-truncate">{{ 'products.product.quantity.decrease' | t: produc: product.title }}</span>
+            <span class="sr-only hdt-truncate">{{ 'products.product.quantity.decrease' | t: product: product.title }}</span>
             <svg focusable="false" class="icon icon--minus" width="10" height="10" viewBox="0 0 10 2" role="presentation"><path d="M10 0v2H0V0z" fill="currentColor"></path></svg>
           </button>
           <input class="hdt-quantity__input" type="number" name="quantity" id="Quantity-{{ section_id }}{{ product.id }}" min="{{ quantity_rule_min }}"{% if quantity_rule.max != null %} max="{{ quantity_rule.max }}"{% endif %} step="{{ quantity_rule.increment | default: 1 }}" value="{{ quantity_rule_min }}">
           <button class="hdt-quantity__button no-js-hidden" name="plus" type="button">
-            <span class="sr-only hdt-truncate">{{ 'products.product.quantity.increase' | t: produc: product.title }}</span>
+            <span class="sr-only hdt-truncate">{{ 'products.product.quantity.increase' | t: product: product.title }}</span>
             <svg focusable="false" class="icon icon--plus" width="10" height="10" viewBox="0 0 10 10" role="presentation"><path d="M6 4h4v2H6v4H4V6H0V4h4V0h2v4z" fill="currentColor" fill-rule="evenodd"></path></svg>
           </button>
         </hdt-quantity-wrapp>

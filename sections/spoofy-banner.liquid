@@ -1,0 +1,25 @@
+{%- assign s = section.settings -%}
+<div class="sp-section{% if s.background == 'sand' %} sp-section--sand{% endif %}">
+  <div class="sp-wrap">
+    {%- render 'spoofy-head', eyebrow: s.eyebrow, title: s.title -%}
+    {%- if s.link != blank -%}<a class="sp-banner" href="{{ s.link }}">{%- else -%}<div class="sp-banner">{%- endif -%}
+      {%- render 'spoofy-img', image: s.image, sizes: '(min-width: 1320px) 1240px, 100vw', alt: s.alt, placeholder: 'hero-apparel-2' -%}
+    {%- if s.link != blank -%}</a>{%- else -%}</div>{%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Spoofy banner image",
+  "class": "sp-banner-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Script line" },
+    { "type": "text", "id": "title", "label": "Heading" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "alt", "label": "Image description" },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "select", "id": "background", "label": "Background", "options": [{ "value": "ivory", "label": "Ivory" }, { "value": "sand", "label": "Sand" }], "default": "ivory" }
+  ],
+  "presets": [{ "name": "Spoofy banner image" }]
+}
+{% endschema %}
