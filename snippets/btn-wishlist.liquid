@@ -1,0 +1,43 @@
+{%- comment -%}
+  Renders a btn wishlist
+
+  Accepts:
+  - class: {String} a list class. (optional)
+  - disable_sr_only: {Boolean} remove class sr_only (optional)
+  - placement: {String} position tooltip (optional)
+  - is_remove_on_page: render a button remove on wishlist page
+
+  Usage:
+  {%- render 'btn-wishlist', class: 'xxx' -%}
+{%- endcomment -%}
+{% liquid
+  if section.id contains 'quick-add' or section.id contains 'quick-view' or section.id contains 'search' or section.id contains 'cart-drawer' or section.id contains 'header'
+    assign inner_tooltip = true
+  endif
+%}
+{%- if is_remove_on_page -%}
+  <hdt-wishlist class="{{ class }}" role="button" data-id="19041994" data-handle="handle_nt_94" action="remove" remove-on-page placement="{{ placement | default: 'none' }}"{% if inner_tooltip %} inner{% endif %}>
+    <svg class="hdt-svg-wis is-ic--remove" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M1.6 4.8H14.4V15.2C14.4 15.4122 14.3157 15.6157 14.1657 15.7657C14.0157 15.9157 13.8122 16 13.6 16H2.4C2.18783 16 1.98434 15.9157 1.83431 15.7657C1.68429 15.6157 1.6 15.4122 1.6 15.2V4.8ZM3.2 6.4V14.4H12.8V6.4H3.2ZM5.6 8H7.2V12.8H5.6V8ZM8.8 8H10.4V12.8H8.8V8ZM4 2.4V0.8C4 0.587827 4.08429 0.384344 4.23431 0.234315C4.38434 0.0842854 4.58783 0 4.8 0H11.2C11.4122 0 11.6157 0.0842854 11.7657 0.234315C11.9157 0.384344 12 0.587827 12 0.8V2.4H16V4H0V2.4H4ZM5.6 1.6V2.4H10.4V1.6H5.6Z" fill="currentColor"/></svg>
+    <span {% unless disable_sr_only %}class="sr-only"{% endunless %}>{{ 'general.wishlist.remove_wishlist' | t }}</span>
+  </hdt-wishlist>
+{%- elsif settings.wishlist_mode == "1" -%}
+  <hdt-wishlist class="{{ class }}" role="button" data-id="19041994" action="add" placement="{{ placement | default: 'none' }}"{% if inner_tooltip %} inner{% endif %}>
+    <svg width="16" height="16" aria-hidden="true" focusable="false" class="hdt-svg-wis" viewBox="0 0 16 16"><use xlink:href="#hdt-icon-wis"></use></svg>
+    <span {% unless disable_sr_only %}class="sr-only"{% endunless %}>{{ 'general.wishlist.add_to_wishlist' | t }}</span>
+  </hdt-wishlist>
+{%- elsif settings.wishlist_mode == "2" and shop.customer_accounts_enabled -%}
+  {%- if customer -%}
+    <hdt-wishlist class="{{ class }}" role="button" data-id="19041994" data-handle="handle_nt_94" action="add" placement="{{ placement | default: 'none' }}"{% if inner_tooltip %} inner{% endif %}>
+      <svg width="16" height="16" aria-hidden="true" focusable="false" class="hdt-svg-wis" viewBox="0 0 16 16"><use xlink:href="#hdt-icon-wis"></use></svg>
+      <span {% unless disable_sr_only %}class="sr-only"{% endunless %}>{{ 'general.wishlist.add_to_wishlist' | t }}</span>
+    </hdt-wishlist>
+  {%- else -%}
+    <hdt-tooltip class="{{ class }} hdt-card-product__btn-wishlist-er" placement="{{ placement | default: 'none' }}"{% if inner_tooltip %} inner{% endif %}>
+      <a href="{{ routes.account_login_url }}" {% unless customer or request.page_type contains 'customers' or settings.login_popup == false %} aria-controls="login-form-popup" {% endunless %} aria-expanded="false" placement="{{ placement | default: 'none' }}">
+        <svg width="16" height="16" aria-hidden="true" focusable="false" class="hdt-svg-wis" viewBox="0 0 16 16"><use xlink:href="#hdt-icon-wis"></use></svg>
+        <span {% unless disable_sr_only %}class="sr-only"{% endunless %}>{{ 'general.wishlist.login_to_use_wishlist' | t }}</span>
+      </a>
+    </hdt-tooltip>
+  {%- endif -%}
+{%- endif -%}

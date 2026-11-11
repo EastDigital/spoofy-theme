@@ -1,0 +1,86 @@
+{% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+{%- if predictive_search.performed -%}
+  {% if predictive_search.resources.products.size > 0 or predictive_search.resources.collections.size > 0 or predictive_search.resources.articles.size > 0 or predictive_search.resources.pages.size > 0 or predictive_search.resources.queries.size > 0 %}
+    {%- if predictive_search.resources.queries.size > 0 -%}
+      <div class="hdt-search-queries">
+        <h6 class="hdt-search-top-title hdt-font-medium">
+          {{- 'templates.search.suggestions' | t -}}
+        </h6>
+        <ul id="predictive-search-results-queries-list-desktop hdt-current-scrollbar" class="hdt-search-results-list hdt-text-base hdt-font-normal predictive-search__results-list hdt-current-scrollbar" role="group" aria-labelledby="predictive-search-pages-desktop">
+          {%- for query in predictive_search.resources.queries -%}
+            <li id="predictive-search-option-page-desktop-{{ forloop.index }}" class="predictive-search__list-item" role="option" aria-selected="false">
+              <a href="{{ query.url }}" class="predictive-search__item link link--text hdt-text-base hdt-font-normal hdt-inline-flex" tabindex="-1">
+                <div class="predictive-search__item-content predictive-search__item-content--centered">
+                  <p class="predictive-search__item-heading predictive-search__item-query-result h5" aria-label="{{ query.text }}">{{ query.styled_text }}</p>
+                </div>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+    {%- if predictive_search.resources.products.size > 0 -%}
+      <div class="hdt-search-products">
+        <h6 class="hdt-search-top-title hdt-font-medium">
+          {{- 'templates.search.products' | t -}}
+        </h6>
+        <div class="hdt-search-results-list hdt-row-products hdt-show-pr-price-{{ settings.predictive_search_show_price }} hdt-current-scrollbar">
+          {%- for product in predictive_search.resources.products -%}
+            {%- render 'pr_loop_item', section_id: section.id, product: product, sizes: "68px", widths: "68, 90, 120, 136, 180, 240", show_vendor: settings.predictive_search_show_vendor -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+    {%- if predictive_search.resources.collections.size > 0 -%}
+      <div class="hdt-search-collections">
+        <h6 class="hdt-search-top-title hdt-font-medium">
+          {{- 'templates.search.collection' | t -}}
+        </h6>
+        <div class="hdt-search-results-list hdt-search-list-collections hdt-current-scrollbar hdt-current-scrollbar">
+          {%- for collection in predictive_search.resources.collections -%}
+            {%- render 'collection_loop_item', collection: collection -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+    {%- if predictive_search.resources.articles.size > 0 -%}
+      <div class="hdt-search-articles">
+        <h6 class="hdt-search-top-title hdt-font-medium">
+          {{- 'templates.search.article' | t -}}
+        </h6>
+        <div class="hdt-search-results-list hdt-search-list-article hdt-current-scrollbar hdt-current-scrollbar">
+          {%- for article in predictive_search.resources.articles -%}
+            {%- render 'article_loop_item', article: article -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+    {%- if predictive_search.resources.pages.size > 0 -%}
+      <div class="hdt-search-pages">
+        <h6 class="hdt-search-top-title hdt-font-medium">
+          {{- 'templates.search.pages' | t -}}
+        </h6>
+        <ul id="predictive-search-results-pages-list-desktop hdt-current-scrollbar" class="hdt-search-results-list hdt-text-base hdt-font-normal predictive-search__results-list hdt-current-scrollbar" role="group" aria-labelledby="predictive-search-pages-desktop">
+          {%- for page in predictive_search.resources.pages -%}
+            <li id="predictive-search-option-page-desktop-{{ forloop.index }}" class="predictive-search__list-item" role="option" aria-selected="false">
+              <a href="{{ page.url }}" class="predictive-search__item link link--text" tabindex="-1">
+                <div class="predictive-search__item-content predictive-search__item-content--centered">
+                  <p class="predictive-search__item-heading h5">{{ page.title }}</p>
+                </div>
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+  {%- else -%}
+  	<div class="hdt-search-empty hdt-text-center hdt-flex hdt-align-center hdt-justify-center hdt-flex-col ">
+      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80" fill="none">
+        <path d="M32.9436 65.8872C14.7784 65.8872 0 51.1088 0 32.9436C0 14.7784 14.7784 0 32.9436 0C51.1088 0 65.8872 14.7784 65.8872 32.9436C65.8872 51.1088 51.1088 65.8872 32.9436 65.8872ZM32.9436 6.24523C18.222 6.24523 6.24523 18.222 6.24523 32.9436C6.24523 47.6652 18.222 59.642 32.9436 59.642C47.6652 59.642 59.642 47.6652 59.642 32.9436C59.642 18.222 47.6652 6.24523 32.9436 6.24523ZM79.0245 79.0855C80.2439 77.866 80.2439 75.8888 79.0245 74.6694L65.0508 60.6957C63.8313 59.4761 61.854 59.4761 60.6346 60.6957C59.4153 61.9152 59.4153 63.8925 60.6346 65.1118L74.6083 79.0855C75.218 79.6952 76.0173 80 76.8165 80C77.6157 80 78.4146 79.6952 79.0245 79.0855Z" fill="currentColor"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M40.6947 26.2928C40.8822 26.4803 40.9875 26.7346 40.9875 26.9998C40.9875 27.2649 40.8822 27.5193 40.6947 27.7068L35.4017 32.9998L40.6947 38.2928C40.8769 38.4814 40.9777 38.734 40.9754 38.9962C40.9731 39.2584 40.8679 39.5092 40.6825 39.6946C40.4971 39.88 40.2463 39.9852 39.9841 39.9875C39.7219 39.9897 39.4693 39.8889 39.2807 39.7068L33.9877 34.4138L28.6947 39.7068C28.5061 39.8889 28.2535 39.9897 27.9913 39.9875C27.7291 39.9852 27.4783 39.88 27.2929 39.6946C27.1075 39.5092 27.0023 39.2584 27 38.9962C26.9978 38.734 27.0986 38.4814 27.2807 38.2928L32.5737 32.9998L27.2807 27.7068C27.0986 27.5182 26.9978 27.2656 27 27.0034C27.0023 26.7412 27.1075 26.4904 27.2929 26.305C27.4783 26.1196 27.7291 26.0144 27.9913 26.0121C28.2535 26.0098 28.5061 26.1106 28.6947 26.2928L33.9877 31.5858L39.2807 26.2928C39.4682 26.1053 39.7225 26 39.9877 26C40.2529 26 40.5072 26.1053 40.6947 26.2928Z" fill="currentColor"/>
+      </svg>
+      <div class="hdt-no-result-product hdt-text-base hdt-font-normal">{{ 'general.search.no_product_results' | t }}</div>
+    </div>
+    <style>.hdt-search-empty{gap:15px;margin-top:30px}.hdt-search-empty svg{width:40px;height:40px}predictive-search[results=true] .hdt-search-hidden .hdt-search-bottom{opacity:0;visibility:hidden;display:none}</style>
+  {% endif %}
+{%- endif -%}  

@@ -1,0 +1,32 @@
+{%- comment -%}
+  Renders a product placeholder card
+
+  Accepts:
+  - image_ratio: {String} Size of the product image card. Values are "square" and "portrait". Default is "square" (optional)
+  - placeholder_image: {String} The placeholder image to use when no product exists. Default: 'product-apparel-2' (optional)
+
+  Usage:
+  {%- render 'card-product-placeholder', image_ratio: section.settings.image_ratio -%}
+{%- endcomment -%}
+{%- liquid
+  assign product_url = '/admin/products'
+-%}
+
+<hdt-card-product class="hdt-card-product {{ class }}{% if card_product.available == false %} hdt-pr-sold_out{% endif %}">
+  <div class="hdt-card-product-wrapper">
+    <div class="hdt-card-product__media">
+      <a href="{{ product_url }}"  data-not-instant calc-nav class="hdt-ratio"{% if image_ratio == 'adapt_image' %} style="--aspect-ratioapt: 1"{% endif %}>
+        {%- liquid
+        if placeholder_image
+          echo placeholder_image | placeholder_svg_tag: 'hdt-placeholder-svg'
+        else
+          echo 'product-apparel-2' | placeholder_svg_tag: 'hdt-placeholder-svg'
+        endif -%}
+      </a>
+    </div>
+    <div class="hdt-card-product__info">
+      <a href="{{ product_url }}" class="hdt-card-product__title hdt-h6" data-not-instant>{{ 'onboarding.product_title' | t }}</a>
+      {%- render 'card-price', product: card_product, price_class: '', show_compare_at_price: true -%}
+    </div>
+  </div>
+</hdt-card-product>

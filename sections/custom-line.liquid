@@ -1,0 +1,162 @@
+<!-- sections/custom-line.liquid -->
+{%- style -%}
+  #{{section.id}} .hdt-custom-line{
+    width:{{section.settings.line_width}}%;
+    border-style:{{section.settings.line_style}};
+    border-top-width:{{section.settings.line_height}}px;
+    border-color:{{section.settings.line_cl}};
+  }
+  #{{ section.id }}{
+    --section-pt: {{ section.settings.padding_top }}px;
+    --section-pb: {{ section.settings.padding_bottom }}px; 
+    --section-prate: {{ section.settings.padding_rate }};
+  }
+{%- endstyle -%}
+<div id="{{ section.id }}" class="hdt-section-spacing hdt-s-gradient">
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %} hdt-flex hdt-justify-{{ section.settings.line_pos }}">
+    <div class="hdt-custom-line"></div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.custom-line.name",
+  "tag": "section",
+  "class": "hdt-section hdt-line-section",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "1. General options"
+    },
+    {
+      "type": "select",
+      "id": "line_style",
+      "label": "t:sections.custom-line.settings.line_style.label",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "t:sections.custom-line.settings.line_style.options.solid"
+        },
+        {
+          "value": "dotted",
+          "label": "t:sections.custom-line.settings.line_style.options.dotted"
+        },
+        {
+          "value": "dashed",
+          "label": "t:sections.custom-line.settings.line_style.options.dashed"
+        },
+        {
+          "value": "double",
+          "label": "t:sections.custom-line.settings.line_style.options.double"
+        },
+        {
+          "value": "groove",
+          "label": "t:sections.custom-line.settings.line_style.options.groove"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "line_width",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "label": "t:sections.custom-line.settings.line_width",
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "line_height",
+      "min": 1,
+      "max": 15,
+      "step": 0.5,
+      "label": "t:settings_schema.typography.settings.line_height.label",
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "color",
+      "id": "line_cl",
+      "label": "t:sections.custom-line.settings.line_cl",
+      "default": "#EBEBEB"
+    },
+    {
+      "type": "select",
+      "id": "line_pos",
+      "label": "t:sections.custom-line.settings.line_pos.label",
+      "default": "center",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.custom-line.settings.line_pos.options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.custom-line.settings.line_pos.options.center"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.custom-line.settings.line_pos.options.right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section_layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.custom-line.name",
+      "category": "t:sections_categories.05_section.name"
+    }
+  ]
+}
+{% endschema %}

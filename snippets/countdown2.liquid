@@ -1,0 +1,32 @@
+{%- comment -%}
+  Renders a countdown
+
+  Accepts:
+  - countdown: {Date and time} (required)
+  - class: {String} a list class. (optional)
+
+  Usage:
+  {%- render 'countdown' with card_product.metafields.theme.countdown.value , class: 'xxx' -%}
+{%- endcomment -%}
+
+{%- assign effect_cd = 'move_top' -%}
+<hdt-countdown class="hdt-pr-countdown2 hdt-flex-wrap hdt-items-center {{ class }}" config='{"month":"{{ countdown | date: '%m' | plus: 0 }}", "date":"{{ countdown | date: '%d, %Y %H:%M:%S' }}", "hideTimerOnComplete": true, "hasZero": false }'>
+  <div class="hdt-countdown__inner hdt-flex" aria-hidden="true">
+    <div class="hdt-countdown__item hdt-countdown--days">
+      <hdt-countdown-amount effect="{{ effect_cd }}" class="hdt-countdown__amount hdt-text-lg hdt-font-medium" data-days>00</hdt-countdown-amount>
+      <hdt-countdown-text singular="{{ 'sections.countdown_timmer.day' | t | escape }}" class="hdt-countdown__text hdt-grid hdt-text-xs hdt-font-bold">{{ 'sections.countdown_timmer.day_plural' | t }}</hdt-countdown-text>
+    </div>
+    <div class="hdt-countdown__item hdt-countdown--hours">
+      <hdt-countdown-amount effect="{{ effect_cd }}" class="hdt-countdown__amount hdt-text-lg hdt-font-medium" data-hours>00</hdt-countdown-amount>
+      <hdt-countdown-text singular="{{ 'sections.countdown_timmer.hr' | t | escape }}" class="hdt-countdown__text hdt-grid hdt-text-xs hdt-font-bold">{{ 'sections.countdown_timmer.hr_plural' | t }}</hdt-countdown-text>
+    </div>
+    <div class="hdt-countdown__item hdt-countdown--minutes">
+      <hdt-countdown-amount effect="{{ effect_cd }}" class="hdt-countdown__amount hdt-text-lg hdt-font-medium" data-minutes>00</hdt-countdown-amount>
+      <hdt-countdown-text singular="{{ 'sections.countdown_timmer.min' | t | escape }}" class="hdt-countdown__text hdt-grid hdt-text-xs hdt-font-bold">{{ 'sections.countdown_timmer.min_plural' | t }}</hdt-countdown-text>
+    </div>
+    <div class="hdt-countdown__item hdt-countdown--seconds">
+      <hdt-countdown-amount effect="{{ effect_cd }}" class="hdt-countdown__amount hdt-text-lg hdt-font-medium" data-seconds>00</hdt-countdown-amount>
+      <hdt-countdown-text singular="{{ 'sections.countdown_timmer.sec' | t | escape }}" class="hdt-countdown__text hdt-grid hdt-text-xs hdt-font-bold">{{ 'sections.countdown_timmer.sec_plural' | t }}</hdt-countdown-text>
+    </div>
+  </div>
+</hdt-countdown>

@@ -1,0 +1,127 @@
+.hdt-price-table-content li{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size: var(--text-base);
+}
+.hdt-icon-check-true svg{
+  display: block;
+}
+.hdt-price-table-content svg{
+  width: 12px;
+  flex: 0 0 auto;
+}
+.hdt-price-table-content li:not(:last-child){
+  margin-bottom:var(--spacing-1);
+}
+.hdt-price-tables .hdt-card-product__info{
+  padding-inline-end:1.5rem;
+  padding-inline-start:1.5rem;
+  gap: 10px;
+}
+.hdt-price-table-contents{
+  padding:1.5rem 1.5rem 2rem;
+}
+.hdt-price-table-content{
+  padding-top:var(--spacing-1-4);
+  border-top: 1px solid rgb(var(--color-line-border));
+}
+.hdt-price-tables .hdt-card-product__vendor{
+  font-weight:var(--font-bold);
+  color:rgb(var(--color-foreground));
+}
+.hdt-price-tables .hdt-card-product__title {
+  font-size:var(--text-lg);
+  color:rgb(var(--color-foreground));
+}
+.hdt-price-tables .hdt-money {
+  color:rgb(var(--color-foreground));
+}
+.hdt-price-table-inner{
+ background-color:rgb(var(--color-background))
+}
+.hdt-price-tables .hdt-badge:not(.hdt-badge__sold_out){
+  background-color: var(--color-custom-badge-label);
+  min-height: 29px;
+}
+.hdt-price-table-item .hdt-price-table-inner{
+  transition: .5s ease 0s;
+}
+.hdt-price-table-item .hdt-card-product__media--hover{
+  background-color: transparent;
+}
+.hdt-price-table-btn{
+  margin-top:var(--spacing-2);
+}
+.hdt-price-table-heading{
+  margin-bottom: calc(var(--sec-heading-spacing) * 0.6);
+}
+.hdt-price-tables .hdt-section-title {
+  margin-bottom: 1rem;
+}
+.hdt-price-tables .hdt-card-product .hdt-card-product__media{
+  border-radius: unset;
+}
+.hdt-price-tables ul{
+  list-style: none;
+  padding: 0;
+}
+.hdt-price-tables ul li::before{
+  content: "\2713";
+  padding-inline-end: 10px;
+  color:rgb(var(--color-foreground));
+}
+
+@media(min-width:768px){
+  .hdt-price-tables .hdt-badge{
+    padding:0 16px;
+  }
+  .hdt-price-tables .hdt-card-product__info{
+    padding-inline-end:2rem;
+    padding-inline-start:2rem;
+  }
+  .hdt-price-table-contents{
+    padding:2rem 2rem 2rem;
+  }
+  .hdt-price-tables .hdt-card-product .hdt-color-list{
+    margin-top:5px;
+  }
+  .hdt-price-tables .hdt-price-wrapp{
+    margin-top: 6px;
+  }
+  .hdt-price-tables .hdt-section-title {
+    margin-bottom: 1.3rem;
+  }
+}
+@media(min-width:1150px){
+  .hdt-price-table-heading{
+    margin-bottom: var(--sec-heading-spacing);
+  }
+  .hdt-price-table-btn{
+    margin-top:var(--spacing-3-8);
+  }
+  .hdt-price-table-content{
+    padding-top:var(--spacing-2-2);
+  }
+  .hdt-price-tables .hdt-card-product__title {
+    font-size:var(--text-2xl);
+  }
+  .hdt-price-table-content li{
+    font-size: var(--text-lg);
+  }
+  .hdt-price-table-content li:not(:last-child){
+    margin-bottom:var(--spacing-1-8);
+  }
+  .hdt-price-tables .hdt-card-product__info{
+    padding-inline-end:3.7rem;
+    padding-inline-start:3.7rem;
+    padding-top:var(--spacing-2-6);
+    margin-top: 0;
+  }
+  .hdt-price-table-contents{
+    padding:2rem 3.7rem 4.8rem;
+  }
+}
+@media (-moz-touch-enabled: 0), (hover: hover) and (min-width: 1150px) {
+  
+}

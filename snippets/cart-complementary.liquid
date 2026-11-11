@@ -1,0 +1,115 @@
+{%- comment -%}
+  Renders a cart complementary products
+
+  Accepts:
+  - section: {Object} (required)
+
+  Usage:
+  {%- render 'cart-complementary', section: section -%}
+{%- endcomment -%}
+{%- liquid
+  if linklists.theme_brands.links
+    capture brand
+      case template.name
+        when "collection"
+          echo collection.metafields.theme.brand.value.name
+        when "product"
+          if product.metafields.theme.brand
+            echo product.metafields.theme.brand.value.name
+          else
+            for collection in product.collections
+              if collection.metafields.theme.brand
+                echo collection.metafields.theme.brand.value.name
+                break
+              endif
+            endfor
+          endif
+        when "page"
+          echo page.metafields.theme.brand.value.name
+        when "blog" or "article"
+          echo blog.metafields.theme.brand.value.name
+      endcase
+    endcapture
+  
+    assign index_active = 0
+    assign count = 0
+    for link in linklists.theme_brands.links
+      if link.active or link.child_active or link.child_current or link.title == brand and index_active == 0
+        assign count = count | plus: 1
+        assign index_active = forloop.index0
+        assign page_handle = link.handle
+      endif
+    endfor
+  endif
+  if count != 1
+    assign page_handle = linklists.theme_brands.links[0].handle
+  endif
+  assign complementary_products = pages[page_handle].metafields.theme.brand.value.cart.value | default: section.settings.product_list
+  if section.settings.replaces_products_selected
+    assign shopify_product_recommendation = cart.items.first.product.metafields.shopify--discovery--product_recommendation.complementary_products.value | where: "available", true
+    if shopify_product_recommendation != blank
+      assign complementary_products = shopify_product_recommendation
+    endif
+  endif
+  if complementary_products != blank
+    assign complementary_products_available = complementary_products | where: "available", true
+  endif
+  assign complementary_index = 0
+-%}
+{%- if complementary_products_available != blank -%}
+  {%- capture code_complementary -%}
+      {%- for item in complementary_products_available limit: 10 -%}
+        {%- liquid
+          assign line_items_quantity = cart | line_items_for: item | sum: 'quantity'
+          if line_items_quantity > 0
+            continue
+          endif
+          assign complementary_index = complementary_index | plus: 1
+          assign image = item.featured_media | default: settings.placeholder_img 
+        -%}
+        <div class="hdt-minicart-recommendations__item hdt-slider__slide hdt-flex hdt-align-center hdt-justify-center">
+          <div class="hdt-minicart-recommendations__item--image">
+            {%- if image != blank -%}
+              <a href="{{ item.url }}" class="hdt-d-block hdt-relative hdt-oh hdt-ratio" style="--aspect-ratioapt:{{ image.aspect_ratio | default: 0.6811989100817438 }}">
+                {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, sizes: '(max-width: 767px) 80px, 160px', widths: '80, 160' }}
+              </a>
+            {%- endif -%}
+          </div>
+          <div class="hdt-minicart-recommendations__item--infos hdt-relative hdt-oh">
+            <a href="{{ item.url }}" class="hdt-block hdt-minicart-recommendations__item--title hdt-s-text hdt-text-lg hdt-font-normal hdt-truncate">{{ item.title }}</a>
+            <div class="hdt-minicart-recommendations__item--price hdt-s-text hdt-text-base hdt-font-semibold">
+              {%- render 'card-price', product: item, price_class: 'hdt-price-wrapp', show_compare_at_price: true -%}
+            </div>
+          </div>
+          <div class="hdt-minicart-recommendations__item--quickview">
+            {%- if settings.show_quick_view -%}
+              <wrapp-hdt-open-modal-btn placement="top" inner>
+                <button type="button" handle="{{ item.handle }}" aria-controls="hdt-quick-view-modal" close-dialog="hdt-quick-view-modal" aria-expanded="false" class="hdt-card-product__btn-quick-view hdt-btn-loading__svg">
+                  <svg class="hdt-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><use xlink:href="#hdt-icon-quickview"></use></svg>
+                  <span class="hdt-loading__spinner hdt-absolute" hidden>
+                    <svg width="16" height="16" class="hdt-svg-spinner" focusable="false" role="presentation" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="hdt-path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
+                  </span>
+                  <span class="sr-only">{{ 'products.product.quick_view' | t }}</span>
+                </button>
+              </wrapp-hdt-open-modal-btn>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+  {%- endcapture -%}
+  {%- if complementary_index > 0 -%}
+    <div class="hdt-minicart-recommendations hdt-ratio--adapt_image hdt-relative" ref="complementary">
+      <div class="hdt-minicart-recommendations-heading hdt-flex hdt-align-center hdt-justify-between hdt-slider__dots_outline">
+        <h3 class="hdt-minicart-recommendations__title hdt-s-text hdt-text-lg hdt-font-semibold">{{ section.settings.heading }}</h3>
+        <div hdt-slider-dots aria-controls="Slider-{{ section.id }}" class="hdt-minicart-recommendation__dots hdt-slider__dots hdt-inline-flex no-js-hidden"></div>
+      </div>
+      <hdt-slider id="Slider-{{ section.id }}" class="hdt-minicart-recommendations__wrap hdt-slider lg:hdt-slides-1 hdt-relative hdt-oh" config='{ "dotUI": true }'>
+        <div class="hdt-slider__viewport">
+          <div class="hdt-slider__container">
+            {{ code_complementary }}
+          </div>
+        </div>
+      </hdt-slider>
+    </div>
+  {%- endif -%}
+{%- endif -%}

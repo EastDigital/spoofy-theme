@@ -1,0 +1,178 @@
+<!-- blocks/image-masonry.liquid -->
+{%- style -%}
+  #{{ block.id }}{
+    grid-column   : {{ block.settings.column_start }} / {{ block.settings.column_end }};
+    grid-row      : {{ block.settings.row_start }} / {{ block.settings.row_end }};
+  }
+{%- endstyle -%}
+<div id="{{ block.id }}" class="hdt-img_item hdt-relative hdt-oh hdt-eff-{{ block.settings.b_effect }} hdt-eff-img-{{ block.settings.img_effect }} hdt-eff" hdt-reveal="slide-in" timeline {{ block.shopify_attributes }}>
+  <div class="hdt-media hdt-h-full hdt-relative hdt-oh {{ block.settings.rounded }}">
+    {% liquid
+      assign widths = '100,200,300,400,500,600,700,800,900,1000,1200,1400,1600,1800,1900,2000,2400,2600,3000,3200,3400'
+      if block.settings.image != blank
+        echo block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: 'lazy', width: block.settings.image.width, height: block.settings.image.height, class: 'hdt-object-cover hdt-full-width-link hdt-object-center hdt-w-full hdt-h-full hdt-obj-eff', sizes: '', widths: widths
+      else
+        echo 'blog-apparel-2' | placeholder_svg_tag: 'hdt-object-cover hdt-full-width-link hdt-object-center hdt-w-full hdt-h-full'
+      endif 
+    %}
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Image masonry",
+    "tag": null,
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      },
+      {
+        "type": "range",
+        "id": "column_start",
+        "min": 1,
+        "max": 13,
+        "step": 1,
+        "label": "Column start",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "column_end",
+        "min": 1,
+        "max": 13,
+        "step": 1,
+        "label": "Column end",
+        "default": 13
+      },
+      {
+        "type": "range",
+        "id": "row_start",
+        "min": 1,
+        "max": 13,
+        "step": 1,
+        "label": "Row start",
+        "default": 1
+      },
+      {
+        "type": "range",
+        "id": "row_end",
+        "min": 1,
+        "max": 13,
+        "step": 1,
+        "label": "Row end",
+        "default": 13
+      },
+      {
+        "type": "select",
+        "id": "img_effect",
+        "label": "t:sections.all.image_effect.image_hover_eff.label",
+        "info": "t:sections.all.image_effect.image_hover_eff.info",
+        "default": "none",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.none"
+          },
+          {
+            "value": "zoom",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.zoom"
+          },
+          {
+            "value": "rotate",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.rotate"
+          },
+          {
+            "value": "translateToTop",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.translateToTop"
+          },
+          {
+            "value": "translateToRight",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.translateToRight"
+          },
+          {
+            "value": "translateToBottom",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.translateToBottom"
+          },
+          {
+            "value": "translateToLeft",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.translateToLeft"
+          },
+          {
+            "value": "filter",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.filter"
+          },
+          {
+            "value": "bounceIn",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.bounceIn"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "b_effect",
+        "label": "t:sections.all.image_effect.item_eff.label",
+        "default": "none",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.all.image_effect.item_eff.options.none"
+          },
+          {
+            "value": "border-run",
+            "label": "t:sections.all.image_effect.item_eff.options.border_run"
+          },
+          {
+            "value": "pervasive-circle",
+            "label": "t:sections.all.image_effect.item_eff.options.pervasive_circle"
+          },
+          {
+            "value": "plus-zoom-overlay",
+            "label": "t:sections.all.image_effect.item_eff.options.plus_zoom_overlay"
+          },
+          {
+            "value": "overlay",
+            "label": "t:sections.all.image_effect.item_eff.options.overlay"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "rounded",
+        "label": "Rounded",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:none"
+          },
+          {
+            "value": "hdt-radius-xs",
+            "label": "t:settings_schema.typography.settings.font_size.xs"
+          },
+          {
+            "value": "hdt-radius-sm",
+            "label": "t:settings_schema.typography.settings.font_size.sm"
+          },
+          {
+            "value": "hdt-radius",
+            "label": "t:settings_schema.typography.settings.font_size.base"
+          },
+          {
+            "value": "hdt-radius-lg",
+            "label": "t:settings_schema.typography.settings.font_size.lg"
+          },
+          {
+            "value": "hdt-radius-full",
+            "label": "Full"
+          }
+        ],
+        "default": "none"
+      }, 
+    ],
+    "presets": [
+      {
+        "name": "Image masonry"
+      }
+    ]
+  }
+{% endschema %}

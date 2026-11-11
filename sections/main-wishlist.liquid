@@ -1,0 +1,491 @@
+<!-- main-wishlist.liquid -->
+{%- comment -%}{{ 'hdt-card-products.css' | asset_url | stylesheet_tag }}{%- endcomment -%}
+{{ 'hdt-main-collection.css' | asset_url | stylesheet_tag }}
+{{ 'hdt-pagination.css' | asset_url | stylesheet_tag }}
+<style type="text/css">.hdt-wishlist-empty{padding:100px 0;gap:0}.hdt-wishlist-empty>svg{margin-bottom:33px;color:rgb(var(--color-line-border))}.hdt-no-result-info{max-width:550px;margin:17px auto}</style>
+{%- liquid
+  assign color_list = 'products.theme_settings.color' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq
+  assign size_list = 'products.theme_settings.size' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq
+  assign products_id = 'products-' | append: section.id
+  assign arr_col_from_attr = cart.attributes.products_items_per_row | split: '.'
+  assign col_mb = section.settings.col_mb | plus: 0
+  assign col_tb = section.settings.col_tb | plus: 0
+  assign col_dk = section.settings.col_dk | plus: 0
+  assign col_mobile = arr_col_from_attr[0] | default: col_mb | plus: 0
+  assign col_tablet = arr_col_from_attr[1] | default: col_tb | plus: 0
+  assign col_tablet = col_tablet | at_most: col_dk | plus: 0
+  assign col_desktop = arr_col_from_attr[2] | default: col_dk | plus: 0
+-%}
+{%- liquid
+  assign current_width = settings.page_width | append: 'px'
+  assign current_width_tb = '100vw'
+  assign current_width_mb = '100vw'
+  assign space_item = "30px"
+  assign space_item_tb = "15px"
+  assign space_item_mb = "15px" 
+-%}
+{%- capture sizes -%}
+  (min-width: 1150px) calc(({{ current_width }} -  {{ space_item }} * {{ section.settings.col_dk | minus: 1 }}) * {{ 1.00 | divided_by: section.settings.col_dk | round: 2 }}) {{- -}}
+  , (min-width: 768px) calc( ({{ current_width_tb }} - {{ space_item_tb }} * {{ section.settings.col_tb | minus: 1 }} ) * {{ 1.00 | divided_by: section.settings.col_tb | round: 2 }})  {{- -}}
+  , calc( ({{ current_width_mb }} - {{ space_item_mb }} * {{ section.settings.col_mb | minus: 1 }} ) * {{ 1.00 | divided_by: section.settings.col_mb | round: 2 }})
+{%- endcapture -%}
+{%- liquid
+  if request.design_mode
+    assign arr_results   = section.settings.product_list
+    assign results_count = arr_results.count
+  else
+   assign arr_results = search.results
+   assign results_count = search.results_count
+  endif   
+-%}
+
+<div id="{{ section.id }}" main-content class="hdt-section-spacing hdt-s-gradient" style="--section-pt: {{ section.settings.padding_top }}px; --section-pb: {{ section.settings.padding_bottom }}px; --section-prate:{{ section.settings.padding_rate }};" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %} hdt-ratio--{{ section.settings.image_ratio }} {% unless section.settings.image_size %} hdt-ratio--contain{% endunless %}">
+    {%- if results_count <= 0 -%}
+      <div class="hdt-wishlist-empty hdt-text-center hdt-flex hdt-align-center hdt-justify-center hdt-flex-col">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="37" viewBox="0 0 40 37" fill="none">
+          <path d="M20.2 31.1L20 31.3L19.78 31.1C10.28 22.48 4 16.78 4 11C4 7 7 4 11 4C14.08 4 17.08 6 18.14 8.72H21.86C22.92 6 25.92 4 29 4C33 4 36 7 36 11C36 16.78 29.72 22.48 20.2 31.1ZM29 0C25.52 0 22.18 1.62 20 4.16C17.82 1.62 14.48 0 11 0C4.84 0 0 4.82 0 11C0 18.54 6.8 24.72 17.1 34.06L20 36.7L22.9 34.06C33.2 24.72 40 18.54 40 11C40 4.82 35.16 0 29 0Z" fill="currentColor"/>
+        </svg>
+        <h5 class="hdt-no-result-product hdt-text-10xl hdt-font-normal hdt-s-text">{{ 'general.wishlist.empty_wishlist' | t }}</h5>
+        <p class="hdt-no-result-info hdt-text-base hdt-font-normal hdt-s-text2">{{ 'general.wishlist.empty_info_wishlist' | t }}</p>
+        {%- assign btn_blocks = section.blocks | where: "type", 'btn' -%}
+        {%- if btn_blocks.size > 0 -%}
+          {%- for block in btn_blocks -%}
+            {%- if block.settings.title != blank -%}
+              <a {% if block.settings.url == blank %} role="link" disabled="true" {% else %} href="{{ block.settings.url }}" {% endif %} class="hdt-compare-emty__ button hdt-btn hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-{{ block.settings.btn_style }} hdt-font-{{ block.settings.btn_fw }}">
+                <span>{{ block.settings.title }}</span>
+                {%- if block.settings.btn_icon == "1" -%}
+                  <svg class="hdt-icon hdt-icon-1" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 64 64" fill="currentColor"><path d="M12,56.43,36.48,32,12,7.52,19.53,0,51.61,32,19.53,64Z"/></svg>
+                {%- elsif block.settings.btn_icon == "2" -%}
+                  <svg class="hdt-icon hdt-icon-2" xmlns="http://www.w3.org/2000/svg" width="12" height="12"  viewBox="0 0 64 64" fill="currentColor"><path d="M6.89,64,0,57.11,47.26,9.85H4.92V0H64V59.08H54.15V16.74Z"/></svg>
+                {%- endif -%}
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      {%- paginate search.results by section.settings.products_count -%}
+      <div class="hdt-shop-control">
+        <div class="hdt-col hdt-control-layout hdt-wishlist-control">
+          {%- if section.settings.enable_num_cols_selector -%}
+            {%- render 'layout-switch', results: search, section_id: section.id, controls_id: products_id, col_mobile: col_mobile, col_tablet: col_tablet, col_desktop: col_desktop -%}
+          {%- endif -%}
+        </div>
+      </div>
+      <hdt-reval-items reveal-on-scroll="true" id="{{ products_id }}" scroll-into-view class="hdt-collection-products hdt-collection-has-pr1 hdt-pr-border_{{ section.settings.pr_border }} hdt-row-grid hdt-row-grid--modify hdt-justify-center hdt-grid-cols-{{ col_mobile }} md:hdt-grid-cols-{{ col_tablet }} lg:hdt-grid-cols-{{ col_desktop }} hdt-ratio--{{ section.settings.image_ratio }}{% unless section.settings.image_size %} hdt-ratio--contain{% endunless %}">
+        {%- if request.design_mode -%}
+          {%- liquid
+            for product in section.settings.product_list
+              capture btn_wishlist_code
+                if settings.wishlist_mode != '0'
+                  render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'left', is_remove_on_page: true
+                endif
+              endcapture
+              unless settings.remove_collection_url
+                assign product_url = product.url | within: section.settings.collection
+              endunless
+              if col_mobile == 0 or col_tablet == 0 or col_desktop == 0
+                render 'card-product-list', card_product: product, class: "hdt-pr-list", section_id: section.id, sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+              else
+                render 'card-product-wishlist', card_product: product, class: "hdt-pr-style1 hdt-pr-wishlist", section_id: section.id, sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+              endif
+            endfor
+          -%}
+        {%- else -%}
+          {%- liquid
+            for product in search.results
+              capture btn_wishlist_code
+                if settings.wishlist_mode != '0'
+                  render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'left', is_remove_on_page: true
+                endif
+              endcapture
+              unless settings.remove_collection_url
+                assign product_url = product.url | within: section.settings.collection
+              endunless
+              if col_mobile == 0 or col_tablet == 0 or col_desktop == 0
+                render 'card-product-list', card_product: product, class: "hdt-pr-list", section_id: section.id, sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+              else
+                render 'card-product-wishlist', card_product: product, class: "hdt-pr-style1 hdt-pr-wishlist", section_id: section.id, sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+              endif
+            endfor
+          -%}
+        {%- endif -%}
+      </hdt-reval-items> 
+      {%- if paginate.pages > 1 -%}
+        {%- render 'pagination', paginate: paginate, anchor: '', section_id: section.id , pagination_type: section.settings.pagination_type, append_id: products_id, paginate_pos: section.settings.paginate_pos, dis_pagination: section.settings.dis_pagination -%}
+      {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</div>
+<script>var isPageWishlist = !Shopify.designMode, isWishlistPerformed = {{ search.performed }};</script>
+{% schema %}
+{
+  "name": "t:sections.main-wishlist.name",
+  "tag": "section",
+  "class": "hdt-section hdt-section-main hdt-main-wishlist",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Demo exist wishlist products on editor"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Products test",
+      "limit": 6,
+      "info": "Only shown on editor admin"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_num_cols_selector",
+      "label": "t:sections.main-collection.settings.enable_num_cols_selector.label",
+      "info": "t:sections.main-collection.settings.enable_num_cols_selector.info",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt_image",
+          "label": "t:sections.all.images.ratio.adapt_image.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.all.images.ratio.square.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.all.images.ratio.portrait.label"
+        },
+        {
+          "value": "asos",
+          "label": "t:sections.all.images.ratio.asos.label"
+        },
+        {
+          "value": "landscape",
+          "label": "t:sections.all.images.ratio.landscape.label"
+        },
+        {
+          "value": "custom-pr",
+          "label": "t:sections.all.images.ratio.custom.label"
+        }
+      ],
+      "label": "t:sections.all.images.ratio.label",
+      "default": "asos"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_size",
+      "label": "t:sections.all.images.size.cover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "t:sections.collection_products.settings.show_vendor",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "pr_border",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.collection_products.settings.pr_border.none"
+        },
+        {
+          "value": "in_image",
+          "label": "t:sections.collection_products.settings.pr_border.in_image"
+        },
+        {
+          "value": "on_item",
+          "label": "t:sections.collection_products.settings.pr_border.on_item"
+        },
+        {
+          "value": "on_grid",
+          "label": "t:sections.collection_products.settings.pr_border.on_grid"
+        }
+      ],
+      "label": "t:sections.collection_products.settings.pr_border.label",
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection_products.settings.options_layout"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "label": "t:sections.all.limit",
+      "info": "Only work on live page",
+      "default": 12,
+    },
+    {
+      "type": "select",
+      "id": "col_dk",
+      "label": "t:sections.all.items_row.desktop",
+      "default": "4",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        },
+        {
+          "label": "3",
+          "value": "3"
+        },
+        {
+          "label": "4",
+          "value": "4"
+        },
+        {
+          "label": "5",
+          "value": "5"
+        },
+        {
+          "label": "6",
+          "value": "6"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "col_tb",
+      "label": "t:sections.all.items_row.tablet",
+      "default": "3",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        },
+        {
+          "label": "3",
+          "value": "3"
+        },
+        {
+          "label": "4",
+          "value": "4"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "col_mb",
+      "label": "t:sections.all.items_row.mobile",
+      "default": "2",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "pagination_type",
+      "label": "Pagination",
+      "info": "Choose a type for the pagination on your page",
+      "options": [
+        {
+          "value": "links",
+          "label": "Links"
+        },
+        {
+          "value": "load_more",
+          "label": "Load more button"
+        },
+        {
+          "value": "infinite",
+          "label": "Infinite scrolling"
+        }
+      ],
+      "default": "links"
+    },
+    {
+      "type": "select",
+      "id": "paginate_pos",
+      "label": "t:sections.all.pagination.paginate_pos.label",
+      "default": "center",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.all.pagination.paginate_pos.option_1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.all.pagination.paginate_pos.option_2.label"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.all.pagination.paginate_pos.option_3.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "dis_pagination",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "label": "t:sections.all.pagination.dis_pagination.label",
+      "default": 60
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section_layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "btn",
+      "name": "Button empty",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.main_compare.blocks.btn.settings.paragraph.content"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.main_compare.blocks.btn.settings.title.label",
+          "default": "Return to shop"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "t:sections.main_compare.blocks.btn.settings.url.label"
+        },
+        {
+          "type": "select",
+          "id": "btn_style",
+          "label": "t:sections.all.button.settings.style.label",
+          "options": [
+            {
+              "value": "solid",
+              "label": "t:sections.all.button.settings.style.options.option_1"
+            },
+            {
+              "value": "outline",
+              "label": "t:sections.all.button.settings.style.options.option_2"
+            },
+            {
+              "value": "link",
+              "label": "t:sections.all.button.settings.style.options.option_4"
+            }
+          ],
+          "default": "solid"
+        },
+        {
+          "type": "select",
+          "id": "btn_fw",
+          "label": "t:sections.all.button.settings.font_weight.label",
+          "options": [
+            {
+              "value": "normal",
+              "label": "t:sections.all.button.settings.font_weight.options.option_1"
+            },
+            {
+              "value": "medium",
+              "label": "t:sections.all.button.settings.font_weight.options.option_2"
+            },
+            {
+              "value": "semibold",
+              "label": "t:sections.all.button.settings.font_weight.options.option_3"
+            },
+            {
+              "value": "bold",
+              "label": "t:sections.all.button.settings.font_weight.options.option_4"
+            }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "select",
+          "id": "btn_icon",
+          "label": "t:sections.all.button.settings.icon.label",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:sections.all.button.settings.icon.options.option_0"
+            },
+            {
+              "value": "1",
+              "label": "t:sections.all.button.settings.icon.options.option_1"
+            },
+            {
+              "value": "2",
+              "label": "t:sections.all.button.settings.icon.options.option_2"
+            }
+          ],
+          "default": "none"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

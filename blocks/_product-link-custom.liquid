@@ -1,0 +1,34 @@
+{%- if block.settings.label != blank -%}
+  <a {% if block.settings.url == blank %}role="link" aria-disabled="true"{% else %}href="{{ block.settings.url }}"{% endif %} {% if block.settings.open_in_new_tab %} target="_blank" {% endif -%} class="hdt-s-text hdt-text-base hdt-font-semibold">{{ block.settings.label }}</a>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Link custom",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:blocks.button.settings.label"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "Link",
+      "visible_if": "{{ block.settings.label != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_in_new_tab",
+      "label": "Open this link in a new tab",
+      "default": false,
+      "visible_if": "{{ block.settings.url != blank }}"
+    }
+  ],
+  "presets": [
+    { 
+      "name": "Link custom" 
+    }
+  ]
+}
+{% endschema %}

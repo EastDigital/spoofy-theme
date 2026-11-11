@@ -1,0 +1,277 @@
+<!-- sections/newsletter-modal.liquid -->
+{{ 'hdt-newsletter-popup.css' | asset_url | stylesheet_tag }}
+{%- assign s_id = section.id | prepend: 'modalNewsletter-' -%}
+<sys-newsletter configs='{ "id": "{{ section.id }}", "after": "{{ section.settings.after }}", "day_next": {{ section.settings.day_next }}, "time_delay": {{ section.settings.time_delay }},  "scroll_delay": {{ section.settings.scroll_delay }} }'>
+  <hdt-modal class="hdt-modal hdt-modal-newsletter hdt-contents hdt-modal-{{ section.settings.direction }}" color-scheme="{{ section.settings.color_scheme }}">
+    <dialog id="modalNewsletter-{{ section.id }}" class="hdt-dialog hdt-dialog-modal" scroll-lock>
+      {% unless request.design_mode %}
+        <button action-close ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="modalNewsletter-{{ section.id }}" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+      {% endunless %}
+      <div class="hdt-dialog-modal__inner hdt-current-scrollbar">
+        <div class="hdt-wrapper hdt-s-gradient hdt-ratio--adapt_image {% if section.settings.direction == "hor" %} hdt-flex hdt-justify-center hdt-align-center{% endif %}">
+          <div class="hdt-img_wrap">
+            {%- if section.settings.image != blank -%}
+              <div class="hdt-ratio hdt-modal-newsletter-image_dk hdt-hidden@mobile" style="--aspect-ratioapt: {{ section.settings.image.aspect_ratio | default: 1.6 }};">
+                {{ section.settings.image | image_url: width: section.settings.image.width | image_tag: loading: 'lazy', sizes: "(min-width: 768px) 625px, 100vw", class: 'hdt-object-pos-mb', widths: '400,600,800,1000,1200,1400,1500' }}
+              </div>
+            {%- endif -%}
+            {%- if section.settings.image_mb != blank -%}
+              <div class="hdt-ratio hdt-modal-newsletter-image_mb" style="--aspect-ratioapt: {{ section.settings.image_mb.aspect_ratio | default: 1.6 }};">
+                {{ section.settings.image_mb | image_url: width: section.settings.image_mb.width | image_tag: loading: 'lazy', sizes: "(min-width: 768px) 625px, 100vw", class: 'hdt-object-pos-mb', widths: '400,600,800,1000,1200,1400,1500' }}
+              </div>
+            {%- endif -%}
+          </div>
+          {%- if section.blocks.size > 0 -%}   
+            <div class="hdt-content hdt-text-center">
+              {%- for block in section.blocks -%}
+                {%- case block.type -%}
+                  {%- when 'text' -%}
+                    {%- if block.settings.text != blank -%}
+                      <h4 class="hdt-h4 hdt-s-text hdt-normal hdt-text">{{ block.settings.text }}</h4>
+                    {%- endif -%}
+                  {%- when 'sub_text' -%}
+                    {%- if block.settings.sub_text != blank -%}
+                      <p class="hdt-text-2xl hdt-s-text hdt-normal hdt-subtext">{{ block.settings.sub_text }}</p>
+                    {%- endif -%}
+                  {%- when 'newsletter' -%}
+                    <div class="hdt-newsletter">
+                      {% render 'newsletter', button_lb: block.settings.button_lb, btn_fw: block.settings.btn_fw, form_id: block.id, s_id: s_id, agree_form: block.settings.agree_form, content: block.settings.content %}
+                    </div>
+                  {%- when 'popup_button' -%}
+                    {%- if block.settings.button_label != blank -%}
+                      <button action-close class="hdt-btn hdt-btn-link hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-base hdt-font-semibold" aria-label="{{ 'accessibility.close' | t | escape }}">{{ block.settings.button_label }}</button>
+                    {%- endif -%}
+                {%- endcase -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </dialog>
+  </hdt-modal>
+</sys-newsletter>
+{% schema %}
+{
+  "name": "t:sections.newsletter_popup.name",
+  "class": "hdt-section-admn2-fixed sys-newsletter",
+  "limit": 2,
+  "presets": [
+    {
+      "name": "t:sections.newsletter_popup.name",
+      "category": "05. Section",
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "text": "Don’t miss out"
+          }
+        },
+        {
+          "type": "sub_text",
+          "settings": {
+            "sub_text": "Be the first one to get the new product at early<br class=\"hdt-hidden md:hdt-block\"> bird prices."
+          }
+        },
+        {
+          "type": "newsletter",
+          "settings": {
+            "button_lb": "Keep me updated",
+            "btn_fw": "normal"
+          }
+        },
+        {
+          "type": "popup_button",
+          "settings": {
+            "button_label": "Not interested"
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "custom.system"
+    ]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.newsletter_popup.settings.color",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.newsletter_popup.settings.image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.newsletter_popup.settings.image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mb",
+      "label": "t:sections.newsletter_popup.settings.image_mb"
+    },
+    {
+      "type":"select",
+      "id":"direction",
+      "label":"t:sections.newsletter_popup.settings.direction.label",
+      "default":"ver",
+      "info":"t:sections.newsletter_popup.settings.direction.info", 
+      "options":[
+        {
+          "value":"hor",
+          "label":"t:sections.newsletter_popup.settings.direction.option_1"
+        },
+        {
+          "value":"ver",
+          "label":"t:sections.newsletter_popup.settings.direction.option_2"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.newsletter_popup.settings.show_popup"
+    },
+    {
+      "type": "select",
+      "id": "after",
+      "label": "t:sections.newsletter_popup.settings.after.label",
+      "default": "scroll",
+      "options": [
+        {
+          "value": "time",
+          "label": "t:sections.newsletter_popup.settings.after.some_time"
+        },
+        {
+          "value": "scroll",
+          "label": "t:sections.newsletter_popup.settings.after.scroll"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "time_delay",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "unit": "sec",
+      "label": "t:sections.newsletter_popup.settings.time_delay.label",
+      "info": "t:sections.newsletter_popup.settings.time_delay.info",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "scroll_delay",
+      "min": 100,
+      "max": 5000,
+      "step": 50,
+      "label": "t:sections.newsletter_popup.settings.scroll_delay.label",
+      "info": "t:sections.newsletter_popup.settings.scroll_delay.info",
+      "default": 800
+    },
+    {
+      "type": "range",
+      "id": "day_next",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "unit": "day",
+      "label": "t:sections.exit_popup.settings.next_time.label",
+      "info": "t:sections.exit_popup.settings.next_time.info",
+      "default": 7
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "t:sections.newsletter_popup.blocks.text.label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.newsletter_popup.blocks.text.label",
+          "default": "The4 Studio"
+        }
+      ]
+    },
+    {
+      "type": "sub_text",
+      "name": "t:sections.newsletter_popup.blocks.sub_text.label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "sub_text",
+          "label": "t:sections.newsletter_popup.blocks.sub_text.label",
+          "default": "The4 Studio sub text"
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_lb",
+          "label": "t:sections.newsletter.settings.button_lb.label",
+          "default": "Keep me updated",
+          "info": "t:sections.newsletter.settings.button_lb.info"
+        },
+        {
+          "type": "select",
+          "id": "btn_fw",
+          "label": "t:sections.all.button.settings.font_weight.label",
+          "options": [
+            {
+              "value": "normal",
+              "label": "t:sections.all.button.settings.font_weight.options.option_1"
+            },
+            {
+              "value": "medium",
+              "label": "t:sections.all.button.settings.font_weight.options.option_2"
+            },
+            {
+              "value": "semibold",
+              "label": "t:sections.all.button.settings.font_weight.options.option_3"
+            },
+            {
+              "value": "bold",
+              "label": "t:sections.all.button.settings.font_weight.options.option_4"
+            }
+          ],
+          "default": "normal"
+        },
+        {
+          "type":"checkbox",
+          "id":"agree_form",
+          "label":"t:sections.newsletter.settings.agree_form.label",
+          "info": "t:sections.newsletter.settings.agree_form.info"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "content",
+          "label": "t:sections.newsletter.settings.content.label",
+          "default": "I agree with the terms and conditions"
+        }
+      ]
+    },
+    {
+      "type": "popup_button",
+      "name": "t:sections.newsletter_popup.blocks.button.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "t:sections.newsletter_popup.blocks.button.label",
+          "default": "Not interested"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

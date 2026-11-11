@@ -1,0 +1,95 @@
+{%- comment -%}
+  Renders product media item.
+  Accepts:
+  - product: {Object} product object.
+  - block: {Object} passing the block information.
+  - product_form_id: {String} product form id.
+  - section_id: {String} id of section to which this snippet belongs.
+
+  - media: {Object} Product Media object
+  - position: {String} Position of the media. Used for accessible label.
+  - group_media_obj: {Json}
+  - class: {String} a class list
+  - autoplay: {Boolean} Enable media autoplay (optional)
+  - loop: {Boolean} Enable video looping (optional)
+  - lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+  - variant_images
+  - sizes: {Array} a array width image
+  - selected_variant
+  - un_no_pick
+
+  Usage:
+  {%- render 'media', media: media -%}
+{%- endcomment -%}
+
+{%- liquid
+  unless lazy_load == false
+    assign lazy = 'lazy'
+  endunless
+  if autoplay
+    assign mute = true
+  else
+    assign mute = false
+  endif
+  assign image = media.preview_image
+  assign media_group = group_media_obj | where: "mid", media.id | first
+  if media_group.size > 0
+    if un_no_pick
+    assign media_hidden = 'hidden'
+    endif
+    assign media_option_name = 'option' | append: media_group.option
+    assign media_option_value = product.options_with_values[media_group.option].values[media_group.value]
+    assign current_value = selected_variant.options[media_group.option]
+    if current_value == media_option_value and current_value != blank
+      assign media_hidden = ''
+    endif
+  else
+  assign media_option_name = ''
+  assign media_option_value = ''
+  endif
+
+  assign image_ratio = block.settings.image_ratio | default: section.settings.image_ratio
+-%}
+
+{%- if media.media_type == 'image' -%}
+  <div {{ media_hidden }}{% if variant_images contains media.src %} data-variants-id="{{ product.images | where: 'src', image.src | map: 'variants' | map: 'id' | join: ';' }}"{% endif %} class="{{ class }} hdt-product__media-item" data-media-id="{{ media.id }}" data-media-type="{{ media.media_type }}" data-group-name="{{ media_option_name }}"  data-group-value="{{ media_option_value | escape }}">
+    <div class="hdt-ratio hdt-product__media" {{ imgatt }}style="{% if image_ratio == 'adapt_image' %}--aspect-ratioapt:{{ image.aspect_ratio }};{% endif %}--mw-media:{{ image.width }}px">
+      {{ image | image_url: width: image.width | image_tag: loading: lazy, sizes: sizes, widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946', hdt-el: '' }}
+    </div>
+  </div>
+{%- else -%}
+  <div {{ media_hidden }} class="{{ class }} hdt-product__media-item" data-media-id="{{ media.id }}" data-media-type="{{ media.media_type }}" data-vhost="{{ media.host }}" data-group-name="{{ media_option_name }}" data-group-value="{{ media_option_value | escape }}">
+
+    <div class="hdt-ratio hdt-product__media" {{ imgatt }}style="{% if image_ratio == 'adapt_image' %}--aspect-ratioapt:{{ media.aspect_ratio | default: 1 }};{% endif %}--mw-media:100%">
+      {%- case media.media_type -%}
+        {%- when 'video' -%}
+          <hdt-video-player type="video"{% if autoplay %} autoplay{% endif %}>
+            {{ image | image_url: width: 1946 | image_tag: loading: lazy, sizes: sizes, widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946' }}
+            {{- media | video_tag: image_size: '400x', playsinline: true, autoplay: autoplay, muted: mute, loop: loop, controls: true, preload: 'none' -}}
+          </hdt-video-player>
+
+          {%- when 'external_video' -%}
+          <hdt-video-player type="external_video" host="{{ media.host }}"{% if autoplay %} autoplay{% endif %}>
+            {{ image | image_url: width: 1946 | image_tag: loading: lazy, sizes: sizes, widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946' }}
+            <template>
+              {%- liquid
+              if media.host == 'youtube'
+                echo media | external_video_url: autoplay: autoplay, loop: loop, mute: mute , playlist: media.external_id | external_video_tag
+              else
+                echo media | external_video_url: autoplay: autoplay, loop: loop, mute: mute | external_video_tag
+              endif
+              -%}
+            </template>
+          </hdt-video-player>
+
+        {%- when 'model' -%}
+          <hdt-model-player section-id="{{ section.id }}">
+            {{ media | media_tag: image_size: "1946x", reveal: 'interaction', toggleable: true, data-model-id: media.id }}
+          </hdt-model-player>
+      {%- endcase -%}
+    </div>
+    {%- if media.media_type == 'model' -%}
+      <button type="button" class="hdt-btn hdt-w-full hdt-flex hdt-justify-center product__xr-button" aria-label="{{ 'products.product.product_single.view_in_space_label' | t }}" data-shopify-xr data-shopify-model3d-id="{{ media.id }}" data-shopify-title="{{ product.title | escape }}" data-shopify-xr-hidden>{% render 'icon' with '3d-model' %}{{ 'products.product.product_single.view_in_space' | t }}</button>
+    {%- endif -%}
+  </div>
+{%- endif -%}

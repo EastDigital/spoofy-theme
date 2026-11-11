@@ -1,0 +1,32 @@
+{%- liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  if product == blank 
+    continue
+  endif
+-%}
+{%- if product.vendor != blank %}
+{%- liquid
+  assign pr_vendor_url = product.vendor | url_for_vendor
+  if settings.use_url_collection_vendor
+    assign pr_vendor_handle = product.vendor | handle
+    assign collection_vendor = collections[pr_vendor_handle]
+    assign pr_vendor_url = collection_vendor.url | default: pr_vendor_url
+  endif
+-%}
+<div class="hdt-vendor-wrapper">{{ 'products.product.vendor' | t }} <span class="hdt-productMeta__value hdt-vendor-value hdt-csecondary hdt-inline-block"><a href="{{ pr_vendor_url }}">{{ product.vendor }}</a></span></div>
+{%- endif -%}
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.meta.settings.show_vendor.label",
+  "tag": null,
+  "settings": [
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.meta.settings.show_vendor.label", 
+    }
+  ]
+}
+{% endschema %}

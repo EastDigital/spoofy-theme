@@ -1,0 +1,201 @@
+{%- if request.design_mode -%}
+  <style>#shopify-section-color-swatch{margin-bottom:6rem}#color-swatch{display:block;max-width:126rem;margin:6rem auto;padding:0 3rem;text-align:center}.copy-code-swatch{padding:1rem;background-color:#f5f5f5;border-radius:.5rem;display:inline-block;color:#000}#color-swatch>div{margin-bottom:2rem;display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:center;flex-direction:column}#preview-color-swatch{text-align:center;gap:2rem!important;flex-direction:row!important}.color-style{width:3rem;height:3rem;display:inline-block;border-radius:50%}.color-name{display:block}#color-swatch h3,#color-swatch #hdt-color-swatch-heading{text-align:center;font-size:4rem;font-weight:500;color:#000;margin-bottom:3rem;display:block}#color-swatch h3{font-size:2.5rem;margin-top:4rem}wrap-hdt-copy-adm button{padding:1rem;color:#000;border:1px solid #000;margin:2rem}button[input-id="input-code-color-swatch"]{padding:1rem 2rem;color:#000;border:2px solid #000;min-width:16rem;text-transform:uppercase;font-weight:500;font-size:1.4rem;transition:color .25s ease,background-color .25s ease,border-color .25s ease,box-shadow .25s ease,opacity .25s ease;margin-top:2rem}</style>
+  {%- capture colors_sett -%}{{ section.settings.color }};{{ section.settings.color2 }};{{ section.settings.color3 }};{{ section.settings.color4 }}{%- endcapture -%}
+  {%- assign colors_sett = colors_sett | remove: "rgba(0,0,0,0)" | replace: ';;;', ';' | replace: ';;', ';' | split: ';' | join: ';' -%}
+  <div id="color-swatch">
+    <div id="hdt-color-swatch-heading">Config color swatch</div>
+    {%- if colors_sett.size > 0 -%}
+    <div class="copy-code-swatch">
+      <textarea class="hdt-textarea" readonly rows="1" id="input-code-color">{{ section.settings.name }}:{{ colors_sett }}</textarea>
+      <wrap-hdt-copy-adm class="hdt-contents" input-id="input-code-color">
+        <button type="button">Copy color code</button>
+      </wrap-hdt-copy-adm>
+    </div>
+    {%- endif -%}
+    {%- if section.settings.image != blank -%}
+    <div class="copy-code-swatch">
+      <textarea class="hdt-textarea" readonly rows="1" id="input-code-image">{{ section.settings.name }}:{{ section.settings.image | image_url: width: 1 | split: '/' | last | split: '?' | first }}</textarea>
+      <wrap-hdt-copy-adm class="hdt-contents" input-id="input-code-image">
+        <button type="button">Copy image name</button>
+      </wrap-hdt-copy-adm>
+    </div>
+    {%- endif -%}
+    {%- if section.settings.image != blank and colors_sett.size > 0 -%}
+    <div class="copy-code-swatch">
+      <textarea class="hdt-textarea" readonly rows="1" id="input-code-color-image">{{ section.settings.name }}:{{ colors_sett }}||{{ section.settings.image | image_url: width: 1 | split: '/' | last | split: '?' | first }}</textarea>
+      <wrap-hdt-copy-adm class="hdt-contents" input-id="input-code-color-image">
+        <button type="button">Copy both color code and image name</button>
+      </wrap-hdt-copy-adm>
+    </div>
+    {%- endif -%}
+
+    {%- assign colors = section.settings.code | newline_to_br | split: '<br />' -%}
+    <h3>Preview color swatch</h3>
+    <div id="preview-color-swatch">
+      {%- liquid
+        assign colors_delimiter = "!#$colors!#$"
+        assign color_delimiter = "!#$color!#$"
+        assign colors_obj = ""
+      -%}
+
+      {%- for color in colors -%}
+        {%- assign arr_color = color | strip | split: ':' -%}
+        {%- assign color_name = arr_color | first -%}
+        {%- assign color_values = arr_color | last | split: '||' -%}
+        {%- liquid
+          assign color_obj = ""
+          assign swatch_type = 'color'
+          assign image_name = ''
+          assign colors_arr = nil
+          if color_name != blank and color_values.size > 0
+            for value in color_values
+              if value contains '.'
+                assign image_name = value
+              else
+                assign colors_arr = value | split: ';'
+                assign size_limit = colors_arr.size | at_most: 4
+                assign rotation = '0deg'
+                if size_limit == 2
+                  assign rotation = '45deg'
+                endif
+                assign angle_increment = 360 | divided_by: size_limit
+                assign angle = 0
+              endif
+            endfor
+            assign image = images[image_name]
+            if image != blank
+              assign color_image = image | image_url: width: 80
+              assign color_image_style = 'background: url(' | append: color_image | append: ') center / cover no-repeat;'
+              assign swatch_type = 'image'
+            else
+              assign color_image_style = ''
+            endif
+          endif
+          -%}
+        {%- if color_name != blank and color_values.size > 0 -%}
+          {%- capture conic_gradient -%}
+            {%- if colors_arr.size > 0 -%}
+              background: conic-gradient(
+              {%- for color_value in colors_arr limit: size_limit -%}
+                {{ color_value }} {{ angle }}deg{%- assign angle = angle | plus: angle_increment %} {{ angle }}deg{%- unless forloop.last %}, {%- endunless -%}
+              {%- endfor -%}
+              ); transform: rotateZ({{ rotation }});
+            {%- endif -%}
+          {%- endcapture -%}
+          {%- liquid
+            assign color_obj = color_obj | append: color_name | append: color_delimiter
+            assign color_obj = color_obj | append: swatch_type | append: color_delimiter
+            assign color_obj = color_obj | append: conic_gradient | append: color_delimiter
+            assign color_obj = color_obj | append: image_name | append: color_delimiter
+            assign colors_obj = colors_obj | append: color_obj | append: colors_delimiter
+          -%}
+
+          <div>
+            <span class="color-style" style="{{ conic_gradient }}{{ color_image_style }}">
+            </span>
+            <span class="color-name">{{ color_name }}</span>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <textarea class="hdt-textarea copy-code-swatch" readonly rows="4" id="input-code-color-swatch">
+      {%- assign colors_obj = colors_obj | split: colors_delimiter -%}
+      {%- if colors_obj.size > 0 -%}
+      {
+        {%- for _color in colors_obj -%}
+        {%- assign color_obj = _color | split: color_delimiter -%}
+        "{{ color_obj[0] | handle | strip }}": {"swatch_type": {{ color_obj[1] | json }}, "colorsCSS": {{ color_obj[2] | json }}, "imageName": {{ color_obj[3] | default: '' | json }}}{% unless forloop.last %},{%- endunless -%}
+        {%- endfor -%}
+      }
+      {%- endif -%}
+    </textarea>
+    <wrap-hdt-copy-adm class="hdt-contents" input-id="input-code-color-swatch">
+      <button type="button" >Copy code</button>
+    </wrap-hdt-copy-adm>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      class CopyButtonADM extends HTMLButtonElement {
+        constructor() {
+          super();
+        }
+        get InputTD() {
+        return this.getAttribute('input-id');
+        }
+        copyFn(e) {
+          // Get the text field
+          var copyText = document.getElementById(this.InputTD);
+          // Select the text field
+          copyText.select();
+          copyText.setSelectionRange(0, 99999); // For mobile devices
+          // Copy the text inside the text field
+          //navigator.clipboard.writeText(copyText.value);
+          navigator.permissions.query({name:'clipboard-write'}).then((result) => {
+            if (result.state == 'granted') {
+              navigator.clipboard.writeText(copyText.value);
+            } else  {
+              document.execCommand ("copy");
+            }
+            const originalText = this.textContent;
+            this.textContent = 'copied'
+            setTimeout(() => {
+              this.textContent = originalText
+            }, 500);
+          });
+        }
+        connectedCallback() {
+          this.addEventListener('click', this.copyFn, false);
+        }
+      }
+      customElements.define("hdt-copy-adm", CopyButtonADM, { extends: "button" });
+    });
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.color-swatch.name",
+  "tag": "section",
+  "class": "hdt-main-section hdt-main-section--color-swatch",
+  "settings": [
+    {
+      "type": "text",
+      "id": "name",
+      "label": "t:sections.color-swatch.settings.name.label",
+      "default": "Red"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "t:sections.color-swatch.settings.color.label",
+      "default": "#000"
+    },
+    {
+      "type": "color",
+      "id": "color2",
+      "label": "t:sections.color-swatch.settings.color2.label"
+    },
+    {
+      "type": "color",
+      "id": "color3",
+      "label": "t:sections.color-swatch.settings.color3.label"
+    },
+    {
+      "type": "color",
+      "id": "color4",
+      "label": "t:sections.color-swatch.settings.color4.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.color-swatch.settings.image.label"
+    },
+    {
+      "type": "textarea",
+      "id": "code",
+      "label": "t:sections.color-swatch.settings.code.label",
+      "info": "t:sections.color-swatch.settings.code.info"
+    }
+  ]
+}
+{% endschema %}

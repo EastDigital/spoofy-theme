@@ -1,0 +1,130 @@
+<hdt-btn-popup-video class="hdt-popup-video hdt-relative hdt-h-full hdt-w-full hdt-block" {% if block.settings.use_color %} color-scheme="{{ block.settings.color_scheme }}" {% endif %}>
+  <div class="hdt-popup-video-img hdt-h-full">
+    {%- if block.settings.image != blank -%}
+      {{ block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: 'lazy', width: block.settings.image.width, height: block.settings.image.height, class: 'hdt-object-cover hdt-object-center hdt-w-full hdt-h-full', widths: '100,200,400,600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200,3400,3600,3800,4000' }}
+    {%- else -%}
+      {{ 'detailed-apparel-1' | placeholder_svg_tag: 'hdt-placeholder-svg hdt-w-full hdt-h-full' }}  
+    {%- endif -%}
+  </div>
+  <button class="hdt-popup-video-btn hdt-relative hdt-absolute" aria-controls="Video-{{ block.id }}">
+    <span class="hdt-popup-video-btn-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="21" viewBox="0 0 18 21" fill="none">
+        <path d="M18 10.5L0.749999 20.4593L0.75 0.540707L18 10.5Z" fill="currentColor"/>
+      </svg>
+    </span>
+  </button>
+  <hdt-modal effect="slide" color-scheme="{{ settings.color_scheme_dialog }}">
+    <dialog id="Video-{{ block.id }}" class="hdt-dialog hdt-dialog-modal hdt-popup-video-close hdt-s-gradient" scroll-lock>
+      <div class="hdt-popup-video-content hdt-relative" style="--video-ratio: {{ block.settings.video.aspect_ratio | default: 1.777 }}">
+        <button ref="closeButton" class="hdt-s-text" aria-controls="Video-{{ block.id }}" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+        {%- if block.settings.video -%}
+          <hdt-video-player class="hdt-w-full hdt-h-full" {% if block.settings.video_autoplay %} autoplay{% endif %}>
+            {% if block.settings.video_autoplay %}
+              {{- block.settings.video | video_tag: image_size: '1500x', playsinline: true, muted: true, loop: true, controls: true, preload: 'metadata' -}}
+            {%- else -%}
+              {{- block.settings.video | video_tag: image_size: '1500x', playsinline: true, loop: true, controls: true, preload: 'metadata' -}}
+            {%- endif -%}
+          </hdt-video-player>
+        {%- elsif block.settings.external_video_url != blank -%}
+          <hdt-video-player class="hdt-w-full hdt-h-full hdt-video-external" host="{{ block.settings.external_video_url.type }}" type="background" autoplay >
+            <template>
+              {%- if block.settings.external_video_url.type == 'youtube' -%}
+                <iframe id="iframe-{{ block.id }}" src="https://www.youtube.com/embed/{{ block.settings.external_video_url.id }}?playsinline=1&autoplay=1&controls=1&mute=1&loop=1&playlist={{ block.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}" allow="autoplay; encrypted-media" allowfullscreen="allowfullscreen"></iframe>
+              {%- elsif block.settings.external_video_url.type == 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ block.settings.external_video_url.id }}?autoplay=1&autopause=1&background=1&loop=1&muted=1&transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.color_accent | remove_first: '#' }}" allow="autoplay; encrypted-media;" allowfullscreen="allowfullscreen"></iframe>
+              {%- endif -%}
+            </template>
+          </hdt-video-player>
+        {%- else -%}
+          {{ block.settings.external_video_frame }}
+        {%- endif -%}
+      </div>
+    </dialog>
+  </hdt-modal>
+  {% comment %} <hdt-modal id="Video-{{ block.id }}" class="hdt-modal hdt-popup-video-close hdt-hidden">
+    <div class="hdt-popup-video-content hdt-relative" style="--video-ratio: {{ block.settings.video.aspect_ratio | default: 1.777 }}">
+      {%- if block.settings.video -%}
+        <hdt-video-player class="hdt-w-full hdt-h-full" {% if block.settings.video_autoplay %} autoplay{% endif %}>
+          {% if block.settings.video_autoplay %}
+            {{- block.settings.video | video_tag: image_size: '1500x', playsinline: true, muted: true, loop: true, controls: true, preload: 'metadata' -}}
+          {%- else -%}
+            {{- block.settings.video | video_tag: image_size: '1500x', playsinline: true, loop: true, controls: true, preload: 'metadata' -}}
+          {%- endif -%}
+        </hdt-video-player>
+      {%- elsif block.settings.external_video_url != blank -%}
+        <hdt-video-player class="hdt-w-full hdt-h-full hdt-video-external" host="{{ block.settings.external_video_url.type }}" type="background" autoplay >
+          <template>
+            {%- if block.settings.external_video_url.type == 'youtube' -%}
+              <iframe id="iframe-{{ block.id }}" src="https://www.youtube.com/embed/{{ block.settings.external_video_url.id }}?playsinline=1&autoplay=1&controls=1&mute=1&loop=1&playlist={{ block.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}" allow="autoplay; encrypted-media" allowfullscreen="allowfullscreen"></iframe>
+            {%- elsif block.settings.external_video_url.type == 'vimeo' -%}
+              <iframe src="https://player.vimeo.com/video/{{ block.settings.external_video_url.id }}?autoplay=1&autopause=1&background=1&loop=1&muted=1&transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.color_accent | remove_first: '#' }}" allow="autoplay; encrypted-media;" allowfullscreen="allowfullscreen"></iframe>
+            {%- endif -%}
+          </template>
+        </hdt-video-player>
+      {%- else -%}
+        {{ block.settings.external_video_frame }}
+      {%- endif -%}
+    </div>
+  </hdt-modal> {% endcomment %}
+</hdt-btn-popup-video>
+{% schema %}
+  {
+    "name": "t:sections.video.name_3",
+    "tag": null,
+    "settings": [
+      /*{
+        "type": "paragraph",
+        "content": "t:sections.video.settings.paragraph"
+      },*/
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.video.settings.video.image_preview"
+      },
+      {
+        "type": "video",
+        "id": "video",
+        "label": "t:sections.video.settings.video.label",
+        "info": "t:sections.video.settings.video.info"
+      },
+      {
+        "type": "video_url",
+        "id": "external_video_url",
+        "accept": [
+          "vimeo",
+          "youtube"
+        ],
+        "label": "t:sections.video.settings.video.url",
+        "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+      },
+      {
+        "type": "textarea",
+        "id": "external_video_frame",
+        "label": "t:sections.video.settings.video.frame"
+      },
+      {
+        "type": "checkbox",
+        "id": "use_color",
+        "label": "t:sections.video.settings.video.use_color",
+        "default": false
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "visible_if": "{{ block.settings.use_color }}"
+      }
+      /*{
+        "type": "checkbox",
+        "id": "video_autoplay",
+        "label": "t:sections.video.settings.autoplay.label",
+        "info": "t:sections.video.settings.autoplay.info"
+      },*/
+    ],
+    "presets": [
+      {
+        "name": "t:sections.video.name_3"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,46 @@
+{%- assign bk_title = block.settings.title | default: block.settings.page.title -%}
+{%- unless bk_title == blank or block.settings.content == blank and block.settings.page.content == blank -%}
+  <!--item-title>
+  <button aria-current="{%- if block.settings.open %}true{% else %}false{% endif %}" class="hdt-s-text hdt-relative hdt-font-semibold">{{ bk_title | escape }}</button>
+  -->
+  <div class="hdt-tab-item-content hdt-rte" tab-item {%- if block.settings.open %} tab-selected{% endif %} data-type={{ block.type }} {{ block.shopify_attributes }}>
+    <div class="hdt-rte">{{ block.settings.content }}
+      {{ block.settings.page.content }}
+    </div>
+  </div>
+{%- endunless -%}
+{% schema %}
+ {
+   "name": "t:sections.main-product-tabs.blocks.tab_htmls.name",
+   "tag": null,
+   "settings": [
+    {
+      "type": "checkbox",
+      "id": "open",
+      "label": "Open",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.main-product-tabs.blocks.title.label",
+      "default": "Tab Custom HTML"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "t:sections.main-product-tabs.blocks.tab_htmls.settings.content.label"
+    },
+    {
+      "type": "page",
+      "id": "page",
+      "label": "t:sections.main-product-tabs.blocks.tab_htmls.settings.page.label"
+    }
+   ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product-tabs.blocks.tab_htmls.name" 
+    }
+  ]
+ }
+{% endschema %}

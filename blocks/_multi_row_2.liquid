@@ -1,0 +1,53 @@
+<div class="hdt-grid-system hdt-grid-system-10 {{ block.settings.rounded }} hdt-oh" {{ block.shopify_attributes }}>
+  {% content_for 'blocks' %}
+</div>
+{% schema %}
+  {
+    "name": "Multi row 10",
+    "tag":null,
+    "blocks": [
+      {
+        "type": "_multi_column_2"
+      }
+    ],
+    "settings": [
+      {
+        "type": "select",
+        "id": "rounded",
+        "label": "Rounded",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:none"
+          },
+          {
+            "value": "hdt-radius-xs",
+            "label": "t:settings_schema.typography.settings.font_size.xs"
+          },
+          {
+            "value": "hdt-radius-sm",
+            "label": "t:settings_schema.typography.settings.font_size.sm"
+          },
+          {
+            "value": "hdt-radius",
+            "label": "t:settings_schema.typography.settings.font_size.base"
+          },
+          {
+            "value": "hdt-radius-lg",
+            "label": "t:settings_schema.typography.settings.font_size.lg"
+          },
+          {
+            "value": "hdt-radius-full",
+            "label": "Full"
+          }
+        ],
+        "default": "none"
+      },
+    ],
+    "presets": [
+      {
+        "name": "Multi row 10"
+      }
+    ]
+  }
+{% endschema %}

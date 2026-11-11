@@ -1,0 +1,226 @@
+<!-- blocks/banner-item.liquid -->
+<div id="{{ block.id }}" class="hdt-banner__item hdt-slider__slide md:hdt-height--{{ section.settings.image_height }} hdt-height--{{ section.settings.image_height_mb }} hdt-eff-{{ block.settings.b_effect }} hdt-eff-img-{{ block.settings.img_effect }} hdt-eff hdt-oh hdt-relative" color-scheme="{{ block.settings.color_scheme }}" {{ block.shopify_attributes }}>
+  {%- liquid
+    assign object_pos = block.settings.image_mb.presentation.focal_point
+  -%}
+  <div class="hdt-item_inner hdt-radius hdt-media-overlap-content" style="{% if section.settings.image_height_mb == 'adapt_image' %}{% assign image_mb = block.settings.image_mb | default: block.settings.image %}--aspect-ratioapt: {{ image_mb.aspect_ratio | default: 2.0 }};{% endif %}{% if section.settings.image_height == 'adapt_image' %}--aspect-ratioapt-md: {{ block.settings.image.aspect_ratio | default: 2.0 }};{% endif %}{% if object_pos != blank %}--object-pos-mb: {{ object_pos }}{% endif %}" hdt-reveal="slide-in" timeline>
+    <a class="hdt-full-width-link" {% if block.settings.banner_url == blank %}
+      role="link" disabled="true"
+    {% else %}
+      href="{{ block.settings.banner_url }}" 
+    {% endif %} target="{% if block.settings.banner_target %}_blank{% else %}_self{% endif %}">
+    </a>
+    {% content_for 'block', type: '_media', id: 'banner-media' %}
+    <div class="hdt-grid hdt-h-full{% unless request.design_mode %} hdt-pe-none{% endunless %}">
+      <div class="hdt-content hdt-h-full hdt-text-{{ block.settings.alignment_mb }} md:hdt-text-{{ block.settings.alignment }} hdt-flex hdt-flex-col hdt-justify-between">
+        {% content_for "blocks" %}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Banner item split",
+    "tag":null,
+    "blocks": [
+      {
+        "type": "_banner_item_column"
+      }
+    ],
+    "settings": [
+      {
+        "type": "header",
+        "content": "General options"
+      },
+      {
+        "type": "url",
+        "id": "banner_url",
+        "label": "t:blocks.banner_item.settings.banner_url"
+      },
+      {
+        "type": "checkbox",
+        "id": "banner_target",
+        "label": "t:blocks.banner_item.settings.banner_target",
+        "default": false,
+        "visible_if": "{{ block.settings.banner_url != blank }}"
+      },
+      {
+        "type": "select",
+        "id": "img_effect",
+        "label": "t:sections.all.image_effect.image_hover_eff.label",
+        "info": "t:sections.all.image_effect.image_hover_eff.info",
+        "default": "none",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.none"
+          },
+          {
+            "value": "zoom",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.zoom"
+          },
+          {
+            "value": "rotate",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.rotate"
+          },
+          {
+            "value": "translateToTop",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.translateToTop"
+          },
+          {
+            "value": "translateToRight",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.translateToRight"
+          },
+          {
+            "value": "translateToBottom",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.translateToBottom"
+          },
+          {
+            "value": "translateToLeft",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.translateToLeft"
+          },
+          {
+            "value": "filter",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.filter"
+          },
+          {
+            "value": "bounceIn",
+            "label": "t:sections.all.image_effect.image_hover_eff.options.bounceIn"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "b_effect",
+        "label": "t:sections.all.image_effect.item_eff.label",
+        "default": "none",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.all.image_effect.item_eff.options.none"
+          },
+          {
+            "value": "border-run",
+            "label": "t:sections.all.image_effect.item_eff.options.border_run"
+          },
+          {
+            "value": "pervasive-circle",
+            "label": "t:sections.all.image_effect.item_eff.options.pervasive_circle"
+          },
+          {
+            "value": "plus-zoom-overlay",
+            "label": "t:sections.all.image_effect.item_eff.options.plus_zoom_overlay"
+          },
+          {
+            "value": "overlay",
+            "label": "t:sections.all.image_effect.item_eff.options.overlay"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.screen.options.desktop"
+      },
+      {
+        "type": "text_alignment",
+        "id": "alignment",
+        "label": "t:settings_schema.global.settings.text_alignment.label",
+        "default": "center"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.screen.options.mobile"
+      },
+      {
+        "type": "text_alignment",
+        "id": "alignment_mb",
+        "label": "t:settings_schema.global.settings.text_alignment.label",
+        "default": "center"
+      }
+    ],
+    "presets":[
+      {
+        "name": "Banner item split",
+        "blocks": [
+          {
+            "type": "_banner_item_column",
+            "settings": {},
+            "blocks": [
+              {
+                "type": "heading",
+                "settings": {
+                  "heading": "<p>SALE OFF UP TO 70%</p>",
+                  "hidden_br_mobile": false,
+                  "hidden_on_mobile": false,
+                  "heading_size": "h5",
+                  "text_color": "",
+                  "font_size_heading_lg": 50,
+                  "font_size_heading_md": 30,
+                  "font_size_heading": 24,
+                  "font_weight_heading": 600,
+                  "letter_spacing_heading": 0
+                }
+              },
+              {
+                "type": "text",
+                "settings": {
+                  "text": "<p>SS 2025 New Arrival</p>",
+                  "hidden_br_mobile": false,
+                  "hidden_on_mobile": false,
+                  "text_size": "xl",
+                  "text_color": "",
+                  "font_size_text_lg": 16,
+                  "font_size_text_md": 14,
+                  "font_size_text": 14,
+                  "font_weight_text": 400,
+                  "letter_spacing_text": 0
+                }
+              }
+            ]
+          },
+          {
+            "type": "_banner_item_column",
+            "settings": {},
+            "blocks": [
+              {
+                "type": "button",
+                "settings": {
+                  "label": "Shop now",
+                  "link": "",
+                  "open_in_new_tab": false,
+                  "full_width": false,
+                  "style_class": "solid",
+                  "font_size": "m",
+                  "font_weight": "normal",
+                  "font_size_btn": 14,
+                  "padding_btn": 30,
+                  "min_width_btn": 100,
+                  "min_width_dt_btn": 100,
+                  "min_height_btn": 40,
+                  "icon": "none",
+                  "icon_position": "after",
+                  "icon_height": 14,
+                  "icon_spacing": 5
+                }
+              }
+            ]
+          },
+          {
+            "type": "_media",
+            "static": true,
+            "id": "banner-media",
+            "settings": {
+              "source": "image",
+              "external_video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

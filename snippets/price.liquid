@@ -1,0 +1,141 @@
+{%- comment -%}
+  Renders a list of product's price (nopick, sale)
+
+  Accepts:
+  - product: {Object} Product Liquid object (required)
+  - use_variant: {Boolean} Renders selected or first variant price instead of overall product pricing, if is false = no pick (optional)
+  - show_badges: {Boolean} Renders 'Sale' and 'Sold Out' tags if the product matches the condition (optional)
+  - price_class: {String} Adds a price class to the price element (optional)
+  - show_compare_at_price: {Boolean} Renders the compare at price if the product matches the condition (optional)
+  - show_volume_note: {Boolean} (optional)
+  - form_id: {String} Price auto update when user selected variant (optional)
+  - un_no_pick: {Boolean} (optional)
+
+  Usage:
+  {%- render 'card-price', product: card_product, show_volume_note: true -%} (used on card, product on sidebar)
+  {%- render 'price', product: product, use_variant: true, form_id: form_id -%} (used on product page, quick view, featured product...)
+  {%- render 'line-item-price', line_item: item -%} (used on cart, order page...)
+{%- endcomment -%}
+
+{%- liquid
+  if show_compare_at_price == nil
+    assign show_compare_at_price = true
+  endif
+  assign selected_variant = product.selected_or_first_available_variant
+  if use_variant
+    assign target = selected_variant
+  else
+    assign target = product
+  endif
+
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price | default: 1999
+  assign price_min = product.price_min
+  assign price_max = product.price_max
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+    assign money_compare_at_price = compare_at_price | money_with_currency
+    assign money_price_min = price_min | money_with_currency
+    assign money_price_max = price_max | money_with_currency
+  else
+    assign money_price = price | money
+    assign money_compare_at_price = compare_at_price | money
+    assign money_price_min = price_min | money
+    assign money_price_max = price_max | money
+  endif
+  if compare_at_price > price
+    assign on_sale = true
+  else
+    assign on_sale = false
+  endif
+  assign price_varies_item = ''
+  if target == product and product.price_varies
+    assign price_varies_item = ' hdt-price-item--range'
+    assign money_price_clone = money_price
+    assign money_price = 'products.product.price.from_price_html' | t: price: money_price_min
+  endif
+  unless un_no_pick
+    if settings.price_varies_style == "1"
+      if money_price_min ==  money_price_max
+        assign money_price = money_price_min
+      else
+        assign money_price = 'products.product.volume_pricing.price_range_html' | t: minimum: money_price_min, maximum: money_price_max
+      endif
+    elsif product.price_varies
+      assign money_price = 'products.product.price.from_price_html' | t: price: money_price_min
+    endif
+  endunless
+-%}
+
+<div class="hdt-price-wrapp {{ price_class }}{% if show_badges %} hdt-price--show-badge{% endif %}">
+  <div class="hdt-price__container">
+    {%- comment -%}
+      Explanation of description list:
+        - div.price__nopick: Displayed when there are no variants selected
+        - div.price__sale: Displayed when a variant selected
+    {%- endcomment -%}
+    {%- if use_variant == false and price_varies_item != '' -%}
+    <div class="hdt-price__nopick hdt-price__list">
+      {%- if product.quantity_price_breaks_configured? -%}
+        {%- if show_compare_at_price and compare_at_price -%}
+          {%- unless product.price_varies == false and product.compare_at_price_varies -%}
+            <hdt-compare-at-price class="hdt-compare-at-price">
+              <span class="sr-only sr-only--inline">{{ 'products.product.price.regular_price' | t }}</span>
+              <span class="hdt-money">{{ money_compare_at_price }}</span>
+            </hdt-compare-at-price>
+          {%- endunless -%}
+        {%- endif -%}
+        <span class="hdt-price hdt-price-item--range">
+          <span class="sr-only sr-only--inline">{{ 'products.product.price.regular_price' | t }}</span>
+          {{- 'products.product.volume_pricing.price_range_html' | t: minimum: money_price_min, maximum: money_price_max -}}
+        </span>
+      {%- else -%}
+        {%- if compare_at_price and on_sale and show_compare_at_price -%}
+          <hdt-compare-at-price class="hdt-compare-at-price">
+            <span class="sr-only sr-only--inline">{{ 'products.product.price.regular_price' | t }}</span>
+            <span class="hdt-money">{{ money_compare_at_price }}</span>
+          </hdt-compare-at-price>
+        {%- endif -%}
+        <hdt-price class="hdt-price{{ price_varies_item }}">
+          <span class="sr-only sr-only--inline">{{ 'products.product.price.sale_price' | t }}</span>
+          {%- if price_varies_item != '' %}{{ money_price }}{% else %}<span class="hdt-money">{{ money_price }}</span>{% endif -%}
+        </hdt-price>
+      {%- endif -%}
+    </div>
+    {%- endif -%}
+    <div class="hdt-price__sale hdt-price__list"{% if use_variant == false and price_varies_item != '' %} hidden{% endif %}>
+      <hdt-compare-at-price class="hdt-compare-at-price"{% if product.has_only_default_variant == false and form_id %} form="{{ form_id }}"{% endif %}{% if compare_at_price == nil or on_sale == false or un_no_pick == false %} hidden{% endif %}>
+        <span class="sr-only sr-only--inline">{{ 'products.product.price.regular_price' | t }}</span>
+        <span class="hdt-money">{{ money_compare_at_price }}</span>
+      </hdt-compare-at-price>
+      <hdt-price class="hdt-price"{% if product.has_only_default_variant == false and form_id %} form="{{ form_id }}"{% endif %}>
+        <span class="sr-only sr-only--inline">{{ 'products.product.price.sale_price' | t }}</span>
+        <span class="hdt-money">{{ money_price_clone | default: money_price }}</span>
+      </hdt-price>
+    </div>
+    <hdt-unit-price class="hdt-unit-price"{% if form_id %} form="{{ form_id }}"{% endif %}{% if selected_variant.unit_price_measurement == nil %} hidden{% endif %}>
+      <span class="sr-only">{{ 'products.product.price.unit_price' | t }}</span>
+      <span class="hdt-hdt-price-item hdt-price-item--last">
+        <span class="hdt-money">{{- selected_variant.unit_price | money -}}</span>
+        <span aria-hidden="true">/</span>
+        <span class="sr-only">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+        <span>
+          {%- if selected_variant.unit_price_measurement.reference_value != 1 -%}
+            {{- selected_variant.unit_price_measurement.reference_value -}}
+          {%- endif -%}
+          {{ selected_variant.unit_price_measurement.reference_unit }}
+        </span>
+      </span>
+    </hdt-unit-price>
+  </div>
+  {%- liquid
+    if show_badges
+    assign sale_text_t = 'products.product.on_sale_single' | t
+    assign sale_percent_t = 'products.product.save_percent_single' | t: percent: 'save_1904' | replace_first: 'save_1904', '<span percent>save_1904</span>'
+    render 'badges', product: product, use_variant: use_variant, form_id: form_id, only_show_sale: only_show_sale, sale_text_t: sale_text_t, sale_percent_t: sale_percent_t
+    endif
+    -%}
+</div>
+{%- if show_volume_note and product.quantity_price_breaks_configured? -%}
+  <div class="hdt-volume-pricing-note">{{ 'products.product.volume_pricing.note' | t }}</div>
+{%- endif -%}

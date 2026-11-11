@@ -1,0 +1,42 @@
+
+{%- assign flag_currency = true -%}
+<div class="hdt-currencies hdt-inline-block hdt-flag-size-sm" data-type="{{ settings.currency_type }}">
+  {%- if settings.currency_type == "1" -%}
+    <button aria-controls="popover-currencies">
+      <span class="hdt-inline-flex hdt-align-center">
+        {%- if flag_currency %}{{ localization.country | image_url: width: 16 | image_tag: loading: 'lazy', class: 'hdt-flag hdt-inline-block hdt-relative', data-flag-current: '' }}{%- endif -%}
+        <span data-name-current>{{- localization.country.currency.iso_code }}</span>
+      </span>  
+      <svg class="hdt-icon-select-arrow hdt-inline-block" role="presentation" viewBox="0 0 19 12" width="10"><polyline fill="none" stroke="currentColor" points="17 2 9.5 10 2 2" fill-rule="evenodd" stroke-width="2" stroke-linecap="square"></polyline></svg>
+    </button>
+  {%- else -%}
+    {% comment %} dkjsldlsadjl: {{  cart.currency.iso_code }}  {% endcomment %}
+    {%- assign supported_codes = settings.supported_currencies | newline_to_br | split: '<br />' -%}
+    {%- # theme-check-disable RemoteAsset -%}
+    {%- for code in supported_codes -%}
+      {%- liquid
+        assign array_money = code | split: '-'
+        assign data_currency = array_money | first | upcase | strip | remove: ' '
+        assign name_money = array_money | last | strip
+      -%}
+      {% if data_currency == cart.currency.iso_code %}
+        {%- capture titledrop -%}
+          {%- if flag_currency %}<img width="30" height="22.5" class="hdt-flag hdt-relative" data-flag-current src="//cdn.shopify.com/static/images/flags/{{ name_money | slice: 0, 2 | downcase }}.svg" alt="{{ name_money }}" loading="lazy">{%- endif -%}
+          <span data-name-current>{{ name_money }}</span>
+        {%- endcapture -%}
+      {% endif %}
+    {%- endfor -%}
+    {%- # theme-check-enable RemoteAsset -%}
+    <button aria-controls="popover-currencies" aria-owns="popover-currencies">
+      <span class="hdt-inline-flex hdt-align-center">
+        {%- if titledrop -%}
+          {{- titledrop -}}
+        {%- else -%}
+          {%- if flag_currency %}{{ localization.country | image_url: width: 32 | image_tag: loading: 'lazy', class: 'hdt-flag hdt-inline-block hdt-relative', data-flag-current: '' }}{%- endif -%}
+          <span data-name-current>{{- localization.country.currency.iso_code }}</span>
+        {%- endif -%}
+      </span>
+      <svg class="hdt-icon-select-arrow hdt-inline-block" role="presentation" viewBox="0 0 19 12" width="10"><polyline fill="none" stroke="currentColor" points="17 2 9.5 10 2 2" fill-rule="evenodd" stroke-width="2" stroke-linecap="square"></polyline></svg>
+    </button>
+  {%- endif -%}
+</div>

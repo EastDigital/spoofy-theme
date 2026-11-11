@@ -1,0 +1,64 @@
+{%- liquid
+  if article == blank
+    continue
+  endif
+  if section.settings.section_fullwidth
+    assign page_widthimg = '100vw'
+  else
+  assign page_widthimg = settings.page_width | append: 'px'
+  endif
+  assign image = article.image
+-%}
+{%- capture sizes -%}
+  (min-width:768px) {{ page_widthimg }}, calc({{ page_widthimg}} - 30px )
+{%- endcapture -%}
+{%- if image == blank -%}{%- continue -%}{%- endif -%}
+<div class="hdt-article-image hdt-flex hdt-justify-center hdt-section-spacing" timeline hdt-reveal="slide-in" style="--section-pt: {{ block.settings.padding_top }}px; --section-pb: {{ block.settings.padding_bottom }}px; --section-prate:{{ block.settings.padding_rate }};" {{ block.shopify_attributes }}>
+  <div class="hdt-oh hdt-radius">
+    {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: 'image-full_width hdt-full-image hdt-object-cover hdt-w-full', sizes: sizes, widths: '375,450,550,750,800,1100,1500,1780,1920,2000,3000,3840' }}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Image",
+    "tag":null,
+    "settings": [
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "padding_rate",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:sections.all.padding.padding_rate",
+        "default": 75
+      }
+    ],
+    "presets":[
+      {
+        "name":"Image",
+      }
+    ]
+  }
+{% endschema %}

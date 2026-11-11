@@ -1,0 +1,274 @@
+<!-- Price-table.liquid -->
+{% comment %} {{ 'hdt-card-products.css' | asset_url | stylesheet_tag }} {% endcomment %}
+{{ 'hdt-price-tables.css' | asset_url | stylesheet_tag }}
+
+<div id="{{ section.id }}" class="hdt-section-spacing hdt-s-gradient" style="--section-pt: {{ section.settings.padding_top }}px; --section-pb: {{ section.settings.padding_bottom }}px; --section-prate:{{ section.settings.padding_rate }};" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %}">
+    {%- content_for "block", type: "section-heading", id: "price-table" -%} 
+    <div class="hdt-main-price-table">
+      <hdt-slider id="Slider-{{ section.id }}" class="hdt-relative hdt-product-btns hdt-icon-check-{{ section.settings.enable_icon_check }} hdt-slider hdt-slider-parent hdt-slide-spacing-x {% if section.settings.navUI %}hdt-slider-has-nav hdt-nav-btns-default hdt-nav-middle_out{% endif %}{% if section.settings.dotUI %}
+        hdt-slider-has-dots-dk{% endif %} hdt-dots-outline lg:hdt-slides-{{ section.settings.col_dk }} md:hdt-slides-{{ section.settings.col_tb }} hdt-slides-{{ section.settings.col_mb }}" config='{ "id": "Slider-{{ section.id }}", "navUI": {{ section.settings.navUI }}, "dotUI": true, "navUICenter": true}' >
+        <div class="hdt-slider__viewport hdt-relative">
+          <div class="hdt-slider__container">
+           {% content_for 'blocks' %}
+          </div>
+        </div>
+        {%- if section.settings.navUI -%}
+          {%- render 'nav_slider', nav_des: section.settings.nav_des -%}
+        {%- endif -%}
+        <div hdt-slider-dots class="hdt-slider__dots hdt-flex hdt-align-center hdt-justify-center no-js-hidden" aria-controls="Slider-{{ section.id }}" style="--dots-distance: 30px;"></div>
+      </hdt-slider>
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "t:sections.price-tables.name",
+    "class": "hdt-section hdt-price-tables",
+    "disabled_on": {
+      "groups": [
+        "*"
+      ]
+    },
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:sections.all.section_general_options"
+      },
+      {
+        "type": "select",
+        "id": "col_dk",
+        "label": "t:sections.all.items_row.desktop",
+        "default": "3",
+        "options": [
+          {
+            "label": "2",
+            "value": "2"
+          },
+          {
+            "label": "3",
+            "value": "3"
+          },
+          {
+            "label": "4",
+            "value": "4"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "col_tb",
+        "label": "t:sections.all.items_row.tablet",
+        "default": "3",
+        "options": [
+          {
+            "label": "1",
+            "value": "1"
+          },
+          {
+            "label": "2",
+            "value": "2"
+          },
+          {
+            "label": "3",
+            "value": "3"
+          },
+          {
+            "label": "4",
+            "value": "4"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "col_mb",
+        "label": "t:sections.all.items_row.mobile",
+        "default": "1",
+        "options": [
+          {
+            "label": "1",
+            "value": "1"
+          },
+          {
+            "label": "2",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "navUI",
+        "label": "t:sections.all.slider.navUI",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "dotUI",
+        "label": "t:sections.all.slider.dotUI",
+        "default": false
+      },  
+      {
+        "type": "header",
+        "content": "t:sections.all.section_layout"
+      },
+      {
+        "type": "checkbox",
+        "id": "section_fullwidth",
+        "label": "t:sections.all.section_fullwidth",
+        "default": false
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 40
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 40
+      },
+      {
+        "type": "range",
+        "id": "padding_rate",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:sections.all.padding.padding_rate",
+        "default": 75
+      }
+    ],
+    "blocks":[
+      {
+        "type": "_price_table_item"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.price-tables.name",
+        "category": "t:sections_categories.05_section.name",
+        "blocks": [
+          {
+            "type": "_price_table_item",
+            "settings": {
+              "color_scheme": "scheme-5",
+              "product": "2-hearts-interlock-pendant-necklace",
+              "show_vendor": true,
+              "image_ratio": "adapt_image",
+              "image_size": true,
+              "content_pos": "start",
+              "label_cl": "#FF3232"
+            },
+            "blocks":[
+              {
+                "type": "text",
+                "settings": {
+                  "text": "<ul><li>Build: Inflatable</li><li>Skill: Beginner-Advanced</li><li>Use: All Around</li><li>Weight: 19.8 lbs</li><li>Sizes: 10’6″x32″x6″</li><li>Warranty : 1-year</li></ul>",
+                  "text_size": "base",
+                  "font_size_text_lg": 16,
+                  "font_size_text_md": 14,
+                  "font_size_text": 14
+                }
+              },
+              {
+                "type": "button",
+                "id": "button_price_table",
+                "static": true,
+                "settings": {
+                  "label": "SHOP NOW",
+                  "link": "/"
+                }
+              }
+            ]
+          },
+          {
+            "type": "_price_table_item",
+            "settings": {
+              "color_scheme": "scheme-5",
+              "product": "2-hearts-interlock-pendant-necklace",
+              "show_vendor": true,
+              "image_ratio": "adapt_image",
+              "image_size": true,
+              "content_pos": "start",
+              "label_cl": "#FF3232"
+            },
+            "blocks":[
+              {
+                "type": "text",
+                "settings": {
+                  "text": "<ul><li>Build: Inflatable</li><li>Skill: Beginner-Advanced</li><li>Use: All Around</li><li>Weight: 19.8 lbs</li><li>Sizes: 10’6″x32″x6″</li><li>Warranty : 1-year</li></ul>",
+                  "text_size": "base",
+                  "font_size_text_lg": 16,
+                  "font_size_text_md": 14,
+                  "font_size_text": 14
+                }
+              },
+              {
+                "type": "button",
+                "id": "button_price_table",
+                "static": true,
+                "settings": {
+                  "label": "SHOP NOW",
+                  "link": "/"
+                }
+              }
+            ]
+          },
+          {
+            "type": "_price_table_item",
+            "settings": {
+              "color_scheme": "scheme-5",
+              "product": "2-hearts-interlock-pendant-necklace",
+              "show_vendor": true,
+              "image_ratio": "adapt_image",
+              "image_size": true,
+              "content_pos": "start",
+              "label_cl": "#FF3232"
+            },
+            "blocks":[
+              {
+                "type": "text",
+                "settings": {
+                  "text": "<ul><li>Build: Inflatable</li><li>Skill: Beginner-Advanced</li><li>Use: All Around</li><li>Weight: 19.8 lbs</li><li>Sizes: 10’6″x32″x6″</li><li>Warranty : 1-year</li></ul>",
+                  "text_size": "base",
+                  "font_size_text_lg": 16,
+                  "font_size_text_md": 14,
+                  "font_size_text": 14
+                }
+              },
+              {
+                "type": "button",
+                "id": "button_price_table",
+                "static": true,
+                "settings": {
+                  "label": "SHOP NOW",
+                  "link": "/"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

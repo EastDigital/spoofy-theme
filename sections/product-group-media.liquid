@@ -1,0 +1,160 @@
+{%- comment -%}
+https://apps.shopify.com/variantimagegrouper
+https://apps.shopify.com/variant-image-automator
+{%- endcomment -%}
+
+{%- if request.design_mode -%}
+  {%- liquid
+    if section.settings.product != blank
+    assign product = section.settings.product
+    endif
+  -%}
+  {%- if product.has_only_default_variant == false and product.media.size > 0 -%}
+    <style>select#select-set-option{max-width:30rem}#hdt-group-media-wrap{display:block;max-width:126rem;margin:6rem auto;padding:0 3rem}#hdt-group-media-option,#hdt-group-media-json{text-align:center}#hdt-group-media-option{border:2px solid #000;padding:2rem;border-bottom:0;display:flex;justify-content:center;gap:1rem}#hdt-group-media-option label{padding:.5rem 1rem;border:1px solid #ddd;display:inline-block;min-width:10rem;border-radius:4px}#hdt-group-media-option input[type=radio]:checked+label{background-color:#000;color:#fff}#hdt-group-media-heading{text-align:center;font-size:4rem;font-weight:500;color:#000;margin-bottom:3rem}#hdt-group-media-list{display:flex;gap:2rem;flex-wrap:wrap;border:2px solid #000;padding:2rem;justify-content:center}#hdt-group-media-list>.hdt-group-media-item{max-width:10rem}#hdt-group-media-wrap img{width:10rem;max-height:10rem;object-fit:cover}#hdt-group-media-list select:not(.is-selected){display:none}#hdt-group-media-list select{padding:.5rem 1rem;border:1px solid #000;width:100%;margin-top:1rem}#hdt-group-media-wrap input[type=radio],#hdt-group-media-code{clip:rect(0,0,0,0);overflow:hidden;position:absolute;height:1px;width:1px}#hdt-group-media-json{border:2px solid #000;padding:2rem;border-top:0}#hdt-group-media-copy{padding:1rem 2rem;color:#000;border:2px solid #000;min-width:16rem;text-transform:uppercase;font-weight:500;font-size:1.4rem;transition:color .25s ease,background-color .25s ease,border-color .25s ease,box-shadow .25s ease,opacity .25s ease}#hdt-group-media-copy:hover{background-color:#f5f5f5}</style>
+    {%- liquid
+    assign product = section.settings.product
+    assign group_media_obj = product.metafields.theme.group_media_obj.value
+    if group_media_obj.size > 0
+      assign media_group_first = group_media_obj | first
+      assign index_active = media_group_first.option
+    else
+      assign index_active = 0
+      assign color_list = 'products.theme_settings.color' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq
+      for option in product.options_with_values
+        assign name_downcase = option.name | downcase
+        if color_list contains name_downcase
+          assign index_active = forloop.index0
+          break
+        endif
+      endfor
+    endif
+    -%}
+
+    <hdt-media-group-config id="hdt-group-media-wrap">
+      <div id="hdt-group-media-heading">Config product group media<br> {{ product.title }}</div>
+      <div id="hdt-group-media-option">
+        <select id="select-set-option" class="hdt-select">
+          {%- for option in product.options_with_values -%}
+            <option value="{{ forloop.index0 }}"{% if forloop.index0 == index_active %} selected{% endif %}>{{ option.name }}</option>
+          {%- endfor -%}
+        </select>
+      </div>
+      <div id="hdt-group-media-list">
+        {%- for media in product.media -%}
+          <div class="hdt-group-media-item" data-media-id="{{ media.id }}">
+            {%- liquid
+              if group_media_obj.size > 0
+                assign media_group = group_media_obj | where: "mid", media.id | first
+              endif
+              echo media.preview_image | image_url: width: 200 | image_tag: sizes: '100px', widths: '100, 200, 300'
+            -%}
+            {%- for option in product.options_with_values -%}
+              {%- assign check = false -%}
+              <select name="{{ forloop.index0 }}"{% if forloop.index0 == index_active %}{% assign check = true %} class="is-selected"{% endif %}>
+                <option value="-1">None</option>
+                {%- for value in option.values -%}
+                  <option value="{{ forloop.index0 }}"{% if media_group.value == forloop.index0 and check %} selected{% endif %}>{{ value }}</option>
+                {%- endfor -%}
+              </select>
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
+      <div id="hdt-group-media-json">
+        <textarea id="hdt-group-media-code"></textarea>
+        <button id="hdt-group-media-copy">copy code</button>
+      </div>
+    </hdt-media-group-config>
+
+  {%- endif -%}
+
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        class MediaGroup extends HTMLElement {
+          constructor() {
+            super();
+          }
+          connectedCallback() {
+            document.getElementById('select-set-option').addEventListener('change', (e) => {
+              const value = e.target.selectedOptions[0].value;
+              document.querySelectorAll('#hdt-group-media-list select').forEach(function(select) {
+                select.classList.toggle('is-selected', value == select.name);
+              });
+              renderCode();
+            }, false);
+
+            function renderCode() {
+              //let code = [], index = 0;
+              let code = [];
+              document.querySelectorAll('#hdt-group-media-list > .hdt-group-media-item').forEach(function(media) {
+                const select = media.querySelector('select.is-selected'),
+                      value  = parseInt(select.value);
+                if (value > -1) {
+                  code.push({
+                    "mid": parseInt(media.dataset.mediaId), "option": parseInt(select.name), value
+                  });
+                  {% comment %} code[index++] = {
+                    "mid": parseInt(media.dataset.mediaId), "option": parseInt(select.name), value
+                  } {% endcomment %}
+                }
+              });
+              document.getElementById('hdt-group-media-code').textContent = (code.length > 0 ) ? JSON.stringify(code) : '';
+            }
+            document.querySelectorAll('#hdt-group-media-list select').forEach(function(select) {
+              select.addEventListener('change', () => {
+                renderCode();
+              }, false);
+            });
+            renderCode();
+            function copyFn(e) {
+              // Get the text field
+              var copyText = document.getElementById("hdt-group-media-code");
+              // Select the text field
+              copyText.select();
+              copyText.setSelectionRange(0, 99999); // For mobile devices
+              // Copy the text inside the text field
+              //navigator.clipboard.writeText(copyText.value);
+              navigator.permissions.query({name:'clipboard-write'}).then(function(result) {
+                if (result.state == 'granted') {
+                  navigator.clipboard.writeText(copyText.value);
+                } else  {
+                  document.execCommand ("copy");
+                }
+                e.target.textContent = 'copied'
+                setTimeout(() => {
+                  e.target.textContent = 'copy code'
+                }, 500);
+              });
+              {% comment %}
+              navigator.clipboard.writeText(copyText.value).then(() => {
+                // Alert the copied text
+                //alert("Copied the text: " + copyText.value);
+                e.target.textContent = 'copied'
+                setTimeout(() => {
+                  e.target.textContent = 'copy code'
+                }, 500);
+              });
+              {% endcomment %}
+            }
+            document.getElementById('hdt-group-media-copy').addEventListener('click', copyFn, false);
+          }
+        }
+        customElements.define('hdt-media-group-config', MediaGroup);
+      });
+    </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.product-group-media.name",
+  "tag": "section",
+  "class": "hdt-section-config",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:sections.product-group-media.settings.product.label"
+    }
+  ]
+}
+{% endschema %}

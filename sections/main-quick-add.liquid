@@ -1,0 +1,91 @@
+{%- if template == 'product.only_config' and request.design_mode == false -%}
+<hdt-lazy-modal color-scheme="{{ section.settings.color_scheme }}" section-id="{{ section.id }}" class="hdt-contents" effect="slide">
+  <dialog id="hdt-quick-add-modal" class="hdt-dialog hdt-dialog-modal hdt-quick-add-modal hdt-s-gradient" scroll-lock>
+    <button ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="hdt-quick-add-modal" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+    <div class="hdt-dialog-modal__inner hdt-current-scrollbar"></div>
+  </dialog>
+</hdt-lazy-modal>
+{%- else -%}
+  {%- if template == 'product.only_config' -%}
+  <hdt-modal un-detect color-scheme="{{ section.settings.color_scheme }}" section-id="{{ section.id }}" class="hdt-contents" effect="slide">
+    <dialog id="hdt-quick-add-modal" class="hdt-dialog hdt-dialog-modal hdt-quick-add-modal hdt-s-gradient" scroll-lock>
+  {%- endif -%}
+  <div class="hdt-main-product-quick-add hdt-s-gradient">
+      {% content_for 'blocks' %}
+  </div>
+
+  {% comment %} {%- if has_form_atc != true and product != empty -%}
+    {%- form 'product', product, id: product_form_id, hidden: '' -%}<input type="hidden" name="id" value="{{ selected_variant.id }}" disabled>{%- endform -%}
+  {%- endif -%} {% endcomment %}
+
+  {%- if template == 'product.only_config' -%}
+    </dialog>
+  </hdt-modal>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      if (!Shopify.designMode) return;
+      document.addEventListener("shopify:section:select", (event) => {
+        const modal = event.target.querySelector('#hdt-quick-add-modal');
+        if (modal) modal.parentElement.open();
+      });
+      document.addEventListener("shopify:section:deselect", (event) => {
+        const modal = event.target.querySelector('#hdt-quick-add-modal');
+        if (modal) modal.parentElement.close();
+      });
+    });
+  </script>
+  {%- endif -%}
+{%- endif -%}
+
+
+{% schema %}
+{
+  "name": "t:sections.main-quick-add.name",
+  "tag": "section",
+  "class": "hdt-main-section hdt-main-section--quick-add hdt-quick-add-modal-",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+  ],
+  "blocks": [
+    {
+      "type": "_variant-info"
+    },
+    {
+      "type": "_product-variant-picker"
+    },
+    {
+      "type": "_quantity-selector"
+    },
+    {
+      "type": "_product-buy-button"
+    },
+    {
+      "type": "_product-item-property"
+    },
+    {
+      "type": "_incoming-mess"
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "_variant-info"
+      },
+      {
+        "type": "_product-variant-picker"
+      },
+      {
+        "type": "_quantity-selector"
+      },
+      {
+        "type": "_product-buy-button"
+      }
+    ]
+  }
+}
+{% endschema %}

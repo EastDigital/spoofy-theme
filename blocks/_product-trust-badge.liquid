@@ -1,0 +1,116 @@
+
+<div class="hdt-product-info__item hdt-product__trust-badge hdt-product__trust-seal hdt-flex hdt-flex-wrap" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+  {%- if block.settings.mess != blank -%}
+    <div class="hdt-product__trust-mess hdt-inline-flex hdt-align-center hdt-s-text">
+      {%- if block.settings.show_icon -%}
+        <div class="hdt-product__trust-icon"><svg class="hdt-inline-block" xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="currentColor"><path d="M10.5 0.614258L2.625 3.47813V10.4055C2.62689 11.7575 2.94764 13.0901 3.56122 14.2949C4.17479 15.4997 5.06388 16.5428 6.15628 17.3394L10.5 20.4986L14.8437 17.3394C15.9361 16.5428 16.8252 15.4997 17.4388 14.2949C18.0524 13.0901 18.3731 11.7575 18.375 10.4055V3.47813L10.5 0.614258ZM17.0625 10.4055C17.0607 11.5506 16.789 12.6791 16.2694 13.6994C15.7498 14.7198 14.9969 15.6033 14.072 16.2783L10.5 18.8764L6.92803 16.2783C6.00306 15.6033 5.25023 14.7198 4.73064 13.6994C4.21104 12.6791 3.93931 11.5506 3.9375 10.4055V4.39688L10.5 2.01076L17.0625 4.39688V10.4055Z"/><path d="M7.68184 8.88757L6.75391 9.81551L9.67881 12.7404L14.2443 8.17489L13.3164 7.24695L9.67881 10.8845L7.68184 8.88757Z"/></svg></div>
+      {%- endif -%}
+      <p class="hdt-font-semibold">{{ block.settings.mess }}</p>
+    </div>
+  {%- endif -%}
+  {%- if block.settings.source == '1' and block.settings.image != blank -%}
+    {%- assign image_size_2x = block.settings.wimg | times: 2 -%}
+    <div class="hdt-img__trust-image hdt-block lg:hdt-inline-block" style="max-width: min(100%, {{ block.settings.wimg }}px);">
+      <img width="{{ block.settings.image.width }}" class="hdt-inline-block" height="{{ block.settings.image.height }}" srcset="{{ block.settings.image | image_url: width: block.settings.image_width }}, {{ block.settings.image | image_url: width: image_size_2x }} 2x" src="{{ block.settings.image | image_url: width: 760 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy">
+    </div>
+  {%- elsif block.settings.svg != blank -%}
+    {%- assign arr = block.settings.svg | remove: ' ' | split: "," -%}
+    <div class="hdt-product_trust-svgs" style="--height-img:{{ block.settings.height }}px;">
+      {%- for img in arr -%}
+        <div class="hdt-payment-item hdt-inline-block">{{ img | payment_type_svg_tag: class: 'hdt-icon-payment hdt-inline-block' }}</div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.img_trust.name",
+  "tag": null,
+  "settings":[
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "t:sections.main-product.blocks.img_trust.settings.show_icon.label",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "mess",
+      "label": "t:sections.main-product.blocks.img_trust.settings.mess.label",
+      "default": "Guaranteed Safe Checkout",
+      "placeholder": "Guaranteed Safe Checkout"
+    },
+    {
+      "type": "select",
+      "id": "source",
+      "label": "t:sections.main-product.blocks.img_trust.settings.source.label",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.main-product.blocks.img_trust.settings.source.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.main-product.blocks.img_trust.settings.source.options__2.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-product.blocks.img_trust.settings.header_image.content",
+      "visible_if": "{{ block.settings.source == '1' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.main-product.blocks.img_trust.settings.image.label",
+      "visible_if": "{{ block.settings.source == '1' }}"
+    },
+    {
+      "type": "range",
+      "id": "wimg",
+      "min": 100,
+      "max": 600,
+      "step": 5,
+      "unit": "px",
+      "label": "t:sections.main-product.blocks.img_trust.settings.wimg.label",
+      "default": 350,
+      "visible_if": "{{ block.settings.source == '1' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-product.blocks.img_trust.settings.header_svg.content",
+      "visible_if": "{{ block.settings.source == '2' }}"
+    },
+    {
+      "type": "textarea",
+      "id": "svg",
+      "label": "t:sections.main-product.blocks.img_trust.settings.svg.label",
+      "default": "amazon_payments,american_express,apple_pay,bitcoin,dankort,diners_club,discover,dogecoin,dwolla,forbrugsforeningen,interac,google_pay,jcb,klarna,klarna-pay-later,litecoin,maestro,master,paypal,shopify_pay,sofort,visa",
+      "info": "Review the [list of available values](https:\/\/github.com\/activemerchant\/payment_icons\/tree\/master\/app\/assets\/images\/payment_icons) and copy the name of each icon that you need from that list, without the .svg extension",
+      "visible_if": "{{ block.settings.source == '2' }}"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "label": "t:sections.main-product.blocks.img_trust.settings.height.label",
+      "unit": "px",
+      "default": 30,
+      "visible_if": "{{ block.settings.source == '2' }}"
+    },
+    {
+      "type": "paragraph",
+      "content": "Enhance your store's legitimacy with [eye-catching trust badges](https:\/\/kits.ecomrise.app\/install?utm_source=the4-ecomus&utm_medium=intheme&utm_content=productpage-trustbadge)"
+    }
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.img_trust.name" 
+    }
+  ]
+}
+{% endschema %}

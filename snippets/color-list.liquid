@@ -1,0 +1,104 @@
+{%- comment -%}
+  Renders a color list
+
+  Accepts:
+  - product: {Object} Product Liquid object (required)
+  - section_id: {String} The ID of the section that contains this color list. (required)
+  - product_url: {String} (required)
+  - color_variants: {Array} (required)
+  - color_variants_avai: {Array} (required)
+  - color_count: {Interger} (required)
+  - class: {String} a list class. (optional)
+  - color_option_index
+
+  Usage:
+  {%- render 'color-list', product: product, product_url: product_url, color_variants: color_variants, color_variants_avai: color_variants_avai, color_count: color_count, section_id: section_id -%}
+{%- endcomment -%}
+
+{%- if settings.color_mode == 'color' -%}
+  {%- liquid
+    assign color_white = 'products.theme_settings.color_white' | t | downcase | strip
+    assign index = 0
+    if settings.color_maximum == 0
+      assign color_maximum = 2
+    else
+      assign color_maximum = settings.color_maximum
+    endif
+    assign first_add = true
+    assign colors = shop.metafields.ecomrise.colors.value
+    assign color_values = shop.metaobjects.theme_swatch.values | first
+    assign colors_2 = color_values.colors.value
+    assign selected_variant = product.selected_variant | default: product.variants.first
+    assign selected_color = selected_variant[color_option_index]
+    if enable_color_limit == 'fixed'
+      assign color_maximum = 6
+      assign enable_color_limit = false
+    else
+      assign enable_color_limit = settings.enable_color_limit
+    endif
+  -%}
+
+  <wrapp-hdt-color-list maximum="{{ color_maximum }}" event="{{ settings.color_event }}" {% if settings.enable_color_limit and color_count > color_maximum %} action-{{ settings.color_action }}{% endif %}{% if enable_color_limit and settings.color_maximum == 0 %} auto-limit{% endif %}>
+  <fieldset class="hdt-color-list {{ class }} hdt-color-list-{{ settings.color_style }}">
+    {%- for color in color_variants -%}
+
+      {%- liquid
+        unless color_variants_avai contains color or settings.color_type == 'all'
+          continue
+        endunless
+        assign index = index | plus: 1
+        assign color_downcase = color | downcase
+        assign color_handle = color | handle
+        assign color_obj = colors[color_handle] | default: colors_2[color_handle]
+        assign color_style_inline = ''
+        assign variants_has_color = product.variants | where: color_option_index, color
+        assign variant_first_color = variants_has_color | first
+        if variant_first_color.featured_image
+          assign variant_first_image = variant_first_color
+        else
+          assign variant_first_image = variants_has_color | where: 'featured_image' | first
+        endif
+        if settings.image_source == 'variant_img' and variant_first_image
+          assign image = variant_first_image.featured_image
+        else
+          assign image = color.swatch.image | default: images[color_obj.imageName]
+        endif
+        if image != blank
+          assign color_image = image | image_url: width: 80
+          assign color_image_style = '--hdt-bg-image: url(' | append: color_image | append: ');'
+          if image.presentation.focal_point
+            assign color_image_style = color_image_style | append: ';--hdt-focal-point:' | append: image.presentation.focal_point | append: ';'
+          endif
+          if color.swatch.color
+            assign color_style_inline = 'background-color: ' | append: color.swatch.color | append: ';'
+          endif
+        else
+          assign color_image_style = nil
+          if color.swatch.color
+            assign color_style_inline = 'background: ' | append: color.swatch.color | append: ';'
+          else
+            assign color_style_inline = color_obj.colorsCSS
+          endif
+        endif
+      -%}
+
+      <hdt-tooltip class="hdt-color-list-item{% if settings.enable_color_limit and index > color_maximum and first_add %}{% assign first_add = false %} is--color-limit{% endif %}">
+        <input {% if selected_color == color %}checked {% endif %}class="sr-only" type="radio" name="color-{{ section_id }}-{{ product.id }}" id="color-{{ section_id }}-{{ product.id }}-{{ color | handle }}" value="{{ color | escape }}"{% if variant_first_color %} data-vid="{{ variant_first_color.id }}"{% endif %}{% if variant_first_image %} data-vimg="{{ variant_first_image.featured_image | image_url: width: variant_first_image.featured_image.width }}"{% endif %}{% unless variant_first_color %} disabled{% endunless %}>
+        <label class="hdt-color-list-color{% if settings.color_shape == 'cricle' %} hdt-radius-full{% endif %}{% if color_white == color_downcase %} hdt-bg-color-white{% endif %}"{% unless color_variants_avai contains color %} unavailable{% endunless %} for="color-{{ section_id }}-{{ product.id }}-{{ color | handle }}">
+          {% if color_image_style or color_style_inline.size > 0 %}<span class="hdt-color-bg{% if settings.color_shape == 'cricle' %} hdt-radius-full{% endif %}" style="{{ color_image_style }}{{ color_style_inline }}"></span>{% endif %}
+          <span class="sr-only">{{ color | escape }}</span></label>
+      </hdt-tooltip>
+
+    {%- endfor -%}
+    {%- if settings.enable_color_limit and color_count > color_maximum -%}
+      <hdt-tooltip class="hdt-color-list-item is--color-link">
+        <a data-pr-url {% if settings.color_shape == 'cricle' %}class="hdt-radius-full"{% endif %} href="{{ product_url }}" title="{{ 'products.product.show_more_colors' | t | escape }}">+{{ color_count | minus: color_maximum | abs }}</a>
+      </hdt-tooltip>
+    {%- endif -%}
+  </fieldset>
+  </wrapp-hdt-color-list>
+{%- else -%}
+  <div class="hdt-color-list">
+    <p class="hdt-color-count">{{- 'products.product.colors_count' | t: count: color_count -}}</p>
+  </div>
+{%- endif -%}

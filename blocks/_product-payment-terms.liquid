@@ -1,0 +1,35 @@
+{%- liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  unless product.available
+    continue
+  endunless
+  assign product_form_id = 'product-form-'| append: section.id | append: product.id
+-%}
+<div class="hdt-product-info__item hdt-product__payment-terms" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+  <hdt-payment-terms form="{{ product_form_id }}">
+    {%- assign product_form_installment_id = 'product-form-installment-' | append: section.id -%}
+    {%- form 'product', product, id: product_form_installment_id, class: 'hdt-installment' -%}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      {{ form | payment_terms }}
+    {%- endform -%}
+  </hdt-payment-terms>
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.payment-terms.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.main-product.blocks.payment-terms.settings.info.content"
+    }
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.payment-terms.name" ,
+    }
+  ]
+}
+{% endschema %}

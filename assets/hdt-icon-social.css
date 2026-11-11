@@ -1,0 +1,175 @@
+.hdt-socials-demo{margin:50px 0;}
+.hdt-socials-demo .hdt-socials{padding:10px 0;}
+:root {
+  --facebook-cl: rgb(59, 89, 152);
+  --twitter-cl: rgb(85, 85, 85);
+  --instagram-cl: rgb(224, 53, 102);
+  --threads-cl: rgb(224, 53, 102);
+  --youtube-cl: rgb(205, 32, 31);
+  --tiktok-cl: rgb(254, 44, 85);
+  --pinterest-cl: rgb(203, 32, 39);
+  --tumblr-cl: rgb(55, 69, 92);
+  --vimeo-cl: rgb(26, 183, 234);
+  --snapchat-cl: rgb(255, 221, 0);
+  --whatsapp-cl: rgb(0, 230, 118);
+  --linked_in-cl: rgb(23, 106, 255);
+  --wechat-cl:rgb(26, 173, 24);
+  --reddit-cl:rgb(255, 69, 0);
+  --line-cl:rgb(0, 195, 77);
+  --spotify-cl:rgb(30, 125, 96);
+  --discord-cl:rgb(88, 101, 242);
+  --kick-cl:rgb(83, 252, 24);
+  --twitch-cl:rgb(145, 70, 255);
+}
+.hdt-socials__list{
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+.hdt-socials__list li a{
+  width: var(--width);
+  height: var(--height);
+  transition: all .3s ease;
+  color: rgb(var(--color-foreground));
+}   
+.hdt-socials__style-default li a {
+  border-radius:var(--radius-full);
+  background-color: rgb(var(--color-foreground) / .1);
+}
+.hdt-socials__style-outline li a {
+  border-radius:var(--radius-full);
+  border: 1px solid rgb(var(--color-foreground));
+}
+.hdt-socials__list li a svg{
+  width: var(--width-icon);
+  height: var(--height-icon);
+  fill: currentColor;
+}
+.hdt-socials__size-small{
+  --width-icon:12px;
+  --height-icon:12px;
+  --width:28px;
+  --height:28px;
+  --spacing-social-item:10px;
+}
+.hdt-socials__style-simple.hdt-socials__size-small{
+  --width-icon:13px;
+  --height-icon:13px;
+  --spacing-social-item:15px;
+}
+.hdt-socials__size-medium{
+  --width-icon:14px;
+  --height-icon:14px;
+  --width:34px;
+  --height:34px;
+  --spacing-social-item:12px;
+}
+.hdt-socials__style-simple.hdt-socials__size-medium{
+  --spacing-social-item:18px;
+}
+.hdt-socials__size-large{
+  --width-icon:16px;
+  --height-icon:16px;
+  --width:36px;
+  --height:36px;
+  --spacing-social-item:20px;
+}
+.hdt-socials__style-simple{
+  --width: auto !important;
+  --height: auto !important;
+  margin-inline-start: -0.2rem;
+  gap: 1rem 1.5rem;
+}
+
+.hdt-text-start .hdt-socials__list {
+	justify-content: start;
+}
+.hdt-text-center .hdt-socials__list {
+	justify-content: center;
+}
+.hdt-text-end .hdt-socials__list {
+	justify-content: end;
+}
+@media (min-width:768px){
+  .md\:hdt-text-start .hdt-socials__list {
+    justify-content: start;
+  }
+  .md\:hdt-text-center .hdt-socials__list {
+    justify-content: center;
+  }
+  .md\:hdt-text-end .hdt-socials__list {
+    justify-content: end;
+  }
+}
+@media (min-width:1150px){
+  .lg\:hdt-text-start .hdt-socials__list {
+    justify-content: start;
+  }
+  .lg\:hdt-text-center .hdt-socials__list {
+    justify-content: center;
+  }
+  .lg\:hdt-text-end .hdt-socials__list {
+    justify-content: end;
+  }
+}
+@media (-moz-touch-enabled: 0), (hover: hover) and (min-width: 1150px){
+  .hdt-socials__style-default a.hdt-social-facebook:hover {color:#fff;background-color: var(--facebook-cl);}
+  .hdt-socials__style-default a.hdt-social-twitter:hover {color:#fff;background-color: var(--twitter-cl);}
+  .hdt-socials__style-default a.hdt-social-instagram:hover {color:#fff;background: linear-gradient(#8a3ab9,#e95950,#fccc63);}
+  .hdt-socials__style-default a.hdt-social-threads:hover {color:#fff;background: linear-gradient(135deg,#8a3ab9,#e95950,#fccc63);}
+  .hdt-socials__style-default a.hdt-social-youtube:hover {color:#fff;background-color: var(--youtube-cl);}
+  .hdt-socials__style-default a.hdt-social-tiktok:hover {color:#fff;background: linear-gradient(#25F4EE,#000000,#FE2C55);}
+  .hdt-socials__style-default a.hdt-social-pinterest:hover {color:#fff;background-color: var(--pinterest-cl);}
+  .hdt-socials__style-default a.hdt-social-tumblr:hover {color:#fff;background-color: var(--tumblr-cl);}
+  .hdt-socials__style-default a.hdt-social-vimeo:hover {color:#fff;background-color: var(--vimeo-cl);}
+  .hdt-socials__style-default a.hdt-social-snapchat:hover {color:#fff;background-color: var(--snapchat-cl);}
+  .hdt-socials__style-default a.hdt-social-whatsapp:hover {color:#fff;background-color: var(--whatsapp-cl);}
+  .hdt-socials__style-default a.hdt-social-linked_in:hover {color:#fff;background-color: var(--linked_in-cl);}
+  .hdt-socials__style-default a.hdt-social-wechat:hover {color:#fff;background-color: var(--wechat-cl);}
+  .hdt-socials__style-default a.hdt-social-reddit:hover {color:#fff;background-color: var(--reddit-cl);}
+  .hdt-socials__style-default a.hdt-social-line:hover {color:#fff;background-color: var(--line-cl);}
+  .hdt-socials__style-default a.hdt-social-spotify:hover {color:#fff;background-color: var(--spotify-cl);}
+  .hdt-socials__style-default a.hdt-social-discord:hover {color:#fff;background-color: var(--discord-cl);}
+  .hdt-socials__style-default a.hdt-social-kick:hover {color:#fff;background-color: var(--kick-cl);}
+  .hdt-socials__style-default a.hdt-social-twitch:hover {color:#fff;background-color: var(--twitch-cl);}
+
+  .hdt-socials__style-outline a.hdt-social-facebook:hover {color:var(--facebook-cl);border-color: var(--facebook-cl);}
+  .hdt-socials__style-outline a.hdt-social-twitter:hover {color:var(--twitter-cl);border-color: var(--twitter-cl);}
+  .hdt-socials__style-outline a.hdt-social-instagram:hover {color:var(--instagram-cl);border-color: var(--instagram-cl);}
+  .hdt-socials__style-outline a.hdt-social-threads:hover {color:var(--instagram-cl);border-color: var(--threads-cl);}
+  .hdt-socials__style-outline a.hdt-social-youtube:hover {color:var(--youtube-cl);border-color: var(--youtube-cl);}
+  .hdt-socials__style-outline a.hdt-social-tiktok:hover {color:var(--tiktok-cl);border-color: var(--tiktok-cl);}
+  .hdt-socials__style-outline a.hdt-social-pinterest:hover {color:var(--pinterest-cl);border-color: var(--pinterest-cl);}
+  .hdt-socials__style-outline a.hdt-social-tumblr:hover {color:var(--tumblr-cl);border-color: var(--tumblr-cl);}
+  .hdt-socials__style-outline a.hdt-social-vimeo:hover {color:var(--vimeo-cl);border-color: var(--vimeo-cl);}
+  .hdt-socials__style-outline a.hdt-social-snapchat:hover {color:var(--snapchat-cl);border-color: var(--snapchat-cl);}
+  .hdt-socials__style-outline a.hdt-social-whatsapp:hover {color:var(--whatsapp-cl);border-color: var(--whatsapp-cl);}
+  .hdt-socials__style-outline a.hdt-social-linked_in:hover {color:var(--linked_in-cl);border-color: var(--linked_in-cl);}
+  .hdt-socials__style-outline a.hdt-social-wechat:hover {color:var(--wechat-cl);border-color: var(--wechat-cl);}
+  .hdt-socials__style-outline a.hdt-social-reddit:hover {color:var(--reddit-cl);border-color: var(--reddit-cl);}
+  .hdt-socials__style-outline a.hdt-social-line:hover {color:var(--line-cl);border-color: var(--line-cl);}
+  .hdt-socials__style-outline a.hdt-social-spotify:hover {color:var(--spotify-cl);border-color: var(--spotify-cl);}
+  .hdt-socials__style-outline a.hdt-social-discord:hover {color:var(--discord-cl);border-color: var(--discord-cl);}
+  .hdt-socials__style-outline a.hdt-social-kick:hover {color:var(--kick-cl);border-color: var(--kick-cl);}
+  .hdt-socials__style-outline a.hdt-social-twitch:hover {color:var(--twitch-cl);border-color: var(--twitch-cl);}
+
+  .hdt-socials__style-simple a.hdt-social-facebook:hover {color:var(--facebook-cl);}
+  .hdt-socials__style-simple a.hdt-social-twitter:hover {color:var(--twitter-cl);}
+  .hdt-socials__style-simple a.hdt-social-instagram:hover {color:var(--instagram-cl);}
+  .hdt-socials__style-simple a.hdt-social-threads:hover {color:var(--threads-cl);}
+  .hdt-socials__style-simple a.hdt-social-youtube:hover {color:var(--youtube-cl);}
+  .hdt-socials__style-simple a.hdt-social-tiktok:hover {color:var(--tiktok-cl);}
+  .hdt-socials__style-simple a.hdt-social-pinterest:hover {color:var(--pinterest-cl);}
+  .hdt-socials__style-simple a.hdt-social-tumblr:hover {color:var(--tumblr-cl);}
+  .hdt-socials__style-simple a.hdt-social-vimeo:hover {color:var(--vimeo-cl);}
+  .hdt-socials__style-simple a.hdt-social-snapchat:hover {color:var(--snapchat-cl);}
+  .hdt-socials__style-simple a.hdt-social-whatsapp:hover {color:var(--whatsapp-cl);}
+  .hdt-socials__style-simple a.hdt-social-linked_in:hover {color:var(--linked_in-cl);}
+  .hdt-socials__style-simple a.hdt-social-wechat:hover {color:var(--wechat-cl);}
+  .hdt-socials__style-simple a.hdt-social-reddit:hover {color:var(--reddit-cl);}
+  .hdt-socials__style-simple a.hdt-social-line:hover {color:var(--line-cl);}
+  .hdt-socials__style-simple a.hdt-social-spotify:hover {color:var(--spotify-cl);}
+  .hdt-socials__style-simple a.hdt-social-discord:hover {color:var(--discord-cl);}
+  .hdt-socials__style-simple a.hdt-social-kick:hover {color:var(--kick-cl);}
+  .hdt-socials__style-simple a.hdt-social-twitch:hover {color:var(--twitch-cl);}
+}

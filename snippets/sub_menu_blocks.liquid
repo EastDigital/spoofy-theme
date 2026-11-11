@@ -1,0 +1,71 @@
+<div class="hdt-sub-menu hdt-absolute hdt-dropdown-menu" color-scheme="{{ section.settings.header_menu_colors }}">
+  <ul class="hdt-menu-list hdt-sub-menu-lever-1" role="list"  >
+    {%- for childlink in link.links -%}
+      {%- if childlink.links != blank -%}
+        <li>
+          <hdt-accordion class="hdt-contents" only-click-icon>       
+            <details aria-expanded="false" class="hdt-menu-item hdt-flex hdt-justify-center hdt-flex-col{% if childlink.links != blank %} hdt-has-children hdt-relative{% endif %}">
+              <summary data-url="{{ childlink.url }}" class="hdt-flex hdt-justify-between hdt-align-center hdt-relative">
+                {%- assign arr_title = childlink.title | remove: "[is_heading]" | split: '[' -%}
+                {%- assign arr_label = arr_title[1] | split: ',' -%}
+                <span class="hdt-menu-link-text hdt-block {%- if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+                  <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                  {%- if arr_label.size > 0 -%}
+                    <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                      {%- for label in arr_label limit: 2 -%}
+                        {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                        <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                      {% endfor %}
+                    </span>
+                  {%- endif -%}
+                </span>
+                <span class="hdt-inline-flex hdt-align-center hdt-justify-center hdt-top-0 hdt-right-0 hdt-bottom-0 hdt-absolute" accordion-icon><svg class="hdt-menu-item-arrow" xmlns="http://www.w3.org/2000/svg" width="10" height="7" viewBox="0 0 10 7" fill="none"><path d="M10 1.24243L5 6.24243L-2.18557e-07 1.24243L0.8875 0.354932L5 4.46743L9.1125 0.354931L10 1.24243Z" fill="currentColor"/></svg></span>
+              </summary>
+                <div id="hdt-sub-menu{{ forloop.index }}" class="hdt-sub-menu hdt-sub-menu-child">
+                  <ul class="hdt-menu-list hdt-sub-menu-lever-2" role="list">
+                    {%- for grandchildlink in childlink.links -%}
+                      <li class="hdt-menu-item hdt-flex hdt-justify-center hdt-flex-col">
+                        <a id="hdt-menu-{{ grandchildlink.handle }}" href="{{ grandchildlink.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-normal {% if childlink.current %} hdt-menu-link--active{% endif %}" {% if grandchildlink.current %} aria-current="page" {% endif %}>
+                          {%- assign arr_title = grandchildlink.title | remove: "[is_heading]" | split: '[' -%}
+                          {%- assign arr_label = arr_title[1] | split: ',' -%}
+                          <span class="hdt-menu-link-text hdt-block {%- if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+                            <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                            {%- if arr_label.size > 0 -%}
+                              <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                                {%- for label in arr_label limit: 2 -%}
+                                  {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                                  <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                                {% endfor %}
+                              </span>
+                            {%- endif -%}
+                          </span>
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+            </details>
+          </hdt-accordion>        
+        </li>
+      {% else %}
+        <li class="hdt-menu-item hdt-flex hdt-justify-start hdt-align-center">
+          <a id="hdt-menu-{{ childlink.handle }}" href="{{ childlink.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-normal {% if childlink.current %} hdt-menu-link--active{% endif %}">
+            {%- assign arr_title = childlink.title | remove: "[is_heading]" | split: '[' -%}
+            {%- assign arr_label = arr_title[1] | split: ',' -%}
+            <span class="hdt-menu-link-text hdt-block {%- if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+              <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+              {%- if arr_label.size > 0 -%}
+                <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                  {%- for label in arr_label limit: 2 -%}
+                    {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                    <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                  {% endfor %}
+                </span>
+              {%- endif -%}
+            </span>
+          </a>
+        </li>
+      {% endif %}
+    {%- endfor -%}
+  </ul>
+</div>

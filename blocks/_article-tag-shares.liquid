@@ -1,0 +1,294 @@
+{% liquid
+  if article == blank
+    continue
+  endif
+%}
+<div class="hdt-row-grid lg:hdt-grid-cols-2 md:hdt-grid-cols-2 hdt-grid-cols-1 hdt-article-tags-social hdt-w-full hdt-section-spacing" style="--section-pt: {{ block.settings.padding_top }}px; --section-pb: {{ block.settings.padding_bottom }}px; --section-prate:{{ block.settings.padding_rate }};" {{ block.shopify_attributes }}>
+  <div class="hdt-article-tags">
+    {%- if article.tags.size > 0 -%}
+      <div class="hdt-flex hdt-align-center hdt-justify-start" timeline hdt-reveal="slide-in">
+        {%- assign article_tags = article.tags | join: ';' | split: ';' -%}
+        {%- assign blog_tags = article_tags | where: 'blog_' -%}
+        {%- for tag in blog_tags -%}
+        <a class="hdt-filter-tag" href="{{ blog.url }}/tagged/{{ tag | handle }}" rel="tag"><span>{{ tag | remove : 'blog_' | strip }}</span></a>
+      {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+  <div class="hdt-article-social hdt-flex hdt-align-center lg:hdt-justify-end md:hdt-justify-end hdt-justify-start" timeline hdt-reveal="slide-in">
+    {%- liquid
+      assign origin = request.origin
+      assign share = article.url | prepend: origin
+      assign preview_image = article.image | image_url: width: 1024, height: 1024
+      assign share_title = article.title
+    -%}
+     {%- if block.settings.enable_social_facebook == true or block.settings.enable_social_twitter == true or block.settings.enable_social_pinterest == true or block.settings.enable_social_tumblr == true or block.settings.enable_social_telegram == true or block.settings.enable_social_whatsapp == true or block.settings.enable_social_email == true -%}
+        <div class="hdt-hidden md:hdt-flex lg:hdt-justify-end md:hdt-justify-end hdt-justify-start hdt-article-tags-dk">
+          <span class="hdt-article-social_name hdt-font-semibold hdt-s-text">{{ 'blogs.article.share' | t }}:</span>
+          {{ 'hdt-icon-social.css' | asset_url | stylesheet_tag }}
+          <ul class="hdt-socials__list hdt-socials__style-{{ block.settings.socials_style }} hdt-socials__size-{{ block.settings.socials_size }} hdt-inline-block">
+            {%- if block.settings.enable_social_facebook -%}
+              <li class="hdt-socials__item hdt-inline-block">
+                <hdt-tooltip placement="top-start">
+                  <a aria-label="{{ 'general.social.shares.share_on_facebook' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" href="https://www.facebook.com/sharer/sharer.php?u={{ share }}" target="_blank" class="hdt-social-facebook hdt-flex hdt-align-center hdt-justify-center">{%- render 'icon_socials', icon_name: "facebook" -%}</a>
+                </hdt-tooltip>
+              </li>
+            {%- endif -%}
+            {%- if block.settings.enable_social_twitter -%}
+              <li class="hdt-socials__item hdt-inline-block">
+                <hdt-tooltip placement="top-start">
+                  <a aria-label="{{ 'general.social.shares.share_on_twitter' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" href="http://x.com/share?text={{ share_title }}&amp;url={{ share }}" target="_blank" class="hdt-social-twitter hdt-flex hdt-align-center hdt-justify-center">{%- render 'icon_socials', icon_name: "twitter" -%}</a>
+                </hdt-tooltip>
+              </li>
+            {%- endif -%}
+            {%- if block.settings.enable_social_pinterest -%}
+              <li class="hdt-socials__item hdt-inline-block">
+                <hdt-tooltip placement="top-start">
+                  <a aria-label="{{ 'general.social.shares.share_on_pinterest' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" href="http://pinterest.com/pin/create/button/?url={{ share }}&amp;media=http:{{ preview_image }}&amp;description={{ share_title }}" target="_blank" class="hdt-social-pinterest hdt-flex hdt-align-center hdt-justify-center">{%- render 'icon_socials', icon_name: "pinterest" -%}</a>
+                </hdt-tooltip>
+              </li>
+            {%- endif -%}
+            {%- if block.settings.enable_social_tumblr -%}
+              <li class="hdt-socials__item hdt-inline-block">
+                <hdt-tooltip placement="top-start">
+                  <a aria-label="{{ 'general.social.shares.share_on_tumblr' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" data-content="http:{{ preview_image }}" href="//tumblr.com/widgets/share/tool?canonicalUrl={{ share }}" target="_blank" class="hdt-social-tumblr hdt-flex hdt-align-center hdt-justify-center">{%- render 'icon_socials', icon_name: "tumblr" -%}</a>
+                </hdt-tooltip>
+              </li>
+            {%- endif -%}
+            {%- if block.settings.enable_social_telegram -%}
+              <li class="hdt-socials__item hdt-inline-block">
+                <hdt-tooltip placement="top-start">
+                  <a aria-label="{{ 'general.social.shares.share_on_telegram' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" target="_blank" class="social-telegram hdt-social-telegram hdt-flex hdt-align-center hdt-justify-center" href="https://telegram.me/share/url?url={{ share }}">{%- render 'icon_socials', icon_name: "telegram" -%}</a>
+                </hdt-tooltip>
+              </li>
+            {%- endif -%}
+            {%- if block.settings.enable_social_whatsapp -%}
+              <li class="hdt-socials__item hdt-inline-block">
+                <hdt-tooltip placement="top-start">
+                  <a aria-label="{{ 'general.social.shares.share_on_whatsapp' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" target="_blank" class="social-whatsapp hdt-social-whatsapp hdt-flex hdt-align-center hdt-justify-center" href="https://wa.me/?text={{ share_title }}&#x20;{{ share }}">{%- render 'icon_socials', icon_name: "whatsapp" -%}</a>
+                </hdt-tooltip>
+              </li>
+            {%- endif -%}
+            {%- if block.settings.enable_social_email -%}
+              <li class="hdt-socials__item hdt-inline-block">
+                <hdt-tooltip placement="top-start">
+                  <a aria-label="{{ 'general.social.shares.share_on_email' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" href="mailto:?subject={{ share_title }}&amp;body={{ share }}" target="_blank" class="hdt-social-email hdt-flex hdt-align-center hdt-justify-center">{%- render 'icon_socials', icon_name: "email" -%}</a>
+                </hdt-tooltip>
+              </li>
+            {%- endif -%}
+          </ul>
+        </div>
+        <div class="hdt-article-tags-m md:hdt-hidden">
+          <wrapp-hdt-share-btn hidden class="hdt-contents">
+            <button class="hdt-share-button hdt-share-button--native hdt-s-text hdt-inline-flex hdt-align-center" hidden>
+              <span class="hdt-product__extra-icon">{%- render 'icon' with 'share' -%}</span>
+              <span class="hdt-product__extra-text hdt-font-semibold"> {{ 'general.social.shares.share_btn' | t }}</span>
+            </button>
+          </wrapp-hdt-share-btn>
+          <button class="hdt-share-button hdt-inline-flex hdt-align-center hdt-s-text" aria-controls="Popover-{{ block.id }}" aria-haspopup="dialog" aria-expanded="false">
+            <span class="hdt-product__extra-icon">{%- render 'icon' with 'share' -%}</span>
+            <span class="hdt-product__extra-text hdt-font-semibold">{{ 'general.social.shares.share_btn' | t }}</span>
+          </button>
+          <hdt-popover class="hdt-popover hdt-contents" placement="top-start" color-scheme="{{ settings.color_scheme_dialog }}" initial-focus="false">
+            <dialog id="Popover-{{ block.id }}" class="hdt-popover" scroll-lock>
+              <div class="hdt-popover__arrow"></div>
+              <div class="hdt-popover__body">
+                <div class="hdt-popover__header hdt-share-button__header md:hdt-flex hdt-s-text">
+                  <span>{{ 'general.social.shares.share_header' | t | escape }}</span>
+                  <button ref="closeButton" class="hdt-s-text" aria-controls="Popover-{{ block.id }}" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+                </div>
+                <div class="hdt-popover__inner hdt-current-scrollbar">
+                  <ul class="hdt-share-button__links">
+                    {%- if block.settings.enable_social_facebook -%}
+                      <li class="hdt-socials__item hdt-inline-block">
+                        <hdt-tooltip placement="top-start">
+                          <a aria-label="{{ 'general.social.shares.share_on_facebook' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" href="https://www.facebook.com/sharer/sharer.php?u={{ share }}" target="_blank" class="social-facebook hdt-flex hdt-align-center hdt-justify-center">{%- render 'icon_socials' with 'facebook' -%}</a>
+                        </hdt-tooltip>
+                      </li>
+                    {%- endif -%}
+                    {%- if block.settings.enable_social_twitter -%}
+                      <li class="hdt-socials__item hdt-inline-block">
+                        <hdt-tooltip placement="top-start">
+                          <a aria-label="{{ 'general.social.shares.share_on_twitter' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" href="http://x.com/share?text={{ share_title }}&amp;url={{ share }}" target="_blank" class="social-twitter hdt-flex hdt-align-center hdt-justify-center">{%- render 'icon_socials' with 'twitter' -%}</a>
+                        </hdt-tooltip>
+                      </li>
+                    {%- endif -%}
+                    {%- if block.settings.enable_social_pinterest -%}
+                      <li class="hdt-socials__item hdt-inline-block">
+                        <hdt-tooltip placement="top-start">
+                          <a aria-label="{{ 'general.social.shares.share_on_pinterest' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" href="http://pinterest.com/pin/create/button/?url={{ share }}&amp;media=http:{{ preview_image }}&amp;description={{ share_title }}" target="_blank" class="social-pinterest hdt-flex hdt-align-center hdt-justify-center">{%- render 'icon_socials' with 'pinterest' -%}</a>
+                        </hdt-tooltip>
+                      </li>
+                    {%- endif -%}
+                    {%- if block.settings.enable_social_tumblr -%}
+                      <li class="hdt-socials__item hdt-inline-block">
+                        <hdt-tooltip placement="top-start">
+                          <a aria-label="{{ 'general.social.shares.share_on_tumblr' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" data-content="http:{{ preview_image }}" href="//tumblr.com/widgets/share/tool?canonicalUrl={{ share }}" target="_blank" class="social-tumblr hdt-flex hdt-align-center hdt-justify-center">{%- render 'icon_socials' with 'tumblr' -%}</a>
+                        </hdt-tooltip>
+                      </li>
+                    {%- endif -%}
+                    {%- if block.settings.enable_social_telegram -%}
+                      <li class="hdt-socials__item hdt-inline-block">
+                        <hdt-tooltip placement="top-start">
+                          <a aria-label="{{ 'general.social.shares.share_on_telegram' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" target="_blank" class="social-telegram hdt-social-telegram hdt-flex hdt-align-center hdt-justify-center" href="https://telegram.me/share/url?url={{ share }}">{%- render 'icon_socials' with 'telegram' -%}</a>
+                        </hdt-tooltip>
+                      </li>
+                    {%- endif -%}
+                    {%- if block.settings.enable_social_whatsapp -%}
+                      <li class="hdt-socials__item hdt-inline-block">
+                        <hdt-tooltip placement="top-start">
+                          <a aria-label="{{ 'general.social.shares.share_on_whatsapp' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" target="_blank" class="social-whatsapp hdt-social-whatsapp hdt-flex hdt-align-center hdt-justify-center" href="https://wa.me/?text={{ share_title }}&#x20;{{ share }}">{%- render 'icon_socials' with 'whatsapp' -%}</a>
+                        </hdt-tooltip>
+                      </li>
+                    {%- endif -%}
+                    {%- if block.settings.enable_social_email -%}
+                      <li class="hdt-socials__item hdt-inline-block">
+                        <hdt-tooltip placement="top-start">
+                          <a aria-label="{{ 'general.social.shares.share_on_email' | t | escape }}" data-no-instant rel="noopener noreferrer nofollow" href="mailto:?subject={{ share_title }}&amp;body={{ share }}" target="_blank" class="social-email hdt-flex hdt-align-center hdt-justify-center">{%- render 'icon_socials' with 'email' -%}</a>
+                        </hdt-tooltip>
+                      </li>
+                    {%- endif -%}
+                  </ul>
+                  <div class="hdt-share-button__wrapp">
+                    <input id="input-{{ block.id }}" class="hdt-share-button__input hdt-s-text2" type="text" value="{{ share }}" onclick="this.select();" readonly>
+                    <wrapp-hdt-copy-btn class="hdt-contents" text-id="input-{{ block.id }}" get-document data-success-message="{{ 'general.social.shares.success_message' | t | escape }}">
+                      <button class="hdt-share-button__copy">{{ 'general.social.shares.share_btn_copy' | t }}</button>
+                    </wrapp-hdt-copy-btn>
+                  </div>
+                </div>
+              </div>
+            </dialog>
+          </hdt-popover>
+        </div>
+      {%- endif -%}
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Tag shares",
+    "tag":null,
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_social_facebook",
+        "default": true,
+        "label": "t:sections.main-article.tags_social.settings.enable_social_facebook.label"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_social_twitter",
+        "default": true,
+        "label": "t:sections.main-article.tags_social.settings.enable_social_twitter.label"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_social_pinterest",
+        "default": true,
+        "label": "t:sections.main-article.tags_social.settings.enable_social_pinterest.label"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_social_tumblr",
+        "default": true,
+        "label": "t:sections.main-article.tags_social.settings.enable_social_tumblr.label"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_social_telegram",
+        "default": true,
+        "label": "t:sections.main-article.tags_social.settings.enable_social_telegram.label"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_social_whatsapp",
+        "default": true,
+        "label": "t:sections.main-article.tags_social.settings.enable_social_whatsapp.label"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_social_email",
+        "default": true,
+        "label": "t:sections.main-article.tags_social.settings.enable_social_email.label"
+      },
+      {
+        "type": "select",
+        "id": "socials_style",
+        "label": "t:settings_schema.social-media.settings.social_style.label",
+        "default": "default",
+        "options": [
+          {
+            "value": "default",
+            "label": "t:default"
+          },
+          {
+            "value": "outline",
+            "label": "t:settings_schema.social-media.settings.social_style.options__2.label"
+          },
+          {
+            "value": "simple",
+            "label": "t:settings_schema.social-media.settings.social_style.options__3.label"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "socials_size",
+        "label": "t:settings_schema.social-media.settings.social_size.label",
+        "default": "medium",
+        "options": [
+          {
+            "value": "small",
+            "label": "t:settings_schema.social-media.settings.social_size.options__1.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:settings_schema.social-media.settings.social_size.options__2.label"
+          },
+          {
+            "value": "large",
+            "label": "t:settings_schema.social-media.settings.social_size.options__3.label"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "padding_rate",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:sections.all.padding.padding_rate",
+        "default": 75
+      }
+    ],
+    "presets":[
+      {
+        "name":"Tag shares",
+      }
+    ]
+  }
+{% endschema %}

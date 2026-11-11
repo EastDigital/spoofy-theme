@@ -1,0 +1,259 @@
+<!-- Collections-list-simple.liquid -->
+{%- style -%}.hdt-text-uppercase-true .hdt-collection-title{text-transform:uppercase;letter-spacing:.7px}.hdt-collections-list-simple .hdt-collection-item .hdt-collection-title{padding:0 var(--spacing-3);height:50px;line-height:48px;color:rgb(var(--color-button-text));background-color:rgb(var(--color-button));border:solid 1px rgb(var(--color-button-border));max-width:100%;border-radius:var(--radius-collection-card)}.hdt-collections-list-simple .hdt-collection-item{flex:0 0 auto}.hdt-collection-other_link{margin-top:30px}.hdt-collection-other_link a{color:rgb(var(--color-link));gap:8px}.hdt-collection-other_link a::after{width:100%;height:1px;background-color:rgb(var(--color-link));content:"";position:absolute;z-index:1;bottom:0;left:0;right:0}@media(min-width:1150px){.hdt-collection-other_link{margin-top:50px}} @media (-moz-touch-enabled:0),(hover:hover) and (min-width:1150px){.hdt-collections-list-simple .hdt-collection-item .hdt-collection-title:hover{background-color:rgb(var(--color-button-text));color:rgb(var(--color-button));border-color:rgb(var(--color-button-text))}.hdt-collection-other_link a:hover{color: rgb(var(--color-accent));}.hdt-collection-other_link a:hover::after{background-color:rgb(var(--color-accent))}}{%- endstyle -%}
+{{ 'hdt-collections-list.css' | asset_url | stylesheet_tag }}
+<div id="{{ section.id }}" class="hdt-section-spacing hdt-s-gradient" style="--section-pt: {{ section.settings.padding_top }}px; --section-pb: {{ section.settings.padding_bottom }}px; --section-prate:{{ section.settings.padding_rate }};" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %}">
+    {% content_for 'block', type: 'section-heading', id: 'collection-list-simple' %}
+    {%- if section.settings.option_layout == 'carousel' -%}
+      <hdt-slider id="Slider-{{ section.id }}" class="hdt-flex md:hdt-justify-center hdt-oh hdt-slider hdt-slider-has-dots-dk hdt-dots-outline hdt-text-uppercase-{{ section.settings.text_transform }} hdt-slides-auto hdt-slide-spacing-10 only-desktop" config='{ "id": "Slider-{{ section.id }}", "navUI": false, "dotUI": true }' hdt-reveal="slide-in" timeline>
+        <div class="hdt-slider__viewport hdt-relative">
+          <div class="hdt-slider__container">
+            {%- if section.settings.collection_list != blank -%}
+              {%- for collection in section.settings.collection_list -%}
+                <div class="hdt-slider__slide hdt-collection-item hdt-text-center">
+                  <a class="hdt-collection-title hdt-flex hdt-align-center hdt-radius-xs hdt-text-lg hdt-font-medium" href="{{ collection.url }}"><span class="hdt-collection-title-text hdt-truncate">{{ collection.title }}</span></a>
+                </div>
+              {%- endfor -%}
+            {%- else -%}
+              {%- for i in (1..6) -%}
+                <div class="hdt-slider__slide hdt-collection-item hdt-text-center">
+                  <a class="hdt-collection-title hdt-flex hdt-align-center hdt-radius-xs hdt-text-lg hdt-font-medium" href="#"><span class="hdt-collection-title-text hdt-truncate">{{ 'onboarding.collection_title' | t }}</span></a>
+                </div>
+              {%- endfor -%}
+            {%- endif -%}
+          </div>
+          <div hdt-slider-dots class="hdt-slider__dots hdt-flex hdt-align-center hdt-justify-center" aria-controls="Slider-{{ section.id }}"></div>
+        </div>
+      </hdt-slider>
+     
+    {%- else -%}
+      <div class="hdt-collections-list-simple-grid hdt-row-grid hdt-text-uppercase-{{ section.settings.text_transform }} hdt-grid-cols-{{ section.settings.mobile_grid_columns }} md:hdt-grid-cols-{{ section.settings.grid_columns }}">
+        {%- if section.settings.collection_list != blank -%}
+          {%- for collection in section.settings.collection_list -%}
+            <div class="hdt-collection-item hdt-text-center">
+              <a class="hdt-collection-title hdt-flex hdt-align-center hdt-radius-xs hdt-text-lg hdt-font-medium" href="{{ collection.url }}"><span class="hdt-collection-title-text hdt-truncate">{{ collection.title }}</span></a>
+            </div>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..6) -%}
+            <div class="hdt-collection-item hdt-text-center">
+              <a class="hdt-collection-title hdt-flex hdt-align-center hdt-radius-xs hdt-text-lg hdt-font-medium" href="#"><span class="hdt-collection-title-text hdt-truncate">{{ 'onboarding.collection_title' | t }}</span></a>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    {%- if section.settings.other_link_label != blank and section.settings.other_link != blank -%}
+      <div class="hdt-flex hdt-justify-center hdt-align-center hdt-collection-other_link">
+        <a class="hdt-text-base hdt-font-semibold hdt-inline-flex hdt-justify-center hdt-align-center hdt-relative" href="{{ section.settings.other_link }}">
+          {{ section.settings.other_link_label }}
+          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+            <path d="M0.861539 8L0 7.13846L5.90769 1.23077H0.615385V0H8V7.38462H6.76923V2.09231L0.861539 8Z" fill="currentColor"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.collection_list.name_simple",
+  "tag": "section",
+  "class": "hdt-section hdt-collections-list hdt-collections-list-simple",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "option_layout",
+      "label": "Layout (Desktop)",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "select",
+      "id": "number_of_items",
+      "label": "Number of items",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2", 
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "6"
+    },
+    {
+      "type": "select",
+      "id": "grid_columns",
+      "label": "Item per row on desktop",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "4",
+      "visible_if": "{{ section.settings.option_layout == 'grid' or section.settings.option_layout == 'grid2' }}"
+    },
+    {
+      "type": "select",
+      "id": "mobile_grid_columns",
+      "label": "Item per row on mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ],
+      "default": "2",
+      "visible_if": "{{ section.settings.option_layout == 'grid' or section.settings.option_layout == 'grid2' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection_list.options_collection"
+    },
+    {
+      "id": "collection_list",
+      "type": "collection_list",
+      "label": "t:sections.collection_list.settings.collection_list"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_transform",
+      "label": "t:sections.collection_list.settings.text_transform",
+      "default": false,
+      "visible_if": "{{ section.settings.collection_list != blank }}"
+    },
+    {
+      "type": "text",
+      "id": "other_link_label",
+      "label": "t:sections.all.button.settings.text.label",
+      "default": "View all categories",
+      "visible_if": "{{ section.settings.collection_list != blank }}"
+    },
+    {
+      "type": "url",
+      "id": "other_link",
+      "label": "t:sections.all.button.settings.url.label",
+      "visible_if": "{{ section.settings.collection_list != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section_layout",
+      "visible_if": "{{ section.settings.collection_list != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false,
+      "visible_if": "{{ section.settings.collection_list != blank }}"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1",
+      "visible_if": "{{ section.settings.collection_list != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading",
+      "visible_if": "{{ section.settings.collection_list != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 130,
+      "visible_if": "{{ section.settings.collection_list != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 130,
+      "visible_if": "{{ section.settings.collection_list != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75,
+      "visible_if": "{{ section.settings.collection_list != blank }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "section-heading"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.collection_list.name_simple",
+      "category": "t:sections_categories.03_collections.name",
+      "blocks": [
+        {
+          "type": "section-heading",
+          "static": true,
+          "id": "collection-list-simple",
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "heading": "<h4>Sustainable Style</h4>",
+                "heading_size": "h4"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

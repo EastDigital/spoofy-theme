@@ -1,0 +1,380 @@
+<!-- sections/main-order.liquid -->
+{{ 'hdt-customer.css' | asset_url | stylesheet_tag }}
+
+<div timeline hdt-reveal="slide-in" class="hdt-main-order hdt-section-spacing hdt-s-gradient" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container">
+    <div class="hdt-customer hdt-customer-account is--order hdt-row-grid">
+      {%- render 'account-sidebar' -%}
+      <div class="hdt-account-content hdt-text-center"> 
+        <div style="margin-bottom:3rem;">
+          <h2 class="is--first hdt-s-text hdt-h5" style="margin-bottom:1rem">{{ 'customer.order.title' | t: name: order.name }}</h2>
+          {%- assign order_date = order.created_at | time_tag: format: "date_at_time" -%}
+          <p class="hdt-s-text2" style="margin-bottom:2rem">{{ 'customer.order.date_html' | t: date: order_date }}</p>
+          {%- if order.cancelled -%}
+            {%- assign cancelled_at = order.cancelled_at | time_tag: format: "date_at_time" -%}
+            <p class="hdt-s-text2" style="margin-bottom:2rem">{{ 'customer.order.cancelled_html' | t: date: cancelled_at }}</p>
+            <p class="hdt-s-text2" style="margin-bottom:2rem">{{ 'customer.order.cancelled_reason' | t: reason: order.cancel_reason_label }}</p>
+          {%- endif -%}
+
+          <table role="table" class="hdt-table-infos hdt-responsive-table order-details">
+            <caption class="sr-only">{{ 'customer.order.title' | t: name: order.name }}</caption>
+            <thead role="rowgroup">
+              <tr role="row">
+                <th id="ColumnProduct" scope="col" role="columnheader">{{ 'customer.order.product' | t }}</th>
+                <th id="ColumnSku" scope="col" role="columnheader">{{ 'customer.order.sku' | t }}</th>
+                <th id="ColumnPrice" scope="col" role="columnheader">{{ 'customer.order.price' | t }}</th>
+                <th id="ColumnQuantity" scope="col" role="columnheader">{{ 'customer.order.quantity' | t }}</th>
+                <th id="ColumnTotal" scope="col" role="columnheader">{{ 'customer.order.total' | t }}</th>
+              </tr>
+            </thead>
+            <tbody role="rowgroup">
+              {%- for line_item in order.line_items -%}
+                <tr role="row">
+                  <td
+                    id="Row{{ line_item.key }}"
+                    headers="ColumnProduct"
+                    role="rowheader"
+                    scope="row"
+                    data-label="{{ 'customer.order.product' | t }}"
+                  >
+                    <div>
+                      {%- if line_item.url != blank -%}
+                        <a href="{{ line_item.url }}">{{ line_item.title }}</a>
+                      {%- else -%}
+                        <p>{{ line_item.title }}</p>
+                      {%- endif -%}
+                      {%- assign property_size = line_item.properties | size -%}
+                      {%- unless line_item.selling_plan_allocation == nil and property_size == 0 -%}
+                        <div class="properties">
+                          {%- unless line_item.product.has_only_default_variant -%}
+                            <span>
+                              {{ line_item.variant.title }}
+                            </span>
+                          {%- endunless -%}
+                          {%- unless line_item.selling_plan_allocation == nil -%}
+                            <span>
+                              {{ line_item.selling_plan_allocation.selling_plan.name }}
+                            </span>
+                          {%- endunless -%}
+                          {%- if property_size != 0 -%}
+                            {%- for property in line_item.properties -%}
+                              {% assign property_first_char = property.first | slice: 0 %}
+                              {%- if property.last != blank and property_first_char != '_' -%}
+                                <span>
+                                  {{ property.first }}:&nbsp;
+                                  {%- if property.last contains '/uploads/' -%}
+                                    <a href="{{ property.last }}">{{ property.last | split: '/' | last }}</a>
+                                  {%- else -%}
+                                    {{ property.last }}
+                                  {%- endif -%}
+                                </span>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          {%- endif -%}
+                        </div>
+                      {%- endunless -%}
+
+                      {%- if line_item.line_level_discount_allocations != blank -%}
+                        <ul role="list" class="hdt-list__discount" aria-label="{{ 'customer.order.discount' | t }}">
+                          {%- for discount_allocation in line_item.line_level_discount_allocations -%}
+                            <li>
+                               {% render 'icon' with 'discount' %}
+                              {{- discount_allocation.discount_application.title }} (-{{ discount_allocation.amount | money -}})
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+
+                      {%- if line_item.fulfillment -%}
+                        <div class="fulfillment">
+                          {%- assign created_at = line_item.fulfillment.created_at | time_tag: format: 'date' -%}
+                          <span>{{ 'customer.order.fulfilled_at_html' | t: date: created_at }}</span>
+
+                            {%- if line_item.fulfillment.tracking_url -%}
+                              <a href="{{ line_item.fulfillment.tracking_url }}">
+                                {{ 'customer.order.track_shipment' | t }}
+                              </a>
+                            {%- endif -%}
+                            <span>
+                              {{ line_item.fulfillment.tracking_company }}
+                              {%- if line_item.fulfillment.tracking_number -%} #{{ line_item.fulfillment.tracking_number }} {%- endif -%}
+                            </span>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </td>
+                  <td
+                    headers="Row{{ line_item.key }} ColumnSku"
+                    role="cell"
+                    data-label="{{ 'customer.order.sku' | t }}"
+                  >
+                    {{ line_item.sku }}
+                  </td>
+                  <td
+                    headers="Row{{ line_item.key }} ColumnPrice"
+                    role="cell"
+                    data-label="{{ 'customer.order.price' | t }}"
+                  >
+                    {%- if line_item.original_price != line_item.final_price or line_item.unit_price_measurement -%}
+                      <dl>
+                        {%- if line_item.original_price != line_item.final_price -%}
+                          <dd class="regular-price">
+                            <s>{{ line_item.original_price | money }}</s>
+                          </dd>
+                          <dd>
+                            <span>{{ line_item.final_price | money }}</span>
+                          </dd>
+                        {%- else -%}
+                          <dd>
+                            {{ line_item.original_price | money }}
+                          </dd>
+                        {%- endif -%}
+                        {%- if line_item.unit_price_measurement -%}
+                          <dd class="unit-price">
+                            <span>
+                              {%- capture unit_price_separator -%}
+                                <span aria-hidden="true">/</span><span class="sr-only">{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+                              {%- endcapture -%}
+                              {%- capture unit_price_base_unit -%}
+                                {%- if line_item.unit_price_measurement.reference_value != 1 -%}
+                                  {{- line_item.unit_price_measurement.reference_value -}}
+                                {%- endif -%}
+                                {{ line_item.unit_price_measurement.reference_unit }}
+                              {%- endcapture -%}
+                              <span data-unit-price>{{ line_item.unit_price | money }}</span>{{- unit_price_separator -}}{{- unit_price_base_unit -}}
+                            </span>
+                          </dd>
+                        {%- endif -%}
+                      </dl>
+                    {%- else -%}
+                      <span>{{ line_item.final_price | money }}</span>
+                    {%- endif -%}
+                  </td>
+                  <td
+                    headers="Row{{ line_item.key }} ColumnQuantity"
+                    role="cell"
+                    data-label="{{ 'customer.order.quantity' | t }}"
+                  >
+                    {{ line_item.quantity }}
+                  </td>
+                  <td
+                    headers="Row{{ line_item.key }} ColumnTotal"
+                    role="cell"
+                    data-label="{{ 'customer.order.total' | t }}"
+                  >
+                    {%- if line_item.original_line_price != line_item.final_line_price -%}
+                      <dl>
+                        <dd class="regular-price">
+                          <s>{{ line_item.original_line_price | money }}</s>
+                        </dd>
+                        <dd>
+                          <span>{{ line_item.final_line_price | money }}</span>
+                        </dd>
+                      </dl>
+                    {%- else -%}
+                      {{ line_item.original_line_price | money }}
+                    {%- endif -%}
+                  </td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+            <tfoot role="rowgroup">
+              <tr role="row">
+                <td id="RowSubtotal" role="rowheader" scope="row" colspan="4">
+                  {{ 'customer.order.subtotal' | t }}
+                </td>
+                <td headers="RowSubtotal" role="cell" data-label="{{ 'customer.order.subtotal' | t }}">{{ order.line_items_subtotal_price | money }}</td>
+              </tr>
+              {%- if order.cart_level_discount_applications != blank -%}
+                <tr role="row">
+                  {%- for discount_application in order.cart_level_discount_applications -%}
+                    <td id="RowDiscount" role="rowheader" scope="row" colspan="4">
+                      <div>{{ 'customer.order.discount' | t }}</div>
+                      <span class="hdt-cart-discount">
+                        {% render 'icon' with 'discount' %}
+                        {{- discount_application.title -}}
+                      </span>
+                    </td>
+                    <td headers="RowDiscount" role="cell" data-label="{{ 'customer.order.discount' | t }}">
+                  
+                        <div>-{{ discount_application.total_allocated_amount | money }}</div>
+                        <span class="hdt-cart-discount">
+                           {% render 'icon' with 'discount' %}
+                          <span>{{- discount_application.title -}}</span>
+                        </span>
+                     
+                    </td>
+                  {%- endfor -%}
+                </tr>
+              {%- endif -%}
+              {%- for shipping_method in order.shipping_methods -%}
+                <tr role="row">
+                  <td id="RowShipping" role="rowheader" scope="row" colspan="4">{{ 'customer.order.shipping' | t }} ({{ shipping_method.title }})</td>
+                  <td headers="RowShipping" role="cell" data-label="{{ 'customer.order.shipping' | t }} ({{ shipping_method.title }})">{{ shipping_method.price | money }}</td>
+                </tr>
+              {%- endfor -%}
+              {%- for tax_line in order.tax_lines -%}
+                <tr role="row">
+                  <td id="RowTax" role="rowheader" scope="row" colspan="4">{{ 'customer.order.tax' | t }} ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)</td>
+                  <td headers="RowTax" role="cell" data-label="{{ 'customer.order.tax' | t }} ({{ tax_line.title }} {{ tax_line.rate | times: 100 }}%)">{{ tax_line.price | money }}</td>
+                </tr>
+              {%- endfor -%}
+              <tr role="row">
+                <td id="RowTotal" role="rowheader" scope="row" colspan="3">{{ 'customer.order.total' | t }}</td>
+                <td headers="RowTotal" role="cell" colspan="2" data-label="{{ 'customer.order.total' | t }}">{{ order.total_price | money_with_currency }}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="hdt-field hdt-row-grid hdt-grid-cols-1 md:hdt-grid-cols-2">
+          <div>
+            <h2 class="hdt-h5 hdt-s-text" style="margin-bottom:1rem">{{ 'customer.order.billing_address' | t }}</h2>
+            <p>
+              <strong>{{ 'customer.order.payment_status' | t }}:</strong>
+              <span class="hdt-order-financial{% if order.financial_status_label contains 'Paid' %} hdt-paid{% else %} hdt-unpaid{% endif %}">{{ order.financial_status_label }}</span>
+            </p>
+            <table class="hdt-table-infos hdt-order-bill">
+              <tbody>
+                <tr>
+                  <td><strong>{{ 'customer.addresses.name' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.name' | t }}">{{ order.billing_address.first_name }} {{ order.billing_address.last_name }}</td>
+                </tr>  
+                {%- if order.billing_address.company != blank -%}
+                  <tr>
+                    <td><strong>{{ 'customer.addresses.company' | t }}</strong></td>
+                    <td data-label="{{ 'customer.addresses.company' | t }}">{{ order.billing_address.company }}</td>
+                  </tr>
+                {%- endif -%}
+                {%- if order.billing_address.address1 != blank -%}
+                  <tr>
+                    <td><strong>{{ 'customer.addresses.address1' | t }}</strong></td>
+                    <td data-label="{{ 'customer.addresses.address1' | t }}">{{ order.billing_address.address1 }}</td>
+                  </tr>
+                {%- endif -%}
+                {%- if order.billing_address.address2 != blank -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.address2' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.address2' | t }}">{{ order.billing_address.address2 }}</td>
+                </tr>
+                {%- endif -%}
+                {%- if order.billing_address.city != blank -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.country' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.country' | t }}">{{ order.billing_address.city }}, {% if order.billing_address.province_code %}{{ order.billing_address.province_code }}, {% endif %}{{ order.billing_address.country }}</td>
+                </tr>
+                {%- endif -%}
+                {%- if order.billing_address.zip != blank -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.zip' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.zip' | t }}">{{ order.billing_address.zip }}</td>
+                </tr>
+                {%- endif -%}
+                {%- if order.billing_address.phone != blank -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.phone' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.phone' | t }}">{{ order.billing_address.phone }}</td>
+                </tr>
+                {%- endif -%}
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h2 class="hdt-h5 hdt-s-text" style="margin-bottom:1rem">{{ 'customer.order.shipping_address' | t }}</h2>
+            <p>
+              <strong>{{ 'customer.order.fulfillment_status' | t }}:</strong>
+              <span class="hdt-order-fullfillment{% if order.fulfillment_status_label contains 'Fulfilled' %} hdt-fulfilled{% else %} hdt-unfulfilled{% endif %}">{{ order.fulfillment_status_label }}</span>
+            </p>
+            <table class="hdt-table-infos hdt-order-ship">
+              <tbody>
+                <tr>
+                  <td><strong>{{ 'customer.addresses.name' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.name' | t }}">{{ order.shipping_address.first_name }} {{ order.shipping_address.last_name }}</td>
+                </tr>  
+                {%- if order.shipping_address.company != blank -%}
+                  <tr>
+                    <td><strong>{{ 'customer.addresses.company' | t }}</strong></td>
+                    <td data-label="{{ 'customer.addresses.company' | t }}">{{ order.shipping_address.company }}</td>
+                  </tr>
+                {%- endif -%}
+                {%- if order.shipping_address.address1 != blank -%}
+                  <tr>
+                    <td><strong>{{ 'customer.addresses.address1' | t }}</strong></td>
+                    <td data-label="{{ 'customer.addresses.address1' | t }}">{{ order.shipping_address.address1 }}</td>
+                  </tr>
+                {%- endif -%}
+                {%- if order.shipping_address.address2 != blank -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.address2' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.address2' | t }}">{{ order.shipping_address.address2 }}</td>
+                </tr>
+                {%- endif -%}
+                {%- if order.shipping_address.city != blank -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.country' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.country' | t }}">{{ order.shipping_address.city }}, {% if order.shipping_address.province_code %}{{ order.shipping_address.province_code }}, {% endif %}{{ order.shipping_address.country }}</td>
+                </tr>
+                {%- endif -%}
+                {%- if order.shipping_address.zip != blank -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.zip' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.zip' | t }}">{{ order.shipping_address.zip }}</td>
+                </tr>
+                {%- endif -%}
+                {%- if order.shipping_address.phone != blank -%}
+                <tr>
+                  <td><strong>{{ 'customer.addresses.phone' | t }}</strong></td>
+                  <td data-label="{{ 'customer.addresses.phone' | t }}">{{ order.shipping_address.phone }}</td>
+                </tr>
+                {%- endif -%}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{%- style -%}#shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}}{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "t:sections.main-order.name",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ]
+}
+{% endschema %}

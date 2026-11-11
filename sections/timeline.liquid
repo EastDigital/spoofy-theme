@@ -1,0 +1,181 @@
+<!-- Timeline.liquid -->
+{%- style -%}.hdt_timeline_content{padding-top:60px;padding-bottom:20px;text-align:center}.hdt_timeline_content .hdt_timeline_line{width:1px;border-right-width:1px;border-style:{{section.settings.line_style}};border-color:rgb(var(--color-line-border));height:100%;top:0;left:50%;transform:translateX(-50%);z-index:1}.hdt-timeline-item :where(.hdt-timeline-image,.hdt-timeline-content){z-index:2;width: 100%;}.hdt-timeline-item .hdt-timeline-content {padding: 8px 0px;background-color: rgb(var(--color-background));}.hdt-timeline-time{background-color:rgb(var(--color-button));color:rgb(var(--color-button-text));border-radius:var(--radius-xs);padding:0 35px;line-height:36px;top:0;left:50%;transform:translateX(-50%);z-index:3}.hdt_timeline_content .hdt_timeline_line::before,.hdt_timeline_content .hdt_timeline_line::after{content:"";position:absolute;z-index:3;left:50%;transform:translateX(-50%);width:10px;height:10px;z-index:3;background-color:rgb(var(--color-line-border));border-radius:var(--radius-full)}.hdt_timeline_content .hdt_timeline_line::before{top:0}.hdt_timeline_content .hdt_timeline_line::after{bottom:0}.hdt-timeline-item .hdt-timeline-inner{gap:30px;padding-top:80px;padding-bottom:80px;flex-direction:column}.hdt-timeline-item .hdt-timeline-label{margin-bottom:7px}.hdt-timeline-item .hdt-timeline-title{margin-bottom:10px}@media(min-width:768px){.hdt_timeline_content{padding-top:100px}.dir--ltr .hdt-timeline-content__end .hdt-timeline-content,.dir--rtl .hdt-timeline-content__start .hdt-timeline-content{text-align:left}.dir--ltr .hdt-timeline-content__start .hdt-timeline-content,.dir--rtl .hdt-timeline-content__end .hdt-timeline-content{text-align:right}.hdt-timeline-item .hdt-timeline-inner{gap:100px;flex-direction:row}.hdt-timeline-item .hdt-timeline-inner.hdt-timeline-content__end{flex-direction:row-reverse}.hdt-timeline-item::before{content:"";position:absolute;z-index:3;left:50%;transform:translateX(-50%);width:10px;height:10px;z-index:3;background-color:rgb(var(--color-line-border));border-radius:var(--radius-full)}.hdt-timeline-item::before{width:10px;height:10px;background-color:rgb(var(--color-link));top:50%;transform:translate(-50%)}.hdt-timeline-item .hdt-timeline-inner::before,.hdt-timeline-item .hdt-timeline-inner::after{position:absolute;content:"";width:20px;background-color:rgb(var(--color-line-border));height:1px;z-index:3;top:calc(50% + 5px)}.hdt-timeline-item .hdt-timeline-inner::before{left:calc(50% + 20px);transform:translate(-50%)}.hdt-timeline-item .hdt-timeline-inner::after{right:calc(50% + 20px);transform:translate(50%)}.hdt-timeline-item :where(.hdt-timeline-image,.hdt-timeline-content){width:calc(50% - 50px);}}@media(min-width:1150px){.hdt_timeline_content{padding-top:130px;width:100%;max-width:{{section.settings.content_width}}px;margin-inline-start:auto;margin-inline-end:auto}.hdt-timeline-item .hdt-timeline-inner{gap:190px;padding-top:90px;padding-bottom:90px}.hdt-timeline-item .hdt-timeline-inner::before,.hdt-timeline-item .hdt-timeline-inner::after{width:40px}.hdt-timeline-item .hdt-timeline-inner::before{left:calc(50% + 35px)}.hdt-timeline-item .hdt-timeline-inner::after{right:calc(50% + 35px)}.hdt-timeline-item :where(.hdt-timeline-image,.hdt-timeline-content){width: calc(50% - 95px)}}{%- endstyle -%}
+<div id="{{ section.id }}" class="hdt-section-spacing hdt-s-gradient" color-scheme="{{ section.settings.color_scheme }}" style="--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}">
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %} hdt-text-uppercase-{{ section.settings.text_transform }}">
+    <div class="hdt_timeline_content hdt-relative">
+      <span class="hdt_timeline_line hdt-absolute"></span>
+      {% content_for "blocks" %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.timeline.name",
+  "tag": "section",
+  "class": "hdt-section hdt-timeline",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.section_general_options"
+    },
+    {
+      "type": "number",
+      "id": "content_width",
+      "label": "t:sections.timeline.settings.content_width",
+      "default": 1170
+    },
+    {
+      "type": "select",
+      "id": "line_style",
+      "label": "t:sections.timeline.settings.line_style.label",
+      "options": [
+        {
+          "value": "solid",
+          "label": "t:sections.timeline.settings.line_style.solid"
+        },
+        {
+          "value": "dotted",
+          "label": "t:sections.timeline.settings.line_style.dotted"
+        },
+        {
+          "value": "dashed",
+          "label": "t:sections.timeline.settings.line_style.dashed"
+        }
+      ],
+      "default": "dotted"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section_layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_time-line"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.timeline.name",
+      "category": "t:sections_categories.05_section.name",
+      "blocks": [
+        {
+          "type": "_time-line",
+          "settings": {
+            "time": "1980",
+            "content_position": "end"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "heading": "<h3><strong>PHASE 1</strong></h3>",
+                "heading_size": "base",
+                "font_size_heading_lg": 50,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 8,
+                "space_md": 6,
+                "space": 6
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "heading": "<h3>Inception and Brand Establishment</h3>",
+                "heading_size": "h3",
+                "font_size_heading_lg": 50,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 10,
+                "space_md": 10,
+                "space": 10
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>Inception, in the context of brand establishment, refers to the initial phase of creating and introducing a brand to the market. It involves laying down the foundational elements that will define the brand's identity, values, and positioning in the minds of consumers.</p>",
+                "text_size": "base",
+                "font_size_text_lg": 16,
+                "font_size_text_md": 14,
+                "font_size_text": 14,
+                "font_weight_text": 400,
+                "letter_spacing_text": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

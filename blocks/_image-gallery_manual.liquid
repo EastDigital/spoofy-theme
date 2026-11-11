@@ -1,0 +1,52 @@
+<!-- blocks/_image-gallery_manual_item.liquid -->
+{%- liquid 
+  assign image = block.settings.image
+  assign product = block.settings.product_item
+  capture current 
+    cycle 1, 2, 3 
+  endcapture -%}
+<div class="hdt-gallery-item hdt-masonry-gallery__item"  {{ block.shopify_attributes }} style="--item-column-span: {{ block.settings.column_width }}; --item-row-span: {{ block.settings.row_count }};--item-column-span-tb: {{ block.settings.tb_column_width }}; --item-row-span-tb: {{ block.settings.tb_row_count }};--item-column-span-mb: {{ block.settings.mb_column_width }}; --item-row-span-mb: {{ block.settings.mb_row_count }}" hdt-reveal="slide-in" timeline> 
+  <div class="hdt-gallery-inner hdt-relative hdt-oh hdt-radius">
+    <div class="hdt-gallery-img" style="--aspect-ratioapt: {{ image.aspect_ratio | default: 1.2 }};">
+      <div class="{% if section.settings.image_ratio != "custom" %}hdt-ratio {% endif %}hdt-oh hdt-radius">
+      {%- if image != blank -%}
+        {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '', sizes: '(max-width: 767px) 200px', widths: '285, 370, 385, 200' }}
+      {%- else -%}
+        {{ 'hero-apparel-' | append: current | placeholder_svg_tag: 'hdt-placeholder-svg' }}  
+      {%- endif -%}
+      {% if block.settings.item_link != blank %}<a class="hdt-full-width-link" href="{{ block.settings.item_link }}"></a>{% endif %}
+    </div>
+    </div>
+    {%- if product != blank -%}
+      {%- if settings.show_ultra_btn %}<div class=" hdt-gallery-product hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center">{% render 'btn-ultra', class: 'hdt-pr_btn', product: product, product_url: product.url, section_id: block.id, placement: 'top' %}</div>{% endif -%}
+    {%- endif -%}
+  </div> 
+</div>
+{% schema %}
+  {
+    "name": "Image item",
+    "tag": null,
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.gallery.blocks.gallery_item.image"
+      },
+      {
+        "type": "url",
+        "id": "item_link",
+        "label": "t:sections.gallery.blocks.gallery_item.link"
+      },
+      {
+        "type": "product",
+        "id": "product_item",
+        "label": "t:sections.gallery.blocks.gallery_item.product"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image item"
+      }
+    ]
+  }
+{% endschema %}

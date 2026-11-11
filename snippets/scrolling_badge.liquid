@@ -1,0 +1,96 @@
+{% 
+  liquid
+
+  unless settings.enable_scroll_badge
+    continue
+  endunless
+  assign icon = product.metafields.theme.scrolling_badge.value.icon | default: settings.scroll_badge_icon | default: product.metafields.theme.scrolling_badge.value.img
+  assign text = product.metafields.theme.scrolling_badge.value.text | default: settings.scroll_badge_text
+  assign show_sale_percentage = product.metafields.theme.scrolling_badge.value.show_sale_percentage | default: settings.scroll_badge_sale_percentage
+  assign show_sale_text = product.metafields.theme.scrolling_badge.value.show_sale_text | default: settings.scroll_badge_sale_text
+
+  assign is_show = true
+  if icon == blank and text == blank and show_sale_percentage == false and show_sale_text == false
+    assign is_show = false
+  endif
+    
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+
+  if icon == blank and text == blank 
+    if on_sale == false
+      assign is_show = false 
+    endif
+  endif
+
+  if is_show == false
+    continue
+  endif
+
+  if product.available or product != blank
+    if product.variants.size > variants_available.size
+      continue
+    endif
+  else 
+    continue
+  endif
+
+
+  assign show_block = settings.scrolling_badge_enable
+  if show_block == false
+    continue
+  endif
+
+  assign target = product
+
+  assign show_badge_sale = false
+  if show_sale_percentage or show_sale_text 
+   assign show_badge_sale = true
+  endif
+
+  unless sale_text_t
+    assign sale_text_t = 'products.product.on_sale' | t
+  endunless
+  unless sale_percent_t
+    assign sale_percent_t = 'products.product.save_percent_single' | t: percent: 'save_1904' | replace_first: 'save_1904', '<span percent>save_1904</span>'
+  endunless
+-%}
+
+{%- capture content -%}
+  {%- if icon != blank -%}
+    <div class="hdt-scrolling-icon">
+      {% if icon.type == 'file_reference' %}
+        {{ icon | image_url: width: icon.width, height: icon.height | image_tag: width: icon.width,widths: '5,10,15,20,25,30,35', loading: 'lazy' }}
+      {% else %}
+        {{ icon }}
+      {% endif %}
+    </div>
+  {%- endif -%}
+  {%- if text != blank -%}
+    <p class="hdt-scrolling-text hdt-font-bold hdt-uppercase">{{ text }}</p>
+  {%- endif -%}
+  {%- if on_sale and show_badge_sale -%}
+    <hdt-badge {{ update_hidden_attr }} is="on_sale" class="hdt-badge hdt-badge__on-sale">
+      {%- liquid
+      if show_sale_percentage
+        assign save_percent = target.compare_at_price | minus: target.price | times: 100.0 | divided_by: target.compare_at_price | round | at_least: 1
+        echo sale_percent_t | replace_first: 'save_1904', save_percent
+      else
+        echo sale_text_t
+      endif
+      -%}
+    </hdt-badge>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if content != blank -%}
+<hdt-marquee speed-factor="0.1" direction="rtl" pausable class="hdt-marquee hdt-block hdt-left-0 hdt-right-0 hdt-bottom-0 hdt-oh hdt-current-scrollbar hdt-scrolling-badge">
+  <div class="hdt-marquee-inner">
+    <div class="hdt-marquee-item">
+        <div class="hdt-scrolling-inner hdt-scrolling-wrap hdt-inline-flex hdt-align-center">{{- content -}}</div>
+      </div>
+  </div>
+</hdt-marquee>
+{%- endif -%}

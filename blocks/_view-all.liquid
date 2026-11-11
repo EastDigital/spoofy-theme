@@ -1,0 +1,151 @@
+<div class="hdt-pagination-wrapper hdt-prs-footer hdt-pagination-view_all hdt-flex hdt-align-center hdt-justify-{{ block.settings.paginate_pos }}{% if block.settings.navUI %} hdt-slider hdt-slider-has-nav hdt-nav-btns-{{ block.settings.nav_des }} hdt-nav-shape_{{ block.settings.nav_shape }} hdt-nav-{{ block.settings.nav_size }} hdt-slider-btn-vi-{{ block.settings.btn_vi }}{% endif %}" hdt-reveal="slide-in" timeline  style="--pagination-distance:{{ block.settings.dis_pagination }}px;" {% if block.settings.use_color_block %}color-scheme="{{ block.settings.color_scheme }}"{% endif %}>
+  <div class="hdt-viewall_wrapper hdt-relative">
+    <a class="hdt-view-all-btn hdt-btn hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-{{ block.settings.btn_style }} hdt-btn--size-{{ block.settings.size }} hdt-font-{{ block.settings.btn_fw }}" href="{{ block.settings.btn_url | default: section.settings.collection.url | default: routes.all_products_collection_url }}">
+      {% assign view_all_df = 'general.pagination.view_all' | t %}
+      <span>{{ block.settings.btn_label | default: view_all_df | escape }}</span>
+    </a>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "View all",
+    "tag": null,
+    "settings": [
+      {
+        "type": "select",
+        "id": "paginate_pos",
+        "label": "t:sections.all.pagination.paginate_pos.label",
+        "default": "center",
+        "options": [
+          {
+            "value": "start",
+            "label": "t:sections.all.pagination.paginate_pos.option_1.label"
+          },
+          {
+            "value": "center",
+            "label": "t:sections.all.pagination.paginate_pos.option_2.label"
+          },
+          {
+            "value": "end",
+            "label": "t:sections.all.pagination.paginate_pos.option_3.label"
+          }/*,
+          {
+            "value": "top_head",
+            "label": "t:sections.all.pagination.paginate_pos.option_4.label"
+          }*/
+        ]
+      },
+      {
+        "type": "range",
+        "id": "dis_pagination",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.pagination.dis_pagination.label",
+        "default": 30
+      },
+      {
+        "type": "text",
+        "id": "btn_label",
+        "label": "t:sections.collection_products.settings.btn_label.label",
+        "info": "t:sections.collection_products.settings.btn_label.info",
+        "default": "View all"
+      },
+      {
+        "type": "url",
+        "id": "btn_url",
+        "label": "Url"
+      },
+      {
+        "type": "select",
+        "id": "btn_style",
+        "label": "t:sections.all.button.settings.style.label",
+        "options": [
+          {
+            "value": "solid",
+            "label": "t:sections.all.button.settings.style.options.option_1"
+          },
+          {
+            "value": "outline",
+            "label": "t:sections.all.button.settings.style.options.option_2"
+          },
+          {
+            "value": "link",
+            "label": "Link"
+          }
+        ],
+        "default": "solid"
+      },
+      {
+        "type": "select",
+        "id": "size",
+        "label": "Size",
+        "options": [
+          {
+            "value": "xs",
+            "label": "t:blocks.button.settings.button_size.options.xs"
+          },
+          {
+            "value": "s",
+            "label": "t:blocks.button.settings.button_size.options.s"
+          },
+          {
+            "value": "m",
+            "label": "t:blocks.button.settings.button_size.options.m"
+          },
+          {
+            "value": "l",
+            "label": "t:blocks.button.settings.button_size.options.l"
+          },
+          {
+            "value": "xl",
+            "label": "t:blocks.button.settings.button_size.options.xl"
+          },
+          {
+            "value": "custom hdt-btn--size-custom-1",
+            "label": "t:blocks.button.settings.button_size.options.custom_1"
+          },
+          {
+            "value": "custom custom-inline",
+            "label": "t:blocks.button.settings.button_size.options.custom_inline"
+          }
+        ],
+        "default": "m"
+      },
+      {
+        "type": "select",
+        "id": "btn_fw",
+        "label": "t:sections.all.button.settings.font_weight.label",
+        "options": [
+          {
+            "value": "light",
+            "label": "t:sections.all.button.settings.font_weight.options.option_0"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.all.button.settings.font_weight.options.option_1"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.all.button.settings.font_weight.options.option_2"
+          },
+          {
+            "value": "semibold",
+            "label": "t:sections.all.button.settings.font_weight.options.option_3"
+          },
+          {
+            "value": "bold",
+            "label": "t:sections.all.button.settings.font_weight.options.option_4"
+          }
+        ],
+        "default": "medium"
+      }
+    ],
+    "presets": [
+      {
+        "name": "View all",
+      }
+    ]
+  }
+{% endschema %}

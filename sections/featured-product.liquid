@@ -1,0 +1,227 @@
+<!-- sections / featured-product.liquid -->
+{% liquid
+  assign product = section.settings.product | default: title: "Example product title", price: 1999, compare_at_price: 2500, available: true, vendor: "Ecomus"
+%}
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --pr-media-width: {{ section.settings.media_width }}%; --section-pt:{{ section.settings.padding_top }}px; --section-pb:{{ section.settings.padding_bottom }}px; --section-prate:{{ section.settings.padding_rate }};
+  }
+{%- endstyle -%}
+<div class="hdt-s-inner hdt-s-gradient hdt-section-spacing" color-scheme="{{ section.settings.color_scheme }}" hdt-reveal="fade-in">
+  <div class="hdt-container {%- if section.settings.full_width -%}-full{%- endif %}">
+    <div class="hdt-row-grid hdt-grid-cols-1 md:hdt-grid-cols-2">
+      {% content_for 'block', type: '_product-medias', id: 'featured-product' %}
+      {% content_for "blocks" %}
+    </div>
+    {%-liquid
+      if section.settings.product_list_fbt != blank and product != blank
+        render 'product-form-bundle2', product_list: section.settings.product_list_fbt, product: product
+      endif
+    -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.feature-product.name",
+  "class": "hdt-section hdt-section--feature-product",
+  "max_blocks": 1,
+  "blocks": [
+    {
+      "type": "_group-product"
+    },
+  ],
+  "disabled_on": {
+    "groups": ["*"]
+  },
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-product.settings.header_fbt.content",
+      "visible_if": "{{ section.settings.product != blank }}"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list_fbt",
+      "label": "t:sections.main-product.settings.product_list_fbt.label",
+      "limit": 10/*,
+      "visible_if": "{{ section.settings.product != blank }}"*/
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "visible_if": "{{ section.settings.product != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": false,
+      "visible_if": "{{ section.settings.product != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading",
+      "visible_if": "{{ section.settings.product != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0,
+      "visible_if": "{{ section.settings.product != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52,
+      "visible_if": "{{ section.settings.product != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75,
+      "visible_if": "{{ section.settings.product != blank }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.feature-product.name",
+      "category": "t:sections_categories.04_products.name",
+      "blocks": [
+        {
+          "type": "_group-product",
+          "settings": {},
+          "blocks": [
+            {
+              "type": "_product-title",
+            },
+            {
+              "type": "_product-badges",
+              "settings": {
+                "special": "",
+                "min": 10,
+                "max": 80,
+                "content": "Selling fast! [count] people have this in their carts.",
+                "icon_svg": "flash",
+                "ani": "none"
+              }
+            },
+            {
+              "type": "_product-price",
+              "settings": {}
+            },
+            {
+              "type": "_product-countdown",
+              "settings": {
+                "color_scheme": "",
+                "icon": "none",
+                "svg_upload": "<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"hdt-ani-tada is--infinite hdt-inine-block\" width=\"14\" height=\"14\" viewBox=\"0 0 14 14\"><path d=\"M6.7796 0.828412C3.1501 0.828412 0.193808 3.7847 0.193808 7.41421C0.193808 11.0437 3.1501 14 6.7796 14C10.4091 14 13.3654 11.0437 13.3654 7.41421C13.3654 3.7847 10.4091 0.828412 6.7796 0.828412ZM6.7796 12.5365C3.95503 12.5365 1.65732 10.2388 1.65732 7.41421C1.65732 4.58963 3.95503 2.29192 6.7796 2.29192C9.60418 2.29192 11.9019 4.58963 11.9019 7.41421C11.9019 10.2388 9.60418 12.5365 6.7796 12.5365ZM0.252349 2.65048C-0.0549885 2.38705 -0.0842587 1.91873 0.179173 1.61871C0.669449 1.05526 1.24754 0.550345 1.88416 0.125928C2.22077 -0.100916 2.67446 -0.0131058 2.9013 0.323501C3.12814 0.660109 3.04033 1.1138 2.70373 1.34064C2.17686 1.69188 1.70122 2.1163 1.29144 2.58462C1.14509 2.75293 0.947516 2.83342 0.742624 2.83342C0.564631 2.83384 0.392712 2.76872 0.259666 2.65048H0.252349ZM10.8555 1.34064C10.5189 1.1138 10.4311 0.660109 10.6579 0.323501C10.8847 -0.0131058 11.3384 -0.100916 11.675 0.125928C12.3117 0.550345 12.8824 1.05526 13.38 1.61871C13.6435 1.92604 13.6142 2.38705 13.3069 2.65048C13.2349 2.71418 13.1511 2.76303 13.0602 2.79421C12.9693 2.82539 12.8732 2.83829 12.7773 2.83217C12.6814 2.82605 12.5876 2.80102 12.5015 2.75854C12.4153 2.71606 12.3383 2.65695 12.2751 2.58462C11.859 2.1117 11.3844 1.69368 10.8628 1.34064H10.8555ZM8.71875 8.1606C9.01877 8.43135 9.04804 8.89235 8.77729 9.19237C8.63094 9.35336 8.43337 9.44117 8.22848 9.44117C8.05286 9.44117 7.88455 9.38263 7.74552 9.25823L6.28933 7.96302C6.13566 7.82399 6.04053 7.62642 6.04053 7.41421V4.48719C6.04053 4.08472 6.36982 3.75543 6.77228 3.75543C7.17475 3.75543 7.50404 4.08472 7.50404 4.48719V7.08492L8.71875 8.1606Z\"></path></svg>",
+                "ani": "hdt-ani-flash",
+                "content": "HURRY UP! SALE ENDS IN:",
+                "alignment": "center",
+                "effect_cd": "move_top"
+              }
+            },
+            {
+              "type": "_product-variant-picker",
+              "settings": {
+                "color_picker_type": "color_rounded",
+                "color_size": "small",
+                "picker_type": "block",
+                "size_chart_source": "page",
+                "size_chart_page": ""
+              }
+            },
+            {
+              "type": "_quantity-selector",
+              "settings": {}
+            },
+            {
+              "type": "_product-buy-button",
+              "settings": {
+                "show_dynamic_checkout": true,
+                "show_gift_card_recipient": true,
+                "show_wishlist": true,
+                "show_compare": false,
+                "show_price_variant": true
+              }
+            },
+            {
+              "type": "_product_back_instock",
+              "settings": {
+                "only_show_soldout": true
+              }
+            },
+            {
+              "type": "_delivery_return",
+              "settings": {
+                "icon_delivery": "ship",
+                "content_devivery": "<p>Estimate delivery times:<strong> 12-26 days</strong> (International),<strong> 3-6 days</strong> (United States).</p>",
+                "icon_return": "return_order",
+                "content_return": "<p>Return within <strong>30 days</strong> of purchase. Duties & taxes are non-refundable.</p>"
+              }
+            },
+            {
+              "type": "_product-trust-badge",
+              "settings": {
+                "show_icon": true,
+                "mess": "Guaranteed Safe Checkout",
+                "source": "1",
+                "wimg": 350,
+                "svg": "amazon_payments,american_express,apple_pay,bitcoin,dankort,diners_club,discover,dogecoin,dwolla,forbrugsforeningen,interac,google_pay,jcb,klarna,klarna-pay-later,litecoin,maestro,master,paypal,shopify_pay,sofort,visa",
+                "height": 30
+              }
+            }
+          ]
+        },
+        {
+          "type": "_product-medias",
+          "static": true,
+          "id": "featured-product",
+          "settings": {
+            "color_scheme": "scheme-2",
+            "display_by_block": true,
+            "desktop_media_layout": "thumbnail_left",
+            "media_size": "medium",
+            "mobile_media_layout": "thumbnails",
+            "enable_thumb_efect": true,
+            "show_first_media": false,
+            "use_select_varaint_change_media": true,
+            "enable_media_autoplay": false,
+            "enable_video_looping": false,
+            "image_ratio": "adapt_image",
+            "image_size": true,
+            "image_zoom": "zoom",
+            "image_zoom_type": "external",
+            "zoom_level": 2,
+            "max_zoom_lightbox": 3,
+            "navUI": true,
+            "nav_des": "default",
+            "nav_shape": "rounded"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

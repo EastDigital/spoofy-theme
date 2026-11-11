@@ -1,0 +1,440 @@
+{% liquid
+  if article == blank
+    continue
+  endif
+
+  if section.settings.section_fullwidth
+  assign page_width = '(100vw - 30px)'
+  else
+  assign page_width = settings.page_width | append: 'px'
+  endif
+  assign article_id =  article.id
+%}
+{{ 'hdt-blog-post.css' | asset_url | stylesheet_tag }}
+{%- capture sizes -%}
+  (min-width:1150px) calc(({{ page_width }} - 30px * ({{ block.settings.col_dk }} - 1 )) * 1 / {{ block.settings.col_dk}}),(min-width:678px) calc(({{ page_width }} - 30px * ({{ block.settings.col_tb }} - 1 )) * 1 / {{ block.settings.col_tb}}), calc((100vw - 30px * ({{ block.settings.col_mb }} - 1 )) * 1 / {{ block.settings.col_mb }})
+{%- endcapture -%}
+<div id="hdt-article_related-{{ block.id }}"class="hdt-s-inner hdt-feature-blog hdt-article-related hdt-w-full hdt-section-spacing" style="--section-pt: {{ block.settings.padding_top }}px; --section-pb: {{ block.settings.padding_bottom }}px; --section-prate:{{ block.settings.padding_rate }};" color-scheme="{{ block.settings.color_scheme }}"  {{ block.shopify_attributes }}>
+  <div class="hdt-container-full">
+    <div class="hdt-top-heading hdt-text-center">
+      {% content_for "blocks" %}
+    </div>
+      <hdt-slider autoheight id="Slider-{{ block.id }}"
+        class="hdt-relative hdt-no-reserve hdt-oh hdt-slider hdt-hidden-slider-nav hdt-hidden-slider-dots hdt-dots-outline hdt-relative hdt-slides-{{ block.settings.col_mb }} lg:hdt-slides-{{ block.settings.col_dk }} md:hdt-slides-{{ block.settings.col_tb }} hdt-slide-spacing-15 md:hdt-slide-spacing-30 hdt-ratio-{{ block.settings.image_ratio }} md:hdt-ratio-{{ block.settings.image_ratio }} hdt-ratio--{{ block.settings.image_size }}"
+        config='{"navUI": {{ block.settings.navUI }},"dotUI":true ,"navUICenter":true,"autoHeight": true }'
+        >
+      <div class="hdt-slider__viewport">
+        <div class="hdt-slider__container">
+          {%- for article in blog.articles limit: block.settings.limit -%}
+            {%- if  article.id == article_id -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- assign image =  article.image -%}
+            <div class="hdt-slider__slide">
+              <div class="hdt-article hdt-article-style-1" timeline hdt-reveal="slide-in" {{ block.shopify_attributes }}>
+                <div class="hdt-article-inner">
+                  <div class="hdt-article-thumb hdt-relative hdt-oh">
+                    {%- if image != blank -%}
+                      <a href="{{ article.url }}" class="hdt-block hdt-eff-img-zoom">
+                        <div calc-nav class="hdt-article-img hdt-oh hdt-ratio hdt-radius" style="--aspect-ratioapt-md:{{ image.aspect_ratio }};--aspect-ratioapt:{{ image.aspect_ratio }}">
+                          {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: 'images-full_width hdt-full-image hdt-object-cover hdt-obj-eff', sizes: sizes, widths: '375,450,550,750,800,1100,1500,1780,1920,2000,3000,3840' }}
+                        </div>
+                      </a>
+                    {%- endif -%}
+                    <div class="hdt-article-label hdt-absolute">
+                      {%- if block.settings.show_blog_title != 'disable' -%}
+                        <div class="hdt-article-category hdt-row-flex">
+                          {%- if  block.settings.show_blog_title == 'blog_current' -%}
+                            <a class="" href="{{ blog.url }}"><span>{{ blog.title }}</span></a>
+                          {%- else -%}
+                            {%- assign article_tags = article.tags | join: ';' | split: ';' -%}
+                            {%- assign blog_tags = article_tags | where: 'blog_' -%}
+                            {%- for tag in blog_tags -%}
+                              <a class="" href="{{ blog.url }}/tagged/{{ tag | handle }}"><span>{{ tag | remove : 'blog_' | strip }}</span></a>
+                            {%- endfor -%}
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                  <div class="hdt-article-content_wapper">
+                    <div class="hdt-article-info hdt-flex hdt-flex-col hdt-align-{{ block.settings.Content_align }}">
+                      {%- if  block.settings.show_tags == true -%}
+                        {%- assign article_tags = article.tags | join: ';' | split: ';' -%}
+                        {%- if article_tags != blank -%}
+                          <div class="hdt-article-tags">
+                            {%- for tag in article_tags -%}
+                              {%- if tag contains 'blog_' -%}{%- continue -%}{%- endif -%}
+                              <a class="hdt-text-xs hdt-font-bold" href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a> {%- unless forloop.last -%} ,  {% endunless -%}
+                            {%- endfor -%}
+                          </div>
+                        {%- endif -%}
+                      {%- endif -%}
+                      <h6 class="hdt-article-title hdt-line-clamp hdt-h6 hdt-font-normal hdt-s-text hdt-text-{{ block.settings.Content_align }}"><a href="{{ article.url }}">{{ article.title }}</a></h6>
+                      {%- if block.settings.show_content == true -%}
+                        {%- if  article.content != blank or article.excerpt != blank -%}
+                          <div class="hdt-article-contents hdt-s-text2 hdt-text-base hdt-text-{{ block.settings.Content_align }} hdt-rte">{%- if article.excerpt.size > 0 -%}{{ article.excerpt }}{%- else -%}{{ article.content | strip_html | truncate: 118 }}{%- endif -%}</div>
+                        {%- endif -%}
+                      {%- endif -%}
+                      {%- if block.settings.show_author or block.settings.show_date -%}
+                        <div class="hdt-article-metas hdt-row-flex ">
+                          {%- if block.settings.show_author == true -%}
+                            <div class="hdt-article-author hdt-s-text2 hdt-text-base hdt-flex">
+                              <span class="hdt-article-author__name"> {{ 'blogs.article.by' | t }}: {{ article.author | replace_first: 'ad clnt', 'admin' }}</span>
+                            </div>
+                          {%- endif -%}
+                          {%- if block.settings.show_date -%}
+                            <div class="hdt-article-time hdt-s-text2 hdt-text-base">
+                              {%- assign date = block.settings.date -%}
+                              {%- if date contains "%" -%}
+                                {{ article.published_at | time_tag: date }}
+                              {%- else -%}
+                                {{ article.published_at | time_tag: format: date }}
+                              {%- endif -%}
+                            </div>
+                          {%- endif -%}
+                          {%- if block.settings.show_comment == true -%}
+                            {%- if article.comments_count > 0 %}{% assign cm_link = '#comments' %}{% else %}{% assign cm_link = '#CommentForm' %}{% endif -%}
+                            <div class="hdt-article-comment hdt-s-text2 hdt-text-base">
+                              <a href="{{ article.url }}{{ cm_link }}" class="hdt-inline-block">
+                                <span class="hdt-article-comment__count">{{ 'blogs.article.comments' | t: count: article.comments_count }}</span>
+                              </a>
+                            </div>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                      {%- if block.settings.show_readmore == true -%}
+                        <div class="hdt-article-btn">
+                          <a href="{{ article.url }}" class="hdt-btn hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-link hdt-text-base hdt-font-semibold hdt-article-btn__readmore"><span>{{ 'blogs.article.read_more' | t }}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"
+                              viewBox="0 0 8 8" fill="none" class="hdt-inline-block hdt-icon hdt-icon-2">
+                              <path
+                                d="M0.861539 8L0 7.13846L5.90769 1.23077H0.615385V0H8V7.38462H6.76923V2.09231L0.861539 8Z"
+                                fill="currentColor" />
+                            </svg>
+                          </a>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      {%- if block.settings.navUI == true -%}
+        <button aria-controls="Slider-{{ block.id }}" hidden class="hdt-slider__button hdt-hidden@mobile hdt-slider-nav hdt-radius-full hdt-inline-flex hdt-align-center hdt-justify-center hdt-left-0 hdt-slider__button-previous" name="previous"><svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none">
+          <path d="M5.5 11L0 5.5L5.5 0L6.47625 0.97625L1.9525 5.5L6.47625 10.0238L5.5 11Z" fill="currentColor"/>
+        </svg></button>
+        <button aria-controls="Slider-{{ block.id }}" hidden class="hdt-slider__button hdt-hidden@mobile hdt-slider-nav hdt-radius-full hdt-inline-flex hdt-align-center hdt-justify-center hdt-right-0 hdt-slider__button-next" name="next"><svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none">
+          <path d="M1.5 11L7 5.5L1.5 0L0.52375 0.97625L5.0475 5.5L0.52375 10.0238L1.5 11Z" fill="currentColor"/>
+        </svg></button>
+      {%- endif -%}
+        <div hdt-slider-dots aria-controls="Slider-{{ block.id }}" hidden class="hdt-slider__dots hdt-show-dot-{{ block.settings.dotUI }} hdt-flex hdt-align-center hdt-justify-center" style="--dots-distance:{{ block.settings.spacing_dot }}px"></div>
+    </hdt-slider>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Related",
+    "tag":null,
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:sections.feature-blog.settings.header_general"
+      },
+      {
+        "type": "range",
+        "id": "limit",
+        "min": 1,
+        "max": 50,
+        "step": 1,
+        "label": "t:sections.feature-blog.settings.limit",
+        "default": 8
+      },
+      {
+        "type": "select",
+        "id": "col_dk",
+        "label": "t:sections.all.items_row.desktop",
+        "default": "3",
+        "options": [
+          {
+            "label": "2",
+            "value": "2"
+          },
+          {
+            "label": "3",
+            "value": "3"
+          },
+          {
+            "label": "4",
+            "value": "4"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "col_tb",
+        "label": "t:sections.all.items_row.tablet",
+        "default": "3",
+        "options": [
+          {
+            "label": "1",
+            "value": "1"
+          },
+          {
+            "label": "2",
+            "value": "2"
+          },
+          {
+            "label": "3",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "col_mb",
+        "label": "t:sections.all.items_row.mobile",
+        "default": "2",
+        "options": [
+          {
+            "label": "1",
+            "value": "1"
+          },
+          {
+            "label": "2",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "show_blog_title",
+        "label": "t:sections.feature-blog.settings.show_blog_title.label",
+        "info": "t:sections.feature-blog.settings.show_blog_title.info",
+        "default": "blog_current",
+        "options": [
+          {
+            "value": "disable",
+            "label": "t:sections.feature-blog.settings.show_blog_title.option_1"
+          },
+          {
+            "value": "blog_current",
+            "label": "t:sections.feature-blog.settings.show_blog_title.option_2"
+          },
+          {
+            "value": "blog_tags",
+            "label": "t:sections.feature-blog.settings.show_blog_title.option_3"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "show_content",
+        "label": "t:sections.feature-blog.settings.show_content",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_tags",
+        "label": "t:sections.feature-blog.settings.show_tags",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_author",
+        "label": "t:sections.feature-blog.settings.show_author",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_comment",
+        "label": "t:sections.feature-blog.settings.show_comment",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_readmore",
+        "label": "t:sections.feature-blog.settings.show_readmore",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_date",
+        "label": "t:sections.feature-blog.settings.show_date",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "date",
+        "options": [
+          {
+            "value": "abbreviated_date",
+            "label": "t:sections.feature-blog.settings.date.option_1"
+          },
+          {
+            "value": "basic",
+            "label": "t:sections.feature-blog.settings.date.option_2"
+          },
+          {
+            "value": "date",
+            "label": "t:sections.feature-blog.settings.date.option_3"
+          },
+          {
+            "value": "%b %d",
+            "label": "t:sections.feature-blog.settings.date.option_4"
+          }
+        ],
+        "label": "t:sections.feature-blog.settings.date.label",
+        "info": "t:sections.feature-blog.settings.date.info",
+        "default": "%b %d",
+        "visible_if": "{{ block.settings.show_date }}"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.slider.label"
+      },
+      {
+        "type": "checkbox",
+        "id": "navUI",
+        "label": "t:sections.all.slider.navUI",
+        "default": false,
+        "info": "t:sections.all.slider.info_navUI"
+      },
+      {
+        "type": "checkbox",
+        "id": "dotUI",
+        "label": "t:sections.main-article.article_related.dotUI.label",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "spacing_dot",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.main-article.article_related.spacing_dot.label",
+        "default": 30,
+        "visible_if": "{{ block.settings.dotUI }}"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.feature-blog.settings.header_content"
+      },
+      {
+        "type": "select",
+        "id": "Content_align",
+        "label": "t:sections.feature-blog.settings.content_align.label",
+        "default": "start",
+        "options": [
+          {
+            "value": "start",
+            "label": "t:sections.feature-blog.settings.content_align.option_1"
+          },
+          {
+            "value": "center",
+            "label": "t:sections.feature-blog.settings.content_align.option_2"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "image_ratio",
+        "options": [
+          {
+            "value": "-adapt_image",
+            "label": "t:sections.all.images.ratio.adapt_image.label"
+          },
+          {
+            "value": "-square",
+            "label": "t:sections.all.images.ratio.square.label"
+          },
+          {
+            "value": "-asos",
+            "label": "t:sections.all.images.ratio.asos.label"
+          },
+          {
+            "value": "-landscape",
+            "label": "t:sections.all.images.ratio.landscape.label"
+          },
+          {
+            "value": "-16-9",
+            "label": "t:sections.all.images.ratio.16_9.label"
+          },
+          {
+            "value": "4-3",
+            "label": "4:3"
+          }
+        ],
+        "label": "t:sections.all.images.ratio.label",
+        "default": "-adapt_image"
+      },
+      {
+        "type": "select",
+        "id": "image_size",
+        "options": [
+          {
+            "value": "cover",
+            "label": "t:sections.all.images.size.cover"
+          },
+          {
+            "value": "contain",
+            "label": "t:sections.all.images.size.contain"
+          }
+        ],
+        "label": "t:sections.all.images.size.label",
+        "info": "t:sections.all.images.size.info",
+        "default": "cover",
+        "visible_if": "{{ block.settings.image_ratio != '-adapt_image' }}"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "padding_rate",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:sections.all.padding.padding_rate",
+        "default": 75
+      }
+    ],
+    "blocks": [{"type": "heading"},{"type": "spacer"},{"type": "paragraph"}],
+    "presets":[
+      {
+        "name":"Related",
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,439 @@
+<hdt-video-popup class="hdt-button-video-wrapper" {{ block.shopify_attributes }}>
+  {%- if block.settings.click_action == 'inline' -%}
+    <input type="checkbox" id="input-{{ block.id }}" class="hdt-visually-hidden hdt-hidden"/>
+  {% endif %}
+  <label id="button-{{ block.id }}" {% if block.settings.click_action == 'popup' %}aria-controls="modal-{{ block.id }}"{% else %} for="input-{{ block.id }}" {% endif %} hdt-reveal="slide-in" timeline class="hdt-button-block hdt-btn hdt-relative hdt-oh hdt-font-{{ block.settings.font_weight }} hdt-btn--size-{{ block.settings.size }} {{ block.settings.btn_style }}{% if block.settings.full_width %} hdt-btn-full-width{% endif %}{% if block.settings.icon != "none" %} hdt-btn--with-icon  hdt-btn--pos-icon-{{ block.settings.icon_position }}{% endif %}"{% if block.settings.icon != "none" %} style="--gap-btn-icon: {{ block.settings.icon_spacing }}px; --height-btn-icon: {{ block.settings.icon_height }}px; height: 100%"{% endif %} {% if block.settings.open_in_new_tab %} rel="noopener noreferrer"{% endif -%}>
+    {%- liquid
+      if block.settings.icon != 'none'
+        render 'icons', icon: block.settings.icon
+      endif
+      echo block.settings.label
+      -%}
+  </label>
+  {%- if block.settings.size == "custom custom-inline" -%}
+    {%- style -%}
+      #button-{{ block.id }} {
+        --hdt-btn-padding-x: {{ block.settings.padding_btn }}px; --hdt-btn-line-height: {{ block.settings.min_height_btn }}px; --hdt-btn-font-size: {{ block.settings.font_size_btn }}px;--minw-button: {{ block.settings.min_width_btn }}px; --minwdt-button: {{ block.settings.min_width_dt_btn }}px;
+        min-height: {{ block.settings.min_height_btn }}px;
+        {% if block.settings.radius_full %}
+          border-radius: var(--radius-full);
+          aspect-ratio: 1;
+        {% endif %}
+      }
+    {%- endstyle -%}
+  {%- endif -%}
+  <hdt-modal class="hdt-modal hdt-modal-video hdt-contents">
+    <dialog id="modal-{{ block.id }}" class="hdt-dialog hdt-dialog-modal{% if section.settings.image_height == 'adapt_image' %} hdt-is-adapt-image{% endif %}" scroll-lock>
+      {% if block.settings.click_action == 'inline' and block.settings.enable_close %}
+        <label for="input-{{ block.id }}" class="hdt-s-text hdt-dialog-btn__close" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</label>
+      {% elsif block.settings.click_action == 'popup' %}
+        <button ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="modal-{{ block.id }}" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+      {% endif %}
+      <div class="hdt-dialog-modal__inner{% if block.settings.click_action == 'inline' %} hdt-media-overlap-content{% endif %}">
+        {%- if block.settings.video != blank and block.settings.source == 'shopify' -%}
+          <hdt-video-player autoplay id="media-{{ block.id }}">
+            {{- block.settings.video | video_tag: image_size: '1500x', playsinline: true, muted: true, loop: true, controls: true, preload: 'metadata' -}}
+          </hdt-video-player>
+        {%- else -%}
+          <hdt-video-player host="{{ block.settings.external_video_url.type }}" type="background" autoplay>
+            <template>
+              {%- if block.settings.external_video_url.type == 'youtube' -%}
+                <iframe id="iframe-{{ block.id }}" src="https://www.youtube.com/embed/{{ block.settings.external_video_url.id }}?playsinline=1&autoplay=1&controls=1&mute=1&loop=1&playlist={{ block.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}" allow="autoplay; encrypted-media" allowfullscreen="allowfullscreen"></iframe>
+              {%- elsif block.settings.external_video_url.type == 'vimeo' -%}
+                <iframe src="https://player.vimeo.com/video/{{ block.settings.external_video_url.id }}?autoplay=1&autopause=1&background=1&loop=1&muted=1&transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.color_accent | remove_first: '#' }}" allow="autoplay; encrypted-media;" allowfullscreen="allowfullscreen"></iframe>
+              {%- endif -%}
+            </template>
+          </hdt-video-player>
+        {%- endif -%}
+      </div>
+    </dialog>
+  </hdt-modal>
+</hdt-video-popup>
+{% schema %}
+  {
+    "name": "t:blocks.button.name_video",
+    "tag": null,
+    "settings": [
+      {
+        "type": "select",
+        "id": "source",
+        "label": "t:blocks.button.settings.source.label",
+        "options": [
+          {
+            "value": "youtube",
+            "label": "t:blocks.button.settings.source.options.youtube"
+          },
+          {
+            "value": "shopify",
+            "label": "t:blocks.button.settings.source.options.shopify"
+          }
+        ],
+        "default": "youtube",
+      },
+      {
+        "id": "external_video_url",
+        "type": "video_url",
+        "label": "t:blocks.button.settings.external_video_url.label",
+        "default":"https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "accept": ["youtube","vimeo"],
+        "visible_if": "{{ block.settings.source == 'youtube' }}"
+      },
+      {
+        "type": "video",
+        "id": "video",
+        "label": "t:blocks.button.settings.video",
+        "visible_if": "{{ block.settings.source == 'shopify' }}"
+      },
+      {
+        "type": "select",
+        "id": "click_action",
+        "label": "t:blocks.button.settings.click_action.label",
+        "options": [
+          {
+            "value": "inline",
+            "label": "t:blocks.button.settings.click_action.options.inline"
+          },
+          {
+            "value": "popup",
+            "label": "t:blocks.button.settings.click_action.options.popup"
+          }
+        ],
+        "default": "inline"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_close",
+        "label": "t:blocks.button.settings.enable_close",
+        "default": false,
+        "visible_if": "{{ block.settings.click_action == 'inline' }}"
+      },
+      {
+        "type": "header",
+        "content": "t:blocks.button.settings.options_for_button",
+      },
+      {
+        "type": "text",
+        "id": "label",
+        "label": "t:blocks.button.settings.label",
+        "default": "Button label",
+      },
+      {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "t:blocks.button.settings.full_width",
+        "default": false,
+      },
+      {
+        "type": "select",
+        "id": "btn_style",
+        "label": "t:blocks.button.settings.button_style.label",
+        "default": "",
+
+        "options": [
+          {
+            "value": "",
+            "label": "t:blocks.button.settings.button_style.options.default"
+          },
+          {
+            "value": "hdt-btn-outline",
+            "label": "t:blocks.button.settings.button_style.options.outline"
+          },
+          {
+            "value": "hdt-btn-link",
+            "label": "t:blocks.button.settings.button_style.options.link"
+          },
+          {
+            "value": "hdt-btn-secondary",
+            "label": "t:blocks.button.settings.button_style.options.secondary",
+            "group": "t:blocks.button.settings.button_style.solid"
+          },
+          {
+            "value": "hdt-btn-tertiary",
+            "label": "t:blocks.button.settings.button_style.options.tertiary",
+            "group": "t:blocks.button.settings.button_style.solid"
+          },
+          {
+            "value": "hdt-btn-accent",
+            "label": "t:blocks.button.settings.button_style.options.accent",
+            "group": "t:blocks.button.settings.button_style.solid"
+          },
+          {
+            "value": "hdt-btn-hover-secondary",
+            "label": "t:blocks.button.settings.button_style.options.hover_secondary",
+            "group": "t:blocks.button.settings.button_style.solid"
+          },
+          {
+            "value": "hdt-btn-hover-tertiary",
+            "label": "t:blocks.button.settings.button_style.options.hover_tertiary",
+            "group": "t:blocks.button.settings.button_style.solid"
+          },
+          {
+            "value": "hdt-btn-hover-accent",
+            "label": "t:blocks.button.settings.button_style.options.hover_accent",
+            "group": "t:blocks.button.settings.button_style.solid"
+          },
+          {
+            "value": "hdt-btn-outline-secondary",
+            "label": "t:blocks.button.settings.button_style.options.outline_secondary",
+            "group": "t:blocks.button.settings.button_style.outline"
+          },
+          {
+            "value": "hdt-btn-outline-tertiary",
+            "label": "t:blocks.button.settings.button_style.options.outline_tertiary",
+            "group": "t:blocks.button.settings.button_style.outline"
+          },
+          {
+            "value": "hdt-btn-outline-accent",
+            "label": "t:blocks.button.settings.button_style.options.outline_accent",
+            "group": "t:blocks.button.settings.button_style.outline"
+          },
+          {
+            "value": "hdt-btn-outline-hover-secondary",
+            "label": "t:blocks.button.settings.button_style.options.outline_hover_secondary",
+            "group": "t:blocks.button.settings.button_style.outline"
+          },
+          {
+            "value": "hdt-btn-outline-hover-tertiary",
+            "label": "t:blocks.button.settings.button_style.options.outline_hover_tertiary",
+            "group": "t:blocks.button.settings.button_style.outline"
+          },
+          {
+            "value": "hdt-btn-outline-hover-accent",
+            "label": "t:blocks.button.settings.button_style.options.outline_hover_accent",
+            "group": "t:blocks.button.settings.button_style.outline"
+          },
+          {
+            "value": "hdt-btn-link-secondary",
+            "label": "t:blocks.button.settings.button_style.options.link_secondary",
+            "group": "t:blocks.button.settings.button_style.link"
+          },
+          {
+            "value": "hdt-btn-link-accent",
+            "label": "t:blocks.button.settings.button_style.options.link_accent",
+            "group": "t:blocks.button.settings.button_style.link"
+          },
+          {
+            "value": "hdt-btn-link-hover",
+            "label": "t:blocks.button.settings.button_style.options.link_hover",
+            "group": "t:blocks.button.settings.button_style.link"
+          },
+          {
+            "value": "hdt-btn-link-secondary-hover",
+            "label": "t:blocks.button.settings.button_style.options.link_secondary_hover",
+            "group": "t:blocks.button.settings.button_style.link"
+          },
+          {
+            "value": "hdt-btn-link-accent-hover",
+            "label": "t:blocks.button.settings.button_style.options.link_accent_hover",
+            "group": "t:blocks.button.settings.button_style.link"
+          },
+        ]
+      },
+      {
+        "type": "select",
+        "id": "size",
+        "label": "t:blocks.button.settings.button_size.label",
+
+        "options": [
+          {
+            "value": "xs",
+            "label": "t:blocks.button.settings.button_size.options.xs"
+          },
+          {
+            "value": "s",
+            "label": "t:blocks.button.settings.button_size.options.s"
+          },
+          {
+            "value": "m",
+            "label": "t:blocks.button.settings.button_size.options.m"
+          },
+          {
+            "value": "l",
+            "label": "t:blocks.button.settings.button_size.options.l"
+          },
+          {
+            "value": "xl",
+            "label": "t:blocks.button.settings.button_size.options.xl"
+          },
+          {
+            "value": "custom hdt-btn--size-custom-1",
+            "label": "t:blocks.button.settings.button_size.options.custom_1"
+          },
+          {
+            "value": "custom custom-inline",
+            "label": "t:blocks.button.settings.button_size.options.custom_inline"
+          }
+        ],
+        "default": "m"
+      },
+      {
+        "type": "select",
+        "id": "font_weight",
+        "label": "t:sections.all.button.settings.font_weight.label",
+
+        "options": [
+          {
+            "value": "light",
+            "label": "t:settings_schema.typography.settings.font_weight.light"
+          },
+          {
+            "value": "normal",
+            "label": "t:settings_schema.typography.settings.font_weight.normal"
+          },
+          {
+            "value": "medium",
+            "label": "t:settings_schema.typography.settings.font_weight.medium"
+          },
+          {
+            "value": "semibold",
+            "label": "t:settings_schema.typography.settings.font_weight.semibold"
+          },
+          {
+            "value": "bold",
+            "label": "t:settings_schema.typography.settings.font_weight.bold"
+          },
+        ],
+        "default": "normal"
+      },
+      {
+        "type": "header",
+        "content": "t:blocks.text.custom_size_options.label",
+        "visible_if": "{{ block.settings.size == 'custom custom-inline' }}"
+      },
+      {
+        "type": "range",
+        "id": "font_size_btn",
+        "min": 10,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "t:settings_schema.typography.settings.font_size.label",
+        "default": 14,
+        "visible_if": "{{ block.settings.size == 'custom custom-inline' }}"
+      },
+      {
+        "type": "range",
+        "id": "padding_btn",
+        "min": 5,
+        "max": 80,
+        "step": 1,
+        "unit": "px",
+        "label": "t:settings_schema.button.settings.padding",
+        "default": 30,
+        "visible_if": "{{ block.settings.size == 'custom custom-inline' }}"
+      },
+      {
+        "type": "range",
+        "id": "min_width_btn",
+        "min": 100,
+        "max": 300,
+        "step": 2,
+        "unit": "px",
+        "label": "t:settings_schema.button.settings.min_width",
+        "default": 100,
+        "visible_if": "{{ block.settings.size == 'custom custom-inline' }}"
+      },
+      {
+        "type": "range",
+        "id": "min_width_dt_btn",
+        "min": 100,
+        "max": 300,
+        "step": 2,
+        "unit": "px",
+        "label": "t:settings_schema.button.settings.min_width_dt",
+        "default": 100,
+        "visible_if": "{{ block.settings.size == 'custom custom-inline' }}"
+      },
+      {
+        "type": "range",
+        "id": "min_height_btn",
+        "min": 25,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:settings_schema.button.settings.min_height",
+        "default": 40,
+        "visible_if": "{{ block.settings.size == 'custom custom-inline' }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "radius_full",
+        "label": "t:blocks.button.settings.radius_full",
+        "default": false,
+        "visible_if": "{{ block.settings.size == 'custom custom-inline' }}"
+      },
+      {
+        "type": "select",
+        "id": "icon",
+        "label": "t:blocks.icon.settings.icon.label",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:none"
+          },
+          {
+            "value": "play",
+            "label": "t:blocks.icon.settings.icon.play"
+          },
+          {
+            "value": "play_circle",
+            "label": "t:blocks.icon.settings.icon.play_circle"  
+          },
+          {
+            "value": "play_arrow",
+            "label": "t:blocks.icon.settings.icon.play_arrow"
+          },
+          {
+            "value": "video_camera", 
+            "label": "t:blocks.icon.settings.icon.video_camera"
+          }
+        ],
+        "default": "play"
+      },
+      {
+        "type": "select",
+        "id": "icon_position",
+        "label": "t:blocks.icon.settings.icon_position.label",
+        "options": [
+          {
+            "value": "before",
+            "label": "t:blocks.icon.settings.icon_position.before"
+          },
+          {
+            "value": "after",
+            "label": "t:blocks.icon.settings.icon_position.after"
+          }
+        ],
+        "default": "after",
+        "visible_if": "{{ block.settings.icon != 'none' }}"
+      },
+      {
+        "type": "range",
+        "id": "icon_height",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "t:blocks.icon.settings.icon_size.label",
+        "default": 14,
+        "visible_if": "{{ block.settings.icon != 'none' }}"
+      },
+      {
+        "type": "range",
+        "id": "icon_spacing",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "t:blocks.icon.settings.icon_spacing.label",
+        "default": 5,
+        "visible_if": "{{ block.settings.icon != 'none' }}"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:blocks.button.name_video"
+      }
+    ]
+  }
+{% endschema %}

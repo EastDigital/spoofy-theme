@@ -1,0 +1,56 @@
+{%- comment -%}
+  Renders product media item.
+  Accepts:
+  - product: {Object} product object.
+  - block: {Object} passing the block information.
+  - product_form_id: {String} product form id.
+  - section_id: {String} id of section to which this snippet belongs.
+
+  - media: {Object} Product Media object
+  - group_media_obj: {Json}
+  - class: {String} a class list
+  - loop: {Boolean} Enable video looping (optional)
+  - lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+  - variant_images
+  - un_no_pick
+
+  Usage:
+  {%- render 'media-thumb' -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign image = media.preview_image
+  assign media_group = group_media_obj | where: "mid", media.id | first
+  if media_group.size > 0
+    if un_no_pick
+    assign media_hidden = 'hidden'
+    endif
+    assign media_option_name = 'option' | append: media_group.option
+    assign media_option_value = product.options_with_values[media_group.option].values[media_group.value]
+    assign current_value = selected_variant.options[media_group.option]
+    if current_value == media_option_value and current_value != blank
+      assign media_hidden = ''
+    endif
+  else
+    assign media_option_name = ''
+    assign media_option_value = ''
+  endif
+-%}
+
+<div {% if block.settings.enable_thumb_efect %} reval {% endif %} {{ media_hidden }} class="{{ class }} hdt-thumbnail__media" data-media-id="{{ media.id }}" data-media-type="{{ media.media_type }}" data-group-name="{{ media_option_name }}" data-group-value="{{ media_option_value  | escape }}">
+  <div class="hdt-ratio"{% if block.settings.image_ratio == 'adapt_image' %} style="--aspect-ratioapt:{{ image.aspect_ratio }};"{% endif %}>
+    {%- liquid
+      case media.media_type
+        when 'video' or 'external_video'
+          echo '<span class="hdt-thumbnail__badge">'
+            render 'icon' with 'video_play'
+          echo '</span>'
+        when 'model'
+          echo '<span class="hdt-thumbnail__badge">'
+            render 'icon' with '3d-model'
+          echo '</span>'
+      endcase
+      echo image | image_url: width: 300 | image_tag: class: image_class, sizes: '150px', widths: '100, 200, 300', loading: 'lazy'
+    -%}
+  </div>
+</div>

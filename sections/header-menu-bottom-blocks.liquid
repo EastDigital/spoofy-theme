@@ -1,0 +1,727 @@
+<!-- header-menu-bottom-blocks.liquid -->
+{%- style -%}html{--header-height:{{section.settings.header_height_mb}}px;--header-height2:{{section.settings.header_height_mb}}px;--header-bottom-height:0}@media(min-width:1150px){html{--header-height:{{section.settings.header_height | plus:section.settings.header_bottom_height}}px;--header-height2:{{section.settings.header_height}}px;--header-bottom-height:{{section.settings.header_bottom_height}}px}.hdt-navigation{--spacing-menu-item:calc({{ section.settings.spacing_nav}}px * .7)}}@media (min-width:1441px){.hdt-navigation{--spacing-menu-item:{{section.settings.spacing_nav}}px}}.hdt-menu-uppercase-true #hdt-nav-ul>li>a,.hdt-menu-uppercase-true #hdt-nav-ul>li>details>summary, .hdt-menu-uppercase-true #hdt-nav-ul>li> hdt-header-menu > details > summary{text-transform:uppercase;letter-spacing:.6px}.hdt-header-language_currencies{gap:28px}.hdt-header-language_currencies button[aria-expanded="true"]+.hdt-popover{z-index:9}{%- endstyle -%}
+{%- assign products_suggests = page.metafields.theme.brand.value.search.value | default: settings.products_suggest -%}
+<hdt-sticky-header sticky-type="{{ section.settings.sticky_type }}" prefix="header" class="hdt-header hdt-header-{{ section.settings.header_layout }} hdt-header-fullwidth-{{ section.settings.header_fullwidth }}{% if section.settings.sticky_glass %} hdt-header-sticky--glass{% endif %}" color-scheme="{{ section.settings.header_colors }}">
+	<div class="hdt-main-header">
+		<div class="hdt-container{% if section.settings.header_fullwidth %}-full lg:hdt-px-40 hdt-px-15{% endif %}">
+			<div data-header-height class="hdt-flex hdt-align-center hdt-spacing-15 md:hdt-px-15 hdt-px-10">
+				{%- if section.settings.header_layout == "logo_left" -%}
+			   	<div class="lg:hdt-hidden md:hdt-custom-col-4 hdt-custom-col-3">
+			   		<button aria-controls="menu_mobile" class="hdt-push-menu-btn hdt-menu-bar hdt-flex hdt-justify-center hdt-align-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 24 16" fill="none">
+                <path d="M2.00056 2.28571H16.8577C17.1608 2.28571 17.4515 2.16531 17.6658 1.95098C17.8802 1.73665 18.0006 1.44596 18.0006 1.14286C18.0006 0.839753 17.8802 0.549063 17.6658 0.334735C17.4515 0.120408 17.1608 0 16.8577 0H2.00056C1.69745 0 1.40676 0.120408 1.19244 0.334735C0.978109 0.549063 0.857702 0.839753 0.857702 1.14286C0.857702 1.44596 0.978109 1.73665 1.19244 1.95098C1.40676 2.16531 1.69745 2.28571 2.00056 2.28571ZM0.857702 8C0.857702 7.6969 0.978109 7.40621 1.19244 7.19188C1.40676 6.97755 1.69745 6.85714 2.00056 6.85714H22.572C22.8751 6.85714 23.1658 6.97755 23.3801 7.19188C23.5944 7.40621 23.7148 7.6969 23.7148 8C23.7148 8.30311 23.5944 8.59379 23.3801 8.80812C23.1658 9.02245 22.8751 9.14286 22.572 9.14286H2.00056C1.69745 9.14286 1.40676 9.02245 1.19244 8.80812C0.978109 8.59379 0.857702 8.30311 0.857702 8ZM0.857702 14.8571C0.857702 14.554 0.978109 14.2633 1.19244 14.049C1.40676 13.8347 1.69745 13.7143 2.00056 13.7143H12.2863C12.5894 13.7143 12.8801 13.8347 13.0944 14.049C13.3087 14.2633 13.4291 14.554 13.4291 14.8571C13.4291 15.1602 13.3087 15.4509 13.0944 15.6653C12.8801 15.8796 12.5894 16 12.2863 16H2.00056C1.69745 16 1.40676 15.8796 1.19244 15.6653C0.978109 15.4509 0.857702 15.1602 0.857702 14.8571Z" fill="currentColor"/>
+              </svg>
+            </button>
+			   	</div>
+	        <div class="lg:hdt-custom-col-4 md:hdt-custom-col-4 hdt-custom-col-6 xs:hdt-text-center">
+	          {%- render 'hdt_logo' -%}
+	        </div>
+			   	<div class="hdt-header-col lg:hdt-custom-col-4 lg:hdt-block hdt-hidden hdt-header-col-search">
+            {%- if settings.predictive_search_enabled -%}
+              <hdt-predictive-search {% if settings.predictive_search_enabled %} enabled{% endif %} data-section-id-results="hdt_predictive-search2" class="hdt_predictive-search2 hdt-block hdt-relative hdt-search-only_pr_{{ section.settings.search_only_product}}">
+            {%- else -%}
+              <search-form>
+            {%- endif -%}
+            {{ 'hdt-search-form.css' | asset_url | stylesheet_tag }}
+			   		<form data-frm-search action="{{ routes.search_url }}" method="get" class="hdt-search_form hdt-relative" role="search">
+	            <input type="hidden" name="resources[limit_scope]" value="each">
+              <input type="hidden" name="resources[options][fields]" value="title,body,tag,product_type,variants.title,vendor,variants.sku">
+	            <div class="hdt-search_inner hdt-flex hdt-justify-between hdt-align-center hdt-relative">
+	              <input data-input-search class="hdt-search_input hdt-input hdt-text-start hdt-text-base hdt-font-normal" autocomplete="off" type="search" name="q" placeholder="{{ 'general.search.placeholder_products' | t }}">
+	              <button class="hdt-search_submit hdt-button hdt-inline-flex hdt-align-center hdt-justify-center" type="submit">
+	                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+									  <path d="M17.7241 16.1932L13.6436 12.1127C14.626 10.8049 15.1563 9.21299 15.1546 7.57728C15.1546 3.39919 11.7554 0 7.57728 0C3.39919 0 0 3.39919 0 7.57728C0 11.7554 3.39919 15.1546 7.57728 15.1546C9.21299 15.1563 10.8049 14.626 12.1127 13.6436L16.1932 17.7241C16.3998 17.9088 16.6692 18.0073 16.9461 17.9996C17.2231 17.9918 17.4865 17.8783 17.6824 17.6824C17.8783 17.4865 17.9918 17.2231 17.9996 16.9461C18.0073 16.6692 17.9088 16.3998 17.7241 16.1932ZM2.16494 7.57728C2.16494 6.50682 2.48237 5.4604 3.07708 4.57034C3.6718 3.68029 4.51709 2.98657 5.50607 2.57693C6.49504 2.16728 7.58328 2.0601 8.63318 2.26893C9.68307 2.47777 10.6475 2.99325 11.4044 3.75018C12.1613 4.5071 12.6768 5.47149 12.8856 6.52138C13.0945 7.57128 12.9873 8.65952 12.5776 9.64849C12.168 10.6375 11.4743 11.4828 10.5842 12.0775C9.69416 12.6722 8.64774 12.9896 7.57728 12.9896C6.14237 12.9879 4.76672 12.4171 3.75208 11.4025C2.73744 10.3878 2.16666 9.01219 2.16494 7.57728Z" fill="currentColor"/>
+									</svg>
+	              </button>
+	            </div>
+              <div class="hdt-cart-show-has-results hdt-absolute hdt-right-0 hdt-left-0 hdt-hidden hdt-current-scrollbar">
+                <div data-results-search class="hdt-mini-search__content hdt-ratio--asos hdt-object-cover"></div>
+                <div data-skeleton-search class="hdt-skeleton_wrap hdt-hidden">
+                  <div class="hdt-row-grid hdt-row-products hdt-grid-cols-1 hdt-text-start">
+                    {%- for i in (1..3) -%}
+                      <div class="hdt-product hdt-pr-loop">
+                        <div class="hdt-card-product__wrapper hdt-flex ">
+                          <div class="hdt-skeleton_img"></div>
+                          <div class="hdt-card-product__info">
+                            <div class="hdt-skeleton_txt1"></div>
+                            <div class="hdt-skeleton_txt2"></div>
+                          </div>
+                        </div>
+                      </div>
+                    {%- endfor -%}
+                  </div>
+                </div>
+              </div>
+	          </form>
+            {%- if settings.predictive_search_enabled -%}
+              <div class="hdt-search-suggests-results hdt-absolute hdt-cart-hide-has-results">
+                {%- if products_suggests != blank -%}
+                  <div class="hdt-search-suggests-content hdt-current-scrollbar">
+                    <div class="hdt-cart-hide-has-results">
+                      <div class="hdt-search-hidden-inner">
+                        {%- if products_suggests != blank -%}
+                          <div data-products_suggest class="hdt-mini-search__content hdt-ratio--asos hdt-object-cover hdt-text-center">
+                            <div class="hdt-row-grid hdt-row-products hdt-show-pr-price-{{ settings.predictive_search_show_price }} hdt-grid-cols-1 hdt-text-start">
+                              {%- for product in products_suggests limit: 4 -%}
+                                {%- render 'pr_loop_item', section_id: section.id, product: product, sizes: "68px", widths: "68, 136, 150, 174, 240, 300" -%}
+                              {%- endfor -%}
+                            </div>
+                          </div>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </div>
+                {%- endif -%}
+              </div>
+              </hdt-predictive-search>
+            {%- else -%}
+              </search-form>
+            {%- endif -%}
+			   	</div>
+			   	<div class="lg:hdt-custom-col-4 md:hdt-custom-col-4 hdt-custom-col-3">
+						{%- render 'header_group_icons', has_text: true -%}
+			   	</div>
+				{%- else -%}
+			   	<div class="lg:hdt-custom-col-5 lg:hdt-block hdt-hidden">
+            {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
+              <div class="hdt-header-language_currencies hdt-flex hdt-align-center">
+                {%- if localization.available_countries.size > 1 -%}
+                  {%- render 'hdt_currency' -%}
+                {%- endif -%}
+                {%- if localization.available_languages.size > 1 -%}
+                  {%- render 'hdt_language' -%}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+			   	</div>
+	        <div class="lg:hdt-hidden md:hdt-custom-col-4 hdt-custom-col-3">
+	          <button aria-controls="menu_mobile" class="hdt-push-menu-btn hdt-menu-bar hdt-flex hdt-justify-center hdt-align-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 24 16" fill="none">
+                <path d="M2.00056 2.28571H16.8577C17.1608 2.28571 17.4515 2.16531 17.6658 1.95098C17.8802 1.73665 18.0006 1.44596 18.0006 1.14286C18.0006 0.839753 17.8802 0.549063 17.6658 0.334735C17.4515 0.120408 17.1608 0 16.8577 0H2.00056C1.69745 0 1.40676 0.120408 1.19244 0.334735C0.978109 0.549063 0.857702 0.839753 0.857702 1.14286C0.857702 1.44596 0.978109 1.73665 1.19244 1.95098C1.40676 2.16531 1.69745 2.28571 2.00056 2.28571ZM0.857702 8C0.857702 7.6969 0.978109 7.40621 1.19244 7.19188C1.40676 6.97755 1.69745 6.85714 2.00056 6.85714H22.572C22.8751 6.85714 23.1658 6.97755 23.3801 7.19188C23.5944 7.40621 23.7148 7.6969 23.7148 8C23.7148 8.30311 23.5944 8.59379 23.3801 8.80812C23.1658 9.02245 22.8751 9.14286 22.572 9.14286H2.00056C1.69745 9.14286 1.40676 9.02245 1.19244 8.80812C0.978109 8.59379 0.857702 8.30311 0.857702 8ZM0.857702 14.8571C0.857702 14.554 0.978109 14.2633 1.19244 14.049C1.40676 13.8347 1.69745 13.7143 2.00056 13.7143H12.2863C12.5894 13.7143 12.8801 13.8347 13.0944 14.049C13.3087 14.2633 13.4291 14.554 13.4291 14.8571C13.4291 15.1602 13.3087 15.4509 13.0944 15.6653C12.8801 15.8796 12.5894 16 12.2863 16H2.00056C1.69745 16 1.40676 15.8796 1.19244 15.6653C0.978109 15.4509 0.857702 15.1602 0.857702 14.8571Z" fill="currentColor"/>
+              </svg>
+            </button>
+	        </div>
+			   	<div class="lg:hdt-custom-col-2 md:hdt-custom-col-4 hdt-custom-col-6 hdt-text-center">
+			   		{%- render 'hdt_logo' -%}
+			   	</div>
+			   	<div class="lg:hdt-custom-col-5 md:hdt-custom-col-4 hdt-custom-col-3">
+						{%- render 'header_group_icons' -%}
+			   	</div>
+			  {%- endif -%}
+			</div>
+		</div>
+	</div>
+  {%- if section.settings.header_categories or section.settings.main_menu != blank -%}
+  	<div class="hdt-bottom-header hdt-header-sticky-{{ section.settings.header_sticky }} hdt-header-border-{{ section.settings.header_border }} is-sticky lg:hdt-flex hdt-hidden" color-scheme="{{ section.settings.header_colors }}" data-scheme-sticky="{{ section.settings.header_sticky_colors }}">
+  		<div class="hdt-container{% if section.settings.header_fullwidth %}-full lg:hdt-px-40 hdt-px-15{% endif %}">
+  			<div data-header-bottom-height class="hdt-flex hdt-align-center hdt-justify-{{ section.settings.menu_position }}">
+  				{%- if section.settings.header_categories -%}
+            {{- 'hdt-list-categories.css' | asset_url | stylesheet_tag -}}
+
+  					<div class="hdt-list-categories hdt-relative">
+              <a href="#" class="hdt-categories-title hdt-flex hdt-align-center hdt-text-lg hdt-font-bold hdt-radius-sm"> <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4.83416 0H1.61897C0.726277 0 0 0.726277 0 1.61897V4.83416C0 5.72685 0.726277 6.45312 1.61897 6.45312H4.83416C5.72685 6.45312 6.45312 5.72685 6.45312 4.83416V1.61897C6.45312 0.726277 5.72685 0 4.83416 0ZM5.35938 4.83416C5.35938 5.12375 5.12375 5.35938 4.83416 5.35938H1.61897C1.32937 5.35938 1.09375 5.12375 1.09375 4.83416V1.61897C1.09375 1.32937 1.32937 1.09375 1.61897 1.09375H4.83416C5.12375 1.09375 5.35938 1.32937 5.35938 1.61897V4.83416ZM12.3594 0H9.1875C8.28286 0 7.54688 0.735984 7.54688 1.64062V4.8125C7.54688 5.71714 8.28286 6.45312 9.1875 6.45312H12.3594C13.264 6.45312 14 5.71714 14 4.8125V1.64062C14 0.735984 13.264 0 12.3594 0ZM12.9062 4.8125C12.9062 5.11405 12.6609 5.35938 12.3594 5.35938H9.1875C8.88595 5.35938 8.64062 5.11405 8.64062 4.8125V1.64062C8.64062 1.33908 8.88595 1.09375 9.1875 1.09375H12.3594C12.6609 1.09375 12.9062 1.33908 12.9062 1.64062V4.8125ZM4.83416 7.54688H1.61897C0.726277 7.54688 0 8.27315 0 9.16584V12.381C0 13.2737 0.726277 14 1.61897 14H4.83416C5.72685 14 6.45312 13.2737 6.45312 12.381V9.16584C6.45312 8.27315 5.72685 7.54688 4.83416 7.54688ZM5.35938 12.381C5.35938 12.6706 5.12375 12.9062 4.83416 12.9062H1.61897C1.32937 12.9062 1.09375 12.6706 1.09375 12.381V9.16584C1.09375 8.87625 1.32937 8.64062 1.61897 8.64062H4.83416C5.12375 8.64062 5.35938 8.87625 5.35938 9.16584V12.381ZM12.3594 7.54688H9.1875C8.28286 7.54688 7.54688 8.28286 7.54688 9.1875V12.3594C7.54688 13.264 8.28286 14 9.1875 14H12.3594C13.264 14 14 13.264 14 12.3594V9.1875C14 8.28286 13.264 7.54688 12.3594 7.54688ZM12.9062 12.3594C12.9062 12.6609 12.6609 12.9062 12.3594 12.9062H9.1875C8.88595 12.9062 8.64062 12.6609 8.64062 12.3594V9.1875C8.64062 8.88595 8.88595 8.64062 9.1875 8.64062H12.3594C12.6609 8.64062 12.9062 8.88595 12.9062 9.1875V12.3594Z" fill="currentColor"/></svg>{{ section.settings.title_categories }}</a>
+              {%- if section.settings.menu_categories != blank -%}
+                <div class="hdt-list-categories-inner hdt-absolute hdt-radius hdt-left-0">
+                  <ul class="hdt-categories-list">
+                    {%- for link in section.settings.menu_categories.links -%}
+                      <li class="hdt-category-item hdt-relative hdt-flex hdt-justify-center hdt-flex-col{% if link.links != blank %} hdt-has-children hdt-relative{% endif %} {% if link.type == "collection_link" %}hdt-has-img{% endif %}">
+                        {%- if link.links != blank -%}
+                          <hdt-accordion class="hdt-contents" only-click-icon>
+                            <details>
+                              <summary id="hdt-menu-{{ link.handle }}" data-url="{{ link.url }}" class="hdt-category-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium">
+                                <span class="hdt-category-title hdt-flex hdt-align-center">
+                                  {%- if link.type == "collection_link" -%}
+                                    {%- assign image_item = link.object.metafields.theme.image_collection_list.value | default: link.object.image | default: link.object.featured_image | default: link.object.products.first.featured_image -%}
+                                    {%- if image_item != null -%}
+                                      <span class="hdt-category-img hdt-relative">
+                                        {{ image_item | image_url: width: image_item.width | image_tag: loading: 'lazy', width: image_item.width, height: image_item.height, class: 'hdt-radius-f hdt-radius-full', sizes: '40px', widths: '40,34,30' }}
+                                      </span>
+                                    {%- endif -%}
+                                  {%- endif -%}
+                                  <span class="hdt-category-link-text"> {{- link.title -}} </span>
+                                </span>
+                                {% if link.links != blank %}
+                                  <span class="hdt-btn-open-sub hdt-relative" accordion-icon></span>
+                                {% endif %}
+                              </summary>
+                              <div id="hdt-categories-sub-menu{{ forloop.index }}" class="hdt-categories-sub-menu" color-scheme="{{ section.settings.header_menu_colors }}">
+                                <ul class="hdt-menu-list hdt-categories-sub-menu-lever-1" role="list"  >
+                                  {%- for childlink in link.links -%}
+                                    <li class="hdt-category-item hdt-relative hdt-flex hdt-justify-center hdt-flex-col{% if childlink.links != blank %} hdt-has-children hdt-relative{% endif %} {% if childlink.type == "collection_link" %}hdt-has-img{% endif %}">
+                                      {% if childlink.links != blank %}
+                                        <hdt-accordion class="hdt-contents" only-click-icon>
+                                          <details>
+                                            <summary id="hdt-menu-{{ childlink.handle }}" data-url="{{ childlink.url }}" class="hdt-category-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium">
+                                              <span class="hdt-category-title hdt-flex hdt-align-center">
+                                                {%- if childlink.type == "collection_link" -%}
+                                                  {%- assign image_item = childlink.object.image | default: childlink.object.featured_image | default: childlink.object.products.first.featured_image -%}
+                                                  {%- if image_item != null -%}
+                                                    <span class="hdt-category-img hdt-relative">
+                                                      {{ image_item | image_url: width: image_item.width | image_tag: loading: 'lazy', width: image_item.width, height: image_item.height, class: 'hdt-radius-f hdt-radius-full', sizes: '40px', widths: '40,34,30' }}
+                                                    </span>
+                                                  {%- endif -%}
+                                                {%- endif -%}
+                                                <span class="hdt-category-link-text"> {{- childlink.title -}} </span>
+                                              </span>
+                                              <span class="hdt-btn-open-sub hdt-relative" accordion-icon></span>
+                                            </summary>
+                                            <div id="hdt-categories-sub-menu{{ forloop.index }}" class="hdt-categories-sub-menu">
+                                              <ul class="hdt-menu-list hdt-categories-sub-menu-lever-2" role="list">
+                                                {%- for grandchildlink in childlink.links -%}
+                                                  <li class="hdt-category-item hdt-relative hdt-flex hdt-justify-center hdt-flex-col  {% if grandchildlink.type == "collection_link" %}hdt-has-img{% endif %}">
+                                                    <a id="hdt-menu-{{ grandchildlink.handle }}" href="{{ grandchildlink.url }}" class="hdt-category-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium">
+                                                      <span class="hdt-category-title hdt-flex hdt-align-center hdt-oh">
+                                                        {% if grandchildlink.type == "collection_link" %}
+                                                          {%- assign image_item = grandchildlink.object.image | default: grandchildlink.object.featured_image | default: grandchildlink.object.products.first.featured_image -%}
+                                                          {% if image_item != null %}
+                                                            <span class="hdt-category-img hdt-relative">
+                                                              {{ image_item | image_url: width: image_item.width | image_tag: loading: 'lazy', width: image_item.width, height: image_item.height, class: 'hdt-radius-f hdt-radius-full', sizes: '40px', widths: '40,34,30' }}
+                                                            </span>
+                                                          {% endif %}
+                                                        {% endif %}
+                                                        <span class="hdt-category-link-text"> {{ grandchildlink.title | escape }} </span>
+                                                      </span>
+                                                    </a>
+                                                  </li>
+                                                {%- endfor -%}
+                                              </ul>
+                                            </div>
+                                          </details>
+                                        </hdt-accordion>
+                                      {% else %}
+                                        <a id="hdt-menu-{{ childlink.handle }}" href="{{ childlink.url }}" class="hdt-category-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium{% if childlink.current %} hdt-category-link--active{% endif %}" {% if childlink.current %} aria-current="page" {% endif %}>
+                                          <span class="hdt-category-title hdt-flex hdt-align-center">
+                                            {%- if childlink.type == "collection_link" -%}
+                                              {%- assign image_item = childlink.object.metafields.theme.image_collection_list.value | default: childlink.object.image | default: childlink.object.featured_image | default: childlink.object.products.first.featured_image -%}
+                                              {%- if image_item != null -%}
+                                                <span class="hdt-category-img hdt-relative">
+                                                  {{ image_item | image_url: width: image_item.width | image_tag: loading: 'lazy', width: image_item.width, height: image_item.height, class: 'hdt-radius-f hdt-radius-full', sizes: '40px', widths: '40,34,30' }}
+                                                </span>
+                                              {%- endif -%}
+                                            {%- endif -%}
+                                            <span class="hdt-category-link-text"> {{- childlink.title | escape -}} </span>
+                                          </span>
+                                        </a>
+                                      {% endif %}
+                                    </li>
+                                  {%- endfor -%}
+                                </ul>
+                              </div>
+                            </details>
+                          </hdt-accordion>
+                        {%- else -%}
+                            <a id="hdt-menu-{{ link.handle }}" href="{{ link.url }}" class="hdt-category-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium{% if link.current %} hdt-category-link--active{% endif %}" {% if link.current %} aria-current="page" {% endif %}>
+                              <span class="hdt-category-title hdt-flex hdt-align-center">
+                                {%- if link.type == "collection_link" -%}
+                                  {%- assign image_item = link.object.metafields.theme.image_collection_list.value | default: link.object.image | default: link.object.featured_image | default: link.object.products.first.featured_image -%}
+                                  {%- if image_item != null -%}
+                                    <span class="hdt-category-img hdt-relative">
+                                      {{ image_item | image_url: width: image_item.width | image_tag: loading: 'lazy', width: image_item.width, height: image_item.height, class: 'hdt-radius-f hdt-radius-full', sizes: '40px', widths: '40,34,30' }}
+                                    </span>
+                                  {%- endif -%}
+                                {%- endif -%}
+                                <span class="hdt-category-link-text"> {{- link.title | escape -}} </span>
+                              </span>
+                            </a>
+                          {%- endif -%}
+                       </li>
+                    {%- endfor -%}
+                  </ul>
+                  <div class="hdt-list-categories-bottom">
+                    <a href="{{ routes.collections_url }}" class="hdt-view-all hdt-inline-flex hdt-align-center hdt-btn hdt-btn-link hdt-font-medium hdt-text-base">{{ 'sections.header.view_all_categories' | t }}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M0.861539 8L0 7.13846L5.90769 1.23077H0.615385V0H8V7.38462H6.76923V2.09231L0.861539 8Z" fill="currentColor"/></svg></a>
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+  				{%- endif -%}
+
+          {%- capture blocks_content -%}
+            {%- content_for 'blocks' -%}
+          {%- endcapture -%}
+
+          {%- if section.settings.main_menu != blank -%}
+            <nav class="hdt-navigation hdt-text-{{ section.settings.menu_position }} hdt-menu-uppercase-{{ section.settings.text_transform }} hdt-nav-arrow_{{ section.settings.dropdown_arrow }}">
+              <ul id="hdt-nav-ul" class="hdt-nav__ul hdt-inline-flex hdt-align-center hdt-text-{{ section.settings.menu_position }} hdt-justify-{{ section.settings.menu_position }}">
+                
+              {{ blocks_content }}
+              {%- for link in section.settings.main_menu.links -%}
+                {%- render 'main-menu', link: link, index: forloop.index, blocks_content: blocks_content -%}
+              {%- endfor -%}
+              </ul>
+            </nav>
+          {% endif %}
+          
+          {%- if section.settings.other_content != blank -%}
+            <div class="hdt-header-other-content">
+              {{ section.settings.other_content }}
+            </div>
+          {%- endif -%}
+  			</div>
+  		</div>
+  	</div>
+  {%- endif -%}
+</hdt-sticky-header>
+
+<hdt-drawer class="hdt-drawer hdt-drawer-not-header hdt-drawer-menu-mb hdt-contents hdt-header-menu-mobile" color-scheme="{{ section.settings.header_mobile_colors }}">
+  <dialog id="menu_mobile" class="hdt-dialog hdt-dialog-drawer" scroll-lock pos="left">
+    <button ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="menu_mobile" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+    <div class="hdt-dialog-drawer__inner">
+      {%- render 'menu_mobile' -%}
+    </div>
+</dialog>
+</hdt-drawer>
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    {%- if section.settings.logo %}
+    "logo": {{ section.settings.logo | image_url: width: 500 | prepend: "https:" | json }},
+    {% endif -%}
+    "sameAs": [
+      {%- capture socials -%}
+      {{ settings.social_facebook_link | json }},
+      {{ settings.social_twitter_link | json }},
+      {{ settings.social_instagram_link | json }},
+      {{ settings.social_threads_link | json }},
+      {{ settings.social_youtube_link | json }},
+      {{ settings.social_tiktok_link | json }},
+      {{ settings.social_pinterest_link | json }},
+      {{ settings.social_tumblr_link | json }},
+      {{ settings.social_vimeo_link | json }},
+      {{ settings.social_snapchat_link | json }},
+      {{ settings.social_whatsapp_link | json }},
+      {{ settings.social_linked_in_link | json }},
+      {{ settings.social_wechat_link | json }},
+      {{ settings.social_reddit_link | json }},
+      {{ settings.social_line_link | json }},
+      {{ settings.social_spotify_link | json }},
+      {{ settings.social_discord_link | json }},
+      {{ settings.social_kick_link | json }},
+      {{ settings.social_twitch_link | json }}
+      {%- endcapture -%}
+      {{ socials | strip_newlines | remove: '"",' | remove: '  ' | remove: '  ' }}
+    ],
+    "url": {{ request.origin | append: page.url | json }}
+  }
+</script>
+{% schema %}
+{
+  "name": "t:sections.header.header_bottom.name_new",
+  "tag": "header",
+  "max_blocks": 8,
+  "limit": 1,
+  "class": "hdt-section-group hdt-section-header hdt-header-menu-bottom",
+  "enabled_on": {
+    "groups": [
+      "header"
+    ]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.header.settings.header_note"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.settings.desktop_label"
+    },
+    {
+      "type": "select",
+      "id": "header_layout",
+      "options": [
+        {
+          "value": "logo_left",
+          "label": "t:sections.header.settings.header_layout.logo_left"
+        },
+        {
+          "value": "logo_center",
+          "label": "t:sections.header.settings.header_layout.logo_center"
+        }
+      ],
+      "label": "t:sections.header.settings.header_layout.label",
+      "default": "logo_left"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_fullwidth",
+      "info": "t:sections.header.settings.header_fullwidth.info",
+      "label": "t:sections.header.settings.header_fullwidth.label",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:sections.header.settings.logo.label"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "t:sections.header.settings.logo.logo_width",
+      "info": "t:sections.header.settings.logo.logo_info",
+      "min": 80,
+      "max": 280,
+      "step": 2,
+      "unit": "px",
+      "default": 136,
+      "visible_if": "{{ section.settings.logo != blank }}"
+    },
+    {
+      "type": "paragraph",
+      "content": "--------------------------------------"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.header.settings.main_header.label"
+    },
+    {
+      "type": "range",
+      "id": "header_height",
+      "label": "t:sections.header.settings.header_height.label",
+      "min": 60,
+      "max": 160,
+      "step": 1,
+      "unit": "px",
+      "default": 68
+    },
+    {
+      "type": "color_scheme",
+      "id": "header_colors",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.header.settings.group_icons.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled_user",
+      "label": "t:sections.header.settings.group_icons.enabled_user",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled_compare",
+      "label": "t:sections.header.settings.group_icons.enabled_compare.label",
+      "info": "t:sections.header.settings.group_icons.enabled_compare.info",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled_wishlist",
+      "label": "t:sections.header.settings.group_icons.enabled_wishlist.label",
+      "info": "t:sections.header.settings.group_icons.enabled_wishlist.info",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "search_only_product",
+      "label": "t:sections.header.settings.group_icons.search_only_product.label",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "--------------------------------------"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.header.settings.bottom_header.label"
+    },
+    {
+      "type": "range",
+      "id": "header_bottom_height",
+      "label": "t:sections.header.settings.header_height.label_bottom",
+      "min": 60,
+      "max": 160,
+      "step": 1,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.header.settings.nav_label"
+    },
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "t:sections.header.settings.main_menu.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "lazy_mn",
+      "label": "Enable Lazy menu?",
+      "info": "Improve page load speed",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "menu_position",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.header.settings.main_menu.menu_position.left"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.header.settings.main_menu.menu_position.center"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.header.settings.main_menu.menu_position.right"
+        }
+      ],
+      "label": "t:sections.header.settings.main_menu.menu_position.label",
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "menu_size",
+      "options": [
+        {
+          "value": "sm",
+          "label": "t:sections.header.settings.main_menu.menu_size.small"
+        },
+        {
+          "value": "base",
+          "label": "t:sections.header.settings.main_menu.menu_size.medium"
+        },
+        {
+          "value": "lg",
+          "label": "t:sections.header.settings.main_menu.menu_size.large"
+        }
+      ],
+      "label": "t:sections.header.settings.main_menu.menu_size.label",
+      "default": "lg"
+    },
+    {
+      "type": "select",
+      "id": "menu_weight",
+      "options": [
+        {
+          "value": "normal",
+          "label": "t:sections.header.settings.main_menu.menu_weight.normal"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.header.settings.main_menu.menu_weight.medium"
+        },
+        {
+          "value": "bold",
+          "label": "t:sections.header.settings.main_menu.menu_weight.bold"
+        }
+      ],
+      "label": "t:sections.header.settings.main_menu.menu_weight.label",
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_transform",
+      "label": "t:sections.header.settings.main_menu.text_transform",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "dropdown_arrow",
+      "label": "t:sections.header.settings.main_menu.dropdown_arrow.label",
+      "info": "t:sections.header.settings.main_menu.dropdown_arrow.info",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "active_link",
+      "label": "t:sections.header.settings.main_menu.active_link.label",
+      "info": "t:sections.header.settings.main_menu.active_link.info",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "spacing_nav",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "label": "t:sections.header.settings.main_menu.spacing_nav.label",
+      "info": "t:sections.header.settings.main_menu.spacing_nav.info",
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "select",
+      "id": "open_event",
+      "label": "t:sections.header.settings.main_menu.open_event.label",
+      "info": "t:sections.header.settings.main_menu.open_event.info",
+      "default": "hover",
+      "options": [
+        {
+          "label": "t:sections.header.settings.main_menu.open_event.options.hover",
+          "value": "hover"
+        },
+        {
+          "label": "t:sections.header.settings.main_menu.open_event.options.click",
+          "value": "click"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "header_menu_colors",
+      "label": "t:sections.header.settings.main_menu.submenu_color"
+    },
+    {
+      "type": "checkbox",
+      "id": "header_categories",
+      "label": "t:sections.header.settings.header_categories.label",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "title_categories",
+      "label": "t:sections.header.settings.header_categories.title_categories",
+      "default": "Browse All Categories"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_categories",
+      "label": "t:sections.header.settings.header_categories.menu_categories"
+    },
+    {
+      "type": "textarea",
+      "id": "other_content",
+      "label": "t:sections.header.header_bottom.other_content"
+    },
+    {
+      "type": "select",
+      "id": "header_border",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.header.header_bottom.header_border.none"
+        },
+        {
+          "value": "top",
+          "label": "t:sections.header.header_bottom.header_border.top"
+        },
+        {
+          "value": "bottom",
+          "label": "t:sections.header.header_bottom.header_border.bottom"
+        },
+        {
+          "value": "top_bottom",
+          "label": "t:sections.header.header_bottom.header_border.top_bottom"
+        }
+      ],
+      "label": "t:sections.header.header_bottom.header_border.label",
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.settings.mobile_label"
+    },
+    {
+      "type": "range",
+      "id": "header_height_mb",
+      "label": "t:sections.header.settings.header_height.label_mobile",
+      "min": 60,
+      "max": 160,
+      "step": 1,
+      "unit": "px",
+      "default": 60
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_mobile",
+      "label": "t:sections.header.settings.logo.label_mobile"
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mb",
+      "label": "t:sections.header.settings.logo.logo_width_mb",
+      "info": "t:sections.header.settings.logo.logo_info",
+      "min": 80,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "default": 130,
+      "visible_if": "{{ section.settings.logo_mobile != blank }}"
+    },
+    {
+      "type": "link_list",
+      "id": "main_menu_mobile",
+      "label": "t:sections.header.settings.main_menu.label_mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "lazy_mn_mb",
+      "label": "Enable Lazy menu?",
+      "info": "Improve page load speed",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "only_click_icon",
+      "label": "t:sections.header.settings.main_menu.mobile_menu_click.label",
+      "info": "t:sections.header.settings.main_menu.mobile_menu_click.info",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "header_mobile_colors",
+      "label": "t:sections.header.settings.main_menu.color_mobile"
+    },
+    {
+      "type": "textarea",
+      "id": "note_mobile",
+      "label": "t:sections.header.settings.note_mobile",
+      "default": "<span class=\"hdt-inline-flex hdt-text-base hdt-font-medium\" style=\"border-bottom: solid 1px rgb(var(--color-line-border));margin-bottom: 11px\">Need help ? </span><span class=\"hdt-flex hdt-flex-col hdt-text-base hdt-font-medium\" style=\"line-height: 24px;\"><span>Address: 1234 Fashion Street, Suite 567,<br> New York, NY 10001</span><span>Email: <b>info@fashionshop.com</b></span><span>Phone: <b>(212) 555-1234</b></span></span>"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.settings.sticky_label"
+    },
+    {
+      "type": "select",
+      "id": "sticky_type",
+      "label": "t:sections.header.settings.header_sticky.label",
+      "default": "on_scroll_up",
+      "options": [
+        {
+          "label": "t:none",
+          "value": "none"
+        },
+        {
+          "label": "On scroll up",
+          "value": "on_scroll_up"
+        },
+        {
+          "label": "Always",
+          "value": "always"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_glass",
+      "label": "t:sections.header.settings.sticky_glass.label",
+      "info": "t:sections.header.settings.sticky_glass.info",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_mega_block"
+    },
+    {
+      "type": "_mega_block_column_10"
+    },
+    {
+      "type": "_mega_block_column_12"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.header.header_bottom.name_new"
+    }
+  ]
+}
+{% endschema %}

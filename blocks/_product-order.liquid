@@ -1,0 +1,413 @@
+{%- liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+
+  unless product.available
+    continue
+  endunless
+
+  if settings.pick_mode == 'no' and product.variants.size > 1
+    assign selected_variant = product.selected_variant
+  elsif settings.pick_mode == 'first' and settings.hide_sold_out == false
+    assign selected_variant = product.selected_variant | default: product.variants.first
+  else
+    assign selected_variant = product.selected_or_first_available_variant
+  endif
+  
+  assign product_form_id = 'product-form-'| append: section.id | append: product.id
+  if selected_variant.inventory_management == 'shopify' and selected_variant.inventory_quantity <= 0 and selected_variant.available
+    assign is_pre_order = true
+  else
+    assign is_pre_order = false
+  endif
+
+-%}
+
+{%- unless is_pre_order and block.settings.hide_pre -%} 
+  <div class="hdt-product-info__item hdt-product__order" data-type="{{ block.type }}" {{ block.shopify_attributes }} >
+    {%- capture hourHTML -%}
+    <hdt-countdown-simple config='{ "time": {{ block.settings.time | default: "19041994" | json }} }'><template>[hours] {{ 'sections.countdown_timmer.hr_plural' | t | escape }} [mins] {{ 'sections.countdown_timmer.min_plural' | t | escape }}</template></hdt-countdown-simple>
+    {%- endcapture -%}
+    <div class="hdt-product-info__item hdt-product__order" data-type="{{ block.type }}" {{ block.shopify_attributes }} style="{%-unless selected_variant.available-%}display: none;{%-endunless-%}">
+      <order-delivery id="delivery{{ block.id }}" class="" config='{ "timezone":false, "format_day":"{{ block.settings.frm_day }}", "mode":"{{ block.settings.mode }}", "cut_day": {{ block.settings.cut_day | json }}, "off_day": "{{ block.settings.off_days | split: " " | join: "," }}", "estimateStartDate": {{ product.metafields.theme.estimateStartDate | default: block.settings.ds | json }}, "estimateEndDate": {{ product.metafields.theme.estimateEndDate | default: block.settings.de | json }}, "time":{{ block.settings.time | default: "19041994" | json }}, "hideWithPreorder":{{ block.settings.hide_pre }} }' form="{{ product_form_id }}">
+        <div class="hdt-product__order-wrap hdt-product__order-content hdt-inline-flex hdt-align-center">
+          {%- liquid
+            assign class = block.settings.ani | append: ' is--infinite '
+            if block.settings.svg_upload != blank
+              echo '<div class="' | append: class | append:'">'
+                echo block.settings.svg_upload 
+              echo '</div>'
+            elsif block.settings.image_upload != blank
+              echo block.settings.image_upload | image_url: width: 25 | image_tag: widths: '25, 50, 100, 200, 300, 400, 500', class: class
+            else
+              render 'icons', icon: block.settings.icon, class: class
+            endif
+          -%}
+          <p class="hdt-s-text">{{ block.settings.txt | replace: '[hour]', hourHTML | replace: '[date_start]', '<span data-start-delivery class="hdt-start_delivery hdt-font-semibold"></span>' | replace: '[date_end]', '<span data-end-delivery class="hdt-end_delivery hdt-font-semibold"></span>' }}</p>
+        </div>
+      </order-delivery>
+    </div>
+  </div>
+{%- endunless -%}
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.order.name",
+  "tag": null,
+  "settings":[
+    {
+      "type": "paragraph",
+      "content": "t:sections.main-product.blocks.order.settings.paragraph.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_pre",
+      "label": "t:sections.main-product.blocks.order.settings.hide_pre.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:none"
+        },
+        {
+          "value": "car",
+          "label": "t:blocks.icon.settings.icon.car"
+        },
+        {
+          "value": "truck",
+          "label": "t:blocks.icon.settings.icon.truck"
+        },
+        {
+          "value": "diamond",
+          "label": "t:blocks.icon.settings.icon.diamond"
+        },
+        {
+          "value": "door-lock",
+          "label": "t:blocks.icon.settings.icon.door_lock"
+        },
+        {
+          "value": "gym",
+          "label": "t:blocks.icon.settings.icon.gym"
+        },
+        {
+          "value": "hammer",
+          "label": "t:blocks.icon.settings.icon.hammer"
+        },
+        {
+          "value": "headphones",
+          "label": "t:blocks.icon.settings.icon.headphones"
+        },
+        {
+          "value": "helm",
+          "label": "t:blocks.icon.settings.icon.helm"
+        },
+        {
+          "value": "hourglass",
+          "label": "t:blocks.icon.settings.icon.hourglass"
+        },
+        {
+          "value": "map",
+          "label": "t:blocks.icon.settings.icon.map"
+        },
+        {
+          "value": "piggy",
+          "label": "t:blocks.icon.settings.icon.piggy"
+        },
+        {
+          "value": "refesh",
+          "label": "t:blocks.icon.settings.icon.refresh"
+        },
+        {
+          "value": "rocket",
+          "label": "t:blocks.icon.settings.icon.rocket"
+        },
+        {
+          "value": "shield",
+          "label": "t:blocks.icon.settings.icon.shield"
+        },
+        {
+          "value": "shield2",
+          "label": "t:blocks.icon.settings.icon.shield_2"
+        },
+        {
+          "value": "smile",
+          "label": "t:blocks.icon.settings.icon.smile"
+        },
+        {
+          "value": "scissors",
+          "label": "t:blocks.icon.settings.icon.scissors"
+        },
+        {
+          "value": "shuffle",
+          "label": "t:blocks.icon.settings.icon.shuffle"
+        },
+        {
+          "value": "cloud_upload",
+          "label": "t:blocks.icon.settings.icon.cloud_upload"
+        },
+        {
+          "value": "cash",
+          "label": "t:blocks.icon.settings.icon.cash"
+        },
+        {
+          "value": "way",
+          "label": "t:blocks.icon.settings.icon.way"
+        },
+        {
+          "value": "wristwatch",
+          "label": "t:blocks.icon.settings.icon.wristwatch"
+        },
+        {
+          "value": "world",
+          "label": "t:blocks.icon.settings.icon.world"
+        },
+        {
+          "value": "wallet",
+          "label": "t:blocks.icon.settings.icon.wallet"
+        },
+        {
+          "value": "unlock",
+          "label": "t:blocks.icon.settings.icon.unlock"
+        },
+        {
+          "value": "umbrella",
+          "label": "t:blocks.icon.settings.icon.umbrella"
+        },
+        {
+          "value": "repeat",
+          "label": "t:blocks.icon.settings.icon.repeat"
+        },
+        {
+          "value": "refesh-2",
+          "label": "t:blocks.icon.settings.icon.refresh_2"
+        },
+        {
+          "value": "medal",
+          "label": "t:blocks.icon.settings.icon.medal"
+        },
+        {
+          "value": "portfolio",
+          "label": "t:blocks.icon.settings.icon.portfolio"
+        },
+        {
+          "value": "like",
+          "label": "t:blocks.icon.settings.icon.like"
+        },
+        {
+          "value": "plance",
+          "label": "t:blocks.icon.settings.icon.plance"
+        },
+        {
+          "value": "map-maker",
+          "label": "t:blocks.icon.settings.icon.map_maker"
+        },
+        {
+          "value": "help",
+          "label": "t:blocks.icon.settings.icon.help"
+        },
+        {
+          "value": "gift",
+          "label": "t:blocks.icon.settings.icon.gift"
+        },
+        {
+          "value": "cart",
+          "label": "t:blocks.icon.settings.icon.cart"
+        },
+        {
+          "value": "box",
+          "label": "t:blocks.icon.settings.icon.box"
+        },
+        {
+          "value": "back",
+          "label": "t:blocks.icon.settings.icon.back"
+        },
+        {
+          "value": "back2",
+          "label": "t:blocks.icon.settings.icon.back_2"
+        }
+      ],
+      "default": "none",
+      "label": "t:blocks.icon.settings.icon.label"
+    },
+    {
+      "type": "liquid",
+      "id": "svg_upload",
+      "label": "t:blocks.icon.settings.svg_upload.label",
+      "info": "t:blocks.icon.settings.svg_upload.info"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_upload",
+      "label": "t:blocks.icon.settings.image_upload.label"
+    },
+    {
+      "type": "select",
+      "id": "ani",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.main-product.blocks.ani.settings.options__none.label"
+        },
+        {
+          "value": "hdt-ani-bounce",
+          "label": "t:sections.main-product.blocks.ani.settings.options__1.label"
+        },
+        {
+          "value": "hdt-ani-tada",
+          "label": "t:sections.main-product.blocks.ani.settings.options__2.label"
+        },
+        {
+          "value": "hdt-ani-swing",
+          "label": "t:sections.main-product.blocks.ani.settings.options__3.label"
+        },
+        {
+          "value": "hdt-ani-flash",
+          "label": "t:sections.main-product.blocks.ani.settings.options__4.label"
+        },
+        {
+          "value": "hdt-ani-fadeIn",
+          "label": "t:sections.main-product.blocks.ani.settings.options__5.label"
+        },
+        {
+          "value": "hdt-ani-heartBeat",
+          "label": "t:sections.main-product.blocks.ani.settings.options__6.label"
+        },
+        {
+          "value": "hdt-ani-shake",
+          "label": "t:sections.main-product.blocks.ani.settings.options__7.label"
+        }
+      ],
+      "label": "t:sections.main-product.blocks.ani.label"
+    },
+    {
+      "type": "textarea",
+      "id": "txt",
+      "label": "t:sections.main-product.blocks.order.settings.txt.label",
+      "default": "Order in the next [hour] to get it between [date_start] and [date_end]",
+      "info": "t:sections.main-product.blocks.order.settings.txt.info"
+    },
+    {
+      "type": "range",
+      "id": "ds",
+      "min": 0,
+      "max": 99,
+      "step": 1,
+      "label": "t:sections.main-product.blocks.order.settings.ds.label",
+      "info": "t:sections.main-product.blocks.order.settings.ds.info",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "de",
+      "min": 0,
+      "max": 99,
+      "step": 1,
+      "label": "t:sections.main-product.blocks.order.settings.de.label",
+      "info": "t:sections.main-product.blocks.order.settings.de.label",
+      "default": 15
+    },
+    {
+      "type": "select",
+      "id": "mode",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.main-product.blocks.order.settings.mode.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.main-product.blocks.order.settings.mode.options__2.label"
+        }
+      ],
+      "label": "t:sections.main-product.blocks.order.settings.mode.label"
+    },
+    {
+      "type": "text",
+      "id": "cut_day",
+      "label": "t:sections.main-product.blocks.order.settings.cut_day.label",
+      "default": "SAT,SUN",
+      "info": "t:sections.main-product.blocks.order.settings.cut_day.info"
+    },
+    {
+      "type": "textarea",
+      "id": "off_days",
+      "label": "t:sections.main-product.blocks.order.settings.off_days.label",
+      "default": "23/12/****\n24/12/****\n01/01/****",
+      "placeholder": "23/12/****\n24/12/****\n01/01/****\n02/11/2024"
+    },
+    {
+      "type": "select",
+      "id": "frm_day",
+      "default": "t44, t45 t46",
+      "options": [
+        {
+          "value": "t44, t45 t46",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__1.label"
+        },
+        {
+          "value": "t44, DD t46",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__2.label"
+        },
+        {
+          "value": "t44, t45 t46 YYYY",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__3.label"
+        },
+        {
+          "value": "t44, t45 t46, YYYY",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__4.label"
+        },
+        {
+          "value": "t44, t46 t45, YYYY",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__5.label"
+        },
+        {
+          "value": "t44, t46 t45",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__6.label"
+        },
+        {
+          "value": "t44, t46 t45 YYYY",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__7.label"
+        },
+        {
+          "value": "t44, t46 DD",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__8.label"
+        },
+        {
+          "value": "t44, t46 DD YYYY",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__9.label"
+        },
+        {
+          "value": "t44, MM/DD/YYYY",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__10.label"
+        },
+        {
+          "value": "t44, DD/MM/YYYY",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__11.label"
+        },
+        {
+          "value": "t44, YYYY/MM/DD",
+          "label": "t:sections.main-product.blocks.order.settings.frm_day.options__12.label"
+        }
+      ],
+      "label": "t:sections.main-product.blocks.order.settings.frm_day.label"
+    },
+    {
+      "type": "text",
+      "id": "time",
+      "label": "t:sections.main-product.blocks.order.settings.time.label",
+      "info": "t:sections.main-product.blocks.order.settings.time.info",
+      "default": "16:00:00"
+    }
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.order.name" ,
+    }
+  ]
+}
+{% endschema %}

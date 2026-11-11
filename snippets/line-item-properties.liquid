@@ -1,0 +1,114 @@
+{%- comment -%}
+  https://ui-elements-generator.myshopify.com/pages/line-item-property
+  Renders line item properties
+
+  Accepts:
+  - form_id: {String} Form cart ID (required)
+  - block: {Object} (required)
+
+  Usage:
+   {%- render 'line-item-properties', form_id: form_id, block: block -%}
+{%- endcomment -%}
+{%- liquid
+  if block.settings.visibility == 'all'
+  elsif block.settings.visibility == 'collection'
+    if collection_based_title.size == 0
+      continue
+    endif
+    assign collection_based_title = block.settings.collection_based | map: 'title'
+    assign pr_title_and_collections = product.collections | map: 'title' | concat: collection_based_title
+    assign pr_title_and_collections_uniq = pr_title_and_collections | uniq
+    if pr_title_and_collections_uniq.size == pr_title_and_collections.size
+      continue
+    endif
+  elsif block.settings.visibility == 'type'
+    if product.type == blank
+      continue
+    endif
+    assign type_based = block.settings.type_based | remove: '  ' | replace: ', ', ',' | replace: ' ,', ',' | split: ','
+    unless type_based contains product.type
+      continue
+    endunless
+  elsif block.settings.visibility == 'tag'
+    if product.tags.size == 0
+      continue
+    endif
+    assign tag_based = block.settings.tag_based | remove: '  ' | replace: ', ', ',' | replace: ' ,', ',' | split: ','
+    assign pr_tag_and_tags = product.tags | concat: tag_based
+    assign pr_tag_and_tags_uniq = pr_tag_and_tags | uniq
+    if pr_tag_and_tags_uniq.size == pr_tag_and_tags.size
+      continue
+    endif
+  elsif block.settings.visibility == 'product'
+    assign product_based_title = block.settings.product_based | map: 'title'
+    unless product_based_title contains product.title
+      continue
+    endunless
+  elsif block.settings.visibility == 'metafield'
+    unless product.metafields.theme.visibility_customizable
+      continue
+    endunless
+  endif
+-%}
+{%- liquid
+  assign id = "property" | append: block.id
+  assign property_type = block.settings.property_type
+  if  block.settings.show_at_ck_cart
+    assign property_name = block.settings.title | escape
+  else
+    assign property_name = '_' | append: block.settings.title | escape
+  endif
+-%}
+<div class="hdt-product-info__item hdt-product__line-item-property" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+{%- case property_type -%}
+  {%- when 'checkbox' -%}
+    <hdt-block-required detect="checked" event="change" class="hdt-line-item-property hdt-line-item-property--{{ property_type }}" {{ block.shopify_attributes }}>
+      <input form="{{ form_id }}" class="hdt-grid-1x1" type="checkbox" id="{{ id }}"{% if block.settings.use_required %} required{% endif %} name="properties[{{ property_name }}]" value="{{ block.settings.ck_value | escape }}">
+      <label for="{{ id }}" class="hdt-s-text hdt-inline-block">{{ block.settings.title }}</label>
+    </hdt-block-required>
+
+  {%- when 'text' -%}
+    <hdt-block-required detect="length" event="input" class="hdt-line-item-property hdt-line-item-property--{{ property_type }}" {{ block.shopify_attributes }}>
+      <div class="hdt-field">
+        {%- if block.settings.type_text == 'short' -%}
+        <input class="hdt-field__input hdt-input"  placeholder="{{ block.settings.title | escape }}" type="text" id="{{ id }}" form="{{ form_id }}"{% if block.settings.use_required %} required{% endif %} name="properties[{{ property_name }}]"{% if block.settings.max_characters > 0 %} maxlength="{{ block.settings.max_characters }}"{% endif %}>
+        {%- else -%}
+        <textarea class="hdt-field__input hdt-textarea"  placeholder="{{ block.settings.title | escape }}" rows="4" id="{{ id }}" form="{{ form_id }}"{% if block.settings.use_required %} required{% endif %} name="properties[{{ property_name }}]"{% if block.settings.max_characters > 0 %} maxlength="{{ block.settings.max_characters }}"{% endif %}></textarea>
+        {%- endif -%}
+        <label class="hdt-field__label" for="{{ id }}">{{ block.settings.title }}</label>
+      </div>
+    </hdt-block-required>
+
+  {%- when 'options' -%}
+    {%- liquid
+      assign arr_options = block.settings.options | newline_to_br | split: '<br />'
+      if arr_options.size == 0
+        continue
+      endif
+    -%}
+    <hdt-block-required detect="checked" event="change" class="hdt-line-item-property hdt-line-item-property--{{ property_type }}" {{ block.shopify_attributes }}>
+      <label class="hdt-s-text hdt-block">{{ block.settings.title }}</label>
+      {%- if block.settings.type_options == 'radio' -%}
+        {%- for option in arr_options -%}
+          <div class="hdt-property-option">
+            <input id="{{ id }}__{{ forloop.index }}" type="radio" form="{{ form_id }}"{% if block.settings.use_required %} required{% endif %} name="properties[{{ property_name }}]" value="{{ option | strip | escape }}">
+            <label for="{{ id }}__{{ forloop.index }}" class="hdt-s-text">{{ option }}</label>
+          </div>
+        {%- endfor -%}
+      {%- elsif block.settings.type_options == 'select' -%}
+        <select class="hdt-select hdt-s-text" id="{{ id }}" form="{{ form_id }}" name="properties[{{ property_name }}]"{% if block.settings.use_required %} required{% endif %}>
+          {%- for option in arr_options %}<option value="{{ option | strip | escape }}">{{ option }}</option>{% endfor -%}
+        </select>
+      {%- else -%}
+        {%- for option in arr_options -%}
+          <div class="hdt-property-option">
+            <input id="{{ id }}__{{ forloop.index }}" type="checkbox" sync-name="properties[{{ property_name }}]" value="{{ option | strip | escape }}">
+            <label for="{{ id }}__{{ forloop.index }}" class="hdt-s-text">{{ option }}</label>
+          </div>
+        {%- endfor -%}
+        <input type="hidden" form="{{ form_id }}" id="{{ id }}" name="properties[{{ property_name }}]"{% if block.settings.use_required %} required{% endif %}>
+      {%- endif -%}
+    </hdt-block-required>
+
+{%- endcase -%}
+</div>

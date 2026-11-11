@@ -1,0 +1,51 @@
+{%-liquid
+  assign space_x = '0px'
+    assign space_x_tb = '0px'
+    assign space_x_mb = '0px'  
+  if section.settings.border_item 
+    assign space_x = '30px'
+    assign space_x_tb = '20px'
+    assign space_x_mb = '15px'  
+  endif
+-%}
+{%- capture sizes -%}
+(min-width: 1150px) calc(({{ settings.page_width }}px - {{ space_x }} * {{ section.settings.col_dk | minus: 1 }}) * {{ 1.00 | divided_by: section.settings.col_dk | round: 2 }}) {{- -}}
+, (min-width: 768px) calc((100vw - {{ space_x_tb }} * {{ section.settings.col_tb | minus: 1 }}) * {{ 1.00 | divided_by: section.settings.col_tb | round: 2 }}) {{- -}}
+, calc((100vw - 30px - {{ space_x_mb }} * {{ section.settings.col_mb | minus: 1 }}) * {{ 1.00 | divided_by: section.settings.col_mb | round: 2 }})
+{%- endcapture -%}
+<div class="hdt-slider__slide" {{ block.shopify_attributes }}>
+  <div class="hdt-slide__inner hdt-relative" hdt-reveal="slide-in" timeline>
+    {%- if block.settings.url != blank -%}
+      <a href="{{ block.settings.url }}" target="{{ section.settings.url_target }}" class="hdt-full-width-link"></a>
+    {%- endif -%}
+    {%- if block.settings.image != blank -%}
+      {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: 'lazy', width: block.settings.image.width, height: block.settings.image.height, class: '', sizes: sizes, widths: '400,600,800,1000,1200,1400,1600,1800,2000,2400,2000' -}}
+    {%- else -%}
+      {{ 'logo' | placeholder_svg_tag: 'placeholder-svg' }}
+    {%- endif -%}
+  </div>
+</div> 
+{% schema %}
+  {
+    "name": "Logo item",
+    "tag": null,
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.brands.blocks.image.label"
+      },
+      {
+        "type": "url",
+        "id": "url",
+        "label": "t:sections.brands.blocks.url.label",
+        "visible_if": "{{ block.settings.image != blank }}"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Logo item"
+      }
+    ]
+  }
+{% endschema %}

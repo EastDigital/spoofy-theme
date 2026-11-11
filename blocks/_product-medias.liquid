@@ -1,0 +1,509 @@
+{% liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  assign un_no_pick = true
+  if settings.pick_mode == 'no' and product.variants.size > 1
+    assign selected_variant = product.selected_variant
+    unless selected_variant
+      assign un_no_pick = false
+    endunless
+  elsif settings.pick_mode == 'first' and settings.hide_sold_out == false
+    assign selected_variant = product.selected_variant | default: product.variants.first
+  else
+    assign selected_variant = product.selected_or_first_available_variant
+  endif
+  assign product_form_id = 'product-form-'| append: section.id | append: product.id
+  assign selected_variant_featured_media = selected_variant.featured_media
+  assign group_media_obj = product.metafields.theme.group_media_obj.value
+  assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src'
+  assign desktop_media_layout = block.settings.desktop_media_layout
+  assign mobile_media_layout = block.settings.mobile_media_layout
+  if product.media.size < 1
+    assign desktop_media_layout = 'no_media_size'
+  elsif product.media.size == 1
+    assign desktop_media_layout = 'one_media_size'
+  endif
+  if section.settings.image != blank
+    assign desktop_media_layout = 'no_media_size'
+  endif
+  assign models = product.media | where: 'media_type', 'model'
+  assign first_3d_model = models | first
+%}
+{% style %}
+  .hdt-group-block--{{ block.id }} {
+    {%- capture width -%}
+    --width-group: {{ block.settings.width }}%; --width-group-md: {{ block.settings.width_md }}%; --width-group-lg: {{ block.settings.width_lg }}%;
+    {%- endcapture -%}
+    {{ width | replace: ' 8%', '8.33333333%' | replace: ' 16%', '16.66666667%' | replace: ' 33%', '33.33333333%' | replace: ' 41%', '41.66666667%' | replace: ' 58%', '58.33333333%' | replace: ' 66%', '66.66666667%' | replace: ' 83%', '83.33333333%' | replace: ' 91%', '91.66666667%' }}
+    --padding-group:0px; --padding-group-md: 0px; --padding-group-lg: 0px;
+    --space-group: 0px; --space-group-md: 0px; --space-group-lg: 0px;
+  }
+{% endstyle %}
+<div class="hdt-product-media-wrapps hdt-group-blockss hdt-s-gradient hdt-group-block--{{ block.id }}"{% if block.settings.display_by_block %} color-scheme="{{ block.settings.color_scheme }}"{% endif %} {{ block.shopify_attributes }}>
+  {%- if product != blank -%}
+    {%- capture start_index -%}
+    {%- unless group_media_obj.size > 0 %}, "startIndex": {% if block.settings.show_first_media or un_no_pick == false %}0{% else %}{{ selected_variant_featured_media.position | default: 1 | minus: 1 }}{% endif %}{% endunless -%}
+    {%- endcapture -%}
+
+    {%- if first_3d_model -%}
+    <link rel="stylesheet" href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css" media="print" onload="this.media='all'; this.onload = null">
+    {%- endif -%}
+    <hdt-product-media show-thumb section-id="{{ section.id }}" class="hdt-product-media hdt-product-media__layout-{{ desktop_media_layout }} hdt-product-thumb-size__{{ block.settings.media_size }} hdt-mobile-media-layout--{{ mobile_media_layout }}" form="{{ product_form_id }}"{% if block.settings.enable_media_autoplay %} autoplay-media{% endif %}{% if variant_images.size > 0 and product.images.size > 1 and block.settings.use_select_varaint_change_media %} update-when-variant-change{% endif %} image-zoom="{{ block.settings.image_zoom }}" max-zoom="{{ block.settings.max_zoom_lightbox }}" zoom-options='{"type": "{{ block.settings.image_zoom_type }}","magnify": {{ block.settings.zoom_level }}}'{% if group_media_obj.size > 0 %} can-has-media-group{% endif %}>
+      {%- case desktop_media_layout -%}
+        {%- when 'no_media_size' -%}
+          {%- assign image = section.settings.image | default: settings.placeholder_img -%}
+          {%- if image != blank -%}
+            <div class="hdt-product-media__main hdt-ratio--{{ block.settings.image_ratio }}{% unless block.settings.image_size %} hdt-ratio--contain{% endunless %}">
+              <div class="hdt-ratio hdt-product__media" style="{% if block.settings.image_ratio == 'adapt_image' %}--aspect-ratioapt:{{ image.aspect_ratio }};{% endif %}--mw-media:{{ image.width }}px">
+          
+                {{ image | image_url: width: image.width | image_tag: widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946' }}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- when 'one_media_size' -%}
+          <div class="hdt-product-media__main hdt-ratio--{{ block.settings.image_ratio }}{% unless block.settings.image_size %} hdt-ratio--contain{% endunless %}">
+            {%- render 'media', media: product.media.first, lazy_load: false, product: product, autoplay: block.settings.enable_media_autoplay, loop: block.settings.enable_video_looping -%}
+          </div>
+
+        {%- when 'thumbnail_bottom' or 'thumbnail_left' or 'thumbnail_right' or 'without_thumbnails' -%}
+          <div class="hdt-product-media__main">
+            <hdt-slider id="slider-{{ block.id }}-{{ product.id }}" aria-controls="slider-thumb-{{ block.id }}-{{ product.id }}" autoheight class="hdt-slider hdt-medias-slider hdt-slider-parent hdt-relative hdt-ratio--{{ block.settings.image_ratio }}{% unless block.settings.image_size %} hdt-ratio--contain{% endunless %} {% if block.settings.navUI %} hdt-slider-has-nav hdt-nav-btns-{{ block.settings.nav_des }} hdt-nav-shape_{{ block.settings.nav_shape }} hdt-nav-{{ block.settings.nav_pos }} hdt-nav-{{ block.settings.nav_size }}{% endif %}" config='{ "autoHeight": true{{ start_index }}, "slidesToScroll": 1, "watchDrag": "onlyTypeImage", "navUI": true ,"slides": ".hdt-slider__slide:not([hidden])" }'>
+              <div class="hdt-slider__viewport">
+                <div class="hdt-slider__container">
+                    {%- liquid
+                      for media in product.media
+                        assign lazy_load = false
+                        if media.position > 1
+                          assign lazy_load = true
+                        endif
+                        render 'media', media: media, selected_variant: selected_variant, un_no_pick: un_no_pick, position: media.position, group_media_obj: group_media_obj, variant_images: variant_images, class: 'hdt-slider__slide', autoplay: block.settings.enable_media_autoplay, loop: block.settings.enable_video_looping, lazy_load: lazy_load, product: product
+                      endfor
+                    -%}
+                </div>
+              </div>
+              {%- if block.settings.navUI -%}
+                <button aria-controls="slider-{{ block.id }}-{{ product.id }}" class="hdt-slider__button hdt-slider-nav hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--prev" type="button" disabled name="previous">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M5.5 11L0 5.5L5.5 0L6.47625 0.97625L1.9525 5.5L6.47625 10.0238L5.5 11Z" fill="currentColor"/></svg>
+                </button>
+                <button aria-controls="slider-{{ block.id }}-{{ product.id }}" class="hdt-slider__button hdt-slider-nav hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--next" type="button" disabled name="next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1.5 11L7 5.5L1.5 0L0.52375 0.97625L5.0475 5.5L0.52375 10.0238L1.5 11Z" fill="currentColor"/></svg>
+                </button>
+              {%- endif -%}
+            </hdt-slider>
+          </div>
+          <div class="hdt-product-media__thumb hdt-text-center">
+            <hdt-slider-thumb {% if block.settings.enable_thumb_efect %} stagger {% endif %} id="slider-thumb-{{ block.id }}-{{ product.id }}" aria-controls="slider-{{ block.id }}-{{ product.id }}" autoheight class="hdt-slider hdt-ratio--{{ block.settings.image_ratio }}{% unless block.settings.image_size %} hdt-ratio--contain{% endunless %} hdt-slides-5 hdt-slide-spacing-10{% if mobile_media_layout != 'thumbnails' %} hdt-hidden lg:hdt-block{% endif %}" config='{ "active": {% if mobile_media_layout != 'thumbnails' %}false{% else %}true{% endif %}{{ start_index }}, "autoHeight": false, "classNames": false, "dragFree": false, "slidesToScroll": 1, "align": "center", "axis": "x", "slides": ".hdt-slider__slide:not([hidden])"{% if desktop_media_layout == 'thumbnail_left' or desktop_media_layout == 'thumbnail_right' %}, "breakpoints": { "(min-width: 1150px)": { "active": true, "axis": "y", "watchSlides": false } }{% endif %} }'>
+              <div class="hdt-slider__viewport">
+                <div class="hdt-slider__container">
+                    {%- liquid
+                      for media in product.media
+                        render 'media-thumb', media: media, selected_variant: selected_variant, un_no_pick: un_no_pick, group_media_obj: group_media_obj, variant_images: variant_images, class: 'hdt-slider__slide', autoplay: block.settings.enable_media_autoplay, loop: block.settings.enable_video_looping, lazy_load: lazy_load
+                      endfor
+                    -%}
+                </div>
+              </div>
+            </hdt-slider-thumb>
+            {%- if mobile_media_layout != 'thumbnails' -%}
+              <hdt-slider-counter class="hdt-slider-counter hdt-slider-fraction hdt-inline-flex hdt-align-center lg:hdt-hidden" slider="slider-{{ block.id }}-{{ product.id }}">
+                <button disabled name="previous" aria-controls="slider-{{ block.id }}-{{ product.id }}" class="no-js-hidden">
+                  <svg aria-hidden="true" focusable="false" viewBox="0 0 10 6"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor"></path></svg>
+                </button>
+                <span>
+                  <span update-current class="hdt-slider-counter--current">1</span>
+                  <span aria-hidden="true"> / </span>
+                  <span class="sr-only">{{ 'general.slider.of' | t }}</span>
+                  <span update-total class="hdt-slider-counter--total">{{ product.media.size }}</span>
+                </span>
+                <button disabled name="next" aria-controls="slider-{{ block.id }}-{{ product.id }}" class="no-js-hidden">
+                  <svg aria-hidden="true" focusable="false" viewBox="0 0 10 6"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor"></path></svg>
+                </button>
+              </hdt-slider-counter>
+            {%- endif -%}
+          </div>
+
+        {%- else -%}
+          <div class="hdt-product-media__main">
+            <hdt-slider id="slider-{{ block.id }}-{{ product.id }}" aria-controls="slider-thumb-{{ block.id }}-{{ product.id }}" autoheight class="hdt-slider hdt-ratio--{{ block.settings.image_ratio }}{% unless block.settings.image_size %} hdt-ratio--contain{% endunless %}" config='{ "active": true{{ start_index }}, "autoHeight": true, "slidesToScroll": 1, "watchDrag": "onlyTypeImage", "slides": ".hdt-slider__slide:not([hidden])","navUI": true{{ start_index }}, "breakpoints": { "(min-width: 1150px)": { "active": false } } }'>
+              <div class="hdt-slider__viewport">
+                <div class="hdt-slider__container">
+                    {%- liquid
+                    for media in product.media
+                      assign lazy_load = false
+                      if media.position > 1
+                        assign lazy_load = true
+                      endif
+                      render 'media', media: media, selected_variant: selected_variant, un_no_pick: un_no_pick, position: media.position, group_media_obj: group_media_obj, variant_images: variant_images, class: 'hdt-slider__slide', autoplay: block.settings.enable_media_autoplay, loop: block.settings.enable_video_looping, lazy_load: lazy_load, product: product
+                    endfor
+                    -%}
+                </div>
+              </div>
+            </hdt-slider>
+          </div>
+          <div class="hdt-product-media__thumb hdt-text-center lg:hdt-hidden">
+            {%- if mobile_media_layout == 'thumbnails' -%}
+              <hdt-slider-thumb {% if block.settings.enable_thumb_efect %} stagger {% endif %} id="slider-thumb-{{ block.id }}-{{ product.id }}" aria-controls="slider-{{ block.id }}-{{ product.id }}" autoheight class="hdt-slider hdt-ratio--{{ block.settings.image_ratio }}{% unless block.settings.image_size %} hdt-ratio--contain{% endunless %} hdt-slides-5 hdt-slide-spacing-10" config='{ "active": true{{ start_index }}, "autoHeight": false, "classNames": false, "containScroll": "trimSnaps", "dragFree": false, "slidesToScroll": 1, "align": "center", "axis": "x", "slides": ".hdt-slider__slide:not([hidden])", "breakpoints": { "(min-width: 1150px)": { "active": false } } }'>
+                <div class="hdt-slider__viewport">
+                  <div class="hdt-slider__container">
+                      {%- liquid
+                        for media in product.media
+                          render 'media-thumb', media: media, selected_variant: selected_variant, un_no_pick: un_no_pick, group_media_obj: group_media_obj, variant_images: variant_images, class: 'hdt-slider__slide', autoplay: block.settings.enable_media_autoplay, loop: block.settings.enable_video_looping, lazy_load: lazy_load
+                        endfor
+                      -%}
+                  </div>
+                </div>
+              </hdt-slider-thumb>
+            {%- else -%}
+            <hdt-slider-counter class="hdt-slider-counter hdt-slider-fraction hdt-inline-flex hdt-align-center" slider="slider-{{ block.id }}-{{ product.id }}">
+              <button disabled name="previous" aria-controls="slider-{{ block.id }}-{{ product.id }}" class="no-js-hidden">
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 10 6"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor"></path></svg>
+              </button>
+              <span>
+                <span update-current class="hdt-slider-counter--current">1</span>
+                <span aria-hidden="true"> / </span>
+                <span class="sr-only">{{ 'general.slider.of' | t }}</span>
+                <span update-total class="hdt-slider-counter--total">{{ product.media.size }}</span>
+              </span>
+              <button disabled name="next" aria-controls="slider-{{ block.id }}-{{ product.id }}" class="no-js-hidden">
+                <svg aria-hidden="true" focusable="false" viewBox="0 0 10 6"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor"></path></svg>
+              </button>
+            </hdt-slider-counter>
+            {%- endif -%}
+          </div>
+
+      {%- endcase -%}
+    </hdt-product-media>
+    {%- if first_3d_model -%}<script type="application/json" id="ModelJson-{{ section.id }}">{{ models | json }}</script>{% endif -%}
+  {%- else -%}
+    <div class="hdt-product-media-placeholder-wrap">
+      <div class="hdt-product-media-placeholder hdt-relative">
+        {{ 'product-apparel-2' | placeholder_svg_tag: 'hdt-product-media-placeholder-svg' }}
+        <style>.hdt-product-media-placeholder-wrap{flex:1}.hdt-product-media-placeholder{width: 100%;aspect-ratio: 1 / 1;overflow: hidden;}.hdt-product-media-placeholder-svg{position: absolute;width: 100%;height: 100%;}</style>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.medias.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "display_by_block",
+      "label": "Display color by blocks",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "visible_if": "{{ block.settings.display_by_block }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-product.settings.header.content",
+      "info": "t:sections.main-product.settings.header.info"
+    },
+    {
+      "type": "select",
+      "id": "desktop_media_layout",
+      "options": [
+        {
+          "value": "stacked",
+          "label": "t:sections.main-product.settings.desktop_media_layout.options__1.label"
+        },
+        {
+          "value": "column",
+          "label": "t:sections.main-product.settings.desktop_media_layout.options__2.label"
+        },
+        {
+          "value": "2_columns",
+          "label": "t:sections.main-product.settings.desktop_media_layout.options__3.label"
+        },
+        {
+          "value": "thumbnail_bottom",
+          "label": "t:sections.main-product.settings.desktop_media_layout.options__4.label"
+        },
+        {
+          "value": "thumbnail_left",
+          "label": "t:sections.main-product.settings.desktop_media_layout.options__5.label"
+        },
+        {
+          "value": "thumbnail_right",
+          "label": "t:sections.main-product.settings.desktop_media_layout.options__6.label"
+        },
+        {
+          "value": "without_thumbnails",
+          "label": "t:sections.main-product.settings.desktop_media_layout.options__7.label"
+        }
+      ],
+      "default": "thumbnail_left",
+      "label": "t:sections.main-product.settings.desktop_media_layout.label"
+    },
+    {
+      "type": "select",
+      "id": "media_size",
+      "label": "t:sections.main-product.settings.media_size.label",
+      "default": "medium",
+      "options": [
+        {
+          "value": "small",
+          "label": "t:sections.main-product.settings.media_size.options__1.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.main-product.settings.media_size.options__2.label"
+        },
+        {
+          "value": "large",
+          "label": "t:sections.main-product.settings.media_size.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_media_layout",
+      "options": [
+        {
+          "value": "fraction",
+          "label": "t:sections.main-product.settings.mobile_media_layout.options__1.label"
+        },
+        {
+          "value": "thumbnails",
+          "label": "t:sections.main-product.settings.mobile_media_layout.options__2.label"
+        }
+      ],
+      "default": "thumbnails",
+      "label": "t:sections.main-product.settings.mobile_media_layout.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_thumb_efect",
+      "default": true,
+      "label": "t:sections.main-product.settings.enable_thumb_efect.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_first_media",
+      "default": false,
+      "label": "t:sections.main-product.settings.show_first_media.label",
+      "info": "t:sections.main-product.settings.show_first_media.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_select_varaint_change_media",
+      "default": true,
+      "label": "t:sections.main-product.settings.use_select_varaint_change_media.label",
+      "info": "t:sections.main-product.settings.use_select_varaint_change_media.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_media_autoplay",
+      "default": false,
+      "label": "t:sections.main-product.settings.enable_media_autoplay.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "default": false,
+      "label": "t:sections.main-product.settings.enable_video_looping.label"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt_image",
+          "label": "t:sections.all.images.ratio.adapt_image.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.all.images.ratio.square.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.all.images.ratio.portrait.label"
+        },
+        {
+          "value": "asos",
+          "label": "t:sections.all.images.ratio.asos.label"
+        },
+        {
+          "value": "landscape",
+          "label": "t:sections.all.images.ratio.landscape.label"
+        },
+        {
+          "value": "custom-pr",
+          "label": "t:sections.all.images.ratio.custom.label"
+        }
+      ],
+      "label": "t:sections.all.images.ratio.label",
+      "default": "adapt_image"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_size",
+      "label": "t:sections.all.images.size.cover",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-product.settings.header_zoom.content",
+      "info": "t:sections.main-product.settings.header_zoom.info"
+    },
+    {
+      "type": "select",
+      "id": "image_zoom",
+      "options": [
+        {
+          "value": "zoom",
+          "label": "t:sections.main-product.settings.image_zoom.options__1.label"
+        },
+        {
+          "value": "lightbox",
+          "label": "t:sections.main-product.settings.image_zoom.options__2.label"
+        },
+        {
+          "value": "no",
+          "label": "t:sections.main-product.settings.image_zoom.options__3.label"
+        },
+        {
+          "value": "zoom_lightbox",
+          "label": "t:sections.main-product.settings.image_zoom.options__4.label"
+        }
+      ],
+      "default": "zoom",
+      "label": "t:sections.main-product.settings.image_zoom.label",
+      "info": "t:sections.main-product.settings.image_zoom.info"
+    },
+    {
+      "type": "select",
+      "id": "image_zoom_type",
+      "options": [
+        {
+          "value": "inner",
+          "label": "t:sections.main-product.settings.image_zoom_type.options__1.label"
+        },
+        {
+          "value": "inner2",
+          "label": "t:sections.main-product.settings.image_zoom_type.options__2.label"
+        },
+        {
+          "value": "external",
+          "label": "t:sections.main-product.settings.image_zoom_type.options__3.label"
+        }
+      ],
+      "default": "external",
+      "label": "t:sections.main-product.settings.image_zoom_type.label"
+    },
+    {
+      "type": "range",
+      "id": "zoom_level",
+      "min": 1.5,
+      "max": 4,
+      "step": 0.5,
+      "unit": "x",
+      "label": "t:sections.main-product.settings.zoom_level.label",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "max_zoom_lightbox",
+      "min": 1,
+      "max": 4,
+      "step": 0.5,
+      "unit": "x",
+      "label": "t:sections.main-product.settings.max_zoom_lightbox.label",
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.slider.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "navUI",
+      "label": "t:sections.all.slider.navUI",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "nav_des",
+      "label": "t:sections.all.slider.nav_des.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.all.slider.nav_des.options.default"
+        },
+        {
+          "value": "outline",
+          "label": "t:sections.all.slider.nav_des.options.outline"
+        },
+        {
+          "value": "simple",
+          "label": "t:sections.all.slider.nav_des.options.simple"
+        }
+      ],
+      "default": "default",
+      "visible_if": "{{ block.settings.navUI }}"
+    },
+    {
+      "type": "select",
+      "id": "nav_shape",
+      "label": "t:sections.all.slider.nav_shape.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.all.slider.nav_shape.options.default"
+        },
+        {
+          "value": "rounded",
+          "label": "t:sections.all.slider.nav_shape.options.rounded"
+        },
+        {
+          "value": "rotate",
+          "label": "t:sections.all.slider.nav_shape.options.rotate"
+        }
+      ],
+      "default": "default",
+      "visible_if": "{{ block.settings.navUI }}"
+    },
+    /*{
+      "type": "range",
+      "id": "width_lg",
+      "label": "Width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "width_md",
+      "label": "Tablet width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Mobile width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100
+    }*/
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.medias.name"
+    }
+  ]
+}
+{% endschema %}

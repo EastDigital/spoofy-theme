@@ -1,0 +1,73 @@
+<div class="hdt-product-info__item hdt-product__liveview" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+  <div class="hdt-product__liveview-wrap hdt-font-semibold hdt-inline-flex hdt-align-center">
+    {%- capture count_html -%}
+      {%- assign count = 'now' | date: '%S' | at_most: block.settings.min | at_least: block.settings.max -%}
+      <number-random class="hdt-product__liveview-count hdt-inline-flex hdt-align-center hdt-justify-center hdt-font-medium" config='{ "min":{{ block.settings.min }}, "max":{{ block.settings.max }}, "interval":{{ block.settings.time }}000 }'>{{ count }}</number-random>
+    {%- endcapture -%}
+    {%- liquid
+      assign class = block.settings.ani | append: ' is--infinite '
+      if block.settings.svg_upload != blank
+      echo '<div class="' | append: class | append:'">'
+          echo block.settings.svg_upload 
+        echo '</div>'
+      elsif block.settings.image_upload != blank
+        echo block.settings.image_upload | image_url: width: 25 | image_tag: widths: '25, 50, 100, 200, 300, 400, 500', class: class
+      else
+        render 'icons', icon: block.settings.icon, class: class
+      endif
+    -%}
+    {%- if block.settings.content != blank -%}
+      <div class="hdt-product__liveview-content hdt-s-text">
+        {{ block.settings.content | replace: "[count]", count_html }}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.live_view.name",
+  "tag": null,
+  "settings": [
+
+    {
+      "type": "range",
+      "id": "min",
+      "min": 2,
+      "max": 60,
+      "step": 1,
+      "default": 10,
+      "label": "t:sections.main-product.blocks.live_view.settings.min.label"
+    },
+    {
+      "type": "range",
+      "id": "max",
+      "min": 2,
+      "max": 60,
+      "step": 1,
+      "default": 40,
+      "label": "t:sections.main-product.blocks.live_view.settings.max.label"
+    },
+    {
+      "type": "range",
+      "id": "time",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "unit": "sec",
+      "label": "t:sections.main-product.blocks.live_view.settings.time.label",
+      "default": 7
+    },
+    {
+      "type": "textarea",
+      "id": "content",
+      "label": "t:sections.main-product.blocks.live_view.settings.content.label",
+      "default": "[count] People are viewing this right now"
+    }
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.live_view.name" 
+    }
+  ]
+}
+{% endschema %}

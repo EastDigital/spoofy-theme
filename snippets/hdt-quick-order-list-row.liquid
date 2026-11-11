@@ -1,0 +1,102 @@
+{% comment %}
+  Variant List Row
+
+  Accepts:
+  - variant: {Object} Variant or Product object
+  - image: {Object} Product or Variant image (optional)
+  Usage:
+  {% render 'hdt-quick-order-list-row' variant: variant %}
+{% endcomment %}
+{%- liquid
+  assign quantity_rule = variant.quantity_rule
+  # theme-check-disable
+  assign cart_qty = cart | item_count_for_variant: variant.id
+  if settings.currency_code_enabled
+  
+    assign data_variant_price = cart | line_items_for: variant | sum: 'original_line_price' 
+    assign variant_price = cart | line_items_for: variant | sum: 'original_line_price' | money_with_currency
+  else
+    assign data_variant_price = cart | line_items_for: variant | sum: 'original_line_price'
+    assign variant_price = cart | line_items_for: variant | sum: 'original_line_price' | money
+  endif
+
+  assign current_inventory_quantity = variant.inventory_quantity
+  if variant.inventory_management != null and current_inventory_quantity > 0 and variant.inventory_policy != 'continue'
+    assign max_qty = current_inventory_quantity
+  else
+    assign max_qty = 9999
+  endif
+  if variant.quantity_rule.max and max_qty > variant.quantity_rule.max
+    assign max_qty = variant.quantity_rule.max
+  endif
+  # theme-check-enable
+-%}
+<tr class="hdt-variant-item" id="Variant-{{ variant.id }}" data-variant-id="{{ variant.id }}" data-cart-qty="{{ cart_qty }}">
+  <td class="hdt-variant-item__inner hdt-text-start">
+    <div class="hdt-variant_inner">
+      <div class="hdt-variant-item__media hdt-flex hdt-justify-start hdt-align-center">
+        {%- if show_image -%}
+          <div class="hdt-variant-item__image-container">
+            <div class="hdt-ratio hdt-radius-xs hdt-oh"{% if image_ratio == 'adapt_image' %} style="--aspect-ratioapt: {{ image.aspect_ratio }}"{% endif %}>
+              {% if image %}
+                {{ image | image_url: width: image.width | image_tag: loading: 'lazy', fetchpriority: 'low', decoding: 'async', class: 'hdt-variant-item__image', width: image.width, widths: '80,120,160,240', sizes: '(min-width: 1150px) 120px,80px', alt: variant.title | escape }}
+              {% endif %}
+            </div>
+          </div>
+        {%- endif -%}
+        <span class="hdt-variant-title hdt-s-text hdt-text-base hdt-font-normal">{{ variant.title }}</span>
+      </div>
+    </div>
+  </td>
+  <td class="hdt-variant-item__quantity hdt-text-start">
+    <div class="hdt-variant_inner">
+      <div id="Quantity-Form-{{ variant.id }}" class="hdt-product-info__item hdt-product-form__quantity"{% comment %}{% unless selected_variant.available %} hidden{% endunless %}{% endcomment %} data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+       <label class="hdt-quantity__label hdt-s-text hdt-font-semibold" for="Variant-{{ variant.id }}">{{ 'products.product.quantity.label' | t }} <span class="hdt-quantity__rules-cart no-js-hidden"{% if cart_qty == 0 %} hidden{% endif %}>({{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}})</span></label>
+        <hdt-quantity-wrapp class="hdt-quantity-wrapp hdt-product__form-qty hdt-s-text hdt-text-center hdt-relative hdt-inline-block">
+          <button class="hdt-quantity__button no-js-hidden disabled is--minus hdt-absolute hdt-p-0 hdt-top-0 hdt-left-0 hdt-text-start" name="minus" type="button">
+            <span class="sr-only">{{ 'products.product.quantity.decrease' | t: produc: product.title }}</span>
+            {%- render 'icon' with 'minus' -%}
+          </button>
+          <input form="Variant-form-{{ variant.id }}" class="hdt-quantity__input hdt-text-center hdt-text-sm hdt-font-medium" type="number" name="updates[{{ variant.id }}]" id="Quantity-{{ variant.id }}" data-quantity-variant-id="{{ variant.id }}" data-cart-quantity="{{ cart_qty }}" min="{{ quantity_rule.min }}" max="{{ max_qty }}" step="{{ quantity_rule.increment }}" value="{{ cart_qty | default: 0 }}" data-index="{{ variant.id }}">
+          <button class="hdt-quantity__button no-js-hidden is--plus hdt-absolute hdt-p-0 hdt-top-0 hdt-right-0 hdt-text-end" name="plus" type="button">
+            <span class="sr-only">{{ 'products.product.quantity.increase' | t: produc: product.title }}</span>
+            {%- render 'icon' with 'plus' -%}
+          </button>
+        </hdt-quantity-wrapp>
+        <div class="hdt-quantity__rules no-js-hidden" id="Quantity-Rules-{{ variant.id }}">
+            {%- if quantity_rule.increment > 1 -%}
+              <span class="hdt-divider">{{- 'products.product.quantity.multiples_of' | t: quantity: quantity_rule.increment -}}</span>
+            {%- endif -%}
+            {%- if quantity_rule.min > 1 -%}
+              <span class="hdt-divider">{{- 'products.product.quantity.minimum_of' | t: quantity: quantity_rule.min -}}</span>
+            {%- endif -%}
+            {%- if quantity_rule.max != null -%}
+              <span class="hdt-divider">{{- 'products.product.quantity.maximum_of' | t: quantity: quantity_rule.max -}}</span>
+            {%- endif -%}
+            <span class="hdt-other-error"></span>
+        </div>
+      </div>
+      <hdt-quick-order-list-remove-button {% if cart_qty == 0 -%}hidden{%- endif %} id="Remove-{{ variant.id }}" data-index="{{ variant.id }}"  href="{{ product.url_to_remove }}" class="hdt-btn hdt-btn-link hdt-font-normal hdt-text-base hdt-relative hdt-oh hdt-btn-loading__svg" aria-label="{{ 'sections.cart.remove_title' | t: title: product.title }}">
+          <span class="hdt-qol-text">
+            {{ 'sections.cart.remove' | t }}
+          </span>
+          <span class="hdt-loading__spinner hdt-absolute" hidden>
+            <svg width="16" height="16" class="hdt-svg-spinner" focusable="false" role="presentation" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="hdt-path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
+          </span>
+      </hdt-quick-order-list-remove-button>
+    </div>
+  </td>
+  <td class="hdt-variant-item__price" qol-data-title="Price">
+    <div class="hdt-variant_inner">
+      {% render 'card-price', section_id: section_id, product: variant, show_volume_note: true, price_class: "hdt-text-base hdt-font-semibold" %}
+    </div>
+  </td>
+  <td class="hdt-variant-item__totals hdt-text-end" qol-data-title="Total">
+    <span class="hdt-btn-loading__svg" price_loading>
+      <span class="hdt-loading__spinner hdt-absolute" hidden>
+        <svg width="16" height="16" class="hdt-svg-spinner" focusable="false" role="presentation" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="hdt-path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
+      </span>
+      <span class="hdt-price hdt-money hdt-qol-text hdt-text-base hdt-font-semibold hdt-s-text" variant_update_price data-variant-price="{{ data_variant_price }}">{{ variant_price }}</span>
+    </span>
+  </td>
+</tr>

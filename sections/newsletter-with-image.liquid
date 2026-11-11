@@ -1,0 +1,260 @@
+<!-- section/newsletter-with-image.liquid -->
+{{ 'newsletter.css' | asset_url | stylesheet_tag }}
+{%- style -%}#shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}} #{{section.id}} .hdt-newsletter-parent{width:100%}.hdt-content-newsl-img{background-color:rgb(var(--color-background2))}.hdt-col-newsl_img .hdt-top-heading{gap:var(--spacing-2)}.hdt-content-newsl-img{padding:var(--spacing-3)}.hdt-col-newsl_img{gap:0}.hdt-content-newsl-img .hdt-newsletter-wrap{margin-top:var(--spacing-1-6)}.hdt-content-newsl-img .hdt-section-des{margin-top:var(--spacing-1)}@media (min-width:768px){.hdt-content-newsl-img{padding:var(--spacing-4)}.hdt-content-newsl-img .hdt-newsletter-wrap{margin-top:var(--spacing-3)}.hdt-content-newsl-img .hdt-section-des{margin-top:var(--spacing-1-6)}}@media (min-width:1150px){.hdt-content-newsl-img{padding:0 13.2rem 0 12.2rem}.hdt-content-newsl-img .hdt-newsletter-wrap{margin-top:var(--spacing-3)}.hdt-content-newsl-img .hdt-section-des{margin-top:var(--spacing-2-6)}}{%- endstyle -%}
+<div
+  id="{{ section.id }}"
+  class="hdt-s-inner hdt-section-spacing hdt-oh hdt-relative hdt-s-gradient"
+  color-scheme="{{ section.settings.color_scheme }}"
+>
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full {%- endif -%}">
+    <div class="hdt-row-grid lg:hdt-grid-cols-2 md:hdt-grid-cols-2 hdt-grid-cols-1 hdt-col-newsl_img hdt-radius hdt-oh">
+      <div
+        class="hdt-content-newsl-img hdt-flex hdt-flex-col hdt-justify-center hdt-text-{{ section.settings.content_align }}"
+        timeline
+        hdt-reveal="fade-in"
+      >
+        {% content_for 'blocks' %}
+      </div>
+      <div
+        class="hdt-media hdt-flex hdt-ratio--{{ section.settings.image_ratio }} hdt-object-{{ section.settings.image_size }} hdt-order-{{ section.settings.img_position }}"
+        timeline
+        hdt-reveal="fade-in"
+      >
+        {%- if section.settings.image_bg1 != blank -%}
+          {%- capture sizes -%}
+            (min-width: 768px) calc({{ settings.page_width }} / 2), calc(100vw - 30px)
+          {%- endcapture -%}
+          <div
+            class="hdt-image-wrap hdt-ratio hdt-oh"
+            style="--aspect-ratioapt:{{ section.settings.image_bg1.aspect_ratio }}"
+          >
+            {{
+              section.settings.image_bg1
+              | image_url: width: section.settings.image_bg1.width
+              | image_tag:
+                loading: 'lazy',
+                class: 'hdt-object-cover ',
+                width: section.settings.image_bg1.width,
+                height: section.settings.image_bg1.height,
+                sizes: sizes,
+                widths: '375,550,720,1100,1500,1780,1920'
+            }}
+          </div>
+        {%- else -%}
+          <div
+            class="hdt-image-wrap hdt-ratio hdt-oh"
+            style="--aspect-ratioapt:{{ section.settings.image_bg1.aspect_ratio | default: 1.2 }}"
+          >
+            {{ 'detailed-apparel-1' | placeholder_svg_tag: 'hdt-placeholder-svg hdt-svg-bg' }}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter with image",
+  "class": "hdt-section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": ["*"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.newsletter.settings.header_general"
+    },
+    {
+      "type": "select",
+      "id": "img_position",
+      "label": "t:sections.newsletter.settings.img_position.label",
+      "default": "last",
+      "options": [
+        {
+          "value": "first",
+          "label": "t:sections.newsletter.settings.img_position.option_1"
+        },
+        {
+          "value": "last",
+          "label": "t:sections.newsletter.settings.img_position.option_2"
+        }
+      ]
+    },
+    {
+      "type": "text_alignment",
+      "id": "content_align",
+      "label": "t:settings_schema.global.settings.text_alignment.label",
+      "default": "left"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_bg1",
+      "label": "t:sections.newsletter.settings.image_bg"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt_image",
+          "label": "t:sections.all.images.ratio.adapt_image.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.all.images.ratio.square.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.all.images.ratio.portrait.label"
+        },
+        {
+          "value": "asos",
+          "label": "t:sections.all.images.ratio.asos.label"
+        },
+        {
+          "value": "landscape",
+          "label": "t:sections.all.images.ratio.landscape.label"
+        }
+      ],
+      "label": "t:sections.all.images.ratio.label",
+      "default": "adapt_image"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section_layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.title.settings.padding_top.label",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.title.settings.padding_bottom.label",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [{ "type": "heading" }, { "type": "text" }, { "type": "_newsletter" }, { "type": "spacer" }],
+  "presets": [
+    {
+      "name": "Newsletter with image",
+      "category": "t:sections_categories.05_section.name",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "<p>Heading</p>",
+            "hidden_br_mobile": false,
+            "hidden_on_mobile": false,
+            "heading_size": "h2",
+            "text_color": "",
+            "font_size_heading_lg": 50,
+            "font_size_heading_md": 30,
+            "font_size_heading": 24,
+            "font_weight_heading": 600,
+            "letter_spacing_heading": 0
+          }
+        },
+        {
+          "type": "spacer",
+          "settings": {
+            "direction": false,
+            "space_lg": 10,
+            "space_md": 10,
+            "space": 10
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "hidden_br_mobile": false,
+            "hidden_on_mobile": false,
+            "text_size": "base",
+            "text_color": "",
+            "font_size_text_lg": 16,
+            "font_size_text_md": 14,
+            "font_size_text": 14,
+            "font_weight_text": 400,
+            "letter_spacing_text": 0
+          }
+        },
+        {
+          "type": "spacer",
+          "settings": {
+            "direction": false,
+            "space_lg": 10,
+            "space_md": 10,
+            "space": 10
+          }
+        },
+        {
+          "type": "_newsletter",
+          "settings": {
+            "des_newsletter": "1",
+            "button_lb": "Subscribe",
+            "show_icon": false,
+            "width": 100
+          }
+        },
+        {
+          "type": "spacer",
+          "settings": {
+            "direction": false,
+            "space_lg": 10,
+            "space_md": 10,
+            "space": 10
+          }
+        }
+      ],
+      "settings": {
+        "img_position": "last",
+        "content_align": "center",
+        "image_ratio": "adapt_image",
+        "section_fullwidth": false,
+        "color_scheme": "",
+        "padding_top": 4,
+        "padding_bottom": 30,
+        "padding_rate": 75
+      }
+    }
+  ]
+}
+{% endschema %}

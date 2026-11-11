@@ -1,0 +1,124 @@
+
+{%- comment -%}
+  Renders badges
+
+  Accepts:
+  - product: {Object} Product Liquid object (required)
+  - selected_variant: {Object} (required)
+  - product_form_id: {String} (required)
+  - block: {Object} (required)
+
+  Usage:
+  {%- render 'inventory', product: product, block: block, product_form_id: product_form_id, selected_variant: selected_variant -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign inventory_threshold = block.settings.inventory_threshold
+  assign show_inventory_quantity = block.settings.show_inventory_quantity
+  assign low_stock = false
+  assign low_stock_count = false
+  assign in_stock = false
+  assign in_stock_count = false
+  assign pre_order_stock = false
+  # assign not_ship_stock = false
+  # assign will_in_stock = false
+  assign inventory_out_of_stock = false
+  if selected_variant.available
+    if selected_variant.inventory_quantity > 0
+      if selected_variant.inventory_quantity <= inventory_threshold and selected_variant.requires_shipping
+        if show_inventory_quantity
+          assign low_stock_count = true
+        else
+          assign low_stock = true
+        endif
+      else
+        if show_inventory_quantity
+          assign in_stock_count = true
+        else
+          assign in_stock = true
+        endif
+      endif
+    else
+      # if selected_variant.next_incoming_date and selected_variant.requires_shipping
+        # assign not_ship_stock = true
+      # elsif selected_variant.inventory_management == 'shopify'
+      if selected_variant.inventory_management == 'shopify'
+        assign pre_order_stock = true
+      else
+        assign in_stock = true
+      endif
+    endif
+  # elsif selected_variant.incoming and selected_variant.next_incoming_date
+    # assign will_in_stock = true
+  else
+    assign inventory_out_of_stock = true
+  endif
+  # if selected_variant.next_incoming_date
+    # assign incoming_date = selected_variant.next_incoming_date | date: format: 'date'
+  # else
+    # assign incoming_date = 19041994
+  # endif
+  assign inventory_quantity = selected_variant.inventory_quantity | default: 0
+-%}
+
+<hdt-variant-inventory form="{{ product_form_id }}" role="status"{% if show_inventory_quantity %} show-inventory-quantity{% endif %} inventory-threshold="{{ inventory_threshold }}">
+  <span class="hdt-inline-flex hdt-align-center hdt-stock-status hdt-stock-error" low-stock{% unless low_stock %} hidden{% endunless %}>
+    <svg width="15" height="15" aria-hidden="true">
+      <circle cx="7.5" cy="7.5" r="7.5" fill="currentColor"/>
+      <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255, 255, 255)" stroke-width="1" fill="currentColor"/>
+    </svg>
+    <span class="hdt-s-text hdt-font-semibold">{{- 'products.product.inventory_low_stock' | t -}}</span>
+  </span>
+  <span class="hdt-inline-flex hdt-align-center hdt-stock-status hdt-stock-error" low-stock-count{% unless low_stock_count %} hidden{% endunless %}>
+    <svg width="15" height="15" aria-hidden="true">
+      <circle cx="7.5" cy="7.5" r="7.5" fill="currentColor"></circle>
+      <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255, 255, 255)" stroke-width="1" fill="currentColor"></circle>
+    </svg>
+    <span class="hdt-s-text hdt-font-semibold">{{- 'products.product.inventory_low_stock_show_count_html' | t: quantity: inventory_quantity -}}</span>
+  </span>
+  <span class="hdt-inline-flex hdt-align-center hdt-stock-status hdt-stock-success" in-stock{% unless in_stock %} hidden{% endunless %}>
+    <svg width="15" height="15" aria-hidden="true">
+      <circle cx="7.5" cy="7.5" r="7.5" fill="currentColor"></circle>
+      <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255, 255, 255)" stroke-width="1" fill="currentColor"></circle>
+    </svg>
+    <span class="hdt-s-text hdt-font-semibold">{{- 'products.product.inventory_in_stock' | t -}}</span>
+  </span>
+  <span class="hdt-inline-flex hdt-align-center hdt-stock-status hdt-stock-success" in-stock-count{% unless in_stock_count %} hidden{% endunless %}>
+    <svg width="15" height="15" aria-hidden="true">
+      <circle cx="7.5" cy="7.5" r="7.5" fill="currentColor"></circle>
+      <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255, 255, 255)" stroke-width="1" fill="currentColor"></circle>
+    </svg>
+    <span class="hdt-s-text hdt-font-semibold">{{- 'products.product.inventory_in_stock_show_count_html' | t: quantity: inventory_quantity -}}</span>
+  </span>
+  <span class="hdt-inline-flex hdt-align-center hdt-stock-status hdt-stock-warning" pre-order-stock{% unless pre_order_stock %} hidden{% endunless %}>
+    <svg width="15" height="15" aria-hidden="true">
+      <circle cx="7.5" cy="7.5" r="7.5" fill="currentColor"></circle>
+      <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255, 255, 255)" stroke-width="1" fill="currentColor"></circle>
+    </svg>
+    <span class="hdt-s-text hdt-font-semibold">{{- 'products.product.inventory_out_of_stock_continue_selling' | t -}}</span>
+  </span>
+  {%- comment -%}
+  <span class="hdt-inline-flex hdt-align-center hdt-stock-status hdt-stock-warning" not-ship-stock{% unless not_ship_stock %} hidden{% endunless %}>
+    <svg width="15" height="15" aria-hidden="true">
+      <circle cx="7.5" cy="7.5" r="7.5" fill="currentColor"></circle>
+      <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255, 255, 255)" stroke-width="1" fill="currentColor"></circle>
+    </svg>
+    <span class="hdt-s-text hdt-font-semibold">{{- 'products.product.will_not_ship_until_html' | t: date: incoming_date -}}</span>
+  </span>
+  <span class="hdt-inline-flex hdt-align-center hdt-stock-status hdt-stock-warning" will-in-stock{% unless will_in_stock %} hidden{% endunless %}>
+    <svg width="15" height="15" aria-hidden="true">
+      <circle cx="7.5" cy="7.5" r="7.5" fill="currentColor"></circle>
+      <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255, 255, 255)" stroke-width="1" fill="currentColor"></circle>
+    </svg>
+    <span class="hdt-s-text hdt-font-semibold">{{- 'products.product.will_be_in_stock_after_html' | t: date: incoming_date -}}</span>
+  </span>
+  {%- endcomment -%}
+  <span class="hdt-inline-flex hdt-align-center hdt-stock-status hdt-stock-error" out-of-stock{% unless inventory_out_of_stock %} hidden{% endunless %}>
+    <svg width="15" height="15" aria-hidden="true">
+      <circle cx="7.5" cy="7.5" r="7.5" fill="currentColor"></circle>
+      <circle cx="7.5" cy="7.5" r="5" stroke="rgb(255, 255, 255)" stroke-width="1" fill="currentColor"></circle>
+    </svg>
+    <span class="hdt-s-text hdt-font-semibold">{{- 'products.product.inventory_out_of_stock' | t -}}</span>
+  </span>
+  {%- if block.settings.show_progress_bar and product.available %}<hdt-progress-bar {% unless low_stock or in_stock or low_stock_count or in_stock_count %}hidden {% endunless %}class="hdt-progress-bar" reveal-in-view aria-valuenow="{% if inventory_quantity > 0 %}{{ inventory_quantity }}{% elsif selected_variant.available %}{{ block.settings.progress_bar_max }}{% endif %}" aria-valuemax="{{ block.settings.progress_bar_max }}" style="--progress-rate: 0;"></hdt-progress-bar>{% endif -%}
+</hdt-variant-inventory>

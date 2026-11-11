@@ -1,0 +1,76 @@
+
+{%- liquid
+  unless product_url
+    assign product_url = card_product.url
+  endunless
+  assign featured_media = card_product.featured_media | default: settings.placeholder_img
+  assign color_count = 0
+  assign size_count = 0
+  
+  if card_product.has_only_default_variant == false and settings.color_mode != 'hide' or settings.size_mode != 'hide'
+     assign available_variants = card_product.variants | where: "available"
+     for option in card_product.options_with_values
+        assign name_downcase = option.name | downcase
+        if settings.color_mode != 'hide' and color_list contains name_downcase and color_count == 0
+          assign color_option_index = 'option' | append: forloop.index
+          assign color_variants = option.values
+          assign color_variants_avai = available_variants | map: color_option_index | uniq
+          if settings.color_type == 'all'
+            assign color_count = color_variants.size
+          else
+            if card_product.options_with_values.size == 1
+              assign color_variants = color_variants_avai
+            endif
+            assign color_count = color_variants_avai.size
+          endif
+        elsif settings.size_mode != 'hide' and size_list contains name_downcase and size_count == 0
+          assign size_option_index = 'option' | append: forloop.index
+          assign size_variants_avai = available_variants | map: size_option_index | uniq
+          assign size_variants = option.values
+          if settings.size_type == 'all'
+            assign size_count = size_variants.size
+          else
+            if card_product.options_with_values.size == 1
+              assign size_variants = size_variants_avai
+            endif
+            assign size_count = size_variants_avai.size
+          endif
+        endif
+     endfor
+  endif
+  -%}
+  
+  <hdt-card-product class="hdt-card-product">
+    <div class="hdt-card-product__wrapper">
+      <div class="hdt-card-product__media hdt-relative hdt-oh{% if size_count > 0 %} hdt-has-size-list{% endif %}">
+        {%- if featured_media -%}
+          <a data-pr-url href="{{ product_url }}" data-instant calc-nav class="hdt-card-product__media-wrapp hdt-ratio"{% if image_ratio == 'adapt_image' %} style="--aspect-ratioapt: {{ featured_media.aspect_ratio }}"{% endif %}>
+            {%- liquid
+              echo featured_media | image_url: width: featured_media.width | image_tag: loading: 'lazy', sizes: sizes, widths: '165, 340, 500, 600, 680', data-widths: '[165, 340, 500, 600, 680]', class: 'hdt-card-product__media--main'
+              if card_product.media[1] != null and settings.show_secondary_image
+                assign next_media = card_product.media[featured_media.position] | default: card_product.media[1]
+                echo next_media | image_url: width: next_media.width | image_tag: loading: 'lazy', sizes: sizes, widths: '165, 340, 500, 600, 680', class: 'hdt-card-product__media--hover'
+              endif
+            -%}
+          </a>
+        {%- endif -%}
+        {%- render 'badges', product: card_product, use_variant: false -%}
+        <div class="hdt-group_btns2">
+          {%- if settings.show_quick_view %}{% render 'btn-quick-view', class: 'hdt-pr_btn', product: card_product, section_id: section_id, placement: 'top' %}{% endif -%}
+        </div>
+      </div>
+      <div class="hdt-card-product__info hdt-card-align-{{ settings.pr_card_alignment }}">
+        {%- if settings.show_rating %}{% render 'hdt-pr-card-rating', product: card_product %}{% endif -%}
+        <a data-pr-url href="{{ product_url }}" class="hdt-card-product__title hdt-text-lg hdt-font-normal hdt-line-clamp" data-instant>{{ card_product.title | escape }}</a>
+        {%- liquid
+          render 'card-price', section_id: section_id, product: card_product, show_volume_note: true, price_class: "hdt-text-base hdt-font-semibold"
+          if color_count > 0
+            render 'color-list', section_id: section_id, product: card_product, product_url: product_url, color_variants: color_variants, color_variants_avai: color_variants_avai, color_count: color_count, color_option_index: color_option_index, placement: 'top'
+          endif
+        -%}
+      </div>
+      <div class="hdt-group_btns">
+        {%- if settings.show_quick_view %}{% render 'btn-quick-view', class: 'hdt-pr_btn', product: card_product, section_id: section_id, placement: 'top' %}{% endif -%}
+      </div>
+    </div>
+  </hdt-card-product>

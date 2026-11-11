@@ -1,0 +1,35 @@
+{%- liquid
+  assign quantity_rule = selected_variant.quantity_rule
+  # theme-check-disable
+  assign cart_qty = cart | item_count_for_variant: selected_variant.id
+  # theme-check-enable
+  unless id
+    assign id = section.id
+  endunless
+-%}
+
+<div id="Quantity-Form-{{ id }}" class="hdt-product-info__item hdt-product-form__quantity"{% comment %}{% unless selected_variant.available %} hidden{% endunless %}{% endcomment %} data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+ <label class="hdt-quantity__label hdt-s-text hdt-font-semibold" for="Quantity-{{ id }}">{{ 'products.product.quantity.label' | t }} <span class="hdt-quantity__rules-cart no-js-hidden"{% if cart_qty == 0 %} hidden{% endif %}>({{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}})</span></label>
+  <hdt-quantity-wrapp variant-id="{{ selected_variant.id }}" handle="{{ product.handle }}" class="hdt-quantity-wrapp hdt-product__form-qty hdt-s-text hdt-text-center hdt-relative hdt-inline-block" section-id="{{ id }}">
+    <button class="hdt-quantity__button no-js-hidden disabled is--minus hdt-absolute hdt-p-0 hdt-top-0 hdt-left-0 hdt-text-start" name="minus" type="button">
+      <span class="sr-only">{{ 'products.product.quantity.decrease' | t: produc: product.title }}</span>
+      {%- render 'icon' with 'minus' -%}
+    </button>
+    <input form="{{ product_form_id }}" class="hdt-quantity__input hdt-text-center hdt-text-lg hdt-font-semibold" type="number" name="quantity" id="Quantity-{{ id }}" data-cart-quantity="{{ cart_qty }}" min="{{ quantity_rule.min | default: 1 }}"{% if quantity_rule.max != null %} max="{{ quantity_rule.max }}"{% endif %} step="{{ quantity_rule.increment }}" value="{{ quantity_rule.min | default: 1 }}">
+    <button class="hdt-quantity__button no-js-hidden is--plus hdt-absolute hdt-p-0 hdt-top-0 hdt-right-0 hdt-text-end" name="plus" type="button">
+      <span class="sr-only">{{ 'products.product.quantity.increase' | t: produc: product.title }}</span>
+      {%- render 'icon' with 'plus' -%}
+    </button>
+  </hdt-quantity-wrapp>
+  <div class="hdt-quantity__rules no-js-hidden" id="Quantity-Rules-{{ id }}">
+      {%- if quantity_rule.increment > 1 -%}
+        <span class="hdt-divider">{{- 'products.product.quantity.multiples_of' | t: quantity: quantity_rule.increment -}}</span>
+      {%- endif -%}
+      {%- if quantity_rule.min > 1 -%}
+        <span class="hdt-divider">{{- 'products.product.quantity.minimum_of' | t: quantity: quantity_rule.min -}}</span>
+      {%- endif -%}
+      {%- if quantity_rule.max != null -%}
+        <span class="hdt-divider">{{- 'products.product.quantity.maximum_of' | t: quantity: quantity_rule.max -}}</span>
+      {%- endif -%}
+  </div>
+</div>

@@ -1,0 +1,99 @@
+
+ <div color-scheme="{{ block.settings.color_scheme }}" class="hdt-group-product-block hdt-s-gradient hdt-relative" {{ block.shopify_attributes }}>
+   <div id="product-info-{{ section.id }}" class="hdt-product-info__list hdt-current-scrollbar">
+     {% content_for "blocks" %}
+   </div>
+ </div>
+ {% schema %}
+ {
+  "name": "Quick view content",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_product-title"
+    },
+    {
+      "type": "_product-badges"
+    },
+    {
+      "type": "_product-price"
+    },
+    {
+      "type": "_product-description"
+    },
+    {
+      "type": "_product-variant-picker"
+    },
+    {
+      "type": "_quantity-selector"
+    },
+    {
+      "type": "_product-buy-button"
+    },
+    {
+      "type": "_view-product-detail"
+    },
+    {
+      "type": "_product-countdown"
+    },
+    {
+      "type": "_product-item-property"
+    },
+    { 
+      "type": "_socials" 
+    },
+    {
+      "type": "_custom-liquid"
+    },
+    {
+      "type": "_product-meta"
+    },
+    {
+      "type": "_product-linked"
+    },
+    {
+      "type": "_product-brands" 
+    },
+    {
+      "type": "_product-inventory"
+    },
+    {
+      "type": "_product-order"
+    },
+    {
+      "type": "_product-pickup"
+    },
+    {
+      "type": "_product-sold"
+    },
+    {
+      "type": "_product-tax-ship"
+    },
+    {
+      "type": "_product-trust-badge"
+    },
+    {
+      "type": "_incoming-mess"
+    },
+
+    {
+      "type": "_delivery_return"
+    },
+  ],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+  ],
+  "presets": [
+    {
+      "name": "Quick view content"
+    }
+  ]
+ }
+ {% endschema %}
+ 
+ 

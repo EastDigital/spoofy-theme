@@ -1,0 +1,117 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "heading": {
+      "type": "main-heading",
+      "blocks": {
+        "5ecb9555-19e4-433b-8817-1ccaa3a41384": {
+          "type": "1",
+          "settings": {
+            "heading": "",
+            "hidden_on_mobile": false,
+            "heading_size": "h3",
+            "text_color": "hdt-s-text",
+            "font_size_heading_lg": 42,
+            "font_size_heading_md": 30,
+            "font_size_heading": 24,
+            "font_weight_heading": 400,
+            "letter_spacing_heading": 0
+          }
+        }
+      },
+      "block_order": [
+        "5ecb9555-19e4-433b-8817-1ccaa3a41384"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/z4683181570507_46fb10fa21da971ae2af71e75431028c.png",
+        "color_scheme": "",
+        "spacing_hd": 0,
+        "padding_top": 80,
+        "padding_bottom": 86,
+        "padding_rate": 75
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "section_fullwidth": false,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 52,
+        "padding_rate": 75
+      }
+    },
+    "babdfbbb-3e4a-4a85-aac2-1864f01bb209": {
+      "type": "store-locator",
+      "blocks": {
+        "template--21300436271408__babdfbbb-3e4a-4a85-aac2-1864f01bb209-store_item-1": {
+          "type": "store_item",
+          "settings": {
+            "title": "Ecomus Paris",
+            "address_content": "93 Rue du Chevalier de la Barre, 961821 Paris, France",
+            "phone_content": "(+33) 936 -1234",
+            "email_content": "Ecomus.paris@example.com",
+            "map": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d83998.77824554527!2d2.2646347368784494!3d48.85893843472727!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e5ccbdfcb83%3A0x7080acd10c465b03!2sThe%20Basilica%20of%20the%20Sacred%20Heart%20of%20Paris%2C%2035%20Rue%20du%20Chevalier%20de%20la%20Barre%2C%2075018%20Paris%2C%20Ph%C3%A1p!5e0!3m2!1svi!2s!4v1695714595683!5m2!1svi!2s\" width=\"950\" height=\"985\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+          }
+        },
+        "template--21300436271408__babdfbbb-3e4a-4a85-aac2-1864f01bb209-store_item-2": {
+          "type": "store_item",
+          "settings": {
+            "title": "Ecomus London",
+            "address_content": "Cromwell Rd, South Kensington, London SW1 6BD, UK",
+            "phone_content": "(+44) 20 4942 6789",
+            "email_content": "Ecomus.london@example.com",
+            "map": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d158857.83988696116!2d-0.2664041260712504!3d51.528739804962385!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48760542e6182f3f%3A0x7bb7e385c39764c4!2zQuG6o28gdMOgbmcgTOG7i2NoIHPhu60gVOG7sSBuaGnDqm4gTHXDom4gxJDDtG4!5e0!3m2!1svi!2s!4v1695713866594!5m2!1svi!2s\" width=\"950\" height=\"985\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+          }
+        },
+        "template--21300436271408__babdfbbb-3e4a-4a85-aac2-1864f01bb209-store_item-3": {
+          "type": "store_item",
+          "settings": {
+            "title": "Ecomus Marid",
+            "address_content": "C. de Ferraz, 1, 150596 Madrid, Spain",
+            "phone_content": "(+48) 321-2468",
+            "email_content": "Ecomus.marid@example.com",
+            "map": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d194347.47826971003!2d-3.8443443525750864!3d40.43809861044427!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd42286e8bea1259%3A0x1d6ad9c64a7706ab!2sTemple%20of%20Debod!5e0!3m2!1svi!2s!4v1695714821550!5m2!1svi!2s\" width=\"950\" height=\"985\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+          }
+        },
+        "7801afff-2599-439b-b08c-4df5f481c983": {
+          "type": "store_item",
+          "settings": {
+            "title": "Ecomus Tokyo",
+            "address_content": "152-0035 Tokyo, Meguro City, Jiyugaoka, Japan",
+            "phone_content": "(623) 934-2400",
+            "email_content": "Ecomus.tokyo@example.com",
+            "map": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d74921.46852220563!2d139.72145857820857!3d35.63525620239026!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x605d1b87f02e57e7%3A0x2e01618b22571b89!2zVMO0a3nDtCwgTmjhuq10IELhuqNu!5e0!3m2!1svi!2s!4v1695714925913!5m2!1svi!2s\" width=\"950\" height=\"985\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"
+          }
+        }
+      },
+      "block_order": [
+        "template--21300436271408__babdfbbb-3e4a-4a85-aac2-1864f01bb209-store_item-1",
+        "template--21300436271408__babdfbbb-3e4a-4a85-aac2-1864f01bb209-store_item-2",
+        "template--21300436271408__babdfbbb-3e4a-4a85-aac2-1864f01bb209-store_item-3",
+        "7801afff-2599-439b-b08c-4df5f481c983"
+      ],
+      "settings": {
+        "section_fullwidth": false,
+        "color_scheme": "scheme-1",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "padding_rate": 75
+      }
+    }
+  },
+  "order": [
+    "heading",
+    "main",
+    "babdfbbb-3e4a-4a85-aac2-1864f01bb209"
+  ]
+}

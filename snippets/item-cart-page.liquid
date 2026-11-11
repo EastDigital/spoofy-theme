@@ -1,0 +1,61 @@
+{%- comment -%}
+  Renders a item cart page
+
+  Accepts:
+  - item: {Object} (required)
+  - form_id: {String} (required)
+
+  Usage:
+  {%- render 'item-cart-page', item: item, form_id: form_id -%}
+{%- endcomment -%}
+{%- assign image  = item.image | default: settings.placeholder_img -%}
+<div class="hdt-line-item{% if item.variant.id == gift_wrap_pr_id %} is-gift-wrap{% endif %}">
+  <div class="hdt-page-cart__infos-wrap hdt-flex">
+    <div class="hdt-page-cart__image">
+      <a href="{{ item.url }}" class="hdt-page-cart__img hdt-block hdt-relative hdt-oh hdt-ratio" style="--aspect-ratioapt:{{ image.aspect_ratio | default: 0.6811989100817438 }}">
+        {%- if image != blank -%}
+          {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, sizes: '(max-width: 767px) 80px, 160px', widths: '80, 160' }}
+        {%- else -%}
+          <span class="hdt-page-cart__img-placeholder"></span>
+        {%- endif -%}
+      </a>
+    </div>
+    <div class="hdt-page-cart__info">
+      <a href="{{ item.url }}" class="hdt-page-cart__title hdt-s-text">{{ item.product.title }}</a>
+      {%- unless item.product.has_only_default_variant -%}<div class="hdt-page-cart__meta-variant hdt-text-sm hdt-font-normal hdt-s-text2 hdt-block">{{ item.variant.title | escape }}</div>{%- endunless -%}
+      {% comment %} {%- if item_pr.has_only_default_variant == false -%}
+        <div class="hdt-page-cart__edit">
+          <a href="{{ item.url }}" rel="nofollow" class="hdt-inline-block hdt-s-text" data-action-quickshop data-no-instant><svg viewBox="0 0 14 16" width="14" height="16"><use href="#icon-cart-edit"/></svg></a>
+        </div>
+      {%- endif -%} {% endcomment %}
+      {%- if item.properties.size != 0 -%}
+        <ul class="hdt-page-cart__meta-propertyList hdt-s-text2">
+          {%- for property in item.properties -%}
+            {%- assign property_first_char = property.first | slice: 0 -%}
+            {%- if property.last != blank and property_first_char != '_' -%}
+              <li class="hdt-product-option hdt-product-details__item hdt-product-details__item--property">
+                <span class="hdt-product-details__item-label"><strong>{{ property.first }}: </strong></span>
+                <span>
+                  {%- if property.last contains '/uploads/' -%}
+                    <a href="{{ property.last }}" target="_blank" aria-describedby="a11y-new-window-message">{{ property.last | split: '/' | last }}</a>
+                  {%- else -%}
+                    {{ property.last }}
+                  {%- endif -%}
+                </span>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- if item.line_level_discount_allocations.size != 0 -%}
+        <ul class="hdt-discounts hdt-cart_discounts hdt-font-normal" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+          {%- for discount in item.line_level_discount_allocations -%}
+            <li class="hdt-discounts__discount hdt-page-cart-discount_item">{% render 'icon' with 'discount' %} {{ discount.discount_application.title }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- if item.selling_plan_allocation != null %}<p class="hdt-product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>{% endif -%}
+      <wrapp-remove-item-oncart data-index="{{ item.index | plus: 1 }}" form="{{ form_id }}" href="{{ routes.cart_change_url }}?line={{ item.index | plus: 1 }}&quantity=0" class="hdt-page-cart__remove hdt-inline-block hdt-s-text"><span aria-label="{{ 'sections.cart.remove_title' | t: title: item.title | escape }}">{{ 'sections.cart.remove' | t }}</span></wrapp-remove-item-oncart>
+    </div>
+  </div>
+</div>

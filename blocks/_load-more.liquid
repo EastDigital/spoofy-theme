@@ -1,0 +1,156 @@
+{%- if section.settings.collection != blank and section.settings.product_list == blank -%}
+  {%- paginate section.settings.collection.products by section.settings.products_count -%}
+    {%- if paginate.next -%}
+    {%-
+      liquid
+      assign products_id = 'products-' | append: section.id
+    -%}
+    <div loadmore-btn-wrapp class="hdt-pagination-wrapper hdt-prs-footer hdt-pagination-load_more hdt-flex hdt-justify-{{ block.settings.paginate_pos }}" style="--pagination-distance:{{ block.settings.dis_pagination }}px;" hdt-reveal="slide-in" timeline>
+      <wrapp-hdt-lm-url class="hdt-contents">
+        <a section-id="{{ section.id }}" append="{{ products_id }}" href="{{ paginate.next.url }}" class="hdt-loamore-btn hdt-btn hdt-oh hdt-relative hdt-inline-flex hdt-align-center hdt-justify-center hdt-btn-{{ block.settings.btn_style }} hdt-btn--size-{{ block.settings.size }} hdt-font-{{ block.settings.btn_fw }}">
+          {% assign loadmore_df = 'general.pagination.load_more_products' | t %}
+          <span>{{ block.settings.btn_label | default: loadmore_df | escape }}</span>
+          {% comment %} {%- if block.settings.endable_btn_icon -%}
+            <svg class="t4s-btn-icon" viewBox="0 0 32 32" width="24"><path d="M 15 4 L 15 24.0625 L 8.21875 17.28125 L 6.78125 18.71875 L 15.28125 27.21875 L 16 27.90625 L 16.71875 27.21875 L 25.21875 18.71875 L 23.78125 17.28125 L 17 24.0625 L 17 4 Z"/></svg>
+          {%- endif -%} {% endcomment %}
+        </a>
+      </wrapp-hdt-lm-url>
+    </div>
+    {%- endif -%}
+  {%- endpaginate -%}
+{%- endif -%}
+{% schema %}
+  {
+    "name": "Load more",
+    "tag": null,
+    "settings": [
+      {
+        "type": "select",
+        "id": "paginate_pos",
+        "label": "t:sections.all.pagination.paginate_pos.label",
+        "default": "center",
+        "options": [
+          {
+            "value": "start",
+            "label": "t:sections.all.pagination.paginate_pos.option_1.label"
+          },
+          {
+            "value": "center",
+            "label": "t:sections.all.pagination.paginate_pos.option_2.label"
+          },
+          {
+            "value": "end",
+            "label": "t:sections.all.pagination.paginate_pos.option_3.label"
+          }
+        ]
+      },
+      {
+        "type": "range",
+        "id": "dis_pagination",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.pagination.dis_pagination.label",
+        "default": 30
+      },
+      {
+        "type": "text",
+        "id": "btn_label",
+        "label": "t:sections.collection_products.settings.btn_label.label",
+        "info": "t:sections.collection_products.settings.btn_label.info"
+      },
+      {
+        "type": "select",
+        "id": "btn_style",
+        "label": "t:sections.all.button.settings.style.label",
+        "options": [
+          {
+            "value": "solid",
+            "label": "t:sections.all.button.settings.style.options.option_1"
+          },
+          {
+            "value": "outline",
+            "label": "t:sections.all.button.settings.style.options.option_2"
+          },
+          {
+            "value": "link",
+            "label": "t:sections.all.button.settings.style.options.option_4"
+          }
+        ],
+        "default": "solid"
+      },
+      /*{
+        "type": "checkbox",
+        "id": "endable_btn_icon",
+        "label": "t:sections.all.button.settings.icon.label",
+        "default": false
+      },*/
+      {
+        "type": "select",
+        "id": "size",
+        "label": "t:settings_schema.typography.settings.font_size.label",
+        "options": [
+          {
+            "value": "xs",
+            "label": "t:settings_schema.typography.settings.font_size.xs"
+          },
+          {
+            "value": "s",
+            "label": "t:settings_schema.typography.settings.font_size.sm"
+          },
+          {
+            "value": "m",
+            "label": "t:settings_schema.typography.settings.font_size.base"
+          },
+          {
+            "value": "l",
+            "label": "t:settings_schema.typography.settings.font_size.lg"
+          },
+          {
+            "value": "xl",
+            "label": "t:settings_schema.typography.settings.font_size.xl"
+          },
+          {
+            "value": "custom hdt-btn--size-custom-1",
+            "label": "Custom size default"
+          }
+        ],
+        "default": "m"
+      },
+      {
+        "type": "select",
+        "id": "btn_fw",
+        "label": "t:sections.all.button.settings.font_weight.label",
+        "options": [
+          {
+            "value": "light",
+            "label": "t:sections.all.button.settings.font_weight.options.option_0"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.all.button.settings.font_weight.options.option_1"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.all.button.settings.font_weight.options.option_2"
+          },
+          {
+            "value": "semibold",
+            "label": "t:sections.all.button.settings.font_weight.options.option_3"
+          },
+          {
+            "value": "bold",
+            "label": "t:sections.all.button.settings.font_weight.options.option_4"
+          }
+        ],
+        "default": "medium"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Load more",
+      }
+    ]
+  }
+{% endschema %}

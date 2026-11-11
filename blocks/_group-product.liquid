@@ -1,0 +1,126 @@
+{{ 'hdt-product-tabs.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+.hdt-group-product-block{z-index:2}
+
+@media (min-width: 768px) {.hdt-group-product-block{position: sticky;top: 3rem;} }
+{%- endstyle -%}
+<div class="hdt-group-product-block hdt-s-gradient hdt-relative" {{ block.shopify_attributes }}>
+  <div id="product-zoom-{{ section.id }}" class="hdt-produc-zoom--wrapp hdt-w-full"></div>
+  <div id="product-info-{{ section.id }}" class="hdt-product-info__list hdt-w-full">
+    {% content_for "blocks" %}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Product content",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_product-title"
+    },
+    {
+      "type": "_brand_image"
+    },
+    {
+      "type": "_product-variant-picker"
+    },
+    {
+      "type": "_product_complimentary"
+    },
+    { 
+      "type": "_product-brands" 
+    },
+    {
+      "type": "_product-buy-button"
+    },
+    {
+      "type": "_product-countdown"
+    },
+    {
+      "type": "_product-description"
+    },
+    {
+      "type": "_product-extra-link"
+    },
+    {
+      "type": "_product-inventory"
+    },
+    {
+      "type": "_product-item-property"
+    },
+    {
+      "type": "_product-linked"
+    },
+    {
+      "type": "_product-live-review"
+    },
+    {
+      "type": "_product-meta"
+    },
+    {
+      "type": "_product-order"
+    },
+    {
+      "type": "_product-payment-terms"
+    },
+    {
+      "type": "_product-pickup"
+    },
+    {
+      "type": "_product-price"
+    },
+    {
+      "type": "_product-sold"
+    },
+    {
+      "type": "_product-tax-ship"
+    },
+    {
+      "type": "_product-trust-badge"
+    },
+    {
+      "type": "_quantity-selector"
+    },
+    {
+      "type": "_group-product-tab"
+    },
+    {
+      "type": "_product-badges"
+    },
+    { 
+      "type": "_socials" 
+    },
+    {"type": "_custom-liquid"
+    },
+    {
+      "type": "_incoming-mess"
+    },
+    {
+      "type": "_view-product-detail"
+    },
+    {
+      "type": "_delivery_return"
+    },
+    {
+      "type": "_product_bundle"
+    },
+    {
+      "type": "_product_back_instock"
+    },
+    {
+      "type": "@app"
+    },
+    {
+      "type": "_group_accordion"
+    }
+  ],
+  "settings": [
+  ],
+  "presets": [
+    {
+      "name": "Product content",
+    }
+  ]
+}
+{% endschema %}
+

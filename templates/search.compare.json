@@ -1,0 +1,108 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "heading": {
+      "type": "main-heading",
+      "blocks": {
+        "b68c3c0c-fc8e-4c1b-910f-52c850ee21f4": {
+          "type": "1",
+          "settings": {
+            "heading": "<h4>Compare Products</h4>",
+            "hidden_on_mobile": false,
+            "heading_size": "h4",
+            "text_color": "hdt-s-text",
+            "font_size_heading_lg": 50,
+            "font_size_heading_md": 30,
+            "font_size_heading": 24,
+            "font_weight_heading": 600,
+            "letter_spacing_heading": 0
+          }
+        }
+      },
+      "block_order": [
+        "b68c3c0c-fc8e-4c1b-910f-52c850ee21f4"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/z4683181570507_46fb10fa21da971ae2af71e75431028c_f52f84e6-035f-4b0a-a139-3f31ae2a7614.webp",
+        "color_scheme": "",
+        "spacing_hd": 5,
+        "padding_top": 88,
+        "padding_bottom": 88,
+        "padding_rate": 75
+      }
+    },
+    "main": {
+      "type": "main-compare",
+      "blocks": {
+        "e5f28274-eb97-43ed-b408-7fb318b057aa": {
+          "type": "basic",
+          "settings": {}
+        },
+        "5b57b10b-73ad-4e51-a4ae-efdcc4e219a3": {
+          "type": "availability",
+          "settings": {
+            "title": "Availability"
+          }
+        },
+        "1b0564bb-6404-43cb-ad50-5498b9149cf9": {
+          "type": "vendor",
+          "settings": {
+            "title": "Vendor"
+          }
+        },
+        "a0d07f91-ad78-4004-86ce-be7ce806ac2d1": {
+          "type": "variants",
+          "settings": {
+            "title": "Color"
+          }
+        },
+        "a0d07f91-ad78-4004-86ce-be7ce806ac2d2": {
+          "type": "btn",
+          "settings": {
+            "title": "Return to shop",
+            "url": "shopify://collections/all",
+            "btn_style": "solid",
+            "btn_fw": "semibold",
+            "btn_icon": "none"
+          }
+        }
+      },
+      "block_order": [
+        "e5f28274-eb97-43ed-b408-7fb318b057aa",
+        "5b57b10b-73ad-4e51-a4ae-efdcc4e219a3",
+        "1b0564bb-6404-43cb-ad50-5498b9149cf9",
+        "a0d07f91-ad78-4004-86ce-be7ce806ac2d1",
+        "a0d07f91-ad78-4004-86ce-be7ce806ac2d2"
+      ],
+      "settings": {
+        "product_list": [
+          "100-organic-cold-pressed-oil",
+          "12-oz-slim-cooler-cup",
+          "21-oz-standard-mouth-w-flex-cap",
+          "3-in-1-wireless-charger-for-apple-devices",
+          "3-in-1-wireless-charger-with-official-magsafe-charging-15w",
+          "copy-of-wireless-charger-stand-with-magsafe-1"
+        ],
+        "image_ratio": "custom-pr",
+        "image_size": true,
+        "color_scheme": "",
+        "padding_top": 100,
+        "padding_bottom": 100,
+        "padding_rate": 75
+      }
+    }
+  },
+  "order": [
+    "heading",
+    "main"
+  ]
+}
+  

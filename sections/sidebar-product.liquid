@@ -1,0 +1,924 @@
+<!-- sections/sidebar-product.liquid -->
+{{ 'hdt-widget.css' | asset_url | stylesheet_tag }}
+<div class="hdt-sidebar hdt-sidebar-product" color-scheme="{{ section.settings.color_scheme }}">
+  <button aria-controls="drawer-sidebar-product" class="hdt-btn-sidebar hdt-fixed hdt-left-0 hdt-flex hdt-align-center hdt-oh hdt-s-gradient hdt-s-text">
+    <span class="hdt-btn-sidebar-icon hdt-inline-flex hdt-align-center hdt-justify-center"><svg class="hdt-inline-block" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M10.2326 0H5.76744C1.72428 0 0 1.72428 0 5.76744V10.2326C0 14.2757 1.72428 16 5.76744 16H10.2326C14.2757 16 16 14.2757 16 10.2326V5.76744C16 1.72428 14.2757 0 10.2326 0ZM9.67442 14.8837H5.76744C2.33377 14.8837 1.11628 13.6662 1.11628 10.2326V5.76744C1.11628 2.33377 2.33377 1.11628 5.76744 1.11628H9.67442V14.8837ZM14.8837 10.2326C14.8837 13.4727 13.798 14.7379 10.7907 14.8703V1.12967C13.798 1.26214 14.8837 2.52726 14.8837 5.76744V10.2326ZM5.41767 5.70047L7.32279 7.60558C7.37463 7.65735 7.41576 7.71883 7.44382 7.78651C7.47188 7.85419 7.48633 7.92673 7.48633 8C7.48633 8.07327 7.47188 8.14581 7.44382 8.21349C7.41576 8.28117 7.37463 8.34265 7.32279 8.39442L5.41767 10.2995C5.31236 10.4012 5.17135 10.4573 5.025 10.456C4.87866 10.4547 4.7387 10.3959 4.63526 10.2924C4.53183 10.1888 4.4732 10.0488 4.47199 9.90248C4.47079 9.75613 4.52712 9.61517 4.62884 9.50995L6.13953 8L4.62884 6.49005C4.52712 6.38483 4.47079 6.24387 4.47199 6.09752C4.4732 5.95118 4.53183 5.81116 4.63526 5.70763C4.7387 5.6041 4.87866 5.54533 5.025 5.54399C5.17135 5.54265 5.31236 5.59884 5.41767 5.70047Z"/></svg></span>
+    <span class="hdt-btn-sidebar-text">{{ 'onboarding.open_sidebar' | t }}</span>
+  </button>
+  <hdt-drawer class="hdt-drawer hdt-drawer-sidebar hdt-contents" color-scheme="{{ section.settings.color_scheme }}">
+    <dialog id="drawer-sidebar-product" class="hdt-dialog hdt-dialog-drawer" scroll-lock pos="left">
+      <div class="hdt-dialog-drawer__header">
+        <h3 slot="header" class="hdt-drawer-sidebar-title hdt-text-sm hdt-font-semibold">{{ 'products.sidebar.label_product' | t }}</h3>
+        <button ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="drawer-sidebar-product" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+      </div>
+      <div class="hdt-dialog-drawer__inner">
+        <div class="hdt-sidebar-inner" style="--spacing-item:{{ section.settings.space }}px">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'gallery' -%}
+                {%- liquid
+                  assign open_link = block.settings.open_link
+                  assign ARRhtml1 = 'a,,' | split: ','
+                  assign ARRhtml2 = 'div,data-' | split: ',' 
+                -%}
+                <div class="hdt-widget hdt-widget-gallery" {{ block.shopify_attributes }}>
+                  <h5 class="hdt-widget-title hdt-text-2xl hdt-font-normal">{{ block.settings.widget_heading }}</h5>
+                  <div class="hdt-widget-content">
+                    <div class="hdt-gallery-list hdt-row-grid hdt-row-grid--modify hdt-justify-center hdt-ratio--square hdt-object-cover hdt-grid-cols-3">
+                      {%- capture sizes -%}
+                        (100% - 8px) * 1 / 3)
+                      {%- endcapture -%}
+                      {%- for i in (1..9) -%}
+                        {%- liquid
+                          assign image_list = 'img' | append: i 
+                          assign image_url_list = 'link' | append: i 
+                          assign url = block.settings[image_url_list]
+                          assign image = block.settings[image_list] 
+                          if url == blank 
+                              assign ARRhtml = ARRhtml2
+                          else 
+                              assign ARRhtml = ARRhtml1  
+                          endif  
+                        -%}                                               
+                        {%- if image != blank -%}
+                          <div class="hdt-col-item hdt-gallery-item">
+                            <{{ ARRhtml[0] }} {{ ARRhtml[1] }}href="{{ url }}" {{ ARRhtml[2] }}target="{{ open_link }}" class="hdt-effect hdt-relative hdt-oh hdt-d-block">
+                              <div class="hdt-ratio" style="background: url({{ image | image_url: width: 1 }});">
+                                {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '' , sizes: sizes, widths: "110,150,200,300,400,500,600" }}
+                              </div>
+                            </{{ ARRhtml[0] }}>
+                          </div>  
+                        {%- endif -%}                                            
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                </div>
+              {%- when 'featured_products' -%}
+                <div class="hdt-widget hdt-widget-featured-products" {{ block.shopify_attributes }}>
+                  <h5 class="hdt-widget-title hdt-text-2xl hdt-font-normal">{{ block.settings.widget_heading }}</h5>
+                  <div class="hdt-widget-content">
+                    <div class="hdt-products-list hdt-row-grid hdt-row-grid--modify hdt-ratio--{{ block.settings.image_ratio }} {% if block.settings.image_size %} hdt-object-cover{% else %} hdt-object-contain{% endif %} lg:hdt-grid-cols-1">
+                      {%- liquid
+                        assign product_collection = block.settings.product_list | default: block.settings.collection.products   
+                      -%}
+                        {%- if product_collection != blank -%}
+                          {%- liquid 
+                          for product in product_collection limit: block.settings.products_count
+                            render 'pr_loop_item', section_id: block.id, product: product, sizes: "92px", widths: "92, 100, 180, 200"
+                          endfor -%}
+                        {%- else -%}
+                          {%- capture current -%}
+                            {%- cycle 1, 2 , 3, 4 -%}
+                          {%- endcapture -%}
+                          {%- for i in (1..block.settings.products_count) -%}
+                            <div class="hdt-card-product hdt-pr-loop hdt-loop-item">
+                              <div class="hdt-card-product__wrapper hdt-flex hdt-loop-inner">
+                                <div class="hdt-card-product__media hdt-loop-img hdt-relative hdt-oh">
+                                    <div class="hdt-product-img hdt-ratio" style="--aspect-ratioapt: 1">
+                                      {{ 'product-apparel-' | append: current | placeholder_svg_tag: 'hdt-placeholder-svg' }}  
+                                    </div>
+                                  <a data-pr-href class="hdt-full-width-link" href="{{ product.url }}"></a>
+                                </div>
+                                <div class="hdt-card-product__info">
+                                  <a href="{{ product.url }}" class="hdt-card-product__title hdt-h6" data-not-instant>{{ 'onboarding.product_title' | t }}</a>
+                                  {%- render 'card-price', product: product, price_class: '', show_compare_at_price: true -%}
+                                </div>
+                              </div>
+                            </div>
+                          {%- endfor -%}
+                        {%- endif -%}
+                    </div>
+                  </div>
+                </div>
+              {%- when 'iconbox' -%}
+                <div class="hdt-widget hdt-widget-iconbox" {{ block.shopify_attributes }}>
+                  <h5 class="hdt-widget-title hdt-text-2xl hdt-font-normal">{{ block.settings.widget_heading }}</h5>
+                  <div class="hdt-iconbox-list hdt-row-grid hdt-ratio--square hdt-object-cover lg:hdt-grid-cols-1">
+                    {%- for i in (1..4) -%}
+                      {%- liquid
+                        assign icon_svg = 'icon_svg' | append: i
+                        assign custom_svg = 'custom_svg' | append: i
+                        assign iconbox_icon_img = 'iconbox_icon_img' | append: i
+                        assign iconbox_content = 'iconbox_content' | append: i
+                        assign link_item = 'link_item' | append: i
+                        assign icon_svg = block.settings[icon_svg]
+                        assign custom_svg = block.settings[custom_svg] 
+                        assign iconbox_icon_img = block.settings[iconbox_icon_img] 
+                        assign iconbox_content = block.settings[iconbox_content]
+                        assign link_item = block.settings[link_item] 
+                      -%}
+                      {%- if iconbox_content != blank -%}
+                        {%- assign iconbox_content = iconbox_content | replace: ' _', '_' | replace: '_ ', '_' | split: '_' -%}
+                        <div class="hdt-iconbox-item hdt-flex hdt-align-center hdt-relative">
+                          {% if link_item != blank %}<a data-pr-href class="hdt-full-width-link" href="{{ link_item }}"></a>{% endif %}
+                          <span class="hdt-iconbox-icon hdt-flex hdt-align-center hdt-justify-center">
+                            {%- if iconbox_icon_img != blank -%}
+                              {{ iconbox_icon_img | image_url: width: iconbox_icon_img.width | image_tag: loading: 'lazy', width: iconbox_icon_img.width, height: iconbox_icon_img.height, class: '' , sizes: sizes, widths: "24, 52, 48, 104, 120, 240" }}
+                            {%- elsif custom_svg != blank  -%}
+                              {{ custom_svg }}
+                            {%- else -%}
+                              {%- render 'icon_theme_svg', icon_svg: icon_svg -%}
+                            {%- endif -%}
+                          </span>
+                          <div class="hdt-iconbox-content">
+                            <h4 class="hdt-sidebar-iconbox-title hdt-text-lg hdt-font-semibold">{{ iconbox_content[0] }}</h4>
+                            <p class="hdt-sidebar-iconbox-desc hdt-text-base hdt-font-normal">{{ iconbox_content[1] }}</p>
+                          </div>
+                        </div>
+                      {%- endif -%}
+                   {%- endfor -%}
+                  </div>
+                </div>
+                {%- when 'html' -%}
+                  <div class="hdt-widget hdt-widget-iconbox" {{ block.shopify_attributes }}>
+                    <h5 class="hdt-widget-title hdt-text-2xl hdt-font-normal">{{ block.settings.widget_heading }}</h5>
+                    <div class="hdt-widget-content">
+                      <div class="hdt-raw-html hdt-rte--list" id="b_{{ block.id }}">{{ block.settings.html_content }}</div>
+                    </div>
+                  </div>
+                {%- when 'social' -%}
+                  <div class="hdt-widget hdt-widget-social" {{ block.shopify_attributes }}>
+                    <h5 class="hdt-widget-title hdt-text-2xl hdt-font-normal">{{ block.settings.widget_heading }}</h5>
+                    <div class="hdt-widget-content">
+                      {%- render 'social_sharing', socials_style: block.settings.socials_style, socials_size: block.settings.socials_size -%}  
+                    </div>
+                  </div>
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </dialog>
+  </hdt-drawer>
+</div>
+{% schema %}
+  {
+    "name": "t:sections.sidebar-product.name",
+    "class": "hdt-section hdt-section-sidebar hdt-section-sidebar-product",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label"
+      },
+      {
+        "type": "range",
+        "id": "space",
+        "label": "t:sections.sidebar-blog.settings.space.label",
+        "info": "t:sections.sidebar-blog.settings.space.info",
+        "default": 50,
+        "min": 20,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "gallery",
+        "name": "t:sections.main-collection.blocks.gallery.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "widget_heading",
+            "label": "t:sections.main-collection.blocks.heading",
+            "default": "Gallery"
+          },        
+          {
+            "type": "image_picker",
+            "id": "img1",
+            "label": "t:sections.main-collection.blocks.gallery.img1"
+          },
+          {
+            "type": "url",
+            "id": "link1",
+            "label": "t:sections.main-collection.blocks.gallery.link1",
+            "visible_if": "{{ section.settings.img1 != blank }}"
+          },
+          {
+            "type": "image_picker",
+            "id": "img2",
+            "label": "t:sections.main-collection.blocks.gallery.img2"
+          },
+          {
+            "type": "url",
+            "id": "link2",
+            "label": "t:sections.main-collection.blocks.gallery.link2",
+            "visible_if": "{{ section.settings.img2 != blank }}"
+          },
+          {
+            "type": "image_picker",
+            "id": "img3",
+            "label": "t:sections.main-collection.blocks.gallery.img3"
+          },
+          {
+            "type": "url",
+            "id": "link3",
+            "label": "t:sections.main-collection.blocks.gallery.link3",
+            "visible_if": "{{ section.settings.img3 != blank }}"
+          },
+          {
+            "type": "image_picker",
+            "id": "img4",
+            "label": "t:sections.main-collection.blocks.gallery.img4"
+          },
+          {
+            "type": "url",
+            "id": "link4",
+            "label": "t:sections.main-collection.blocks.gallery.link4",
+            "visible_if": "{{ section.settings.img4 != blank }}"
+          },
+          {
+            "type": "image_picker",
+            "id": "img5",
+            "label": "t:sections.main-collection.blocks.gallery.img5"
+          },
+          {
+            "type": "url",
+            "id": "link5",
+            "label": "t:sections.main-collection.blocks.gallery.link5",
+            "visible_if": "{{ section.settings.img5 != blank }}"
+          },
+          {
+            "type": "image_picker",
+            "id": "img6",
+            "label": "t:sections.main-collection.blocks.gallery.img6"
+          },
+          {
+            "type": "url",
+            "id": "link6",
+            "label": "t:sections.main-collection.blocks.gallery.link6",
+            "visible_if": "{{ section.settings.img6 != blank }}"
+          },
+          {
+            "type": "select",
+            "id": "open_link",
+            "options": [
+              {
+                "value": "_self",
+                "label": "t:sections.main-collection.blocks.gallery.open_link.current"
+              },
+              {
+                "value": "_blank",
+                "label": "t:sections.main-collection.blocks.gallery.open_link.blank"
+              }
+            ],
+            "label": "t:sections.main-collection.blocks.gallery.open_link.label",
+            "default": "_blank"
+          }
+        ]
+      },
+      {
+        "type": "featured_products",
+        "name": "Featured Products",
+        "settings": [
+          {
+            "type": "text",
+            "id": "widget_heading",
+            "label": "t:sections.main-collection.blocks.heading",
+            "default": "Sale products"
+          },
+          {
+            "id": "collection",
+            "type": "collection",
+            "label": "t:sections.collection_products.settings.collection"
+          },
+          {
+            "type": "product_list",
+            "id": "product_list",
+            "label": "t:sections.collection_products.settings.product_list.label",
+            "info": "t:sections.collection_products.settings.product_list.info"
+          },
+          {
+            "type": "range",
+            "id": "products_count",
+            "min": 1,
+            "max": 20,
+            "step": 1,
+            "label": "t:sections.all.limit",
+            "default": 3,
+            "visible_if": "{{ section.settings.product_list != blank or section.settings.collection != blank }}"
+          },
+          {
+            "type": "select",
+            "id": "image_ratio",
+            "options": [
+              {
+                "value": "adapt_image",
+                "label": "t:sections.all.images.ratio.adapt_image.label"
+              },
+              {
+                "value": "square",
+                "label": "t:sections.all.images.ratio.square.label"
+              },
+              {
+                "value": "portrait",
+                "label": "t:sections.all.images.ratio.portrait.label"
+              },
+              {
+                "value": "asos",
+                "label": "t:sections.all.images.ratio.asos.label"
+              },
+              {
+                "value": "landscape",
+                "label": "t:sections.all.images.ratio.landscape.label"
+              },
+              {
+                "value": "custom-pr",
+                "label": "t:sections.all.images.ratio.custom.label"
+              }
+            ],
+            "label": "t:sections.all.images.ratio.label",
+            "default": "adapt_image",
+            "visible_if": "{{ section.settings.product_list != blank or section.settings.collection != blank }}"
+          },
+          {
+            "type": "checkbox",
+            "id": "image_size",
+            "label": "t:sections.all.images.size.cover",
+            "default": true,
+            "visible_if": "{{ section.settings.product_list != blank or section.settings.collection != blank }}"
+          }
+        ]
+      },
+      {
+        "type": "iconbox",
+        "name": "t:sections.main-collection.blocks.iconbox.name",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "widget_heading",
+            "label": "t:sections.main-collection.blocks.heading",
+            "default": "Shipping & Delivery"
+          },
+          {
+            "type": "paragraph",
+            "content": "t:sections.main-collection.blocks.iconbox.iconbox_item1.label"
+          },
+          {
+            "type": "select",
+            "id": "icon_svg1",
+            "label": "Icon",
+            "default": "box",
+            "options": [
+              {
+                "value": "none",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__1.label"
+              },
+              {
+                "value": "box",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__2.label"
+              },
+              {
+                "value": "box2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__3.label"
+              },
+              {
+                "value": "payment",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__4.label"
+              },
+              {
+                "value": "payment2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__5.label"
+              },
+              {
+                "value": "return",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__6.label"
+              },
+              {
+                "value": "return2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__7.label"
+              },
+              {
+                "value": "support",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__8.label"
+              },
+              {
+                "value": "wave",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__9.label"
+              },
+              {
+                "value": "plants",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__10.label"
+              },
+              {
+                "value": "flowerpot",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__11.label"
+              },
+              {
+                "value": "leaf",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__12.label"
+              },
+              {
+                "value": "leaf2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__13.label"
+              },
+              {
+                "value": "smile",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__14.label"
+              },
+              {
+                "value": "smile2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__15.label"
+              },
+              {
+                "value": "delicious",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__16.label"
+              },
+              {
+                "value": "health",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__17.label"
+              },
+              {
+                "value": "energy",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__18.label"
+              },
+              {
+                "value": "skin",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__19.label"
+              },
+              {
+                "value": "crescent_moon",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__20.label"
+              },
+              {
+                "value": "diamond",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__21.label"
+              },
+              {
+                "value": "various_sizes",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__22.label"
+              }
+            ]
+          },
+          {
+            "type": "textarea",
+            "id": "custom_svg1",
+            "label": "Custom svg",
+            "info": "[Remixicon](https://remixicon.com/)"
+          },
+          {
+            "type": "image_picker",
+            "id": "iconbox_icon_img1",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item1.iconbox_icon_img1.label",
+            "info": "t:sections.main-collection.blocks.iconbox.iconbox_item1.iconbox_icon_img1.info"
+          },
+          {
+            "type": "textarea",
+            "id": "iconbox_content1",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item1.iconbox_content1.label",
+            "info": "t:sections.main-collection.blocks.iconbox.iconbox_item1.iconbox_content1.info",
+            "default": "Free shipping_ Free iconbox for all US order"
+          },
+          {
+            "type": "url",
+            "id": "link_item1",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item1.link_item1"
+          },
+          {
+            "type": "paragraph",
+            "content": "t:sections.main-collection.blocks.iconbox.iconbox_item2.label"
+          },
+          {
+            "type": "select",
+            "id": "icon_svg2",
+            "label": "Icon 2",
+            "default": "support",
+            "options": [
+              {
+                "value": "none",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__1.label"
+              },
+              {
+                "value": "box",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__2.label"
+              },
+              {
+                "value": "box2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__3.label"
+              },
+              {
+                "value": "payment",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__4.label"
+              },
+              {
+                "value": "payment2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__5.label"
+              },
+              {
+                "value": "return",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__6.label"
+              },
+              {
+                "value": "return2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__7.label"
+              },
+              {
+                "value": "support",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__8.label"
+              },
+              {
+                "value": "wave",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__9.label"
+              },
+              {
+                "value": "plants",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__10.label"
+              },
+              {
+                "value": "flowerpot",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__11.label"
+              },
+              {
+                "value": "leaf",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__12.label"
+              },
+              {
+                "value": "leaf2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__13.label"
+              },
+              {
+                "value": "smile",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__14.label"
+              },
+              {
+                "value": "smile2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__15.label"
+              },
+              {
+                "value": "delicious",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__16.label"
+              },
+              {
+                "value": "health",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__17.label"
+              },
+              {
+                "value": "energy",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__18.label"
+              },
+              {
+                "value": "skin",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__19.label"
+              },
+              {
+                "value": "crescent_moon",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__20.label"
+              },
+              {
+                "value": "diamond",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__21.label"
+              },
+              {
+                "value": "various_sizes",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__22.label"
+              }
+            ]
+          },
+          {
+            "type": "textarea",
+            "id": "custom_svg2",
+            "label": "Custom svg 2",
+            "info": "[Remixicon](https://remixicon.com/)"
+          },
+          {
+            "type": "image_picker",
+            "id": "iconbox_icon_img2",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item2.iconbox_icon_img2.label",
+            "info": "t:sections.main-collection.blocks.iconbox.iconbox_item2.iconbox_icon_img2.info"
+          },
+          {
+            "type": "textarea",
+            "id": "iconbox_content2",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item2.iconbox_content2.label",
+            "info": "t:sections.main-collection.blocks.iconbox.iconbox_item2.iconbox_content2.info",
+            "default": "Premium Support_ Support 24 hours a day"
+          },
+          {
+            "type": "url",
+            "id": "link_item2",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item2.link_item2"
+          },
+          {
+            "type": "paragraph",
+            "content": "t:sections.main-collection.blocks.iconbox.iconbox_item3.label"
+          },
+          {
+            "type": "select",
+            "id": "icon_svg3",
+            "label": "Icon 3",
+            "default": "return",
+            "options": [
+              {
+                "value": "none",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__1.label"
+              },
+              {
+                "value": "box",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__2.label"
+              },
+              {
+                "value": "box2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__3.label"
+              },
+              {
+                "value": "payment",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__4.label"
+              },
+              {
+                "value": "payment2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__5.label"
+              },
+              {
+                "value": "return",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__6.label"
+              },
+              {
+                "value": "return2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__7.label"
+              },
+              {
+                "value": "support",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__8.label"
+              },
+              {
+                "value": "wave",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__9.label"
+              },
+              {
+                "value": "plants",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__10.label"
+              },
+              {
+                "value": "flowerpot",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__11.label"
+              },
+              {
+                "value": "leaf",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__12.label"
+              },
+              {
+                "value": "leaf2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__13.label"
+              },
+              {
+                "value": "smile",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__14.label"
+              },
+              {
+                "value": "smile2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__15.label"
+              },
+              {
+                "value": "delicious",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__16.label"
+              },
+              {
+                "value": "health",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__17.label"
+              },
+              {
+                "value": "energy",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__18.label"
+              },
+              {
+                "value": "skin",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__19.label"
+              },
+              {
+                "value": "crescent_moon",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__20.label"
+              },
+              {
+                "value": "diamond",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__21.label"
+              },
+              {
+                "value": "various_sizes",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__22.label"
+              }
+            ]
+          },
+          {
+            "type": "textarea",
+            "id": "custom_svg3",
+            "label": "Custom svg 3",
+            "info": "[Remixicon](https://remixicon.com/)"
+          },
+          {
+            "type": "image_picker",
+            "id": "iconbox_icon_img3",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item3.iconbox_icon_img3.label",
+            "info": "t:sections.main-collection.blocks.iconbox.iconbox_item3.iconbox_icon_img3.info"
+          },
+          {
+            "type": "textarea",
+            "id": "iconbox_content3",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item3.iconbox_content3.label",
+            "info": "t:sections.main-collection.blocks.iconbox.iconbox_item3.iconbox_content3.info",
+            "default": "30 Days Return_ You have 30 days to return"
+          },
+          {
+            "type": "url",
+            "id": "link_item3",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item3.link_item3"
+          },
+          {
+            "type": "paragraph",
+            "content": "t:sections.main-collection.blocks.iconbox.iconbox_item4.label"
+          },
+          {
+            "type": "select",
+            "id": "icon_svg4",
+            "label": "Icon 4",
+            "default": "payment",
+            "options": [
+              {
+                "value": "none",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__1.label"
+              },
+              {
+                "value": "box",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__2.label"
+              },
+              {
+                "value": "box2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__3.label"
+              },
+              {
+                "value": "payment",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__4.label"
+              },
+              {
+                "value": "payment2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__5.label"
+              },
+              {
+                "value": "return",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__6.label"
+              },
+              {
+                "value": "return2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__7.label"
+              },
+              {
+                "value": "support",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__8.label"
+              },
+              {
+                "value": "wave",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__9.label"
+              },
+              {
+                "value": "plants",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__10.label"
+              },
+              {
+                "value": "flowerpot",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__11.label"
+              },
+              {
+                "value": "leaf",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__12.label"
+              },
+              {
+                "value": "leaf2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__13.label"
+              },
+              {
+                "value": "smile",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__14.label"
+              },
+              {
+                "value": "smile2",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__15.label"
+              },
+              {
+                "value": "delicious",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__16.label"
+              },
+              {
+                "value": "health",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__17.label"
+              },
+              {
+                "value": "energy",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__18.label"
+              },
+              {
+                "value": "skin",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__19.label"
+              },
+              {
+                "value": "crescent_moon",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__20.label"
+              },
+              {
+                "value": "diamond",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__21.label"
+              },
+              {
+                "value": "various_sizes",
+                "label": "t:sections.icon-box.blocks.item.icon_svg.options__22.label"
+              }
+            ]
+          },
+          {
+            "type": "textarea",
+            "id": "custom_svg4",
+            "label": "Custom svg 4",
+            "info": "[Remixicon](https://remixicon.com/)"
+          },
+          {
+            "type": "image_picker",
+            "id": "iconbox_icon_img4",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item4.iconbox_icon_img4.label",
+            "info": "t:sections.main-collection.blocks.iconbox.iconbox_item4.iconbox_icon_img4.info"
+          },
+          {
+            "type": "textarea",
+            "id": "iconbox_content4",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item4.iconbox_content4.label",
+            "info": "t:sections.main-collection.blocks.iconbox.iconbox_item4.iconbox_content4.info"
+          },
+          {
+            "type": "url",
+            "id": "link_item4",
+            "label": "t:sections.main-collection.blocks.iconbox.iconbox_item4.link_item4"
+          }
+        ]
+      },
+      {
+        "type": "html",
+        "name": "HTML",
+        "settings": [
+          {
+            "type": "text",
+            "id": "widget_heading",
+            "label": "Heading",
+            "default": "Talk about your brand"
+          },
+          {
+            "type": "html",
+            "id": "html_content",
+            "label": "Type html",
+            "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+          }
+        ]
+      },
+      {
+        "type": "social",
+        "name": "t:sections.footer.social_media.name",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "text",
+            "id": "widget_heading",
+            "label": "Heading",
+            "default": "Follow us"
+          },
+          {
+            "type": "select",
+            "id": "socials_style",
+            "label": "t:settings_schema.social-media.settings.social_style.label",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "t:default"
+              },
+              {
+                "value": "outline",
+                "label": "t:settings_schema.social-media.settings.social_style.options__2.label"
+              },
+              {
+                "value": "simple",
+                "label": "t:settings_schema.social-media.settings.social_style.options__3.label"
+              }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "socials_size",
+            "label": "t:settings_schema.social-media.settings.social_size.label",
+            "default": "medium",
+            "options": [
+              {
+                "value": "small",
+                "label": "t:settings_schema.social-media.settings.social_size.options__1.label"
+              },
+              {
+                "value": "medium",
+                "label": "t:settings_schema.social-media.settings.social_size.options__2.label"
+              },
+              {
+                "value": "large",
+                "label": "t:settings_schema.social-media.settings.social_size.options__3.label"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

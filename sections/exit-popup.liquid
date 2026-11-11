@@ -1,0 +1,540 @@
+<!-- section/exit-popup.liquid -->
+{%liquid
+  assign product_collection = section.settings.product_list | default: section.settings.collections.products
+  assign page_type   = request.page_type
+  assign exit_popup   = false
+  if section.settings[page_type] == true
+    assign exit_popup = true
+  endif
+  assign color_list = 'products.theme_settings.color' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq  
+  assign object_pos = section.settings.image_mb.presentation.focal_point
+  
+  if product_collection == blank 
+    assign has_pr = '--has-pr-w: 500px'
+  else
+    assign col_has_pr = 'md:hdt-flex-cols-2'
+  endif
+%}
+{%- capture sizes -%}
+(min-width: 1150px) 26vw, (min-width: 768px) calc(95vw / 2), 100vw
+{%- endcapture -%}
+{%- if exit_popup -%}
+  {{ 'hdt-exit-popup.css' | asset_url | stylesheet_tag }}
+  <sys-exit configs='{ "id": "{{ section.id }}", "after": "{{ section.settings.after }}", "day_next": {{ section.settings.day_next }}, "time_delay": {{ section.settings.time_delay }} }'>
+    <hdt-modal class="hdt-modal hdt-modal-exit hdt-contents" color-scheme="{{ section.settings.color_scheme }}" style="{{ has_pr }}">
+      <dialog id="modalExit-{{ section.id }}" class="hdt-dialog hdt-dialog-modal" scroll-lock>
+        <button ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="modalExit-{{ section.id }}" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+        <div class="hdt-dialog-modal__inner">
+          <div class="hdt-exit_content">
+            <div class="hdt-exit_wrap hdt-row-flex hdt-flex-cols-1 {{ col_has_pr }} hdt-s-gradient" style="--spacing-x: 0px;">
+              <div class="hdt-col">
+                <div class="hdt-col-inner hdt-media-overlap-content" style="{% if object_pos != blank %}--object-pos-mb: {{ object_pos }}{% endif %}">
+                  {%- if section.settings.image != blank -%}
+                    {%liquid
+                      echo '<picture class="hdt-media-wrapper">'
+                      if section.settings.image_mb != blank and section.settings.image_mb != section.settings.image
+                        assign srcset = section.settings.image_mb | image_url: width: section.settings.image_mb.width | image_tag: widths: '300,400,500,600,700,800', alt: null | split: 'srcset="' | last
+                        unless srcset contains 'src='
+                          echo '<source media="(max-width: 767px)" srcset="' | append: srcset | replace_first: 'style=', 'data-none='
+                        endunless
+                      endif
+                      echo section.settings.image | image_url: width: section.settings.image.width | image_tag: loading: 'lazy', sizes: sizes, class: 'hdt-object-pos-mb', widths: '300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500'
+                      echo '</picture>'
+                    %}
+                  {%- endif -%}
+                  {%- if section.blocks.size > 0 -%}   
+                    <div class="hdt-place-self-center md:hdt-place-self-center{% unless request.design_mode %} hdt-pe-none{% endunless %}">
+                      <div class="hdt-content_wrap">
+                        <div class="hdt-content hdt-grid hdt-text-center md:hdt-text-center">
+                          {%- for block in section.blocks -%}
+                            {%- case block.type -%}
+                              {%- when 'text' -%}
+                                {%- if block.settings.text != blank -%}
+                                  <p class="hdt-text hdt-s-text2 hdt-{{ block.settings.text_size }} hdt-font-normal" {{ block.shopify_attributes }} style="--mgb: {{ block.settings.mgb }}px">{{ block.settings.text }}</p>
+                                {%- endif -%}
+                              {%- when 'discount' -%}
+                                {%- if block.settings.discount != blank -%}
+                                  <div class="hdt-discount hdt-flex hdt-justify-center hdt-align-center" {{ block.shopify_attributes }}>
+                                    <div class="hdt-dc_wrap hdt-relative hdt-s-text hdt-font-bold hdt-text-lg hdt-flex hdt-justify-center hdt-align-center">
+                                      <input is="discount" readonly type="text" class="sr-only" value="{{ block.settings.discount | truncate: 20, "" }}" />
+                                      <span class="hdt-code_discount hdt-radius-xs">{{ block.settings.discount | truncate: 20, "" }}</span>
+                                      <button is="discount_copy" class="hdt-discount_copy hdt-inline-flex hdt-align-center hdt-justify-center hdt-radius-xs">
+                                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                        <span class="hdt-tooltip-text hdt-inline-flex hdt-align-center hdt-justify-center hdt-pe-none hdt-text-base hdt-font-normal hdt-radius-xs">{{ 'general.aria.exit_popup.copy' | t }}</span>
+                                      </button>
+                                    </div>
+                                  </div>
+                                {%- endif -%}
+                              {%- when 'button' -%}
+                                {%- if block.settings.btn_label != blank -%}
+                                  <div class="hdt-flex hdt-align-center hdt-justify-center hdt-exit-btn" {{ block.shopify_attributes }}>
+                                    <a {% if block.settings.btn_link == blank %}
+                                      role="link" disabled="true"
+                                      {% else %}
+                                        href="{{ block.settings.btn_link }}" 
+                                      {% endif %} target="{% if block.settings.target %}_blank{% else %}_self{% endif %}"
+                                      class="hdt-btn hdt-text-{{ block.settings.btn_size }} hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-{{ block.settings.btn_style }} hdt-font-{{ block.settings.btn_fw }}"><span>{{ block.settings.btn_label }}</span>
+                                    {%- if block.settings.btn_icon == "1" -%}
+                                      <svg class="hdt-icon hdt-icon-1" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 64 64" fill="currentColor"><path d="M12,56.43,36.48,32,12,7.52,19.53,0,51.61,32,19.53,64Z"/></svg>
+                                    {%- elsif block.settings.btn_icon == "2" -%}
+                                      <svg class="hdt-icon hdt-icon-2" xmlns="http://www.w3.org/2000/svg" width="12" height="12"  viewBox="0 0 64 64" fill="currentColor"><path d="M6.89,64,0,57.11,47.26,9.85H4.92V0H64V59.08H54.15V16.74Z"/></svg>
+                                    {%- else -%}
+                                    {%- endif -%}
+                                    </a>
+                                  </div>
+                                {%- endif -%}
+                            {%- endcase -%}
+                          {%- endfor -%}
+                        </div>
+                      </div>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+              {%- if product_collection != blank -%}
+                <div class="hdt-col">
+                  <div class="hdt-exit_product">
+                    {%- if section.settings.heading != blank -%}
+                      <div class="heading_wrap{% unless request.design_mode %} hdt-pe-none{% endunless %}">
+                        <h3 class="hdt-h6 hdt-s-text hdt-font-medium" >{{ section.settings.heading }}</h3>
+                      </div>
+                    {%- endif -%}
+                    <div class="hdt-product_recommend hdt-current-scrollbar hdt-ratio--{{ section.settings.image_ratio }}" >
+                      {%-liquid
+                        for product in product_collection limit: section.settings.limit 
+                          assign product_url = product.url
+                          unless settings.remove_collection_url or section.settings.product_list != blank
+                            assign product_url = product.url | within: section.settings.collection
+                          endunless
+                          render 'exits-card' , card_product: product , image_ratio: section.settings.image_ratio, color_list: color_list, section_id: section.id, sizes: '100px', product_url: product_url
+                        endfor
+                      -%}
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+    </dialog>
+
+    </hdt-modal>
+  </sys-exit>
+{%- endif -%}
+{% schema %}
+{
+  "name": "t:sections.exit_popup.name",
+  "class": "hdt-section-admn2-fixed sys-exit",
+  "limit": 1,
+  "presets": [
+    {
+      "name": "t:sections.exit_popup.name",
+      "blocks": [
+        {
+          "type": "text",
+          "settings": {
+            "text": "Wait! before you leave...",
+            "text_size": "h5",
+            "mgb": 16
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "Get 20% off for your first order",
+            "text_size": "base",
+            "mgb": 26
+          }
+        },
+        {
+          "type": "discount",
+          "settings": {
+            "discount": "CODE20OFF"
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "Use above code to get 15% 0FF for your first order<br class=\"hdt-none lg:hdt-block\"> when checkout",
+            "text_size": "base",
+            "mgb": 20
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "btn_label": "Grap the discount",
+            "btn_link": "shopify://collections",
+            "target": true,
+            "btn_size": "base",
+            "btn_style": "solid",
+            "btn_fw": "semibold",
+            "btn_icon": "none"
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "custom.system"
+    ]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.exit_popup.settings.color"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.exit_popup.settings.heading",
+      "default": "Recommended Products"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.exit_popup.settings.image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mb",
+      "label": "t:sections.exit_popup.settings.image_mb"
+    },
+    {
+      "type": "collection",
+      "id": "collections",
+      "label": "t:sections.exit_popup.settings.collections"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "t:sections.exit_popup.settings.product_list",
+      "info": "t:sections.banner_product.settings.product_list.info_2"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "label": "t:sections.exit_popup.settings.limit",
+      "default": 3,
+      "visible_if": "{{ section.settings.product_list != blank or section.settings.collections != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt_image",
+          "label": "t:sections.all.images.ratio.adapt_image.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.all.images.ratio.square.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.all.images.ratio.portrait.label"
+        },
+        {
+          "value": "asos",
+          "label": "t:sections.all.images.ratio.asos.label"
+        },
+        {
+          "value": "landscape",
+          "label": "t:sections.all.images.ratio.landscape.label"
+        },
+        {
+          "value": "custom-pr",
+          "label": "t:sections.all.images.ratio.custom.label"
+        }
+      ],
+      "label": "t:sections.exit_popup.settings.image_ratio",
+      "default": "adapt_image",
+      "visible_if": "{{ section.settings.product_list != blank or section.settings.collections != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.exit_popup.settings.show_popup"
+    },
+    {
+      "type": "select",
+      "id": "after",
+      "label": "t:sections.exit_popup.settings.after.label",
+      "default": "move_cursor",
+      "info": "t:sections.exit_popup.settings.after.info",
+      "options": [
+        {
+          "value": "move_cursor",
+          "label": "t:sections.exit_popup.settings.after.move_cursor"
+        },
+        {
+          "value": "time",
+          "label": "t:sections.exit_popup.settings.after.some_time"
+        },
+        {
+          "value": "scroll",
+          "label": "t:sections.exit_popup.settings.after.scroll"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "time_delay",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "unit": "sec",
+      "label": "t:sections.exit_popup.settings.time_delay.label",
+      "info": "t:sections.exit_popup.settings.time_delay.info",
+      "default": 2,
+      "visible_if": "{{ section.settings.after == 'time' }}"
+    },
+    {
+      "type": "range",
+      "id": "day_next",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "unit": "day",
+      "label": "t:sections.exit_popup.settings.next_time.label",
+      "info": "t:sections.exit_popup.settings.next_time.info",
+      "default": 7,
+      "visible_if": "{{ section.settings.after == 'time' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.exit_popup.settings.page.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "index",
+      "label": "t:sections.exit_popup.settings.page.home.label",
+      "default": true,
+      "info": "t:sections.exit_popup.settings.page.home.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "product",
+      "label": "t:sections.exit_popup.settings.page.product.label",
+      "default": false,
+      "info": "t:sections.exit_popup.settings.page.product.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "collection",
+      "label": "t:sections.exit_popup.settings.page.collection.label",
+      "default": false,
+      "info": "t:sections.exit_popup.settings.page.collection.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "article",
+      "label": "t:sections.exit_popup.settings.page.article.label",
+      "default": false,
+      "info": "t:sections.exit_popup.settings.page.article.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog",
+      "label": "t:sections.exit_popup.settings.page.blog.label",
+      "default": false,
+      "info": "t:sections.exit_popup.settings.page.blog.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "cart",
+      "label": "t:sections.exit_popup.settings.page.cart.label",
+      "default": false,
+      "info": "t:sections.exit_popup.settings.page.cart.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "page",
+      "label": "t:sections.exit_popup.settings.page.other.label",
+      "default": false,
+      "info": "t:sections.exit_popup.settings.page.other.info"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "t:sections.exit_popup.blocks.text.label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:sections.exit_popup.blocks.text.label",
+          "default": "Wait! before you leave..."
+        },
+        {
+          "type": "select",
+          "id": "text_size",
+          "label": "t:sections.exit_popup.blocks.text.size.label",
+          "options": [
+            {
+              "value": "base",
+              "label": "t:sections.exit_popup.blocks.text.size.base"
+            },
+            {
+              "value": "h5",
+              "label": "t:sections.exit_popup.blocks.text.size.large"
+            }
+          ],
+          "default": "base",
+          "visible_if": "{{ section.settings.text != blank }}"
+        },
+        {
+          "type": "range",
+          "id": "mgb",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "t:sections.exit_popup.blocks.text.mgb.label",
+          "default": 0,
+          "visible_if": "{{ section.settings.text != blank }}"
+        }
+      ]
+    },
+    {
+      "type": "discount",
+      "name": "t:sections.exit_popup.blocks.discount.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "discount",
+          "label": "t:sections.exit_popup.blocks.discount.label",
+          "default": "The4Studio",
+          "info": "t:sections.exit_popup.blocks.discount.info"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "t:sections.all.button.settings.text.label",
+          "default": "Shop now",
+          "info": "t:sections.all.button.settings.text.info"
+        },
+        {
+          "type": "url",
+          "id": "btn_link",
+          "label": "t:sections.all.button.settings.url.label",
+          "visible_if": "{{ section.settings.btn_label != blank }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "target",
+          "label": "t:sections.all.button.settings.target.label",
+          "default": false,
+          "visible_if": "{{ section.settings.btn_label != blank }}"
+        },
+        {
+          "type": "select",
+          "id": "btn_size",
+          "label": "t:sections.all.button.settings.font_size.label",
+          "options": [
+            {
+              "value": "xs",
+              "label": "t:sections.all.button.settings.font_size.options.xs"
+            },
+            {
+              "value": "sm",
+              "label": "t:sections.all.button.settings.font_size.options.sm"
+            },
+            {
+              "value": "base",
+              "label": "t:sections.all.button.settings.font_size.options.base"
+            },
+            {
+              "value": "lg",
+              "label": "t:sections.all.button.settings.font_size.options.lg"
+            },
+            {
+              "value": "xl",
+              "label": "t:sections.all.button.settings.font_size.options.xl"
+            }
+          ],
+          "default": "base",
+          "visible_if": "{{ section.settings.btn_label != blank }}"
+        },
+        {
+          "type": "select",
+          "id": "btn_style",
+          "label": "t:sections.all.button.settings.style.label",
+          "options": [
+            {
+              "value": "solid",
+              "label": "t:sections.all.button.settings.style.options.option_1"
+            },
+            {
+              "value": "outline",
+              "label": "t:sections.all.button.settings.style.options.option_2"
+            },
+            {
+              "value": "link",
+              "label": "t:sections.all.button.settings.style.options.option_4"
+            }
+          ],
+          "default": "solid",
+          "visible_if": "{{ section.settings.btn_label != blank }}"
+        },
+        {
+          "type": "select",
+          "id": "btn_fw",
+          "label": "t:sections.all.button.settings.font_weight.label",
+          "options": [
+            {
+              "value": "normal",
+              "label": "t:sections.all.button.settings.font_weight.options.option_1"
+            },
+            {
+              "value": "medium",
+              "label": "t:sections.all.button.settings.font_weight.options.option_2"
+            },
+            {
+              "value": "semibold",
+              "label": "t:sections.all.button.settings.font_weight.options.option_3"
+            },
+            {
+              "value": "bold",
+              "label": "t:sections.all.button.settings.font_weight.options.option_4"
+            }
+          ],
+          "default": "normal",
+          "visible_if": "{{ section.settings.btn_label != blank }}"
+        },
+        {
+          "type": "select",
+          "id": "btn_icon",
+          "label": "t:sections.all.button.settings.icon.label",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:sections.all.button.settings.icon.options.option_0"
+            },
+            {
+              "value": "1",
+              "label": "t:sections.all.button.settings.icon.options.option_1"
+            },
+            {
+              "value": "2",
+              "label": "t:sections.all.button.settings.icon.options.option_2"
+            }
+          ],
+          "default": "none",
+          "visible_if": "{{ section.settings.btn_label != blank }}"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

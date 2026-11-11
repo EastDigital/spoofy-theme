@@ -1,0 +1,130 @@
+<div id="hdt-media-{{ block.id }}" class="hdt-slider__slide md:hdt-height--{{ section.settings.image_height }} hdt-height--{{ section.settings.image_height_mb }} hdt-ratio--adapt_image" {{ block.shopify_attributes }} hdt-reveal="slide-in" timeline>
+  {%- style -%}
+  #hdt-media-{{ block.id }} {
+    {%- if section.settings.image_height == 'fixed' -%}
+      --aspect-ratioapt-md: {{ section.settings.fixed_height }}px;
+    {%- elsif section.settings.image_height == 'adapt_image_first' and block.settings.video -%}
+      --aspect-ratioapt-md: {{ block.settings.video.aspect_ratio }};
+    {%- else -%}
+      --aspect-ratioapt-md: 1.77777777778;
+    {%- endif -%}
+    {%- if section.settings.image_height_mb == 'fixed' -%}
+      --aspect-ratioapt: {{ section.settings.fixed_height_mb }}px;
+    {%- elsif section.settings.image_height_mb == 'adapt_image_first' and block.settings.video -%}
+      --aspect-ratioapt: {{ block.settings.video.aspect_ratio }};
+    {%- else -%}
+      --aspect-ratioapt: 1.77777777778;
+    {%- endif -%}
+  }
+  {%- endstyle -%}
+  <div calc-nav class="hdt-media-overlap-content">
+    {%- if block.settings.video -%}
+      <hdt-video-player autoplay>
+        {{- block.settings.video | video_tag: image_size: '1500x', playsinline: true, muted: true, loop: true, controls: false, preload: 'metadata' -}}
+      </hdt-video-player>
+    {%- else -%}
+      <hdt-video-player host="{{ block.settings.external_video_url.type }}" type="background" autoplay>
+        <template>
+          {%- if block.settings.external_video_url.type == 'youtube' -%}
+            <iframe id="iframe-{{ block.id }}" src="https://www.youtube.com/embed/{{ block.settings.external_video_url.id }}?playsinline=1&autoplay=1&controls=0&mute=1&loop=1&playlist={{ block.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}" allow="autoplay; encrypted-media" allowfullscreen="allowfullscreen"></iframe>
+          {%- elsif block.settings.external_video_url.type == 'vimeo' -%}
+            <iframe src="https://player.vimeo.com/video/{{ block.settings.external_video_url.id }}?autoplay=1&autopause=1&background=1&loop=1&muted=1&transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.color_accent | remove_first: '#' }}" allow="autoplay; encrypted-media;" allowfullscreen="allowfullscreen"></iframe>
+          {%- endif -%}
+        </template>
+      </hdt-video-player>
+    {%- endif -%}
+  </div>
+  <div class="hdt-content">
+    {%- liquid
+      assign product = block.settings.product
+    -%}
+    {%- if product != blank -%}
+      <div class="hdt-content__item hdt-flex hdt-align-center hdt-justify-center">
+        {%- assign image = product.featured_media | default: settings.placeholder_img -%}
+        <div class="hdt-content__item--image">
+          {%- if image != blank -%}
+            <a href="{{ product.url }}" class="hdt-d-block hdt-relative hdt-oh hdt-ratio hdt-radius-full" style="--aspect-ratioapt:{{ image.aspect_ratio | default: 1 }}">
+              {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, sizes: '(max-width: 767px) 80px, 160px', widths: '80, 160' }}
+            </a>
+          {%- endif -%}
+        </div>
+        <div class="hdt-content__item--infos hdt-relative hdt-oh">
+          <a href="{{ product.url }}" class="hdt-block hdt-content__item--title hdt-s-text hdt-text-lg hdt-font-normal hdt-truncate">
+            {{- product.title -}}
+          </a>
+          <div class="hdt-content__item--price hdt-s-text hdt-text-base hdt-font-semibold">
+            {%- render 'card-price', product: product, price_class: 'hdt-price-wrapp', show_compare_at_price: true -%}
+          </div>
+        </div>
+        <div class="hdt-content__item--quickview">
+          <wrapp-hdt-open-modal-btn class="hdt-contents">
+            <button type="button" handle="{{ product.handle }}" aria-controls="hdt-quick-view-modal" aria-expanded="false" class="hdt-card-product__btn-quick-view hdt-btn-loading__svg" placement="top">
+              <svg class="hdt-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+                <use xlink:href="#hdt-icon-quickview"></use>
+              </svg>
+              <span class="hdt-loading__spinner hdt-absolute" hidden>
+                <svg width="16" height="16" class="hdt-svg-spinner" focusable="false" role="presentation" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                  <circle class="hdt-path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                </svg>
+              </span>
+              <span class="sr-only">{{ 'products.product.quick_view' | t }}</span>
+            </button>
+          </wrapp-hdt-open-modal-btn>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="hdt-content__item hdt-flex hdt-align-center hdt-justify-center">
+        <div class="hdt-content__item--image">
+          <div
+            class="hdt-d-block hdt-relative hdt-oh hdt-ratio hdt-radius-full"
+            style="--aspect-ratioapt:0.6666666666666666"
+          >
+            <div class="hdt-content__item--image-placeholder"></div>
+          </div>
+        </div>
+        <div class="hdt-content__item--infos hdt-relative hdt-oh">
+          <h3 class="hdt-block hdt-content__item--title hdt-s-text hdt-text-lg hdt-font-normal hdt-truncate">
+            {{ 'onboarding.product_title' | t }}
+          </h3>
+          <div class="hdt-content__item--price hdt-s-text hdt-text-base hdt-font-semibold">99</div>
+          <div class="hdt-content__item--quickview"></div>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Item",
+    "tag": null,
+    "settings": [
+      {
+        "type": "video",
+        "id": "video",
+        "label": "t:sections.video.settings.video.label",
+        "info": "t:sections.video.settings.video.info"
+      },
+      {
+        "type": "video_url",
+        "id": "external_video_url",
+        "accept": [
+          "vimeo",
+          "youtube"
+        ],
+        "label": "t:sections.video.settings.video.url",
+        "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+      },
+      {
+        "type": "product",
+        "id": "product",
+        "label": "Product"
+      },
+    ],
+    "presets": [
+      {
+        "name": "Item"
+      } 
+    ]
+  }
+{% endschema %}

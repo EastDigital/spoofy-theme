@@ -1,0 +1,33 @@
+<div class="hdt-user-information">
+  {%- if block.settings.image -%}
+    <div class="hdt-radius hdt-user-information-img hdt-oh" id="hdt-user-information-img">
+      {{ block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: 'lazy', width: block.settings.image.width, height: block.settings.image.height, widths: '100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,2400,2600,2800,3000,3200,3400,3600,3800,4000,4200,4400,4600,4800,5000,5200,5400,5600,5760' }}
+    </div>
+  {%- endif -%}
+  <div>
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "User information",
+  "tag": null,
+  "class": "hdt-user-information",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Only show on mobile"
+    }
+  ],
+  "blocks": [{ "type": "heading" }, { "type": "text" }, { "type": "spacer" }],
+  "presets": [
+    {
+      "name": "User information",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}

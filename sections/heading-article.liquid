@@ -1,0 +1,141 @@
+<div class="hdt-heading-article__wrap">
+  <div class="hdt-container lg:hdt-container hdt-px-15">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when "title" -%}
+          <h3>{{ article.title }}</h3>
+        {%- when "blog_title" -%}
+          <div class="hdt-article-tags">
+            {%- if block.settings.show_blog_title != 'disable' -%}
+              <div class="hdt-article-category hdt-row-flex">
+                {%- if  block.settings.show_blog_title == 'blog_current' -%}
+                  <a class="hdt-text-xs hdt-font-bold" href="{{ blog.url }}">{{ blog.title }}</a>
+                {%- else -%}  
+                  {%- assign article_tags = article.tags | join: ';' | split: ';' -%}
+                  {%- assign blog_tags = article_tags | where: 'blog_' -%}
+                  {%- for tag in blog_tags -%}
+                    <a class="hdt-text-xs hdt-font-bold hdt-btn" href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag | remove : 'blog_' | strip }}</a>
+                  {%- endfor -%}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- when "article_metas" -%}
+          {%- if block.settings.show_author or block.settings.show_date -%}
+            <div class="hdt-article-metas hdt-row-flex ">
+              {%- if block.settings.show_author == true -%}
+                <div class="hdt-article-author hdt-s-text2 hdt-text-base hdt-flex">
+                  <span class="hdt-article-author__name"> {{ 'blogs.article.by' | t }}: {{ article.author | replace_first: 'ad clnt', 'admin' }}</span>
+                </div>
+              {%- endif -%}
+              {%- if block.settings.show_date -%}
+                <div class="hdt-article-time hdt-s-text2 hdt-text-base">
+                  {%- assign date = block.settings.date -%}
+                  {%- if date contains "%" -%}
+                    {{ article.published_at | time_tag: date }}
+                  {%- else -%}	
+                    {{ article.published_at | time_tag: format: date }}
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Heading article",
+  "class": "hdt-section hdt-heading-article",
+  "blocks": [
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1
+    },
+    {
+      "type": "blog_title",
+      "name": "Blog title",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "show_blog_tite",
+          "label": "Show blog title",
+          "info": "From tags contains 'blog_': will show tags on article current contains 'blog_'",
+          "default": "blog_current",
+          "options": [
+            {
+              "value": "blog_current",
+              "label": "From blog current"
+            },
+            {
+              "value": "blog_tags",
+              "label": "From tags contains 'blog_'"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "article_metas",
+      "name": "Article metas",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_author",
+          "label": "t:sections.feature-blog.settings.show_author",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_date",
+          "label": "t:sections.feature-blog.settings.show_date",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "date",
+          "options": [
+            {
+              "value": "abbreviated_date",
+              "label": "t:sections.feature-blog.settings.date.option_1"
+            },
+            {
+              "value": "basic",
+              "label": "t:sections.feature-blog.settings.date.option_2"
+            },
+            {
+              "value": "date",
+              "label": "t:sections.feature-blog.settings.date.option_3"
+            },
+            {
+              "value": "%b %d",
+              "label": "t:sections.feature-blog.settings.date.option_4"
+            }
+          ],
+          "label": "t:sections.feature-blog.settings.date.label",
+          "info": "t:sections.feature-blog.settings.date.info",
+          "default": "%b %d"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "title"
+      },
+      {
+        "type": "blog_title"
+      },
+      {
+        "type": "article_metas"
+      }
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,47 @@
+{%- liquid
+  assign collection_des = collection_des | default: section.settings.collection_des
+  assign image = block.settings.image | default: collection.metafields.theme.featured_image_collection.value | default: collection.image | default: collection.products.first.featured_image
+  assign title = block.settings.title | default: collection.title
+  assign collection_link = block.settings.collection_link | default: collection.url
+  assign count = collection.all_products_count | default: 0
+-%}
+<div class="hdt-collection-item hdt-collection-style{{ collection_des }} {{ class }}" {{ block.shopify_attributes }}>
+  <div class="hdt-collection-inner" {% if section.settings.collection_des == '6' %}calc-nav{% endif %} hdt-reveal="slide-in" timeline>
+    <div class="hdt-collection-img hdt-relative hdt-oh hdt-grid" {% if section.settings.collection_des != '6' %}calc-nav{% endif %} style="--aspect-ratioapt: {{ image.aspect_ratio | default: 1.2 }};">
+      <span class="hdt-ratio">
+        {%- if image != blank -%}
+          {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '' , sizes: sizes, widths: "160,320,360,400,600,800,1000,1200,1400,1440,1920,2000,2400,2800,3600" }}
+        {%- else -%}
+          {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'hdt-placeholder-svg' }}  
+        {%- endif -%}
+      </span>
+      <a data-pr-href class="hdt-full-width-link" href="{{ collection_link }}"></a>
+      {%- if collection_link != blank and section.settings.collection_des == '3' -%}
+        <a href="{{ collection_link }}" class="hdt-collection-link hdt-inline-flex hdt-align-center hdt-justify-center hdt-radius-full hdt-absolute hdt-place-self-{{ section.settings.content_position }}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.07692 10L0 8.92308L7.38462 1.53846H0.769231V0H10V9.23077H8.46154V2.61538L1.07692 10Z" fill="currentColor"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+    {%- if title != blank -%}
+      <div class="hdt-collection-content hdt-text-{{ section.settings.content_position }}">
+        <a class="hdt-collection-title hdt-truncate hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-{{ section.settings.content_size }} hdt-font-{{ section.settings.content_weight }}" href="{{ collection_link }}">
+          <span class="hdt-collection-title-text hdt-truncate">{{ title }}</span>
+        </a>
+        {%- if section.settings.collection_des == '3' or section.settings.collection_des == '4' or section.settings.collection_des == '5' -%}
+          <div class="hdt-collection-count hdt-text-base hdt-font-normal"><span>{{ 'sections.collection_list.items_count' | t : count: count }} </span></div>
+        {%- endif -%}
+        {%- if section.settings.collection_des == '8' and collection.description != blank -%}
+          <p class="hdt-collection-description hdt-text-base hdt-font-normal hdt-rte">{{ collection.description | strip_html }}</p>
+        {%- endif -%}
+        {%- if collection_link != blank and section.settings.collection_des == '8' -%}
+          <div class="hdt-collection-bottom-content">
+            <a href="{{ collection_link }}" class="hdt-collection-link hdt-relative hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-base hdt-font-semibold">
+              <span>{{ 'sections.collection_list.button_text.style8' | t }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.07692 10L0 8.92308L7.38462 1.53846H0.769231V0H10V9.23077H8.46154V2.61538L1.07692 10Z" fill="currentColor"/></svg>
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div> 
+</div>

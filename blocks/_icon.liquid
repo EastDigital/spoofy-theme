@@ -1,0 +1,234 @@
+{%- comment %} Check sizes image when Shopify update API {% endcomment -%}
+<div id="block-{{ block.id }}" class="hdt-icon-block hdt-s-text" style=" --width: {{ block.settings.width }}px; --width-md: {{ block.settings.width_md }}px; --width-lg: {{ block.settings.width_lg }}px;" {{ block.shopify_attributes }}>
+  {%- liquid
+    if block.settings.svg_upload != blank
+      echo block.settings.svg_upload
+    elsif block.settings.image_upload != blank
+      echo block.settings.image_upload | image_url: width: 500 | image_tag: widths: '50, 100, 200, 300, 400, 500'
+    else
+      render 'icons', icon: block.settings.icon
+    endif
+    -%}
+</div>
+{% schema %}
+{
+  "name": "t:blocks.icon.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "t:blocks.icon.settings.icon.label",
+      "options": [
+        {
+          "value": "check",
+          "label": "t:blocks.icon.settings.icon.check"
+        },
+        {
+          "value": "car",
+          "label": "t:blocks.icon.settings.icon.car"
+        },
+        {
+          "value": "truck",
+          "label": "t:blocks.icon.settings.icon.truck"
+        },
+        {
+          "value": "diamond",
+          "label": "t:blocks.icon.settings.icon.diamond"
+        },
+        {
+          "value": "door-lock",
+          "label": "t:blocks.icon.settings.icon.door_lock"
+        },
+        {
+          "value": "gym",
+          "label": "t:blocks.icon.settings.icon.gym"
+        },
+        {
+          "value": "hammer",
+          "label": "t:blocks.icon.settings.icon.hammer"
+        },
+        {
+          "value": "headphones",
+          "label": "t:blocks.icon.settings.icon.headphones"
+        },
+        {
+          "value": "helm",
+          "label": "t:blocks.icon.settings.icon.helm"
+        },
+        {
+          "value": "hourglass",
+          "label": "t:blocks.icon.settings.icon.hourglass"
+        },
+        {
+          "value": "map",
+          "label": "t:blocks.icon.settings.icon.map"
+        },
+        {
+          "value": "piggy",
+          "label": "t:blocks.icon.settings.icon.piggy"
+        },
+        {
+          "value": "refesh",
+          "label": "t:blocks.icon.settings.icon.refresh"
+        },
+        {
+          "value": "rocket",
+          "label": "t:blocks.icon.settings.icon.rocket"
+        },
+        {
+          "value": "shield",
+          "label": "t:blocks.icon.settings.icon.shield"
+        },
+        {
+          "value": "shield2",
+          "label": "t:blocks.icon.settings.icon.shield_2"
+        },
+        {
+          "value": "smile",
+          "label": "t:blocks.icon.settings.icon.smile"
+        },
+        {
+          "value": "scissors",
+          "label": "t:blocks.icon.settings.icon.scissors"
+        },
+        {
+          "value": "shuffle",
+          "label": "t:blocks.icon.settings.icon.shuffle"
+        },
+        {
+          "value": "cloud_upload",
+          "label": "t:blocks.icon.settings.icon.cloud_upload"
+        },
+        {
+          "value": "cash",
+          "label": "t:blocks.icon.settings.icon.cash"
+        },
+        {
+          "value": "way",
+          "label": "t:blocks.icon.settings.icon.way"
+        },
+        {
+          "value": "wristwatch",
+          "label": "t:blocks.icon.settings.icon.wristwatch"
+        },
+        {
+          "value": "world",
+          "label": "t:blocks.icon.settings.icon.world"
+        },
+        {
+          "value": "wallet",
+          "label": "t:blocks.icon.settings.icon.wallet"
+        },
+        {
+          "value": "unlock",
+          "label": "t:blocks.icon.settings.icon.unlock"
+        },
+        {
+          "value": "umbrella",
+          "label": "t:blocks.icon.settings.icon.umbrella"
+        },
+        {
+          "value": "repeat",
+          "label": "t:blocks.icon.settings.icon.repeat"
+        },
+        {
+          "value": "refesh-2",
+          "label": "t:blocks.icon.settings.icon.refresh_2"
+        },
+        {
+          "value": "medal",
+          "label": "t:blocks.icon.settings.icon.medal"
+        },
+        {
+          "value": "portfolio",
+          "label": "t:blocks.icon.settings.icon.portfolio"
+        },
+        {
+          "value": "like",
+          "label": "t:blocks.icon.settings.icon.like"
+        },
+        {
+          "value": "plance",
+          "label": "t:blocks.icon.settings.icon.plance"
+        },
+        {
+          "value": "map-maker",
+          "label": "t:blocks.icon.settings.icon.map_maker"
+        },
+        {
+          "value": "help",
+          "label": "t:blocks.icon.settings.icon.help"
+        },
+        {
+          "value": "gift",
+          "label": "t:blocks.icon.settings.icon.gift"
+        },
+        {
+          "value": "cart",
+          "label": "t:blocks.icon.settings.icon.cart"
+        },
+        {
+          "value": "box",
+          "label": "t:blocks.icon.settings.icon.box"
+        },
+        {
+          "value": "back",
+          "label": "t:blocks.icon.settings.icon.back"
+        },
+        {
+          "value": "back2",
+          "label": "t:blocks.icon.settings.icon.back_2"
+        }
+      ],
+      "default": "car"
+    },
+    {
+      "type": "liquid",
+      "id": "svg_upload",
+      "label": "t:blocks.icon.settings.svg_upload.label",
+      "info": "t:blocks.icon.settings.svg_upload.info"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_upload",
+      "label": "t:blocks.icon.settings.image_upload.label"
+    },
+    {
+      "type": "range",
+      "id": "width_lg",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:blocks.icon.settings.width_lg.label",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "width_md",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:blocks.icon.settings.width_md.label",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:blocks.icon.settings.width.label",
+      "default": 44
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon"
+    }
+  ]
+}
+{% endschema %}

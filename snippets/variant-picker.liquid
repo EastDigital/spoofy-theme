@@ -1,0 +1,168 @@
+{%- comment -%}
+  Renders product variant-picker
+
+  Accepts:
+  - product: {Object} product object.
+  - selected_variant: {Object} (required)
+  - un_no_pick: {Boolean}
+  - block: {Object} passing the block information.
+  - product_form_id: {String} Id of the product form to which the variant picker is associated.
+  - update_url: {Boolean} whether or not to update url when changing variants. If false, the url isn't updated. Default: true (optional).
+  - hide_update_value {Boolean} if set true will hidden block update value
+  Usage:
+  {% render 'variant-picker', product: product, block: block, product_form_id: product_form_id %}
+
+  [
+    {"mid":35633981718802,"option":1,"value":0},{"mid":35633981751570,"option":1,"value":0},
+    {"mid":35633981784338,"option":1,"value":1},{"mid":35633981817106,"option":1,"value":1}
+  ]
+{%- endcomment -%}
+{%- unless product.has_only_default_variant -%}
+  {%- liquid
+    #assign selected_variant = product.selected_or_first_available_variant
+    assign variants_option2 = product.variants | where: 'option1', selected_variant.option1
+    assign variants_option3 = product.variants | where: 'option1', selected_variant.option1 | where: 'option2', selected_variant.option2
+    assign variants_option1_arr = product.variants | map: 'option1' | uniq
+    assign variants_option2_arr = variants_option2 | map: 'option2' | uniq
+    assign variants_option3_arr = variants_option3 | map: 'option3' | uniq
+    assign variants_option1_available_arr = product.variants | where: 'available' | map: 'option1' | uniq
+    assign variants_option2_available_arr = variants_option2 | where: 'available' | map: 'option2' | uniq
+    assign variants_option3_available_arr = variants_option3 | where: 'available' | map: 'option3' | uniq
+    if variants_option1_arr.size == 1 and variants_option2_arr.size == 1 or variants_option1_arr.size == 1 and variants_option3_arr.size == 1 or variants_option2_arr.size == 1 and variants_option3_arr.size == 1 or product.options_with_values.size == 1
+      assign update_status = false
+    else
+      assign update_status = true
+    endif
+    if product.available and settings.hide_sold_out
+      assign hide_sold_out = true
+    else
+      assign hide_sold_out = false
+    endif
+    assign color_list = 'products.theme_settings.color' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq
+    assign size_list = 'products.theme_settings.size' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq
+    assign use_size_chart_page = false
+    assign use_size_chart_image = false
+    assign show_dialog_size_chart = false
+    if block.settings.size_chart_source == 'page' and block.settings.size_chart_page != blank
+      assign use_size_chart_page = true
+    elsif block.settings.size_chart_source == 'image' and block.settings.size_chart_image != blank
+      assign use_size_chart_image = true
+      assign image_size_chart = block.settings.size_chart_image
+    endif
+    assign choose_an_option = 'products.product.choose_an_option' | t
+    echo hide_sold_out | json
+  -%}
+  <hdt-variant-picker id="variant-picker-{{ section.id }}" form="{{ product_form_id }}" selected-variant="{{ selected_variant.id }}" class="hdt-variant-picker no-js-hidden hdt-color-mode__{{ block.settings.color_picker_type }} hdt-color-size__{{ block.settings.color_size }} hdt-selector-mode__{{ block.settings.picker_type }}"{% if update_url %} update-url="{{ selected_variant.id | default: 19041994 }}"{% endif %}{% if update_status %} update-status{% endif %} data-size="{{ product.options_with_values.size }}"{% if hide_sold_out %} hide-sold-out-variants{% endif %}{% unless un_no_pick %} no-pick{% endunless %}>
+    {%- for option in product.options_with_values -%}
+      {%-  liquid
+      assign name_downcase = option.name | downcase
+      if color_list contains name_downcase
+        assign option_type = 'color'
+        assign color_option_index = 'option' | append: forloop.index
+      elsif size_list contains name_downcase
+        assign option_type = 'size'
+      else
+        assign option_type = 'other'
+      endif
+      if option_type != 'color' and block.settings.picker_type != 'dropdown'
+        assign no_dropdown = true
+      elsif option_type == 'color' and block.settings.color_picker_type != 'dropdown' and block.settings.color_picker_type != 'dropdown_with_color'
+        assign no_dropdown = true
+      else
+        assign no_dropdown = false
+      endif
+      if option.values.size == 1
+        assign selected_value = option.values.first
+      else
+        assign selected_value = selected_variant.options[forloop.index0]
+      endif
+      -%}
+      {%- capture btn_size_chart -%}
+        {%- if option_type == 'size' and use_size_chart_page or use_size_chart_image and show_dialog_size_chart == false -%}
+          {%- assign show_dialog_size_chart = true -%}
+          {%- if use_size_chart_page -%}
+            <button class="hdt-s-text hdt-font-semibold" aria-controls="modal-{{ block.id }}" aria-expanded="false">{{ 'products.product.size_chart_button' | t }}</button>
+          {%- else -%}
+          <wrapp-open-pswp-btn class="hdt-contents" data-obj-img='{ "src": "{{ image_size_chart | image_url: width: image_size_chart.width }}", "width": "{{ image_size_chart.width }}", "height": "{{ image_size_chart.height }}", "alt": "{{ image_size_chart.alt }}" }'>
+            <button class="hdt-s-text hdt-font-semibold">{{ 'products.product.size_chart_button' | t }}</button>
+          </wrapp-open-pswp-btn>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endcapture -%}
+
+      <fieldset class="hdt-product-form__input is-style-{{ option_type }}" type="{% if option_type == 'color' %}{{ block.settings.color_picker_type }}{% else %}{{ block.settings.picker_type }}{% endif %}" data-index="{{ forloop.index0 }}">
+        <legend class="hdt-product-form__label hdt-s-text"><span>{{ option.name }}{% unless hide_update_value %}: <span class="hdt-font-semibold" update-value>{{ selected_value | default: choose_an_option }}</span>{% endunless %}</span> {{ btn_size_chart }}</legend>
+        {%- if no_dropdown -%}
+          <div class="hdt-product-form__values">
+            {%- render 'product-variant-options', hide_sold_out: hide_sold_out, option_type: option_type, product: product, option: option, block: block, product_form_id: product_form_id, variants_option1_arr: variants_option1_arr, variants_option2_arr: variants_option2_arr, variants_option3_arr: variants_option3_arr, variants_option1_available_arr: variants_option1_available_arr, variants_option2_available_arr: variants_option2_available_arr, variants_option3_available_arr: variants_option3_available_arr, color_option_index: color_option_index, un_no_pick: un_no_pick, selected_value: selected_value -%}
+          </div>
+        {%- else -%}
+          <input is-value type="hidden" name="option{{ forloop.index }}" value="{{ selected_value | escape }}" form="{{ product_form_id }}">
+          <div class="hdt-relative">
+            <button class="hdt-select" aria-controls="variant-popover{{ section.id }}-{{ forloop.index0 }}" aria-owns="variant-listbox{{ section.id }}-{{ forloop.index0 }}">{{ selected_value | default: choose_an_option }}</button>
+            {%- render 'icon' with 'caret' -%}
+            <hdt-popover class="hdt-popover hdt-hidden hdt-popover-variant" id="variant-popover{{ section.id }}-{{ forloop.index0 }}" class="hdt-product-form__values" config='{ "closeRichlistSelect": true }' color-scheme="{{ settings.color_scheme_dialog }}">
+              <hdt-richlist role="listbox" selected="{{ selected_value | escape }}" id="variant-listbox{{ section.id }}-{{ forloop.index0 }}">
+                {%- render 'product-variant-options', hide_sold_out: hide_sold_out, option_type: option_type, product: product, option: option, block: block, product_form_id: product_form_id, variants_option1_arr: variants_option1_arr, variants_option2_arr: variants_option2_arr, variants_option3_arr: variants_option3_arr, variants_option1_available_arr: variants_option1_available_arr, variants_option2_available_arr: variants_option2_available_arr, variants_option3_available_arr: variants_option3_available_arr, un_no_pick: un_no_pick, selected_value: selected_value -%}
+              </hdt-richlist>
+            </hdt-popover>
+          </div>
+        {%- endif -%}
+      </fieldset>
+
+    {%- endfor -%}
+    <script type="application/json" data-variants-json>{% if hide_sold_out %}{{ product.variants | where: 'available' | json }}{% else %}{{ product.variants | json }}{% endif %}</script>
+    {%- comment %}<script type="application/json" data-options-json>{{ product.options_with_values | json }}</script>{% endcomment -%}
+  </hdt-variant-picker>
+  <noscript class="product-form__noscript-wrapper-{{ section.id }}">
+    <div class="hdt-product-form__input">
+      <label class="hdt-form__label" for="Variants-{{ section.id }}">{{- 'products.product.product_variants' | t -}}</label>
+      <div class="hdt-form__wrapp">
+        <select name="id" id="Variants-{{ section.id }}" class="hdt-select" form="{{ product_form_id }}" >
+          {%- for variant in product.variants -%}
+            {%- liquid
+              if hide_sold_out and variant.available == false
+              continue
+              endif
+              -%}
+            <option data-mdid="{{ variant.featured_media.id }}" data-inventoryQuantity="{{ variant.inventory_quantity }}" data-inventoryPolicy="{{ variant.inventory_policy }}" data-nextIncomingDate="{{ variant.next_incoming_date }}" data-nextIncomingDateFormat="{{ variant.next_incoming_date | date: format: 'date' }}" {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}{% if variant.available == false %} disabled {% endif %} value="{{ variant.id }}">
+              {%- liquid
+                echo variant.title
+                echo variant.price | money | strip_html | prepend: ' - '
+                if variant.available == false
+                  echo 'products.product.sold_out' | t | prepend: ' - '
+                endif
+                if variant.quantity_rule.increment > 1
+                  echo 'products.product.quantity.multiples_of' | t: quantity: variant.quantity_rule.increment | prepend: ' - '
+                endif
+                if variant.quantity_rule.min > 1
+                  echo 'products.product.quantity.minimum_of' | t: quantity: variant.quantity_rule.min | prepend: ' - '
+                endif
+                if variant.quantity_rule.max != null
+                  echo 'products.product.quantity.maximum_of' | t: quantity: variant.quantity_rule.max | prepend: ' - '
+                endif
+                # TODO: enable theme-check once `item_count_for_variant` is accepted as valid filter
+                # theme-check-disable
+                assign cart_quantity = cart | item_count_for_variant: variant.id
+                # theme-check-enable
+                if cart_quantity > 0
+                  echo 'products.product.quantity.in_cart_html' | t: quantity: cart_quantity | prepend: ' - '
+                endif
+              -%}
+            </option>
+          {%- endfor -%}
+        </select>
+      </div>
+    </div>
+  </noscript>
+  {%- if show_dialog_size_chart and use_size_chart_page -%}
+    <hdt-modal effect="slide" color-scheme="{{ settings.color_scheme_dialog }}">
+      <dialog id="modal-{{ block.id }}" class="hdt-dialog hdt-dialog-modal hdt-product__modal hdt-modal__size-chart" scroll-lock>
+      <div class="hdt-dialog-modal__header"><h3 class="hdt-product__modal-title">{{ block.settings.size_chart_page.title }}</h3><button class="hdt-s-text" aria-controls="modal-{{ block.id }}" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button></div>
+      <div class="hdt-dialog-modal__inner hdt-current-scrollbar hdt-rte">{{ block.settings.size_chart_page.content }}</div>
+      </dialog>
+    </hdt-modal>
+  {%- endif -%}
+{%- else -%}
+  <script type="application/json" data-variants-json="{{ product.variants.first.id }}">{% if hide_sold_out %}{{ product.variants | where: 'available' | json }}{% else %}{{ product.variants | json }}{% endif %}</script>
+{%- endunless -%}

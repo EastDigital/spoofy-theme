@@ -1,0 +1,71 @@
+{%- liquid
+  unless page_handle
+    assign logo_default = section.settings.logo
+    assign logo_sticky  = section.settings.logo 
+  else
+    assign page_brand = pages[page_handle]
+    assign logo_default = page_brand.metafields.theme.brand.value.logo | default: section.settings.logo
+    assign logo_sticky = page_brand.metafields.theme.brand.value.logo | default: section.settings.logo
+  endunless
+  if section.settings.header_transparent and template.name == "index"
+    assign logo_default = section.settings.logo_transparent | default: logo_default
+  endif
+  assign logo = logo_default
+-%}
+<div class="hdt-logo hdt-flex hdt-align-center{% if section.settings.header_layout == "logo_center" %} hdt-justify-center{% endif %} {{ header_e_commerce_attr }}">
+  {%- if logo != blank -%}
+    <a class="hdt-inline-flex hdt-align-center" href="{{ page_brand.metafields.theme.brand.value.url.value.url | default: routes.root_url }}">
+      {%- liquid
+        assign logo_width_2x = section.settings.logo_width | times: 2
+        assign logo_width_mb_2x = section.settings.logo_width_mb | times: 2
+        assign logo_alt = section.settings.logo.alt | default: shop.name | escape
+        assign logo_height = section.settings.logo_width | divided_by: section.settings.logo.aspect_ratio | round
+        assign logo_mobile = page_brand.metafields.theme.brand.value.logo_mobile | default: section.settings.logo_mobile | default: logo_default
+      -%}
+      {%- capture sizes -%}(min-width: 768px) {{ section.settings.logo_width }}px, {{ section.settings.logo_width_mb }}px{%- endcapture -%}
+      {%- capture srcset -%}{{ logo_mobile | image_url: width: section.settings.logo_width_mb }} 1x, {{ logo_mobile | image_url: width: logo_width_mb_2x }} 2x{%- endcapture -%}
+
+      <picture class="hdt-logo-default">
+        <source media="(min-width:768px)" srcset="{{ logo | image_url: width: section.settings.logo_width }} 1x, {{ logo | image_url: width: logo_width_2x }} 2x">
+        {{- logo_mobile | image_url: width: logo_width_2x | image_tag: class: 'hdt-logo-img', widths: nil, height: logo_height, width: section.settings.logo_width, alt: logo_alt, sizes: sizes, srcset: srcset, reload: true -}}
+      </picture>
+      {% if section.settings.sticky_type != 'none' %}
+        {% unless logo_sticky %}
+          <p class="hdt-logo-sticky">
+            {{- shop.name -}}
+          </p>
+        {%- else -%}  
+          {%- capture srcset -%}{{ logo_sticky | image_url: width: section.settings.logo_width_mb }} 1x, {{ logo_sticky | image_url: width: logo_width_mb_2x }} 2x{%- endcapture -%}
+          <picture class="hdt-logo-sticky">
+            <source media="(min-width:768px)" srcset="{{ logo_sticky | image_url: width: section.settings.logo_width }} 1x, {{ logo_sticky | image_url: width: logo_width_2x }} 2x">
+            {{- logo_sticky | image_url: width: logo_width_2x | image_tag: class: 'hdt-logo-img', widths: nil, height: logo_height, width: section.settings.logo_width, alt: logo_alt, sizes: sizes, srcset: srcset, reload: true -}}
+          </picture>
+        {% endunless %}
+      {% endif %}
+    </a>
+    {%- style -%}
+      .hdt-logo {
+        padding: 5px 0;
+      }
+    	.hdt-logo a img{
+    		width: {{ section.settings.logo_width_mb }}px !important;
+    	}
+      .hdt-logo .hdt-logo-sticky {
+        display: none;
+      }
+      .scrolled-past-header.shopify-section-header-sticky .hdt-logo .hdt-logo-sticky {
+        display: inline-flex;
+      }
+      .scrolled-past-header.shopify-section-header-sticky .hdt-logo picture:not(.hdt-logo-sticky) {
+        display: none;
+      }
+    	@media (min-width: 768px) {
+    		.hdt-logo a img{
+    			width: {{ section.settings.logo_width }}px !important;
+    		}
+    	}
+    {%- endstyle -%}
+  {%- else -%}
+    <a class="hdt-inline-flex hdt-align-center" href="{{ page_brand.metafields.theme.brand.value.url.value.url | default: routes.root_url }}">{{- shop.name -}}</a>
+  {%- endif -%}
+</div>

@@ -1,0 +1,127 @@
+<!-- blocks/_heading_slider_button.liquid -->
+{% liquid
+  assign nav_id = section.id
+  assign nav_icon = block.settings.nav_icon
+%}
+<style>
+  {% unless section.settings.dotUI %}
+    @media (max-width: 750px){
+      #{{ section.id }} .hdt-slider__dots{
+        display: none;
+      }
+    }
+  {% endunless %}
+</style>
+<div class="hdt-slider hdt-heading-slider hdt-slider-has-nav hdt-nav-btns-{{ block.settings.nav_des }} hdt-nav-shape_default hdt-nav-{{ block.settings.nav_size }}" {{ block.shopify_attributes }}>
+  <div class="hdt-wrap hdt-inline-flex hdt-align-center" style="gap:8px;--size-nav:30px;">
+    <button aria-controls="Slider-{{ nav_id }}" class="hdt-slider__button hdt-show-all hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--prev" type="button" name="previous">
+      {%- if nav_icon == 'chrvon' -%}
+        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M5.5 11L0 5.5L5.5 0L6.47625 0.97625L1.9525 5.5L6.47625 10.0238L5.5 11Z" fill="currentColor"/></svg>
+      {%- else -%}
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 14 12" fill="none"><path d="M5.25 11.25L6.475 9.98125L3.36875 6.875H14V5.125H3.36875L6.475 2.01875L5.25 0.75L0 6L5.25 11.25Z" fill="currentColor"></path></svg>
+      {%- endif -%}
+    </button>
+    {% if block.settings.view_all %}
+      <a class="hdt-view-all-btn hdt-btn hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-link hdt-btn--size-s hdt-font-semibold" href="{{ block.settings.view_all_url | default: section.settings.collection.url | default: routes.all_products_collection_url }}" hdt-reveal="slide-in" timeline>
+        {% assign view_all_df = 'general.pagination.view_all' | t %}
+        <span>{{ block.settings.btn_label | default: view_all_df | escape }}</span>
+      </a>
+    {% endif %}
+    <button aria-controls="Slider-{{ nav_id }}" class="hdt-slider__button hdt-show-all hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--next" type="button" name="next">
+      {%- if nav_icon == 'chrvon' -%}
+        <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1.5 11L7 5.5L1.5 0L0.52375 0.97625L5.0475 5.5L0.52375 10.0238L1.5 11Z" fill="currentColor"/></svg>
+      {%- else -%}
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 14 12" fill="none"><path d="M8.75 11.25L7.525 9.98125L10.6312 6.875H0V5.125H10.6312L7.525 2.01875L8.75 0.75L14 6L8.75 11.25Z" fill="currentColor"></path></svg>
+      {%- endif -%}
+    </button>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Slider button",
+    "tag": null,
+    "settings": [
+      {
+        "type": "select",
+        "id": "nav_des",
+        "label": "t:sections.all.slider.nav_des.label",
+        "options": [
+          {
+            "value": "outline",
+            "label": "t:sections.all.slider.nav_des.options.outline"
+          },
+          {
+            "value": "simple",
+            "label": "t:sections.all.slider.nav_des.options.simple"
+          }
+        ],
+        "default": "outline"
+      },
+      {
+        "type": "select",
+        "id": "nav_size",
+        "label": "t:sections.all.slider.nav_size.label",
+        "options": [
+          {
+            "value": "xsmall",
+            "label": "t:blocks.button.settings.button_size.options.xs"
+          },
+          {
+            "value": "small",
+            "label": "t:sections.all.slider.nav_size.options.small"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.all.slider.nav_size.options.medium"
+          },
+          {
+            "value": "large",
+            "label": "t:sections.all.slider.nav_size.options.large"
+          }
+        ],
+        "default": "small"
+      },
+      {
+        "type": "select",
+        "id": "nav_icon",
+        "label": "Navigation icon",
+        "options": [
+          {
+            "value": "chrvon",
+            "label": "Chevron"
+          },
+          {
+            "value": "arrow_right",
+            "label": "Arrow"
+          }
+        ],
+        "default": "chrvon"
+      },
+      {
+        "type": "checkbox",
+        "id": "view_all",
+        "label": "Enable view all",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "btn_label",
+        "label": "t:sections.collection_products.settings.btn_label.label",
+        "info": "t:sections.collection_products.settings.btn_label.info",
+        "default": "View all",
+        "visible_if": "{{ block.settings.view_all }}"
+      },
+      {
+        "type": "url",
+        "id": "view_all_url",
+        "label": "URL",
+        "visible_if": "{{ block.settings.view_all }}"
+      },
+    ],
+    "presets": [
+      {
+        "name": "Slider button"
+      }
+    ]
+  }
+{% endschema %}

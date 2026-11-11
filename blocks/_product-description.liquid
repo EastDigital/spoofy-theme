@@ -1,0 +1,107 @@
+{%- liquid
+  unless product 
+    assign product = section.settings.product
+  endunless
+  assign description_excerpt = block.settings.short_des | default: product.description
+  if description_excerpt == blank
+    continue 
+  endif 
+-%}
+
+{%- if product.description != blank and block.settings.des == '1' -%}    
+  <div class="hdt-product-info__item hdt-product__description" {{ block.shopify_attributes }}>
+    <div class="hdt-s-text2 hdt-rte">
+      {{ product.description }}
+    </div>
+  </div>
+{%- elsif description_excerpt != blank -%}
+  {%- if block.settings.readm == false -%}
+    <div class="hdt-product-info__item hdt-product__description" {{ block.shopify_attributes }}>
+      <div class="hdt-s-text2 hdt-rte">
+        {{ description_excerpt }}
+      </div>
+    </div>
+  {%- else -%}
+    {%- assign height_limit = block.settings.length | abs -%}
+    <product-description class="hdt-block hdt-product-description" data-height-limit="{{ height_limit }}" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+      <div data-content class="hdt-product-info__item hdt-product__description hdt-relative hdt-oh">
+        <div class="hdt-s-text2 hdt-rte hdt-full-des">
+          {{ description_excerpt }}
+        </div>
+        <div class="hdt-description-overlay"></div>
+      </div>
+      <button data-button class="hdt-product__description_readm hdt-pr-des-rm hdt-btn hdt-btn-link">
+        <span class="hdt-rm-text">{{ block.settings.readm_txt }}</span>
+        <span class="hdt-rl-text hdt-hidden">{{ block.settings.readl_txt }}</span>
+      </button>
+    </product-description>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.description.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "des",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.main-product.blocks.description.settings.des.options__1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.main-product.blocks.description.settings.des.options__2.label"
+        }
+      ],
+      "label": "t:sections.main-product.blocks.description.settings.des.label",
+      "info": "t:sections.main-product.blocks.description.settings.des.info",
+      "default": "2"
+    },
+    {
+      "type": "richtext",
+      "id": "short_des",
+      "label": "t:sections.main-product.blocks.description.settings.short_des.label",
+      "info": "t:sections.main-product.blocks.description.settings.short_des.info",
+      "visible_if": "{{ block.settings.des == '2' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "readm",
+      "label": "t:sections.main-product.blocks.description.settings.readm.label",
+      "info": "t:sections.main-product.blocks.description.settings.readm.info",
+      "default": false,
+      "visible_if": "{{ block.settings.des == '2' }}"
+    },
+    {
+      "type": "number",
+      "id": "length",
+      "label": "Short description height",
+      "info": "Number of height that will be displayed for product description (Only work when turned on [Use Read more])",
+      "default": 30,
+      "visible_if": "{{ block.settings.readm and block.settings.des == '2' }}"
+    },
+    {
+      "type": "text",
+      "id": "readm_txt",
+      "label": "t:sections.main-product.blocks.description.settings.readm_txt.label",
+      "default": "Read more",
+      "visible_if": "{{ block.settings.readm and block.settings.des == '2' }}"
+    },
+    {
+      "type": "text",
+      "id": "readl_txt",
+      "label": "t:sections.main-product.blocks.description.settings.readl_txt.label",
+      "default": "Read less",
+      "visible_if": "{{ block.settings.readm and block.settings.des == '2' }}"
+    }
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.description.name",
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,58 @@
+{%- comment -%}
+  Renders active-filter
+
+  Accepts:
+  - results: {Object} Collection or Search object
+
+  Usage:
+  {%- render 'active-filters', results: collection -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign sort_by = results.sort_by | default: results.default_sort_by
+  assign total_active_values = 0
+  if results.url
+    assign results_url = results.url
+  else
+    assign terms = results.terms | escape
+    assign results_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last&sort_by=' | append: sort_by
+  endif
+-%}
+{%- capture filters_value -%}
+  {%- for filter in results.filters -%}
+    {%- if filter.type == "price_range" -%}
+      {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+        {%- assign total_active_values = total_active_values | plus: 1 -%}
+        <div class="hdt-filters_count hdt-s-text">
+          <wrapp-hdt-facet-url>
+            <a class="hdt-active-filters__remove hdt-relative hdt-s-text" href="{{ filter.url_to_remove }}">
+              {%- assign min_value = filter.min_value.value | default: 0 -%}
+              {%- assign max_value = filter.max_value.value | default: filter.range_max -%}
+              {{ min_value | money }} - {{ max_value | money }}
+            </a>
+          </wrapp-hdt-facet-url>
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      {%- assign total_active_values = total_active_values | plus: filter.active_values.size -%}
+      {%- for filter_value in filter.active_values -%}
+        <div class="hdt-filters_count hdt-s-text">
+          <wrapp-hdt-facet-url>
+            <a class="hdt-active-filters__remove hdt-relative hdt-s-text" href="{{ filter_value.url_to_remove }}">{{ filter_value.label }}</a>
+          </wrapp-hdt-facet-url>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- if total_active_values > 0 -%}
+  <div class="hdt-active-filters hdt-flex" color-scheme="{{ settings.color_scheme_dialog }}">
+    <div class="hdt-filters_count hdt-s-text">{{ 'products.facets.results_with_count_html' | t: count: results_count }}</div>
+    {{- filters_value -}}
+    {%- if total_active_values > 1 %}
+      <wrapp-hdt-facet-url>
+        <a href="{{ results_url }}" class="hdt-active-filters__clear-all hdt-relative">{{ 'products.facets.clear_all' | t }}</a>
+      </wrapp-hdt-facet-url>
+    {% endif -%}
+  </div>
+{%- endif -%}

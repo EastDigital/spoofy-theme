@@ -1,0 +1,230 @@
+{% liquid
+  assign effect = 'hdt-reveal="slide-in" timeline'
+  if section.id contains 'slideshow'
+    assign effect = 'reval'
+  endif   
+%}
+<div {{ effect }} id="block-{{ block.id }}" class="hdt-heading hdt-text-warry hdt-rte {{ block.settings.text_color }}{% if block.settings.hidden_br_mobile %} hdt-br-hidden{% endif %}{% if block.settings.hidden_on_mobile %} hdt-hide-mobile{% endif %} {{ block.settings.line_height }} hdt-{{ block.settings.heading_size }} hdt-font-{{ block.settings.font_weight }}" {{ block.shopify_attributes }}>{{ block.settings.heading }}</div>
+{%- if block.settings.heading_size == "h_custom" -%}
+  {%- style -%}
+    #block-{{ block.id }} {
+      --heading-fs-lg: {{ block.settings.font_size_heading_lg }}px; --heading-fs-md: {{ block.settings.font_size_heading_md }}px; --heading-fs-mb: {{ block.settings.font_size_heading }}px; --heading-fw: {{ block.settings.font_weight_heading }}; --heading-ls: {{ block.settings.letter_spacing_heading }}px; --heading-lh: {{ block.settings.line_height }};
+    }
+  {%- endstyle -%}
+{%- endif -%}
+{% schema %}
+{
+  "name": "t:blocks.heading.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "t:blocks.text.settings.content.label",
+      "default": "<p>Heading</p>",
+      "info": "t:blocks.text.settings.content.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "hidden_br_mobile",
+      "label": "t:blocks.text.settings.hidden_br_mobile",
+      "default": false,
+      "visible_if": "{{ block.settings.heading != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "hidden_on_mobile",
+      "label": "t:blocks.text.settings.hidden_on_mobile",
+      "default": false,
+      "visible_if": "{{ block.settings.heading != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "line_height",
+      "label": "t:settings_schema.typography.settings.line_height.label",
+      "options": [
+        {
+          "value": "",
+          "label": "t:default"
+        },
+        {
+          "value": "hdt-lh-sm",
+          "label": "t:settings_schema.typography.settings.line_height.hdt-lh-1-2"
+        },
+        {
+          "value": "hdt-lh-1",
+          "label": "t:settings_schema.typography.settings.line_height.hdt-lh-1"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:settings_schema.heading.settings.label",
+      "options": [
+        {
+          "value": "base",
+          "label": "t:settings_schema.heading.settings.base_size"
+        },
+        {
+          "value": "h6",
+          "label": "t:settings_schema.heading.settings.h6_size"
+        },
+        {
+          "value": "h5",
+          "label": "t:settings_schema.heading.settings.h5_size"
+        },
+        {
+          "value": "h4",
+          "label": "t:settings_schema.heading.settings.h4_size"
+        },
+        {
+          "value": "h3",
+          "label": "t:settings_schema.heading.settings.h3_size"
+        },
+        {
+          "value": "h2",
+          "label": "t:settings_schema.heading.settings.h2_size"
+        },
+        {
+          "value": "h1",
+          "label": "t:settings_schema.heading.settings.h1_size"
+        },
+        {
+          "value": "h0",
+          "label": "t:settings_schema.heading.settings.h0_size"
+        },
+        {
+          "value": "h_custom",
+          "label": "t:settings_schema.typography.settings.font_size.custom"
+        }
+      ],
+      "default": "h2",
+      "visible_if": "{{ block.settings.heading != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "t:settings_schema.typography.settings.font_weight.label",
+      "options": [
+        {
+          "value": "",
+          "label": "t:default"
+        },
+        {
+          "value": "light",
+          "label": "t:settings_schema.typography.settings.font_weight.light"
+        },
+        {
+          "value": "normal",
+          "label": "t:settings_schema.typography.settings.font_weight.normal"
+        },
+        {
+          "value": "medium",
+          "label": "t:settings_schema.typography.settings.font_weight.medium"
+        },
+        {
+          "value": "semibold",
+          "label": "t:settings_schema.typography.settings.font_weight.semibold"
+        },
+        {
+          "value": "bold",
+          "label": "t:settings_schema.typography.settings.font_weight.bold"
+        },
+      ],
+      "default": "",
+      "visible_if": "{{ block.settings.heading != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "options": [
+        {
+          "value": "hdt-s-text",
+          "label": "t:default"
+        },
+        {
+          "value": "hdt-text-secondary",
+          "label": "t:settings_schema.colors.secondary"
+        },
+        {
+          "value": "hdt-text-body-tertiary",
+          "label": "t:settings_schema.colors.tertiary"
+        },
+        {
+          "value": "hdt-text-primary",
+          "label": "t:settings_schema.colors.accent"
+        }
+      ],
+      "label": "t:blocks.text.text_color.label",
+      "default": "hdt-s-text",
+      "visible_if": "{{ block.settings.heading != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "t:blocks.text.custom_size_options.label",
+      "visible_if": "{{ block.settings.heading_size == 'h_custom' and block.settings.heading != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_heading_lg",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.label",
+      "default": 50,
+      "visible_if": "{{ block.settings.heading_size == 'h_custom' and block.settings.heading != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_heading_md",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.tablet_font_size",
+      "default": 30,
+      "visible_if": "{{ block.settings.heading_size == 'h_custom' and block.settings.heading != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_heading",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.mobile_font_size",
+      "default": 24,
+      "visible_if": "{{ block.settings.heading_size == 'h_custom' and block.settings.heading != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_weight_heading",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "label": "t:settings_schema.typography.settings.font_weight.label",
+      "default": 600,
+      "visible_if": "{{ block.settings.heading_size == 'h_custom' and block.settings.heading != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing_heading",
+      "min": -10,
+      "max": 10,
+      "step": 0.2,
+      "label": "t:settings_schema.typography.settings.letter_spacing",
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.heading_size == 'h_custom' and block.settings.heading != blank }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.heading.name",
+    }
+  ]
+}
+{% endschema %}

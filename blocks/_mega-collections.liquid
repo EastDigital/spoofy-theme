@@ -1,0 +1,282 @@
+
+{{ 'hdt-collections-list.css' | asset_url | stylesheet_tag }}
+
+
+{%- style -%}
+  {% if block.settings.content_padding > 30 %}
+    #block-{{ block.id }} {
+      --content-pd: 15px;
+      @media(min-width:768px) {
+        --content-pd: 30px
+      }
+      @media(min-width:1150px) {
+        --content-pd:{{block.settings.content_padding}}px
+      }
+    }
+  {% elsif block.settings.content_padding > 15 %}
+    #block-{{ block.id }} {
+      --content-pd: 15px;
+      @media(min-width:768px) {
+        --content-pd:{{block.settings.content_padding}}px
+      }
+    }
+  {% else %}
+    #block-{{ block.id }} {
+      --content-pd:{{block.settings.content_padding}}px
+    }
+  {% endif %}
+{%- endstyle -%}
+
+<div id="block-{{ block.id }}" class="hdt-collection-list-wrap hdt-boxed_content hdt-ratio--{{ block.settings.image_ratio }} {% unless block.settings.image_size %} hdt-ratio--contain{% endunless %}">
+  <div class="hdt-has-collection{{ block.settings.collection_des }} hdt-relative hdt-text-uppercase-{{ block.settings.text_transform }} hdt-row-grid hdt-grid-cols-{{ block.settings.col }}" color-scheme="{{ block.settings.color_scheme }}">
+    {%- for collection in block.settings.collection_list -%}
+      {%- content_for "block", type: "_mega-collections-item",
+        id: "mega-collections-item",
+        closest.collection: collection,
+        collection_des: block.settings.collection_des,
+        content_size: block.settings.content_size,
+        content_weight: block.settings.content_weight,
+        content_position: block.settings.content_position
+      -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Mega Collections",
+    "tag": null,
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label"
+      },
+      {
+        "id": "collection_list",
+        "type": "collection_list",
+        "label": "t:sections.collection_list.settings.collection_list",
+        "info": "t:sections.collection_list.settings.collection_list_info"
+      },
+      {
+        "type": "select",
+        "id": "collection_des",
+        "label": "t:sections.collection_list.settings.collection_des",
+        "options": [
+          {
+            "value": "1",
+            "label": "1"
+          },
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "4",
+            "label": "4"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          },
+          {
+            "value": "7",
+            "label": "7"
+          },
+          {
+            "value": "8",
+            "label": "8"
+          }
+        ],
+        "default": "1"
+      },
+      {
+        "type": "select",
+        "id": "content_size",
+        "options": [
+          {
+            "value": "base",
+            "label": "t:sections.collection_list.settings.content_size.option_1.label"
+          },
+          {
+            "value": "xl",
+            "label": "t:sections.collection_list.settings.content_size.option_2.label"
+          },
+          {
+            "value": "2xl",
+            "label": "t:sections.collection_list.settings.content_size.option_3.label"
+          },
+          {
+            "value": "4xl",
+            "label": "t:sections.collection_list.settings.content_size.option_4.label"
+          },
+          {
+            "value": "10xl",
+            "label": "t:sections.collection_list.settings.content_size.option_5.label"
+          }
+        ],
+        "label": "t:sections.collection_list.settings.content_size.label",
+        "default": "xl"
+      },
+      {
+        "type": "select",
+        "id": "content_weight",
+        "options": [
+          {
+            "value": "normal",
+            "label": "t:sections.collection_list.settings.content_weight.option_1.label"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.collection_list.settings.content_weight.option_2.label"
+          },
+          {
+            "value": "semibold",
+            "label": "t:sections.collection_list.settings.content_weight.option_3.label"
+          },
+          {
+            "value": "bold",
+            "label": "t:sections.collection_list.settings.content_weight.option_4.label"
+          }
+        ],
+        "label": "t:sections.collection_list.settings.content_weight.label",
+        "default": "medium"
+      },
+      {
+        "type": "checkbox",
+        "id": "text_transform",
+        "label": "t:sections.collection_list.settings.text_transform",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "content_position",
+        "label": "t:sections.collection_list.settings.content_position.label",
+        "info": "t:sections.collection_list.settings.content_position.info",
+        "options": [
+          {
+            "value": "center",
+            "label": "t:sections.collection_list.settings.content_position.option_1.label"
+          },
+          {
+            "value": "end-center",
+            "label": "t:sections.collection_list.settings.content_position.option_2.label"
+          },
+          {
+            "value": "end-start",
+            "label": "t:sections.collection_list.settings.content_position.option_3.label"
+          },
+          {
+            "value": "end",
+            "label": "t:sections.collection_list.settings.content_position.option_4.label"
+          }
+        ],
+        "default": "center"
+      },
+      {
+        "type": "range",
+        "id": "content_padding",
+        "label": "t:sections.collection_list.settings.content_padding.label",
+        "info": "t:sections.collection_list.settings.content_padding.info",
+        "min": 0,
+        "max": 60,
+        "step": 1,
+        "unit": "px",
+        "default": 30
+      },
+      {
+        "type": "select",
+        "id": "image_ratio",
+        "options": [
+          {
+            "value": "adapt_image",
+            "label": "t:sections.all.images.ratio.adapt_image.label"
+          },
+          {
+            "value": "square",
+            "label": "t:sections.all.images.ratio.square.label"
+          },
+          {
+            "value": "portrait",
+            "label": "t:sections.all.images.ratio.portrait.label"
+          },
+          {
+            "value": "asos",
+            "label": "t:sections.all.images.ratio.asos.label"
+          },
+          {
+            "value": "landscape",
+            "label": "t:sections.all.images.ratio.landscape.label"
+          }
+        ],
+        "label": "t:sections.all.images.ratio.label",
+        "default": "adapt_image"
+      },
+      {
+        "type": "checkbox",
+        "id": "image_size",
+        "label": "t:sections.all.images.size.cover",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "col",
+        "label": "t:sections.all.items_row.desktop",
+        "default": "4",
+        "options": [
+          {
+            "label": "2",
+            "value": "2"
+          },
+          {
+            "label": "3",
+            "value": "3"
+          },
+          {
+            "label": "4",
+            "value": "4"
+          },
+          {
+            "label": "5",
+            "value": "5"
+          },
+          {
+            "label": "6",
+            "value": "6"
+          }
+        ]
+      }
+    ],
+    "blocks": [
+
+    ],
+    "presets": [
+      {
+        "name": "Mega Collections",
+        "settings": {
+          
+        },
+        "blocks": [
+          {
+            "type": "_mega-collections-item",
+            "static": true,
+            "id": "mega-collections-item",
+            "settings": {
+              "image": "{{ closest.collection.image }}",
+              "title": "{{ closest.collection.title }}",
+              "collection_link": "{{ closest.collection.url }}"
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

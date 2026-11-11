@@ -1,0 +1,221 @@
+
+<style>
+  .hdt-drawer-cookie .hdt-dialog::backdrop{
+    display:none
+  }
+  .hdt-drawer-cookie.hdt-drawer.hdt-direction-hor .hdt-dialog-drawer{
+    max-width:100%;
+    padding:2rem;
+  }
+  .hdt-drawer-cookie.hdt-drawer.hdt-direction-hor .hdt-dialog-drawer__inner{
+    padding:1.4rem 0
+  }
+  .hdt-drawer-cookie .hdt-dialog-drawer{
+    height: fit-content;
+    bottom:0;
+    top: auto;
+    max-width:100%;
+    width:100%;
+  }
+  .hdt-drawer-cookie .hdt-dialog-drawer{
+    box-shadow:0 0 10px 3px #eee !important;
+  } 
+  :where(.hdt-drawer-cookie) .hdt-dialog-drawer__header{
+    text-align:end;
+    line-height:normal
+  }
+  :where(.hdt-drawer-cookie) .hdt-dialog-btn__close{
+    border:none;
+    background-color:transparent;
+    padding:0;
+    color:rgb(var(--color-foreground))
+  }
+  :where(.hdt-drawer-cookie) .hdt-dialog-btn__close:hover{
+    color:rgb(var(--color-button))
+  }
+  .hdt-drawer-cookie.hdt-drawer .hdt-dialog-drawer .hdt-icon.hdt-icon-close{
+    width:12px;
+    height:12px
+  }
+  .hdt-popup_cookies_text{
+    margin-bottom:2rem
+  }
+  .hdt-cookie-btn{
+    justify-content:center;
+    flex-direction:column;
+    align-items:center;
+    gap:2rem
+  }
+  .hdt-cookie-btn .hdt-btn{
+    --hdt-pd-y:var(--spacing-1-4);
+    --hdt-pd-x:var(--spacing-4-4);
+    margin:0;
+    max-height:4.7rem;
+    min-width:fit-content
+  }
+  .hdt-cookie-btn .hdt-btn.hdt-btn-link{
+    min-width:fit-content
+  }
+  .hdt-drawer-cookie.hdt-drawer.hdt-direction-ver .hdt-dialog-drawer__inner{
+    max-width:100%;
+    gap:0;
+    padding:2rem
+  }
+  .hdt-popup_cookies{
+    flex-direction:column
+  }
+  .hdt-drawer-cookie.hdt-drawer.hdt-direction-ver::part(body){
+    flex:0 1 100%
+  }
+  @media(min-width:768px){
+    .hdt-popup_cookies_text{
+    margin-bottom:3.2rem
+  }
+  .hdt-direction-ver .hdt-cookie-btn{
+    flex-direction:row-reverse;
+    align-items:center;
+    gap:3rem;
+    min-width:fit-content
+  }
+  .hdt-direction-ver .hdt-popup_cookies_text{
+    margin-bottom:0
+  }
+  .hdt-drawer-cookie.hdt-drawer.hdt-direction-hor .hdt-dialog-drawer{
+    max-width:35.4rem
+  }
+  .hdt-drawer-cookie.hdt-drawer.hdt-direction-ver .hdt-dialog-drawer__inner{
+    max-width:100%;
+    padding:3rem;
+  }
+  .hdt-direction-ver .hdt-popup_cookies{
+    flex-direction:row;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    gap:3rem
+  }
+  .hdt-direction-ver .hdt-popup_cookies_text{
+    text-align:start
+  }
+}
+  @media(min-width:1150px){
+  .hdt-drawer-cookie.hdt-drawer.hdt-direction-ver .hdt-dialog-drawer__inner{
+    gap:4.6rem
+  }
+  .hdt-direction-ver .hdt-popup_cookies{
+    flex-wrap:nowrap
+  }
+  .hdt-direction-ver .hdt-popup_cookies_text{
+    text-align:start;
+    flex:0 1 58%
+  }
+}
+</style>
+<sys-cookies configs='{ "day_next": {{ section.settings.day_next | default: 60 }}, "show": {{ section.settings.show }} }'>  
+  <hdt-drawer class="hdt-drawer hdt-contents hdt-drawer-cookie  hdt-direction-{{ section.settings.hor-ver-layout }}" color-scheme="{{ settings.color_scheme_dialog }}">
+    {% comment %} <h3 slot="header" class="hdt-text-2xl hdt-font-medium"></h3> {% endcomment %}
+    <dialog id="drawerCookies" class="hdt-dialog hdt-dialog-drawer" pos="bottom" initial-focus="false">
+      {% comment %} <button ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="drawerCookies" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button> {% endcomment %}
+      <div class="hdt-dialog-drawer__inner">
+        <div class="hdt-flex hdt-popup_cookies hdt-align-items-center hdt-justify-content-center hdt-text-center hdt-text-md-start">
+          <div class="hdt-col-item hdt-popup_cookies_text hdt-rte hdt-text-base hdt-s-text2 hdt-font-normal"><div class="hdt-cookies_text">{{ section.settings.text }}</div></div>
+          <div class="hdt-col-item hdt-cookie-btn hdt-flex">
+            {%- if section.settings.accept != blank -%}<button type="button" class="hdt-pp_cookies__accept-btn hdt-relative hdt-oh hdt-font-semibold hdt-text-base hdt-btn hdt-btn-solid">{{ section.settings.accept }}</button>{% endif -%}
+            {%- if section.settings.decline != blank -%}<button type="button" class="hdt-pp_cookies__decline-btn hdt-font-semibold hdt-oh hdt-text-base hdt-relative hdt-btn hdt-btn-solid">{{ section.settings.decline }}</button>{% endif -%}
+            {%- if section.settings.links != blank -%}<a href="{{ section.settings.links }}" class="hdt-pp_cookies__more-btn hdt-font-semibold hdt-text-base hdt-flex hdt-align-center hdt-justify-center  hdt-relative hdt-btn hdt-btn-link">{{ section.settings.more }}</a>{% endif -%} 
+          </div>
+        </div>
+      </div>
+    </dialog>
+  </hdt-drawer>
+</sys-cookies>
+
+{% schema %}
+{
+  "name": "t:sections.cookies.name",
+  "class": "hdt-section-admn2-fixed sys-cookies",
+  "limit": 1,
+  "presets": [
+    {
+      "name": "t:sections.cookies.name"
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "custom.system"
+    ]
+  },
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Under EU privacy regulations, websites must make it clear to visitors what information about them is being stored. This specifically includes cookies. Turn on this option and user will see info box at the bottom of the page that your web-site is using cookies. You can add a cookie compliance banner to your theme to allow customers to consent to tracking of non-essential cookies. This allows customers to consent to relevant, region-specific, tracking laws such as GDPR and CCPA."
+    },
+    {
+      "type": "paragraph",
+      "content": "If you’re a merchant operating in or with customers from the EU, EEA (European Economic Area, which includes all EU countries plus Iceland, Liechtenstein, and Norway), UK, or Switzerland, then you need to collect customer consent before installing cookies or gathering data from the user. Cookies are stored on the customer's computer or mobile device, which means your online store is required to ask customers for their consent before we can load analytics cookies."
+    },
+    {
+      "type": "select",
+      "id": "show",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.cookies.settings.show.option_1"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.cookies.settings.show.option_2"
+        }
+      ],
+      "label": "t:sections.cookies.settings.show.label",
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "hor-ver-layout",
+      "label": "t:sections.cookies.settings.hor-ver-layout.label",
+      "default": "hor",
+      "options": [
+        {
+          "value": "hor",
+          "label": "t:sections.cookies.settings.hor-ver-layout.option_1"
+        },
+        {
+          "value": "ver",
+          "label": "t:sections.cookies.settings.hor-ver-layout.option_2"
+        }
+      ]
+    },
+    {
+      "type": "html",
+      "id": "text",
+      "label": "t:sections.cookies.settings.text.label",
+      "default": "We use cookies to improve your experience on our website. By browsing this website, you agree to our use of cookies."
+    },
+    {
+      "type": "text",
+      "id": "accept",
+      "label": "t:sections.cookies.settings.accept.label",
+      "default": "Accept"
+    },
+    {
+      "type": "text",
+      "id": "decline",
+      "label": "t:sections.cookies.settings.decline.label",
+      "default": "Decline"
+    },
+    {
+      "type": "text",
+      "id": "more",
+      "label": "t:sections.cookies.settings.more.label",
+      "default": "More info"
+    },
+    {
+      "type": "url",
+      "id": "links",
+      "label": "t:sections.cookies.settings.links.label",
+      "info": "t:sections.cookies.settings.links.info"
+    }
+  ]
+}
+{% endschema %}

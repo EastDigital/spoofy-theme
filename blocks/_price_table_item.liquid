@@ -1,0 +1,137 @@
+
+{%-liquid 
+  assign color_list = 'products.theme_settings.color' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq
+  assign size_list = 'products.theme_settings.size' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq
+-%}
+<div class="hdt-price-table-item hdt-pr-style1 hdt-ratio--{{ block.settings.image_ratio }} {% unless block.settings.image_size %} hdt-ratio--contain{% endunless %}" color-scheme="{{ block.settings.color_scheme }}" style="--color-custom-badge-label:{{ block.settings.label_cl }}">
+  <div class="hdt-price-table-inner hdt-radius hdt-oh" hdt-reveal="slide-in" timeline>
+    <div class="hdt-price-table-head hdt-card-product">
+      {%- if block.settings.product != blank -%}
+        {%- liquid
+          assign product = block.settings.product
+          assign product_url = product.url
+          capture btn_wishlist_code
+          if settings.wishlist_mode != '0'
+            render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'top'
+          endif
+        endcapture
+        -%}
+        {% render 'card-product-price-tables', card_product: product, class: "hdt-slider__slide hdt-pr-style1", section_id: block.id, image_ratio: block.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: block.settings.show_vendor, pr_card_alignment: block.settings.content_pos %}
+      {%- else -%}
+      {%- capture current -%}{%- cycle 1, 2 , 3 -%}{%- endcapture -%}
+      {%- assign placeholder_image = 'product-apparel-' | append: current -%}
+      <div class="hdt-price-table-item" style="--color-custom-badge-label:{{ block.settings.label_cl }}">
+        <div class="hdt-price-table-inner hdt-radius hdt-oh">
+          <div class="hdt-price-table-head hdt-card-product">
+            {%- render 'card-product-placeholder', image_ratio: block.settings.image_ratio, placeholder_image: placeholder_image, section_id: block.id -%}
+          </div>
+        </div>
+      </div>
+      {%- endif -%}
+    </div>
+    <div class="hdt-price-table-contents">
+      <div class="hdt-separator-block hdt-separator-block--horizontal" style="border-top: 1px solid rgb(var(--color-line-border));"></div>
+      <div class="" style="padding-top: 20px">
+        {% content_for "blocks" %}
+      </div>
+      <div class="hdt-flex" style="justify-content: center;">
+        {% content_for "block", type: 'button', id: 'button_price_table' %}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Price table item",
+    "class": "hdt-slider__slide",
+    "settings":[
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "background-1"
+      },
+      {
+        "type": "product",
+        "id": "product",
+        "label": "t:sections.price-tables.blocks.settings.product.label",
+        "info": "t:sections.price-tables.blocks.settings.product.info"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "t:sections.collection_products.settings.show_vendor",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "image_ratio",
+        "options": [
+          {
+            "value": "adapt_image",
+            "label": "t:sections.all.images.ratio.adapt_image.label"
+          },
+          {
+            "value": "square",
+            "label": "t:sections.all.images.ratio.square.label"
+          },
+          {
+            "value": "portrait",
+            "label": "t:sections.all.images.ratio.portrait.label"
+          },
+          {
+            "value": "asos",
+            "label": "t:sections.all.images.ratio.asos.label"
+          },
+          {
+            "value": "landscape",
+            "label": "t:sections.all.images.ratio.landscape.label"
+          }
+        ],
+        "label": "t:sections.all.images.ratio.label",
+        "default": "adapt_image"
+      },
+      {
+        "type": "checkbox",
+        "id": "image_size",
+        "label": "t:sections.all.images.size.cover",
+        "default": true
+      },
+      {
+        "type":"select",
+        "id":"content_pos",
+        "options":[
+          {
+            "value":"start",
+            "label":"t:sections.price-tables.settings.content_pos.option_1"
+          },
+          {
+            "value":"center",
+            "label":"t:sections.price-tables.settings.content_pos.option_2"
+          }
+        ],
+        "label":"t:sections.price-tables.settings.content_pos.label",
+        "default":"start"
+      },
+      {
+        "type": "color",
+        "id": "label_cl",
+        "label": "t:sections.price-tables.blocks.settings.label_cl.label",
+        "default": "#FF3232"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text"
+      },
+      {
+        "type": "spacer"
+      }
+    ],
+    "presets": [
+        {
+          "name": "Price table item",
+        }
+    ]
+  }
+{% endschema %}

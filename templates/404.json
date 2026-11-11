@@ -1,0 +1,64 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "404": {
+      "type": "404",
+      "blocks": {
+        "image_ticxjc": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector_5ebc0521-0b90-4aab-853f-780bae2dab15.svg"
+          }
+        },
+        "text_fnq7RX": {
+          "type": "text",
+          "settings": {
+            "text": "Oops...That link is broken."
+          }
+        },
+        "text_2_yTk6gd": {
+          "type": "text_2",
+          "settings": {
+            "text": "Sorry for the inconvenience. Go to our homepage or check out our latest collections."
+          }
+        },
+        "button_qALKey": {
+          "type": "button",
+          "settings": {
+            "btn_label": "Shop now",
+            "btn_link": "",
+            "target": false,
+            "btn_size": "base",
+            "btn_style": "solid",
+            "btn_fw": "normal",
+            "btn_icon": "1"
+          }
+        }
+      },
+      "block_order": [
+        "image_ticxjc",
+        "text_fnq7RX",
+        "text_2_yTk6gd",
+        "button_qALKey"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "full_width": false,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "padding_rate": 75
+      }
+    }
+  },
+  "order": [
+    "404"
+  ]
+}

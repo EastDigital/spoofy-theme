@@ -1,0 +1,31 @@
+<div class="hdt-product-info__item hdt-product__meta hdt-s-text" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+  {% content_for "blocks" %}
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.meta.name",
+  "tag": null,
+  "blocks": [
+    {
+      "type":"_product-meta-options"
+    },
+    {
+      "type":"_product-meta-vendor"
+    },
+    {
+      "type":"_product-meta-type"
+    },
+    {
+      "type":"_product-meta-sku"
+    },
+    {
+      "type":"_product-meta-barcode"
+    }
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.meta.name" 
+    }
+  ]
+}
+{% endschema %}

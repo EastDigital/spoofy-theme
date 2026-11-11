@@ -1,0 +1,34 @@
+<div class="hdt-product-info__item hdt-product__extra-link hdt-flex hdt-flex-wrap" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+  {% content_for "blocks" %}
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.extra_link.name",
+  "tag": null,
+  "blocks": [
+    {
+    "type": "_product-size-chart"
+    },
+    {
+    "type": "_product-delivery-return"
+    },
+    {
+    "type": "_product-ask-question"
+    },
+    {
+    "type": "_product-link-custom"
+    },
+    {
+    "type": "_share_buttons"
+    },
+    {
+    "type": "_compare_color"
+    }
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.extra_link.name" 
+    }
+  ]
+}
+{% endschema %}

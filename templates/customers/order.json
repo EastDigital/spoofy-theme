@@ -1,0 +1,33 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "heading": {
+      "type": "main-heading",
+      "blocks": {
+        "07a5aa24-dd2b-4a86-b317-574b7aeefd77": {
+          "type": "1",
+          "settings": {
+            "heading": "Order"
+          }
+        }
+      },
+      "block_order": ["07a5aa24-dd2b-4a86-b317-574b7aeefd77"],
+      "settings": {
+        "image": "shopify://shop_images/background_heading.png"
+      }
+    },
+    "main": {
+      "type": "main-order",
+      "settings": {}
+    }
+  },
+  "order": ["heading", "main"]
+}

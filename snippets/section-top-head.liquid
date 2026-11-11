@@ -1,0 +1,277 @@
+{%- liquid
+  assign subheading_weight = subheading_weight | default: section.settings.subheading_weight | default: "normal" 
+  assign subheading_size = subheading_size | default: section.settings.subheading_size | default: "lg" 
+  assign heading_gap = heading_gap | default: section.settings.heading_gap | default: 18
+  assign nav_pos = nav_pos | default: section.settings.nav_pos
+  assign nav_des = section.settings.nav_des
+  assign navUI = section.settings.navUI
+  if navUI and nav_pos == "ontop_left"
+    assign nav_position = "ontop_left"
+  elsif navUI and nav_pos == "ontop_right"
+    assign nav_position = "ontop_right"
+  else
+    assign nav_position = "in_content"
+  endif
+  if section.settings.dotUI and section.settings.dots_pos == "ontop"
+    assign dots_pos = "ontop"
+  else
+    assign dots_pos = "in_content"
+  endif
+  assign nav_heading = section.settings.nav_heading | default: "disable"
+  if nav_heading != "disable" 
+    assign navUI = true
+    if section.settings.btn_heading == false
+      assign nav_position = "ontop_right"
+      assign nav_des = nav_heading
+    endif
+  endif
+-%}
+{% if section.settings.sec_heading != blank or section.settings.sec_subheading != blank or nav_position == "ontop_left" or nav_position == "ontop_right" or dots_pos == "ontop" %}
+  <div class="hdt-section-head hdt-relative hdt-flex md:hdt-align-center hdt-justify-{{ section.settings.heading_align }} hdt-nav_{{ nav_position }} hdt-top-dots_{{ dots_pos }} hdt-dots-outline">
+    {%- if nav_position == "ontop_left" -%}
+      <div class="hdt-top-nav hdt-nav-xsmall hdt-flex hdt-align-center hdt-justify-start hdt-left-0 hdt-top-0 hdt-bottom-0 hdt-nav-btns-{{ nav_des }}"{% if section.settings.carousel_scheme %} color-scheme="{{ section.settings.carousel_scheme_color }}"{% endif %}>
+        <button hdt-reveal="slide-in" timeline aria-controls="Slider-{{ section.id }}" class="hdt-slider__button  hdt-show-all hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--prev {{ class }}" type="button" name="previous">
+          <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M5.5 11L0 5.5L5.5 0L6.47625 0.97625L1.9525 5.5L6.47625 10.0238L5.5 11Z" fill="currentColor"/></svg>
+        </button>
+        <button hdt-reveal="slide-in" timeline aria-controls="Slider-{{ section.id }}" class="hdt-slider__button  hdt-show-all hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--next {{ class }}" type="button" name="next">
+          <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1.5 11L7 5.5L1.5 0L0.52375 0.97625L5.0475 5.5L0.52375 10.0238L1.5 11Z" fill="currentColor"/></svg>
+        </button>
+      </div> 
+    {%- endif -%}
+    {% if section.settings.sec_heading != blank or section.settings.sec_subheading != blank %} 
+      <div class="hdt-section-main-heading {% if section.settings.heading_reverse %}hdt-heading-reverse {% endif %}hdt-flex hdt-flex-col hdt-justify-center hdt-align-{{ section.settings.heading_align }} hdt-text-{{ section.settings.heading_align }} {% if section.settings.btn_heading or section.settings.btn_heading_collection %} hdt-heading-has-btn{% endif %}">
+        {% if section.settings.sec_heading != blank %}
+          <{{ section.settings.heading_tag | default: "h3" }} class="hdt-sec-heading hdt-rte hdt-{{ section.settings.heading_size }} {{ section.settings.text_color }} hdt-flex hdt-align-center" hdt-reveal="slide-in" timeline>
+            <span>{{ section.settings.sec_heading }}</span>
+            {% if section.settings.btn_heading_collection %}
+              <a hdt-reveal="slide-in" timeline class="hdt-btn hdt-btn-link hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-text-base hdt-font-semibold" href="{{ routes.collections_url }}">
+                <span class="hdt-relative">{{ 'sections.collection_list.view_all_categories' | t }}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none">
+                  <path d="M0.861539 8L0 7.13846L5.90769 1.23077H0.615385V0H8V7.38462H6.76923V2.09231L0.861539 8Z" fill="currentColor"/>
+                </svg>
+              </a>
+            {% endif %}
+          </{{ section.settings.heading_tag | default: "h3" }}>
+        {% endif %}
+        {%- if section.settings.heading_size == "h_custom" -%}
+          {%- style -%}
+             #shopify-section-{{section.id}} .hdt-section-main-heading .hdt-sec-heading {
+              --heading-fs-lg: {{ section.settings.font_size_heading_lg }}px; --heading-fs-md: {{ section.settings.font_size_heading_md }}px; --heading-fs-mb: {{ section.settings.font_size_heading }}px; --heading-fw: {{ section.settings.font_weight_heading }}; --heading-ls: {{ section.settings.letter_spacing_heading }}px; 
+            }
+          {%- endstyle -%}
+        {%- endif -%}
+
+        {% if section.settings.sec_subheading != blank %}
+          <div hdt-reveal="slide-in" timeline class="hdt-sec-subheading hdt-rte hdt-text-{{ subheading_size }} hdt-font-{{ subheading_weight }}" hdt-reveal="slide-in" timeline>{{ section.settings.sec_subheading }}</div>
+        {% endif %}
+        {% if section.settings.btn_heading %}
+          <div class="hdt-heading-viewall hdt-nav-btns-{{ nav_heading }} hdt-inline-flex hdt-align-center hdt-justify-center" hdt-reveal="slide-in" timeline>
+            {% if nav_heading != "disable" %}
+              <button hdt-reveal="slide-in" timeline aria-controls="Slider-{{ section.id }}" class="hdt-slider__button hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--prev" type="button" disabled name="previous">
+                {%- if nav_heading == "simple" -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="10" viewBox="0 0 14 10" fill="none">
+                    <path d="M5.00016 10L6.16683 8.79167L3.2085 5.83333H13.3335V4.16667H3.2085L6.16683 1.20833L5.00016 0L0.000164032 5L5.00016 10Z" fill="currentColor"/>
+                  </svg>
+                {%- else -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="5" height="8" viewBox="0 0 5 8" fill="none">
+                    <path d="M4 3.49691e-07L3.49691e-07 4L4 8L4.71 7.29L1.42 4L4.71 0.71L4 3.49691e-07Z" fill="currentColor"/>
+                  </svg>
+                {%- endif -%}
+              </button>
+            {% endif %}
+            <a hdt-reveal="slide-in" timeline class="hdt-btn hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-text-sm hdt-font-semibold" href="{{ collection.url | default: routes.all_products_collection_url }}">
+              <span class="hdt-relative">{{ 'general.pagination.view_all' | t }}</span>
+            </a>
+            {% if nav_heading != "disable" %}
+              <button hdt-reveal="slide-in" timeline aria-controls="Slider-{{ section.id }}" class="hdt-slider__button hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--next" type="button" disabled name="next">
+                {%- if nav_heading == "simple" -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="10" viewBox="0 0 14 10" fill="none">
+                    <path d="M8.33333 10L7.16667 8.79167L10.125 5.83333H0V4.16667H10.125L7.16667 1.20833L8.33333 0L13.3333 5L8.33333 10Z" fill="currentColor"/>
+                  </svg>
+                {%- else -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="5" height="8" viewBox="0 0 5 8" fill="none">
+                    <path d="M0.999999 3.49691e-07L5 4L1 8L0.29 7.29L3.58 4L0.289999 0.71L0.999999 3.49691e-07Z" fill="currentColor"/>
+                  </svg>
+                {%- endif -%}
+              </button>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>  
+    {% endif %}
+    {%- if nav_position == "ontop_right" -%}
+      <div class="hdt-top-nav hdt-nav-xsmall hdt-flex hdt-align-center hdt-justify-end hdt-right-0 hdt-top-0 hdt-bottom-0 hdt-top-nav_{{ nav_des }} hdt-nav-btns-{{ nav_des }}"{% if section.settings.carousel_scheme %} color-scheme="{{ section.settings.carousel_scheme_color }}"{% endif %}>
+        <button hdt-reveal="slide-in" timeline aria-controls="Slider-{{ section.id }}" class="hdt-slider__button  hdt-show-all hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--prev {{ class }}" type="button" name="previous">
+          <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M5.5 11L0 5.5L5.5 0L6.47625 0.97625L1.9525 5.5L6.47625 10.0238L5.5 11Z" fill="currentColor"/></svg>
+        </button>
+        <button hdt-reveal="slide-in" timeline aria-controls="Slider-{{ section.id }}" class="hdt-slider__button  hdt-show-all hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--next {{ class }}" type="button" name="next">
+          <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1.5 11L7 5.5L1.5 0L0.52375 0.97625L5.0475 5.5L0.52375 10.0238L1.5 11Z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    {%- endif -%}
+    {%- if dots_pos == "ontop" -%} 
+      <div hdt-reveal="slide-in" timeline hdt-slider-dots class="hdt-slider__dots hdt-absolute hdt-flex hdt-align-center hdt-justify-center hdt-right-0 hdt-top-0 hdt-bottom-0 no-js-hidden" aria-controls="Slider-{{ section.id }}"{% if section.settings.carousel_scheme %} color-scheme="{{ section.settings.carousel_scheme_color }}"{% endif %}></div>
+    {%- endif -%}
+  </div>
+{% endif %}
+{%- style -%}
+{% if section.settings.sec_heading_spacing>50 %}
+  #{{section.id}} .hdt-section-head{
+    --section-head-spacing:30px;
+  }
+  @media(min-width:768px){
+    #{{section.id}} .hdt-section-head{
+      --section-head-spacing:50px;
+    }
+  }
+  @media(min-width:1150px){
+    #{{section.id}} .hdt-section-head{
+      --section-head-spacing:{{section.settings.sec_heading_spacing}}px;
+      }
+  }
+{% elsif section.settings.sec_heading_spacing>30 %}
+  #{{section.id}} .hdt-section-head{
+    --section-head-spacing:30px;
+  }
+  @media(min-width:768px){
+    #{{section.id}} .hdt-section-head{
+      --section-head-spacing: {{section.settings.sec_heading_spacing}}px;
+    }
+  }
+{% else %}
+  #{{section.id}} .hdt-section-head{
+    --section-head-spacing:{{section.settings.sec_heading_spacing}}px;
+  }
+{% endif %}
+.hdt-section-head {
+  margin-bottom: var(--section-head-spacing);
+}
+
+.hdt-section-head.hdt-justify-center {
+  padding-inline-start: 15px;
+  padding-inline-end: 15px;
+}
+
+#{{section.id}} .hdt-section-head .hdt-section-main-heading {
+  gap: {{heading_gap}}px;
+}
+
+
+.hdt-section-head .hdt-sec-subheading {
+  line-height: var(--font-body-line-height);
+  color: rgb(var(--color-foreground2));
+  line-height: 22px;
+}
+
+.hdt-section-head .hdt-sec-subheading.hdt-text-2xl {
+  line-height: 30px;
+}
+
+.hdt-section-head .hdt-sec-subheading.hdt-text-10xl {
+  line-height: 36px;
+}
+
+.hdt-heading-viewall {
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  gap: 16px;
+  line-height: var(--font-heading-line-height);
+  overflow: inherit;
+  --btn-color: rgb(var(--color-foreground));
+}
+
+.hdt-heading-viewall a {
+  line-height: 1;
+  color: var(--btn-color);
+  padding: 0 0 8px;
+}
+
+.hdt-heading-viewall a::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--btn-color);
+}
+
+.hdt-heading-viewall button {
+  color: var(--btn-color);
+}
+
+#{{section.id}} .hdt-section-head .hdt-heading-reverse.hdt-section-main-heading {
+  flex-direction: column-reverse;
+}
+
+.hdt-section-head .hdt-heading-reverse .hdt-sec-subheading {
+  /* --text-lg: var(--text-base);
+  --font-normal: var(--font-semibold) */
+}
+
+@media (-moz-touch-enabled:0),
+(hover:hover) and (min-width:1150px) {
+  .hdt-heading-viewall a:hover,
+  .hdt-heading-viewall button:hover {
+      color: rgb(var(--color-accent));
+  }
+  .hdt-heading-viewall a:hover::after {
+      background-color: rgb(var(--color-accent));
+  }
+}
+
+@media(max-width:1149px) {
+  .hdt-section-head .hdt-sec-subheading.hdt-text-10xl {
+      --text-10xl: 2.4rem ;
+      line-height:28px;
+  }
+  .hdt-section-head .hdt-sec-subheading.hdt-text-2xl {
+      --text-2xl: 1.8rem;
+      line-height: 22px;
+  }
+}
+
+@media(max-width:767px) {
+  .hdt-section-head .hdt-sec-subheading.hdt-text-lg {
+      --text-lg: 1.4rem;
+      line-height: 20px;
+  }
+  .hdt-section-head .hdt-sec-subheading.hdt-text-2xl {
+      --text-2xl: 1.6rem;
+      line-height: 22px;
+  }
+  .hdt-section-head .hdt-sec-subheading.hdt-text-10xl {
+      --text-10xl: 2rem;
+       line-height:24px;
+  }
+  .hdt-section-head .hdt-sec-subheading br {
+      display: none;
+  }
+  .hdt-section-head.hdt-justify-start {
+      justify-content: space-between;
+      gap: 10px;
+  }
+  .hdt-section-head>* {
+      order: 2;
+  }
+  .hdt-section-head .hdt-section-main-heading {
+      order: 1;
+  }
+  .hdt-section-head.hdt-top-dots_ontop .hdt-top-nav {
+      display: none;
+  }
+  .hdt-section-head.hdt-top-dots_ontop .hdt-top-dots {
+      position: static;
+  }
+  .hdt-section-head.hdt-justify-center .hdt-top-nav,
+  .hdt-section-head.hdt-justify-center .hdt-slider__dots-outer {
+      justify-content: center;
+  }
+  .hdt-section-head.hdt-justify-start .hdt-top-nav,
+  .hdt-section-head.hdt-justify-start .hdt-slider__dots-outer {
+      margin-inline-start: 0;
+  }
+}
+{%- endstyle -%}

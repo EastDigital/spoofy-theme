@@ -1,0 +1,72 @@
+{%- comment -%}
+  Renders a line-item price
+
+  Accepts:
+  - line_item: {Object} A line in a cart, checkout, or order. Each line item represents a product variant. (required)
+  - price_class: {String} Adds a price class to the price element (optional)
+  - show_compare_at_price: {Boolean} Renders the compare at price if the product matches the condition (optional)
+  - get_total: {Boolean} The combined price of all of the items in a line item (optional)
+  - show_unit_price {Boolean} (optional)
+
+  Usage:
+  {%- render 'card-price', product: card_product, show_volume_note: true -%} (used on card, product on sidebar)
+  {%- render 'price', product: product, use_variant: true, form_id: form_id -%} (used on product page, quick view, featured product...)
+  {%- render 'line-item-price', line_item: item -%} (used on cart, order page...)
+{%- endcomment -%}
+
+{%- liquid
+  if show_compare_at_price == nil
+    assign show_compare_at_price = true
+  endif
+  if get_total
+    assign price = line_item.final_line_price
+    assign compare_at_price = line_item.original_line_price
+  else
+    assign price = line_item.final_price
+    assign line_item_variant = line_item.variant
+    if line_item.original_price != price
+      assign compare_at_price = line_item.original_price
+    elsif line_item_variant.compare_at_price > price
+      assign compare_at_price = line_item_variant.compare_at_price
+    else
+      assign compare_at_price = 0
+    endif
+  endif
+  if settings.currency_code_enabled
+    assign money_price = price | money_with_currency
+    assign money_compare_at_price = compare_at_price | money_with_currency
+  else
+    assign money_price = price | money
+    assign money_compare_at_price = compare_at_price | money
+  endif
+  if compare_at_price > price
+    assign on_sale = true
+  else
+    assign on_sale = false
+  endif
+-%}
+
+<div class="hdt-price__item hdt-price__list {{ price_class }}">
+  {%- if on_sale and show_compare_at_price -%}
+  <hdt-compare-at-price class="hdt-compare-at-price">
+    <span class="sr-only">{{ 'products.product.price.regular_price' | t }}</span>
+    <span class="hdt-money">{{ money_compare_at_price }}</span>
+  </hdt-compare-at-price>
+  {%- endif -%}
+  <hdt-price class="hdt-price">
+    <span class="sr-only">{{ 'products.product.price.sale_price' | t }}</span>
+    <span class="hdt-money">{{ money_price }}</span>
+  </hdt-price>
+  {%- if line_item.variant.available and line_item.unit_price_measurement and show_unit_price -%}
+    <div class="hdt-unit-price">
+      <span class="sr-only">{{ 'products.product.price.unit_price' | t }}</span>
+      <span class="hdt-money">{{ line_item.unit_price | money }}</span>
+      <span aria-hidden="true">/</span>
+      <span class="sr-only">&nbsp;{{ 'accessibility.unit_price_separator' | t }}&nbsp;</span>
+      {%- if line_item.unit_price_measurement.reference_value != 1 -%}
+        {{- line_item.unit_price_measurement.reference_value -}}
+      {%- endif -%}
+      {{ line_item.unit_price_measurement.reference_unit }}
+    </div>
+  {%- endif -%}
+</div>

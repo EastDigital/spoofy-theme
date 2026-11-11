@@ -1,0 +1,50 @@
+<div id="block-{{ block.id }}" class="hdt-spacer-block {%- if block.settings.direction %}-hoz{% endif %}" style=" --space: {{ block.settings.space }}px; --space-md: {{ block.settings.space_md }}px; --space-lg: {{ block.settings.space_lg }}px;" {{ block.shopify_attributes }}> </div>
+
+{% schema %}
+{
+  "name": "t:blocks.spacer.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "direction",
+      "label": "t:blocks.spacer.horizontal"
+    },
+    {
+      "type": "range",
+      "id": "space_lg",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:blocks.spacer.space",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space_md",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:blocks.spacer.tablet_space",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "t:blocks.spacer.mobile_space",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.spacer.name"
+    }
+  ]
+}
+{% endschema %}

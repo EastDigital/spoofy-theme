@@ -1,0 +1,45 @@
+{%- if block.settings.video -%}
+  <hdt-video-player autoplay>
+    {{- block.settings.video | video_tag: image_size: '1500x', playsinline: true, muted: true, loop: true, controls: false, preload: 'metadata' -}}
+  </hdt-video-player>
+{%- else -%}
+  <hdt-video-player host="{{ block.settings.external_video_url.type }}" type="background" autoplay>
+    <template>
+      {%- if block.settings.external_video_url.type == 'youtube' -%}
+        <iframe id="iframe-{{ block.id }}" src="https://www.youtube.com/embed/{{ block.settings.external_video_url.id }}?playsinline=1&autoplay=1&controls=0&mute=1&loop=1&playlist={{ block.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}" allow="autoplay; encrypted-media" allowfullscreen="allowfullscreen"></iframe>
+      {%- elsif block.settings.external_video_url.type == 'vimeo' -%}
+        <iframe src="https://player.vimeo.com/video/{{ block.settings.external_video_url.id }}?autoplay=1&autopause=1&background=1&loop=1&muted=1&transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.color_accent | remove_first: '#' }}" allow="autoplay; encrypted-media;" allowfullscreen="allowfullscreen"></iframe>
+      {%- endif -%}
+    </template>
+  </hdt-video-player>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Video",
+    "tag":null,
+    "settings": [
+      {
+        "type": "video",
+        "id": "video",
+        "label": "t:sections.video.settings.video.label",
+        "info": "t:sections.video.settings.video.info"
+      },
+      {
+        "type": "video_url",
+        "id": "external_video_url",
+        "accept": [
+          "vimeo",
+          "youtube"
+        ],
+        "label": "t:sections.video.settings.video.url",
+        "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+      },
+    ],
+    "presets": [
+      {
+        "name": "Video"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,200 @@
+<!-- snippets/pin-product.liquid -->
+
+{%- liquid
+  assign product = block.settings.product
+  assign pin_id = 'pin-id-' | append: block.id | append: product.id
+  assign attr = 'close-dialog="' | append: pin_id | append: '"'
+-%}
+<div class="hdt-pin-item hdt-absolute" style="--top-pos:{{ block.settings.top }}%;--left-pos:{{ block.settings.left }}%;" color-scheme="{{ block.settings.color_scheme }}">
+  <button class="hdt-pin_btn hdt-radius-full hdt-pin-size-{{ block.settings.pin_size }} hdt-pin-type-{{ block.settings.pin_type }}" aria-controls="{{ pin_id }}">
+    <span class="hdt-zoompin"></span>
+    {% if block.settings.pin_type == 'showtext' and block.settings.text != blank %}
+      <span class="hdt-pin-text">{{ block.settings.text }}</span> 
+    {% else %}
+      <span class="hdt-pin-icon"></span>
+    {% endif %}
+  </button>
+  <hdt-append-body -desktop>
+    <hdt-popover data-change="Slider-{{ section.id }}" data-auto-close="desktop" placement="{{ block.settings.placement }}" color-scheme="{{block.settings.product_color_scheme }}">
+      <dialog id="{{ pin_id }}" class="hdt-popover hdt-lookbook_pin hdt-ratio--{{ block.settings.image_ratio }}{% unless block.settings.image_size %} hdt-ratio--contain{% endunless %}" scroll-lock>
+        <div class="hdt-popover__arrow"></div>
+        <div class="hdt-popover__body">
+          <div class="hdt-popover__inner hdt-current-scrollbar hdt-pin-product">
+            <div class="hdt-pr_wrap hdt-flex hdt-product hdt-align-center">
+              <div class="hdt-pr_thumb hdt-oh hdt-radius-xs">
+                {%- if product.featured_media -%}
+                  <a href="{{ product.url }}">
+                    {{ product.featured_media | image_url: width: product.featured_media.width | image_tag: loading: 'lazy', width: product.featured_media.width, height: product.featured_media.height, class: 'hdt-h-full hdt-w-full hdt-object-cover hdt-object-center', sizes: '(min-width: 788px) 120px, 80px', widths: '60,80,120,140,180,240' }}
+                  </a>
+                {%- endif -%}
+              </div>
+              <div class="hdt-pr_content hdt-truncate hdt-text-start">
+                <a href="{{ product.url }}" class="hdt-text-lg hdt-pr_title hdt-product-title hdt-font-normal">{{ product.title }}</a>
+                <div class="hdt-pr_price">{%- render 'card-price', product: product, show_volume_note: true, price_class: 'hdt-font-semibold' -%}</div>
+              </div>
+              <div class="hdt-pr_btn hdt-flex hdt-align-center hdt-justify-center">
+                {%- render 'btn-quick-view', product: product, section_id: block.id, class: 'hdt-quickview hdt-lookbook_qv hdt-radius-full hdt-flex hdt-align-center hdt-justify-center', placement: 'top', attr: attr -%}
+              </div>
+            </div>
+          </div>
+        </div>
+      </dialog>
+    </hdt-popover>
+  </hdt-append-body>
+</div>
+
+{% schema %}
+  {
+    "name": "Pin product 2",
+    "tag": null,
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label"
+      },
+      {
+        "type": "range",
+        "id": "left",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:blocks.pin_product.settings.left.label",
+        "default": 50
+      },
+      {
+        "type": "range",
+        "id": "top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:blocks.pin_product.settings.top.label",
+        "default": 50
+      },
+      {
+        "type": "select",
+        "id": "pin_size",
+        "label": "t:blocks.pin_product.settings.pin_size.label",
+        "options": [
+          {
+            "value": "small",
+            "label": "t:blocks.pin_product.settings.pin_size.options.small"
+          },
+          {
+            "value": "medium",
+            "label": "t:blocks.pin_product.settings.pin_size.options.medium"
+          },
+          {
+            "value": "large",
+            "label": "t:blocks.pin_product.settings.pin_size.options.large"
+          },
+          {
+            "value": "extra-large",
+            "label": "t:blocks.pin_product.settings.pin_size.options.extra_large"
+          }
+        ],
+        "default": "medium"
+      },
+      {
+        "type": "select",
+        "id": "pin_type",
+        "label": "t:blocks.pin_product.settings.pin_type.label",
+        "options": [
+          {
+            "value": "1",
+            "label": "t:blocks.pin_product.settings.pin_type.options.icon_1"
+          },
+          {
+            "value": "2",
+            "label": "t:blocks.pin_product.settings.pin_type.options.icon_2"
+          },
+          {
+            "value": "showtext",
+            "label": "t:blocks.pin_product.settings.pin_type.options.show_text"
+          }
+        ],
+        "default": "1"
+      },
+      {
+        "type": "text",
+        "id": "text",
+        "label": "t:blocks.pin_product.settings.text.label",
+        "default": "$59"
+      },
+      {
+        "type": "product",
+        "id": "product",
+        "label": "t:blocks.pin_product.settings.product.label"
+      },
+      {
+        "type": "select",
+        "id": "placement",
+        "label": "t:sections.all.placement.label",
+        "options": [
+          {
+            "value": "top-start",
+            "label": "t:sections.all.placement.options.top-start"
+          },
+          {
+            "value": "top",
+            "label": "t:sections.all.placement.options.top"
+          },
+          {
+            "value": "top-end",
+            "label": "t:sections.all.placement.options.top-end"
+          },
+          {
+            "value": "bottom-start",
+            "label": "t:sections.all.placement.options.bottom-start"
+          },
+          {
+            "value": "bottom",
+            "label": "t:sections.all.placement.options.bottom"
+          },
+          {
+            "value": "bottom-end",
+            "label": "t:sections.all.placement.options.bottom-end"
+          },
+          {
+            "value": "left-start",
+            "label": "t:sections.all.placement.options.left-start"
+          },
+          {
+            "value": "left",
+            "label": "t:sections.all.placement.options.left"
+          },
+          {
+            "value": "left-end",
+            "label": "t:sections.all.placement.options.left-end"
+          },
+          {
+            "value": "right-start",
+            "label": "t:sections.all.placement.options.right-start"
+          },
+          {
+            "value": "right",
+            "label": "t:sections.all.placement.options.right"
+          },
+          {
+            "value": "right-end",
+            "label": "t:sections.all.placement.options.right-end"
+          }
+        ],
+        "default": "top"
+      },
+      {
+        "type": "color_scheme",
+        "id": "product_color_scheme",
+        "label": "Product color scheme",
+        "visible_if": "{{ block.settings.product != blank }}"
+      },
+    ],
+    "presets": [
+      {
+        "name": "Pin product 2",
+      }
+    ]
+  }
+{% endschema %}

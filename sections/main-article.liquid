@@ -1,0 +1,122 @@
+{{ 'hdt-main-article.css' | asset_url | stylesheet_tag }}
+{%- style -%}#shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}}{%- endstyle -%}
+<div id="{{ section.id }}"class="hdt-article-inner hdt-s-gradient hdt-section-spacing" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %}">
+    <div class="hdt-main-article-page">
+      {% content_for "blocks" %}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Main article",
+    "class": "hdt-main-article",
+    "enabled_on": {
+      "templates": [
+        "article"
+      ]
+    },
+    "blocks": [
+      {
+        "type": "_article-comments"
+      },
+      {
+        "type": "_article-content"
+      },
+      {
+        "type": "_article-image"
+      },
+      {
+        "type": "_article-navigation"
+      },
+      {
+        "type": "_article-related"
+      },
+      {
+        "type": "_article-tag-shares"
+      },
+      {
+        "type": "_article-title"
+      }
+    ],
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:sections.all.section_layout"
+      },
+      {
+        "type": "checkbox",
+        "id": "section_fullwidth",
+        "label": "t:sections.all.section_fullwidth",
+        "default": false
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 150,
+        "step": 2,
+        "unit": "px",
+        "label": "t:sections.title.settings.padding_top.label",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 150,
+        "step": 2,
+        "unit": "px",
+        "label": "t:sections.title.settings.padding_bottom.label",
+        "default": 60
+      },
+      {
+        "type": "range",
+        "id": "padding_rate",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:sections.all.padding.padding_rate",
+        "default": 75
+      }
+    ],
+    "presets": [
+      {
+        "name": "Main article",
+        "blocks": [
+          {
+            "type": "_article-comments",
+          },
+          {
+            "type": "_article-content",
+          },
+          {
+            "type": "_article-image",
+          },
+          {
+            "type": "_article-navigation",
+          },
+          {
+            "type": "_article-related",
+          },
+          {
+            "type": "_article-tag-shares",
+          },
+          {
+            "type": "_article-title",
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

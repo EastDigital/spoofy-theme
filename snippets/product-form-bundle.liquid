@@ -1,0 +1,163 @@
+{%- comment -%}
+  Renders product buy-buttons.
+  Accepts:
+  - product: {Object} product object.
+  - block: {Object} passing the block information.
+  - section_id: {String} id of section to which this snippet belongs.
+
+  Usage:
+  {%- render 'product-form-bundle', block: block, product: product, section_id: section.id -%}
+{%- endcomment -%}
+
+<style>
+  .hdt-product-form-bundle input[type="checkbox"] + label {
+    width: 1.4rem;
+    height: 1.4rem;
+    display: inline-block;
+    border: 1px solid;
+  }
+  .hdt-product-form-bundle input[type="checkbox"]:checked + label {
+    border-color: red;
+  }
+  hdt-bundle-product img {
+    width: 8rem;
+  }
+  :is(hdt-bundle-product,.hdt-observe-bundle-item):not(.is-checked) {
+    opacity: .2;
+  }
+</style>
+
+{%- liquid
+  assign selected_variant = product.selected_or_first_available_variant
+  assign bundle_form_id = 'bundle-form-' | append: section_id | append: '-' | append: block.id
+  assign complementary_products = product.metafields.shopify--discovery--product_recommendation.complementary_products.value | default: section.settings.product_list
+  if complementary_products != blank
+  assign complementary_products_available = complementary_products | where: "available", true
+  endif
+  assign sizes = '80px'
+  assign image_size = 160
+-%}
+
+{%- if complementary_products_available.size > 0 -%}
+{%- comment -%}
+  <div>
+    <div class="hdt-observe-bundle-item is-checked" id="observe-{{ block.id }}-{% increment index3 %}">
+      {{ selected_variant.image | default: product.featured_image | image_url: width: image_size | image_tag: srcset: nil, sizes: sizes, update-img: '' }}
+    </div>
+    {%- for item in complementary_products_available limit: 10 -%}
+      <div class="hdt-observe-bundle-item is-checked" id="observe-{{ block.id }}-{% increment index3 %}">
+        {%- liquid
+          assign v_image = item.variants.first.image | default: item.featured_image
+          if v_image != blank
+          echo v_image | image_url: width: image_size | image_tag: srcset: nil, sizes: sizes, update-img: ''
+          endif
+        -%}
+      </div>
+    {%- endfor %}
+  </div>
+{%- endcomment -%}
+<wrapp-hdt-pr-frm-bundle class="hdt-contents">
+  {%- form 'product', product, id: bundle_form_id, class: 'hdt-product-form-bundle', novalidate: 'novalidate' -%}
+    <div class="hdt-bundle-products">
+      {%- liquid
+      assign available_v = product.variants | where: "available"
+      assign available_v_first = available_v.first
+      assign total_price = selected_variant.price
+      assign total_compare_at_price = selected_variant.compare_at_price | default: total_price
+      assign v_image = selected_variant.image | default: product.featured_image
+      -%}
+      <hdt-bundle-product class="is-checked" observes="observe-{{ block.id }}-{% increment index0 %}">
+          <input autocomplete="off" type="checkbox" checked="checked" id="bundle-ck-{{ block.id }}-{% increment index %}" class="sr-only">
+          <label for="bundle-ck-{{ block.id }}-{% increment index2 %}" class="hdt-pe-none no-js-hidden"><svg class="hdt-hidden hdt-icon-checked" width="10" height="10" viewBox="0 0 24 24"><path d="M9 20l-7-7 3-3 4 4L19 4l3 3z"></path></svg></label>
+          {%- liquid
+            if v_image != blank
+            echo v_image | image_url: width: image_size | image_tag: srcset: nil, sizes: sizes, update-img: ''
+            endif
+          -%}
+          <span>{{ product.title }}</span>
+          {%- if product.has_only_default_variant -%}
+            <input data-groups-pr-sl name="items[][id]" data-cpprice="{{ available_v_first.compare_at_price | default: available_v_first.price }}" data-price="{{ available_v_first.price }}" value="{{ available_v_first.id }}" type="hidden">
+        {%- else -%}
+          <div class="hdt-relative hdt-inline-block">
+            <select name="items[][id]" autocomplete="off" class="hdt-select" data-cpprice="{{ available_v_first.compare_at_price | default: available_v_first.price }}" data-price="{{ available_v_first.price }}">
+              {%- for variant in available_v -%}
+                <option data-srcset="{{ variant.image | default: product.featured_image | image_url: width: image_size }}" data-cpprice="{{ variant.compare_at_price | default: variant.price }}" data-price="{{ variant.price }}" data-qty="{{ variant.quantity_rule.min }}" value="{{ variant.id }}"{% if forloop.first %} selected="selected"{% endif %}>{{ variant.title | escape }}</option>
+            {%- endfor -%}
+            </select>
+          </div>
+        {%- endif -%}
+          <input update-qty value="{{ available_v_first.quantity_rule.min }}" type="hidden" name="items[][quantity]">
+          <div update-price>
+            <hdt-compare-at-price class="hdt-compare-at-price" {% unless available_v_first.compare_at_price > available_v_first.price %} hidden{% endunless %}>
+              <span class="sr-only sr-only--inline">{{ 'products.product.price.regular_price' | t }}</span>
+              <span class="hdt-money">{{ available_v_first.compare_at_price | money }}</span>
+            </hdt-compare-at-price>
+            <hdt-price class="hdt-price">
+              <span class="sr-only sr-only--inline">{{ 'products.product.price.sale_price' | t }}</span>
+              <span class="hdt-money">{{ available_v_first.price | money }}</span>
+            </hdt-price>
+          </div>
+      </hdt-bundle-product>
+
+      {%- for item in complementary_products_available limit: 10 -%}
+        {%- liquid
+        if product.id == item.id
+          continue
+        endif
+        assign available_v = item.variants | where: "available"
+        assign available_v_first = available_v.first
+        assign cu_pr = available_v_first.price
+        assign cp_pr = available_v_first.compare_at_price | default: cu_pr
+        assign total_price = total_price | plus: cu_pr
+        assign total_compare_at_price = total_compare_at_price | plus: cp_pr
+        assign v_image = available_v_first.image | default: item.featured_image
+        -%}
+        <hdt-bundle-product class="is-checked" observes="observe-{{ block.id }}-{% increment index0 %}">
+          <input autocomplete="off" type="checkbox" checked="checked" id="bundle-ck-{{ block.id }}-{% increment index %}" class="sr-only">
+          <label for="bundle-ck-{{ block.id }}-{% increment index2 %}" class="no-js-hidden"><svg class="hdt-hidden hdt-icon-checked" width="10" height="10" viewBox="0 0 24 24"><path d="M9 20l-7-7 3-3 4 4L19 4l3 3z"></path></svg></label>
+          {%- liquid
+            if v_image != blank
+            echo v_image | image_url: width: image_size | image_tag: srcset: nil, sizes: sizes, update-img: ''
+            endif
+          -%}
+          <a href="{{ product.url }}">{{ product.title }}</a>
+          {%- if item.has_only_default_variant -%}
+            <input data-groups-pr-sl name="items[][id]" data-cpprice="{{ available_v_first.compare_at_price | default: available_v_first.price }}" data-price="{{ available_v_first.price }}" value="{{ available_v_first.id }}" type="hidden">
+          {%- else -%}
+            <div class="hdt-relative hdt-inline-block">
+              <select name="items[][id]" autocomplete="off" class="hdt-select" data-cpprice="{{ available_v_first.compare_at_price | default: available_v_first.price }}" data-price="{{ available_v_first.price }}">
+                {%- for variant in available_v -%}
+                  <option data-img="{{ variant.image | default: item.featured_image | image_url: width: image_size }}" data-cpprice="{{ variant.compare_at_price | default: variant.price }}" data-price="{{ variant.price }}" data-qty="{{ variant.quantity_rule.min }}" value="{{ variant.id }}"{% if forloop.first %} selected="selected"{% endif %}>{{ variant.title | escape }}</option>
+              {%- endfor -%}
+              </select>
+              {%- render 'icon' with 'caret' -%}
+            </div>
+          {%- endif -%}
+          <input update-qty value="{{ available_v_first.quantity_rule.min }}" type="hidden" name="items[][quantity]">
+          <div update-price>
+            <hdt-compare-at-price class="hdt-compare-at-price"{% unless available_v_first.compare_at_price > available_v_first.price %} hidden{% endunless %}>
+              <span class="sr-only sr-only--inline">{{ 'products.product.price.regular_price' | t }}</span>
+              <span class="hdt-money">{{ available_v_first.compare_at_price | money }}</span>
+            </hdt-compare-at-price>
+            <hdt-price class="hdt-price">
+              <span class="sr-only sr-only--inline">{{ 'products.product.price.sale_price' | t }}</span>
+              <span class="hdt-money">{{ available_v_first.price | money }}</span>
+            </hdt-price>
+          </div>
+        </hdt-bundle-product>
+      {%- endfor -%}
+    </div>
+    <div update-total data-cpprice="{{ total_compare_at_price }}" data-price="{{ total_price }}">
+      <hdt-compare-at-price class="hdt-compare-at-price"{% unless total_compare_at_price > total_price %} hidden{% endunless %}>
+        <span class="sr-only sr-only--inline">{{ 'products.product.price.regular_total_price' | t }}</span>
+        <span class="hdt-money">{{ total_compare_at_price | money_with_currency }}</span>
+      </hdt-compare-at-price>
+      <hdt-price class="hdt-price">
+        <span class="sr-only sr-only--inline">{{ 'products.product.price.sale_total_price' | t }}</span>
+        <span class="hdt-money">{{ total_price | money_with_currency }}</span>
+      </hdt-price>
+    </div>
+    <button id="ProductBundleSubmitButton-{{ section_id }}" type="submit" name="add" class="hdt-product-form__submit"><span>{{ 'products.product.add_selected_to_cart' | t }}</span></button>
+  {%- endform -%}
+</wrapp-hdt-pr-frm-bundle>
+{%- endif -%}

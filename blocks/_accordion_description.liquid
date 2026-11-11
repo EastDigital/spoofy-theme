@@ -1,0 +1,41 @@
+{%- liquid
+  if block.settings.title == blank or product.description == blank 
+    continue
+  endif
+  assign open = block.settings.open
+
+-%}
+<hdt-accordion class="hdt-contents">
+<details class="hdt-product-accordion__item" {% if open %}open {% endif %} {{ block.shopify_attributes }}>
+  <summary aria-expanded="{{ open }}">
+    <span class="hdt-product-accordion__text hdt-s-text hdt-font-semibold">{{ block.settings.title }}</span>
+    <span class="hdt-product-accordion__icon"></span>
+  </summary>
+  <div class="hdt-product-accordion__content hdt-rte">{{- product.description -}}</div>
+</details>
+</hdt-accordion>
+{% schema %}
+  {
+    "name": "t:sections.main-product-tabs.blocks.accordion_description.name",
+    "tag": null,
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "open",
+        "label": "Open",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.main-product-tabs.blocks.accordion_description.settings.title.label",
+        "default": "Description"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.main-product-tabs.blocks.accordion_description.name"
+      }
+    ]
+  }
+{% endschema %}

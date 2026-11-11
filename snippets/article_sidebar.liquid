@@ -1,0 +1,42 @@
+{%- unless content_align -%}
+  {%- assign content_align = section.settings.Content_align -%}
+{%- endunless -%}
+<div class="hdt-article-sidebar hdt-article-style-{{ section.settings.article_des }} hdt-ratio-{{ image_ratio }} md:hdt-ratio-{{ image_ratio }} hdt-ratio--{{ image_size }}" timeline hdt-reveal="slide-in ">
+  <div class="hdt-article-inner hdt-flex">
+    <div class="hdt-article-thumb hdt-relative hdt-oh">
+      {%- if image != blank -%}
+        <a href="{{ article.url }}" class="hdt-block hdt-eff-img-zoom">
+          <div class="hdt-article-img hdt-oh hdt-ratio hdt-radius-sm" style="--aspect-ratioapt-md:{{ image.aspect_ratio }};--aspect-ratioapt:{{ image.aspect_ratio }}">
+            {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: 'hdt-full-image hdt-object-cover hdt-obj-eff md:hdt-block', sizes: '100vw', widths: '375,550,750,1100,1500,1780,1920,2000,3000,3840' }}
+          </div>
+        </a>
+      {%- else -%}
+        <a href="{{ article.url }}" class="hdt-block hdt-eff-img-zoom">
+          <div class="hdt-article-img hdt-oh hdt-ratio hdt-radius-sm" style="--aspect-ratioapt-md: 1;--aspect-ratioapt: 1">
+            {{ "blog-apparel-1" | placeholder_svg_tag: 'hdt-full-image hdt-object-cover hdt-obj-eff md:hdt-block' }}
+          </div>
+        </a>
+      {%- endif -%}
+      </div>
+      <div class="hdt-article-content_wapper hdt-flex ">
+      <div class="hdt-article-info hdt-flex hdt-flex-col hdt-align-{{ content_align }}">
+        <div class="hdt-article-label">
+          {%- if show_blog_title != 'disable' -%}
+            <div class="hdt-article-category hdt-row-flex">
+              {%- if  show_blog_title == 'blog_current' -%}
+                <a class="" href="{{ blog.url }}">{{ blog.title }}</a>
+              {%- else -%}  
+                {%- assign article_tags = article.tags | join: ';' | split: ';' -%}
+                {%- assign blog_tags = article_tags | where: 'blog_' -%}
+                {%- for tag in blog_tags -%}
+                  <a class="" href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag | remove : 'blog_' | strip }}</a>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+        <h6 class="hdt-article-title hdt-line-clamp hdt-base hdt-font-medium hdt-s-text hdt-text-{{ content_align }}"><a href="{{ article.url }}">{{ article.title }}</a></h6>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+.hdt-top-bar{
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+  color: rgb(var(--color-foreground));
+  background-color: rgb(var(--color-background));
+}
+.hdt-top-bar--bottom-border{
+  border-bottom: 0.1rem solid rgb(var(--color-line-border));
+}
+.hdt-top-bar__wrap {
+  padding: 0.8rem 0;
+  min-height: 4.5rem;
+}
+.hdt-top-bar__socials-list a {
+  width: 2.8rem;
+  height: 2.8rem;;
+  transition: all .3s ease;
+  color: rgb(var(--color-foreground));
+}
+.hdt-top-bar__socials-list a svg {
+  height: 1.4rem;;
+  width: 1.4rem;;
+  fill: currentColor;
+}
+.hdt-top-bar__socials-list li:not(:last-child){
+  margin-inline-end: 1rem;
+}
+.hdt-top-bar__text a{display: inline-block;}
+.hdt-top-bar__text svg{margin-inline-start:0.5rem;}
+.dir--rtl .hdt-top-bar__text svg{transform: rotateY(180deg);}
+
+.hdt-top-bar__cur div:not(:last-child){margin-inline-end: 2rem;}
+.hdt-top-bar__linklist li:not(:last-child){
+  padding-inline-end: 0.9rem;
+  margin-inline-end: 0.9rem;
+}
+.hdt-top-bar__linklist a {
+  color:rgb(var(--color-foreground));
+  transition:all .3s ease;
+}
+.hdt-top-bar__linklist a.hdt-link-active{
+  color: rgb(var(--color-accent));
+}
+.hdt-top-bar__text .hdt-rte a:not(.hdt-btn){
+  color: rgb(var(--color-accent));
+  text-decoration-line: none;
+  border-bottom: 0.1rem solid currentColor;
+  padding-bottom: 0.1rem;
+  line-height: 1;
+  transition: color .3s ease;
+}
+@media (min-width:1150px){
+  .lg\:hdt-grid-cols-2 .hdt-top-bar__item:first-child,
+  .lg\:hdt-grid-cols-3 .hdt-top-bar__item:first-child{
+    text-align: start;
+  }
+  .lg\:hdt-grid-cols-2 .hdt-top-bar__item:last-child,
+  .lg\:hdt-grid-cols-3 .hdt-top-bar__item:last-child{
+    text-align: end;
+  }
+  .lg\:hdt-grid-cols-2 .hdt-top-bar__item:first-child .hdt-socials__list,
+  .lg\:hdt-grid-cols-3 .hdt-top-bar__item:first-child .hdt-socials__list{
+    justify-content: start;
+  }
+  .lg\:hdt-grid-cols-2 .hdt-top-bar__item:last-child .hdt-socials__list,
+  .lg\:hdt-grid-cols-3 .hdt-top-bar__item:last-child .hdt-socials__list{
+    justify-content: end;
+  }
+  .hdt-top-bar__cur div:not(:last-child){margin-inline-end: 1.9rem;}
+}
+@media (min-width:1440px){
+  .hdt-top-bar__cur div:not(:last-child){margin-inline-end: 2.9rem;}
+}
+@media (-moz-touch-enabled: 0), (hover: hover) and (min-width: 1150px){
+  .hdt-top-bar__socials-list a:hover {
+    transform: translateY(-0.5rem);
+  }
+  .hdt-top-bar__linklist a:hover{
+    background: transparent;
+    color: rgb(var(--color-foreground) / .8);
+  }
+  .hdt-top-bar__text .hdt-rte a:not(.hdt-btn):hover{
+    opacity: 0.8;
+  }
+}
+.hdt-top-bar .hdt-slider__slide svg {
+  display: inline;
+  margin: 0;
+  width: 16px;
+}  

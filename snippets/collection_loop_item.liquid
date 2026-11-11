@@ -1,0 +1,26 @@
+{%- liquid
+  assign image = collection.metafields.theme.featured_image_collection.value | default: collection.image | default: collection.products.first.featured_image
+  assign count = collection.all_products_count | default: 0
+-%}
+<div class="hdt-collection-item hdt-loop-item" {{ block.shopify_attributes }}>
+  <div class="hdt-collection-inner hdt-loop-inner hdt-flex">
+    <div class="hdt-loop-img hdt-relative hdt-oh" style="--aspect-ratioapt: {{ image.aspect_ratio | default: 1.2 }};">
+      <span class="hdt-ratio">
+        {%- if image != blank -%}
+          {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '', sizes: '700px', widths: '720, 600, 500, 400, 300' }}
+        {%- else -%}
+          {{ 'collection-apparel-1' | placeholder_svg_tag: 'hdt-placeholder-svg' }}  
+        {%- endif -%}
+      </span>
+      <a data-pr-href class="hdt-full-width-link" href="{{ collection.url }}"></a>
+    </div>
+    {%- if collection.title != blank -%}
+      <div class="hdt-loop-content">
+        <a class="hdt-collection-title hdt-flex hdt-text-base hdt-font-semibold" href="{{ collection.url }}">
+          <span class="hdt-collection-title-text hdt-truncate">{{ collection.title }}</span>
+        </a>
+        <div class="hdt-collection-count hdt-text-sm hdt-font-normal"><span>{{ 'sections.collection_list.items_count' | t : count: count }} </span></div>
+      </div>
+    {%- endif -%}
+  </div> 
+</div>

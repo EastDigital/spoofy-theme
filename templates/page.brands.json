@@ -1,0 +1,57 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "heading": {
+      "type": "main-heading",
+      "blocks": {
+        "5ecb9555-19e4-433b-8817-1ccaa3a41384": {
+          "type": "1",
+          "settings": {
+            "heading": "",
+            "heading_size": "h4"
+          }
+        }
+      },
+      "block_order": [
+        "5ecb9555-19e4-433b-8817-1ccaa3a41384"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Mask_group_5.png",
+        "color_scheme": "",
+        "spacing_hd": 0
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "section_fullwidth": false,
+        "color_scheme": ""
+      }
+    },
+    "main_brands_ptwaR9": {
+      "type": "main-brands",
+      "settings": {
+        "layout_brand": "1",
+        "options": "linklist",
+        "bcc": "123,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z",
+        "img_brand": false,
+        "color_scheme": "scheme-2",
+        "section_fullwidth": false
+      }
+    }
+  },
+  "order": [
+    "heading",
+    "main",
+    "main_brands_ptwaR9"
+  ]
+}

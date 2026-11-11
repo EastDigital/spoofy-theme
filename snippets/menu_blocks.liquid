@@ -1,0 +1,120 @@
+{%- if section.settings.main_menu != blank -%}
+	<nav class="hdt-navigation hdt-text-{{ section.settings.menu_position }} hdt-menu-uppercase-{{ section.settings.text_transform }} hdt-nav-arrow_{{ section.settings.dropdown_arrow }}">
+		<ul id="hdt-nav-ul" class="hdt-nav__ul hdt-inline-flex hdt-align-center">
+			{%- for link in section.settings.main_menu.links -%}
+				{%- liquid 
+	      	assign li_class = ""
+					assign mega_position = ''
+	      	assign mega_menu = false
+	      	assign arr_title = link.title | split: '['
+	      	assign arr_label = arr_title[1] | split: ','
+					if section.blocks.size > 0
+	        	for block in section.blocks
+	          	if block.settings.title != blank and block.settings.title == arr_title[0]
+	            	assign index = forloop.index0
+	            	assign li_class = "hdt-has-children"
+	            	assign mega_menu = true
+	            	assign mega_width = block.settings.mega_width
+	            	assign mega_custom_width = block.settings.mega_custom_width
+	            	assign mega_position = block.settings.mega_position | default: 'default'
+	            	break
+	          	endif
+	        	endfor
+					endif 
+					if link.links != blank
+          	assign li_class = "hdt-has-children"
+        	endif
+				-%}
+
+	      <li class="hdt-menu-item hdt-flex hdt-justify-center hdt-flex-col {{ li_class }}" {{ block.shopify_attributes }}>
+					{%- if li_class != "" -%}
+						<hdt-header-menu class="hdt-contents" opened-able-click event="{{ section.settings.open_event }}" position="{{ mega_position | default: 'default' }}" {{ block.shopify_attributes }}>
+							<details {% if mega_menu and mega_width == "full" %} not-need-calc {% elsif mega_menu and mega_width == "custom" %} style="--mega-width: {{ mega_custom_width }}px;" position="{{ mega_position }}" {% endif %}>
+		            <summary data-url="{{ link.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-{{ section.settings.menu_size }} hdt-font-{{ section.settings.menu_weight }}{% if link.current and section.settings.active_link %} hdt-menu-link--active{% endif %}">
+			            <span class="hdt-menu-link-text hdt-block{% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+			              <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+			              {%- if arr_label.size > 0 -%}
+			                <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+			                  {%- for label in arr_label limit: 2 -%}
+			                    {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+			                    <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+			                  {%- endfor -%}
+			                </span>
+			              {%- endif -%}
+			            </span>
+									
+		            	{%- if li_class != "" and section.settings.dropdown_arrow -%}
+										<svg class="hdt-menu-item-arrow" xmlns="http://www.w3.org/2000/svg" width="10" height="7" viewBox="0 0 10 7" fill="none"><path d="M10 1.24243L5 6.24243L-2.18557e-07 1.24243L0.8875 0.354932L5 4.46743L9.1125 0.354931L10 1.24243Z" fill="currentColor"/></svg>
+									{%- endif -%}
+		            </summary>
+		              {%- liquid
+										if mega_menu
+											render 'mega_menu_blocks', link: link, block: section.blocks[index]
+										else
+											render 'sub_menu_blocks', link: link
+										endif 
+									-%}
+		          </details>
+	          </hdt-header-menu>
+						{% assign block = section.blocks[index] %}
+						{%- if block.type == "html" and block.settings.page.metafields.home.menu.value != blank -%}
+							{%- if block.settings.page.metafields.home.menu.value.count > 12 -%}
+								{%- assign demos = block.settings.page.metafields.home.menu.value -%}
+								{%- paginate demos by 100 -%}
+								<hdt-modal class="hdt-modal hdt-modal-demos hdt-contents hdt-text-center" color-scheme="{{ block.settings.mega_menu_colors }}">
+									<dialog id="modal-{{ block.id }}" class="hdt-dialog hdt-dialog-modal" scroll-lock>
+										<div class="hdt-dialog-modal__header hdt-text-center">
+											<h5 class="hdt-demos-title hdt-font-medium hdt-text-center">{{ 'general.demos.demos_full_heading' | t }}</h5>
+											<button ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="modal-{{ block.id }}" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+										</div>
+										<div class="hdt-dialog-modal__inner hdt-current-scrollbar">
+											<div class="hdt-row-grid hdt-row-grid--modify hdt-grid-cols-1 lg:hdt-grid-cols-6 hdt-justify-center hdt-row-demos">
+												{%- for item in block.settings.page.metafields.home.menu.value -%}
+													{% assign image = item.image %}
+													<div class="hdt-col hdt-demo-item hdt-text-center">
+														<a href="{{ item.url }}" title="{{ item.name }}">
+															{%- if image != blank -%}
+																<div class="hdt-demo-image hdt-relative hdt-block">
+																	<img src="{{ image | image_url: width: 300 }}" width="600" height="657" srcset="{{ image | image_url: width: 300 }} 1x, {{ image | image_url: width: 600 }} 2x" sizes="300px" loading='lazy'>
+																	{% if item.label.value.size > 0 %}
+																		<div class="hdt-demo-label hdt-flex hdt-absolute">
+																			{%- for label in item.label.value -%}
+																				<span class="hdt-demo_{{ label | handle }} hdt-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">{{ label | escape }}</span>
+																			{%- endfor -%}
+																		</div>
+																	{% endif %}
+																</div>
+															{%- endif -%}
+															<span class="hdt-demo-name hdt-text-base hdt-font-semibold">{{ item.name }}</span>
+														</a>
+													</div>
+												{%- endfor -%}
+											</div>
+										</div>
+									</dialog>
+								</hdt-modal>
+							{%- endpaginate -%}
+							{%- endif -%}
+						{%- endif -%}
+					{%- else -%}
+						<a id="hdt-menu-{{ link.handle }}" href="{{ link.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-{{ section.settings.menu_size }} hdt-font-{{ section.settings.menu_weight }}{% if link.current and section.settings.active_link %} hdt-menu-link--active{% endif %}" {% if link.current %} aria-current="page" {% endif %}>
+	            <span class="hdt-menu-link-text hdt-block{% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+	              <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+	              {%- if arr_label.size > 0 -%}
+	                <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+	                  {%- for label in arr_label limit: 2 -%}
+	                    {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+	                    <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+	                  {% endfor %}
+	                </span>
+	              {%- endif -%}
+	            </span>
+						</a>
+					{%- endif -%}
+	      </li>
+	    {%- endfor -%}
+		</ul>
+	</nav>
+{%- else -%}
+	<p class="hdt-text-{{ section.settings.menu_position }} hdt-menu-uppercase-{{ section.settings.text_transform }}">{{ 'sections.header.menu_empty' | t }}</p>
+{%- endif -%}

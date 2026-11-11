@@ -1,0 +1,109 @@
+{%- style -%}.hdt-breadcrumb__list{display:inline-flex;align-items:center;flex-wrap:wrap;gap:.6rem}.hdt-breadcrumb__list a{transition:color .3s ease}.hdt-breadcrumb__list svg{height:var(--spacing-0-8);width:auto}.hdt-breadcrumb__next,.hdt-breadcrumb__prev{width:var(--spacing-1-4);height:var(--spacing-1-4)}.hdt-breadcrumb__back{margin:0 var(--spacing-1-2)}.hdt-breadcrumb__wrap{display:grid;gap:3rem;grid-template-columns:1fr auto}@media (min-width:768px){.hdt-breadcrumb__list svg{margin:0 var(--spacing-1)}}.dir--rtl .hdt-breadcrumb__list svg,.dir--rtl .hdt-breadcrumb__prev-next svg{transform:rotate(180deg)}@media (-moz-touch-enabled:0),(hover:hover) and (min-width:1150px){.hdt-breadcrumb__prev-next a:hover,.hdt-breadcrumb__list a:hover{color:rgb(var(--color-accent))}}#shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}}{%- endstyle -%}
+<div class="hdt-breadcrumb hdt-s-gradient hdt-section-spacing" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container">
+    <div class="hdt-breadcrumb__wrap hdt-s-text">
+      <div class="hdt-breadcrumb__list">
+        <a href="{{ routes.root_url }}" class="hdt-inline-block">{{ 'general.breadcrumb.home' | t }}</a>
+        <svg class="hdt-inline-block" xmlns="http://www.w3.org/2000/svg" width="5" height="8" viewBox="0 0 5 8" fill="currentColor">
+          <path d="M0.886718 3.49691e-07L4.88672 4L0.886719 8L0.176719 7.29L3.46672 4L0.176719 0.71L0.886718 3.49691e-07Z"/>
+        </svg> 
+        {% if collection.url != blank %}
+          <a href="{{ collection.url }}" class="hdt-d-inline-block">{{ collection.title }}</a>
+          <svg class="hdt-inline-block" xmlns="http://www.w3.org/2000/svg" width="5" height="8" viewBox="0 0 5 8" fill="currentColor">
+            <path d="M0.886718 3.49691e-07L4.88672 4L0.886719 8L0.176719 7.29L3.46672 4L0.176719 0.71L0.886718 3.49691e-07Z"/>
+          </svg>
+        {%- endif -%}
+        <span class="hdt-s-text2">{{ product.title }}</span> 
+      </div>
+      {%- if section.settings.back_next_pr and collection != blank -%}
+        {%- assign next_pr = collection.next_product -%}
+        {%- assign prev_pr = collection.previous_product -%}
+        <div class="hdt-breadcrumb__prev-next hdt-flex hdt-align-center">
+          {%- if prev_pr -%}
+            <hdt-tooltip class="hdt-inline-flex hdt-breadcrumb__prev hdt-align-center hdt-justify-center" placement="top">
+              <a href="{{ prev_pr.url }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="14" viewBox="0 0 9 14" fill="currentColor">
+                  <path d="M7 1.22392e-06L1.22392e-06 7L7 14L8.2425 12.7575L2.485 7L8.2425 1.2425L7 1.22392e-06Z"/>
+                </svg>
+                <span class="sr-only">{{ prev_pr.title }}</span>
+              </a>
+            </hdt-tooltip>
+          {%- endif -%}
+          <hdt-tooltip class="hdt-inline-flex hdt-breadcrumb__back" placement="top">
+            <a href="{{ collection.url }}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="currentColor">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.09997 0H4.19995C4.7569 0 5.29103 0.221246 5.68485 0.615068C6.07867 1.00889 6.29992 1.54303 6.29992 2.09997V4.19995C6.29992 4.7569 6.07867 5.29103 5.68485 5.68485C5.29103 6.07867 4.7569 6.29992 4.19995 6.29992H2.09997C1.54303 6.29992 1.00889 6.07867 0.615068 5.68485C0.221246 5.29103 0 4.7569 0 4.19995V2.09997C0 1.54303 0.221246 1.00889 0.615068 0.615068C1.00889 0.221246 1.54303 0 2.09997 0ZM4.19995 4.90003C4.29188 4.90003 4.38292 4.88192 4.46786 4.84674C4.55279 4.81155 4.62997 4.75999 4.69498 4.69498C4.75999 4.62997 4.81155 4.55279 4.84674 4.46786C4.88192 4.38292 4.90003 4.29188 4.90003 4.19995V2.09997C4.89996 1.91435 4.82617 1.73635 4.69488 1.60511C4.5636 1.47388 4.38557 1.40016 4.19995 1.40016H2.09997C1.91435 1.40016 1.73632 1.47388 1.60504 1.60511C1.47375 1.73635 1.39996 1.91435 1.39989 2.09997V4.19995C1.39989 4.29188 1.418 4.38292 1.45319 4.46786C1.48837 4.55279 1.53993 4.62997 1.60494 4.69498C1.66995 4.75999 1.74713 4.81155 1.83207 4.84674C1.917 4.88192 2.00804 4.90003 2.09997 4.90003H4.19995ZM4.19995 7.70008H2.09997C1.54303 7.70008 1.00889 7.92133 0.615068 8.31515C0.221246 8.70897 0 9.2431 0 9.80005V11.9C0 12.457 0.221246 12.9911 0.615068 13.3849C1.00889 13.7788 1.54303 14 2.09997 14H4.19995C4.7569 14 5.29103 13.7788 5.68485 13.3849C6.07867 12.9911 6.29992 12.457 6.29992 11.9V9.80005C6.29992 9.2431 6.07867 8.70897 5.68485 8.31515C5.29103 7.92133 4.7569 7.70008 4.19995 7.70008ZM4.19995 12.5998C4.38557 12.5998 4.5636 12.5261 4.69488 12.3949C4.82617 12.2637 4.89996 12.0857 4.90003 11.9V9.80005C4.90003 9.70812 4.88192 9.61708 4.84674 9.53214C4.81155 9.44721 4.75999 9.37003 4.69498 9.30502C4.62997 9.24001 4.55279 9.18845 4.46786 9.15326C4.38292 9.11808 4.29188 9.09997 4.19995 9.09997H2.09997C1.9143 9.09997 1.73623 9.17373 1.60494 9.30502C1.47365 9.43631 1.39989 9.61438 1.39989 9.80005V11.9C1.39996 12.0857 1.47375 12.2637 1.60504 12.3949C1.73632 12.5261 1.91435 12.5998 2.09997 12.5998H4.19995ZM11.8998 7.70008H9.79979C9.24284 7.70008 8.70871 7.92133 8.31488 8.31515C7.92106 8.70897 7.69982 9.2431 7.69982 9.80005V11.9C7.69982 12.457 7.92106 12.9911 8.31488 13.3849C8.70871 13.7788 9.24284 14 9.79979 14H11.8998C12.4567 14 12.9908 13.7788 13.3847 13.3849C13.7785 12.9911 13.9997 12.457 13.9997 11.9V9.80005C13.9997 9.2431 13.7785 8.70897 13.3847 8.31515C12.9908 7.92133 12.4567 7.70008 11.8998 7.70008ZM11.8998 12.5998C12.0854 12.5998 12.2634 12.5261 12.3947 12.3949C12.526 12.2637 12.5998 12.0857 12.5998 11.9V9.80005C12.5998 9.61438 12.5261 9.43631 12.3948 9.30502C12.2635 9.17373 12.0854 9.09997 11.8998 9.09997H9.79979C9.61416 9.10004 9.43616 9.17383 9.30493 9.30511C9.1737 9.4364 9.09997 9.61442 9.09997 9.80005V11.9C9.10004 12.0856 9.1738 12.2636 9.30502 12.3948C9.43625 12.526 9.61421 12.5998 9.79979 12.5998H11.8998ZM11.8998 0H9.79979C9.24284 0 8.70871 0.221246 8.31488 0.615068C7.92106 1.00889 7.69982 1.54303 7.69982 2.09997V4.19995C7.69982 4.7569 7.92106 5.29103 8.31488 5.68485C8.70871 6.07867 9.24284 6.29992 9.79979 6.29992H11.8998C12.4567 6.29992 12.9908 6.07867 13.3847 5.68485C13.7785 5.29103 13.9997 4.7569 13.9997 4.19995V2.09997C13.9997 1.54303 13.7785 1.00889 13.3847 0.615068C12.9908 0.221246 12.4567 0 11.8998 0ZM11.8998 4.90003C11.9917 4.90003 12.0827 4.88192 12.1677 4.84674C12.2526 4.81155 12.3298 4.75999 12.3948 4.69498C12.4598 4.62997 12.5114 4.55279 12.5466 4.46786C12.5817 4.38292 12.5998 4.29188 12.5998 4.19995V2.09997C12.5998 1.91435 12.526 1.73635 12.3947 1.60511C12.2634 1.47388 12.0854 1.40016 11.8998 1.40016H9.79979C9.61421 1.40023 9.43625 1.47398 9.30502 1.60521C9.1738 1.73643 9.10004 1.91439 9.09997 2.09997V4.19995C9.09997 4.38557 9.1737 4.5636 9.30493 4.69488C9.43616 4.82617 9.61416 4.89996 9.79979 4.90003H11.8998Z"/>
+              </svg>
+              <span class="sr-only">{{ 'products.breadcrumb.back_to' | t: title: collection.title }}</span>
+            </a>
+          </hdt-tooltip>
+          {%- if next_pr -%}  
+            <hdt-tooltip class="hdt-inline-flex hdt-breadcrumb__next hdt-align-center hdt-justify-center" placement="top">
+              <a href="{{ next_pr.url }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="14" viewBox="0 0 9 14" fill="currentColor">
+                  <path d="M2 14L9 7L2 0L0.757501 1.2425L6.515 7L0.757501 12.7575L2 14Z"/>
+                </svg>
+                <span class="sr-only">{{ next_pr.title }}</span>
+              </a>
+            </hdt-tooltip>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.brc-nav.name",
+    "class": "hdt-section hdt-section-brc-nav-product",
+    "settings": [
+      {
+        "type":"checkbox",
+        "id":"back_next_pr",
+        "label":"t:sections.brc-nav.settings.back_next_pr.label",
+        "info": "t:sections.brc-nav.settings.back_next_pr.info"
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label"
+      },
+
+      {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "padding_rate",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:sections.all.padding.padding_rate",
+        "default": 75
+      }
+    ] 
+  }
+{% endschema %}

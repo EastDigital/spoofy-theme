@@ -1,0 +1,40 @@
+{%- comment -%}
+  Renders sort by popover
+
+  Accepts:
+  - results: {Object} Collection or Search object (required)
+  - section_id: {String} The ID of the section that contains this card. (required)
+  - controls_id: {String} The ID of the controls. (required)
+  - col_mobile: {Number} (required)
+  - col_tablet: {Number} (required)
+  - col_desktop: {Number} (required)
+  - show_list_view: {Boolean}
+
+  Usage:
+  {%- render 'layout-switch', results: collection, section_id: section.id -%}
+{%- endcomment -%}
+{%- assign arr_icons = 'list_view, grid_view_1, grid_view_2, grid_view_3, grid_view_4, grid_view_5, grid_view_6' | split: ', ' -%}
+{%- assign show_list_view = true -%}
+{%- capture html_btn_list_view -%}
+{%- if show_list_view %}<button type="button" value="0" aria-label="{{ 'products.facets.switch_view_list' | t | escape }}" class="__class_tmp" is="hdt-switch-to-list-view">{%- render 'icon' with 'list_view' -%}</button>{% endif -%}
+{%- endcapture -%}
+<hdt-view-layout-switch breakpoint="mobile" aria-controls="{{ controls_id }}" views="{{ col_mobile }}.{{ col_tablet }}.{{ col_desktop }}" section-id="{{ section_id }}" class="hdt-view-layout-switch hdt-flex md:hdt-hidden">
+  {%- if 0 == col_mobile %}{{ html_btn_list_view | replace_first: '__class_tmp', 'is-active' }}{%- else %}{{ html_btn_list_view }}{% endif -%}
+  {%- for i in (1..2) -%}
+    <button type="button" value="{{ i }}" sizes="{%- render 'sizes', full_width: section.settings.full_width, col_mobile: col_mobile, col_tablet: i, col_desktop: col_desktop -%}" aria-label="{{ 'products.facets.switch_view' | t: number: i | escape }}" class="{% if i == col_mobile %}is-active {% endif %}hdt_btn_layout{{ i }}">{%- render 'icon' with arr_icons[i] -%}</button>
+  {%- endfor -%}
+</hdt-view-layout-switch>
+
+<hdt-view-layout-switch breakpoint="tablet" aria-controls="{{ controls_id }}" views="{{ col_mobile }}.{{ col_tablet }}.{{ col_desktop }}" section-id="{{ section_id }}" class="hdt-view-layout-switch hdt-hidden md:hdt-flex lg:hdt-hidden">
+  {%- if 0 == col_tablet %}{{ html_btn_list_view | replace_first: '__class_tmp', 'is-active' }}{%- else %}{{ html_btn_list_view }}{% endif -%}
+  {%- for i in (2..4) -%}
+    <button type="button" value="{{ i }}" sizes="{%- render 'sizes', full_width: section.settings.full_width, col_mobile: col_mobile, col_tablet: i, col_desktop: col_desktop -%}" aria-label="{{ 'products.facets.switch_view' | t: number: i | escape }}" class="{% if i == col_tablet %}is-active {% endif %}hdt_btn_layout{{ i }}">{%- render 'icon' with arr_icons[i] -%}</button>
+  {%- endfor -%}
+</hdt-view-layout-switch>
+
+<hdt-view-layout-switch breakpoint="desktop" aria-controls="{{ controls_id }}" views="{{ col_mobile }}.{{ col_tablet }}.{{ col_desktop }}" section-id="{{ section_id }}" class="hdt-view-layout-switch hdt-hidden md:hdt-hidden lg:hdt-flex">
+  {%- if 0 == col_desktop %}{{ html_btn_list_view | replace_first: '__class_tmp', 'is-active' }}{%- else %}{{ html_btn_list_view }}{% endif -%}
+  {%- for i in (2..6) -%}
+    <button type="button" value="{{ i }}" sizes="{%- render 'sizes', full_width: section.settings.full_width, col_mobile: col_mobile, col_tablet: col_tablet, col_desktop: i -%}" aria-label="{{ 'products.facets.switch_view' | t: number: i | escape }}" class="{% if i == col_desktop %}is-active {% endif %}hdt_btn_layout{{ i }}">{%- render 'icon' with arr_icons[i] -%}</button>
+  {%- endfor -%}
+</hdt-view-layout-switch>

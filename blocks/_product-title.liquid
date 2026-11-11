@@ -1,0 +1,69 @@
+{%- liquid
+	unless product 
+    assign product = section.settings.product
+    if product == null
+      assign product = null | default: title: "Example product title", price: 1999, compare_at_price: 2500, available: true, vendor: "Ecomus"
+    endif
+  endunless
+-%}
+{%- if section.id contains 'quick-view' or section.id contains 'featured_product' -%}
+  <div class="hdt-product-info__item hdt-product__title" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+    <a href="{{ product.url }}" class="hdt-inline-block hdt-s-text"><h2 class="hdt-product__title hdt-{{ block.settings.hdt_pr_title_size }}" {{ block.shopify_attributes }}>{{ product.title | escape }}</h2></a>
+  </div>
+{%- else -%}
+  <h1 class="hdt-product__title hdt-{{ block.settings.hdt_pr_title_size }}" {{ block.shopify_attributes }}>{{ product.title | escape }}</h1>
+{%- endif -%}
+
+{% schema %}
+	{
+		"name": "t:sections.main-product.blocks.title.name",
+		"tag": null,
+    "settings":[
+      {
+        "type": "select",
+        "id": "hdt_pr_title_size",
+        "label": "Size",
+        "options": [
+          {
+            "value": "base",
+            "label": "t:settings_schema.heading.settings.base_size"
+          },
+          {
+            "value": "h6",
+            "label": "t:settings_schema.heading.settings.h6_size"
+          },
+          {
+            "value": "h5",
+            "label": "t:settings_schema.heading.settings.h5_size"
+          },
+          {
+            "value": "h4",
+            "label": "t:settings_schema.heading.settings.h4_size"
+          },
+          {
+            "value": "h3",
+            "label": "t:settings_schema.heading.settings.h3_size"
+          },
+          {
+            "value": "h2",
+            "label": "t:settings_schema.heading.settings.h2_size"
+          },
+          {
+            "value": "h1",
+            "label": "t:settings_schema.heading.settings.h1_size"
+          },
+          {
+            "value": "h0",
+            "label": "t:settings_schema.heading.settings.h0_size"
+          }
+        ],
+        "default": "h5"
+      },
+    ],
+		"presets": [
+      { 
+        "name": "t:sections.main-product.blocks.title.name"
+      }
+    ]
+	}
+{% endschema %}

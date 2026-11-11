@@ -1,0 +1,89 @@
+{%- comment -%}
+  Renders btn ultra
+
+  Accepts:
+  - product: {Object} Product Liquid object (required)
+  - product_url: {String} (required)
+  - section_id: {String} The ID of the section that contains this card. (required)
+  - class: {String} a list class. (optional)
+  - disable_sr_only: {Boolean} remove class sr_only (optional)
+  - placement: {String} position tooltip (optional)
+
+  Usage:
+  {%- render 'btn-ultra', product: card_product, section_id: section_id -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign product_form_id = 'form-' | append: section_id | append: product.id
+  assign qty_rules = false
+  assign quantity_rule = product.selected_or_first_available_variant.quantity_rule
+  if quantity_rule.min > 1 or quantity_rule.max != null or quantity_rule.increment > 1
+    assign qty_rules = true
+  endif
+  assign quantity_rule_min = quantity_rule.min | default: 1
+
+  if section.id contains 'quick-add' or section.id contains 'quick-view' or section.id contains 'search' or section.id contains 'cart-drawer' or section.id contains 'header'
+    assign inner_tooltip = true
+  endif
+-%}
+{%- if product.available -%}
+  {%- if product.variants.size > 1 or qty_rules or product.selling_plan_groups.size > 0 -%}
+    {%- if settings.show_quick_add -%}
+    <wrapp-hdt-open-modal-btn placement="{{ placement | default: 'none' }}" {%- if inner_tooltip %} inner{% endif %}>
+      <button type="button" handle="{{ product.handle }}" aria-controls="hdt-quick-add-modal" aria-expanded="false" class="hdt-card-product__btn-ultra {{ class }}" placement="{{ placement | default: 'none' }}" >
+        <svg id="hdt-icon-cart" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <use xlink:href="#hdt-icon-cart-sym"></use>
+        </svg>
+        <span class="hdt-truncate{% unless disable_sr_only %} sr-only{% endunless %}">{{ 'products.product.quick_add' | t }}</span>
+      </button>
+    </wrapp-hdt-open-modal-btn>
+    {%- else -%}
+    <hdt-tooltip placement="{{ placement | default: 'none' }}" class="hdt-ultra_btn_parent" {%- if inner_tooltip %} inner{% endif %}>
+      <a data-pr-url href="{{ product_url }}" class="hdt-card-product__btn-ultra {{ class }}" placement="{{ placement | default: 'none' }}">
+        <svg id="hdt-icon-cart" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <use xlink:href="#hdt-icon-cart-sym"></use>
+        </svg>
+        <span {% unless disable_sr_only %}class="sr-only"{% endunless %}>{{ 'products.product.choose_options' | t }}</span>
+      </a>
+    </hdt-tooltip>
+    {%- endif -%}
+  {%- else -%}
+    <wrapp-hdt-pr-frm class="hdt-product-form hdt-flex hdt-align-center hdt-justify-center" {%- if inner_tooltip %} inner{% endif %}>
+      {%- form 'product', product, id: product_form_id, class: 'hdt-product-form', novalidate: 'novalidate' -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        {%- if show_qty -%}
+        <hdt-quantity-wrapp class="hdt-quantity-wrapp">
+          <button class="hdt-quantity__button no-js-hidden disabled" name="minus" type="button">
+            <span class="sr-only hdt-truncate">{{ 'products.product.quantity.decrease' | t: produc: product.title }}</span>
+            <svg focusable="false" class="icon icon--minus" width="10" height="10" viewBox="0 0 10 2" role="presentation"><path d="M10 0v2H0V0z" fill="currentColor"></path></svg>
+          </button>
+          <input class="hdt-quantity__input" type="number" name="quantity" id="Quantity-{{ section_id }}{{ product.id }}" min="{{ quantity_rule_min }}"{% if quantity_rule.max != null %} max="{{ quantity_rule.max }}"{% endif %} step="{{ quantity_rule.increment | default: 1 }}" value="{{ quantity_rule_min }}">
+          <button class="hdt-quantity__button no-js-hidden" name="plus" type="button">
+            <span class="sr-only hdt-truncate">{{ 'products.product.quantity.increase' | t: produc: product.title }}</span>
+            <svg focusable="false" class="icon icon--plus" width="10" height="10" viewBox="0 0 10 10" role="presentation"><path d="M6 4h4v2H6v4H4V6H0V4h4V0h2v4z" fill="currentColor" fill-rule="evenodd"></path></svg>
+          </button>
+        </hdt-quantity-wrapp>
+        {%- else -%}
+        <input type="hidden" name="quantity" value="{{ quantity_rule_min }}">
+        {%- endif -%}
+        <hdt-tooltip placement="{{ placement | default: 'none' }}" class="hdt-ultra_btn_parent">
+          <button type="submit" name="add" class="hdt-card-product__btn-ultra {{ class }}" placement="{{ placement | default: 'none' }}" >
+            <svg id="hdt-icon-cart" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <use xlink:href="#hdt-icon-cart-sym"></use>
+            </svg>
+            <span class="hdt-truncate{% unless disable_sr_only %} sr-only{% endunless %}">{{ 'products.product.add_to_cart' | t }}</span>
+          </button>
+        </hdt-tooltip>
+      {%- endform -%}
+    </wrapp-hdt-pr-frm>
+  {%- endif -%}
+{%- else -%}
+<hdt-tooltip placement="{{ placement | default: 'none' }}" class="hdt-product-form hdt-ultra_btn_parent" {%- if inner_tooltip %} inner{% endif %}>
+  <a data-pr-url href="{{ product_url }}" class="hdt-card-product__btn-ultra {{ class }}">
+    <svg id="hdt-icon-cart" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <use xlink:href="#hdt-icon-cart-sym"></use>
+    </svg>
+    <span class="hdt-truncate{% unless disable_sr_only %} sr-only{% endunless %}">{{ 'products.product.view_product' | t }}</span>
+  </a>
+</hdt-tooltip>
+{%- endif -%}

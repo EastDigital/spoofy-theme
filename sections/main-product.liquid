@@ -1,0 +1,250 @@
+<!-- sections/main-product.liquid -->
+{% liquid
+  assign un_no_pick = true
+  if settings.pick_mode == 'no' and product.variants.size > 1
+    assign selected_variant = product.selected_variant
+    unless selected_variant
+      assign un_no_pick = false
+    endunless
+  elsif settings.pick_mode == 'first' and settings.hide_sold_out == false
+    assign selected_variant = product.selected_variant | default: product.variants.first
+  else
+    assign selected_variant = product.selected_or_first_available_variant
+  endif
+  assign product_form_id = 'product-form-'| append: section.id | append: product.id
+%}
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --pr-media-width: {{ section.settings.media_width }}%; --section-pt:{{ section.settings.padding_top }}px; --section-pb:{{ section.settings.padding_bottom }}px; --section-prate:{{ section.settings.padding_rate }};
+  }
+{%- endstyle -%}
+<div class="hdt-s-inner hdt-s-gradient" color-scheme="{{ section.settings.color_scheme }}" hdt-reveal="fade-in">
+  <div class="hdt-container {%- if section.settings.full_width -%}-full{%- endif %}">
+    <div class="hdt-section-spacing">
+      <div class="hdt-secion-main-product--{{ section.id }} hdt-row-grid hdt-grid-cols-1 md:hdt-grid-cols-2 hdt-main-product-wrap">
+        {% content_for 'block', type: '_product-medias', id: 'main-product' %}
+        {% content_for "blocks" %}
+      </div>
+      {%- if section.settings.product_list_fbt != blank -%}
+        <div color-scheme="{{ section.settings.fbt_color_scheme }}">
+          {% render 'product-form-bundle2', product_list: section.settings.product_list_fbt, product: product %}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+  {%- if section.settings.sticky_atc and product.available and request.page_type == 'product' -%}
+    {%- liquid
+      unless un_no_pick
+      assign selected_variant = product.variants.first
+      endunless
+      assign check_against_inventory = true
+      if selected_variant.inventory_management != 'shopify' or selected_variant.inventory_policy == 'continue'
+        assign check_against_inventory = false
+      endif
+      if selected_variant.quantity_rule.min > selected_variant.inventory_quantity and check_against_inventory
+        assign quantity_rule_soldout = true
+      endif
+      if selected_variant.inventory_management == 'shopify' and selected_variant.inventory_quantity <= 0 and selected_variant.available
+        assign is_pre_order = true
+      else
+        assign is_pre_order = false
+      endif
+      assign product_form_id_sticky = 'form-product-sticky' | append: product.id
+  
+      assign id_sticky = 'sticky-' | append: section.id
+      assign image = selected_variant.featured_image | default: product.featured_image | default: settings.placeholder_img
+    -%}
+  {{ 'hdt-sticky-atc.css' | asset_url | stylesheet_tag }}
+  <hdt-sticky-btn-atc form="{{ product_form_id }}" {% if product.has_only_default_variant %}is-pr-default {% endif %} color-scheme="{{ section.settings.color_scheme }}" class="hdt-sticky-btn-atc hdt-sticky_layout_mb--minimal hdt-s-gradient">
+    <div class="hdt-container">
+      <hdt-height-observer prefix="hdt-sticky-atc" class="hdt-flex hdt-align-center hdt-justify-center">
+        <div class="hdt-sticky-atc__product hdt-flex hdt-align-center">
+          <div class="hdt-sticky-atc__img hdt-radius-full hdt-oh hdt-relative">
+            {%- if image != blank -%}
+              {{ image | image_url: width: image.width | image_tag: loading: 'lazy', sizes: '80px', widths: '80, 160', data-widths: '[80, 160]', data-v-img: '' }}
+            {%- else -%}
+                <span class="hdt-sticky-atc__img-placeholder"></span>
+            {%- endif -%}
+          </div>
+          <div class="hdt-sticky-atc__product-infos">
+            <h3 class="hdt-sticky-atc__title hdt-text-lg hdt-font-medium hdt-hidden lg:hdt-block">{{ product.title }}</h3>
+          </div>
+        </div>
+        <div class="hdt-sticky-atc__infos">
+          <wrapp-hdt-pr-frm class="hdt-contents">
+            {%- form 'product', product, id: product_form_id_sticky, class: 'hdt-sticky-atc__form hdt-flex hdt-align-center', data-gift-card-recipient: false -%}
+              <div class="hdt-sticky-atc__variant-price">
+                {%- unless product.has_only_default_variant -%}
+                  <select name="id" class="hdt-select hdt-s-text hdt-truncate" tag-select>
+                    {%- for variant in product.variants -%}
+                      <option data-mdid="{{ variant.featured_media.id }}" {% if variant == selected_variant %}selected="selected"{% endif %}{% if variant.available == false %} disabled {% endif %} value="{{ variant.id }}">
+                        {%- liquid
+                          echo variant.title
+                          unless settings.currency_type == "2"
+                            echo variant.price | money | strip_html | prepend: ' - '
+                          endunless
+                          if variant.available == false
+                            echo 'products.product.sold_out' | t | prepend: ' - '
+                          endif
+                        -%}
+                      </option>
+                    {%- endfor -%}
+                  </select>
+                {%- else -%}
+                  <input type="hidden" name="id" value="{{ selected_variant.id }}">
+                  <span class="hdt-sticky-atc__product-monney hdt-money hdt-text-lg">{{ product.price | money }}</span>
+                {%- endunless -%}
+              </div>
+              <div class="hdt-sticky-atc__btns hdt-flex hdt-align-center">
+                <div class="hdt-sticky-atc__qty-selector">
+                  {%- render 'product-qty-selector', selected_variant: selected_variant, product_form_id: product_form_id_sticky, id: id_sticky -%}
+                </div>
+                <button type="submit" name="add" class="hdt-sticky-atc__submit hdt-btn hdt-oh hdt-btn-solid hdt-font-semibold hdt-relative hdt-truncate hdt-btn-loading__svg"{% if selected_variant.available == false or quantity_rule_soldout %} disabled="true"{% endif %}>
+                  <span class="hdt-btn-atc_text">{% if is_pre_order %}{{ 'products.product.pre_order' | t }}{% elsif selected_variant.available == false or quantity_rule_soldout %}{{ 'products.product.sold_out' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}</span> 
+                  <span class="hdt-loading__spinner hdt-absolute" hidden>
+                    <svg width="16" height="16" class="hdt-svg-spinner" focusable="false" role="presentation" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="hdt-path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
+                  </span>
+                </button>
+              </div>
+            {%- endform -%}
+          </wrapp-hdt-pr-frm>
+        </div>
+      </hdt-height-observer>
+    </div>
+  </hdt-sticky-btn-atc>
+  {%- endif -%}
+</div>
+{% schema %}
+{
+  "name": "Main product",
+  "class": "hdt-section hdt-section--feature-product",
+  "max_blocks": 1,
+  "blocks": [
+    {
+      "type": "_group-product"
+    },
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.main-product.settings.header_sticky_atc.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_atc",
+      "label": "t:sections.main-product.settings.sticky_atc.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main-product.settings.header_fbt.content"
+    },
+    {
+      "type": "product_list",
+      "id": "product_list_fbt",
+      "label": "t:sections.main-product.settings.product_list_fbt.label",
+      "limit": 10
+    },
+    {
+      "type": "color_scheme",
+      "id": "fbt_color_scheme",
+      "label": "Frequently Bought Together Color scheme",
+      "visible_if": "{{ section.settings.product_list_fbt != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "Section settings"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": false
+    },
+    /*{
+      "type": "range",
+      "id": "space_lg",
+      "label": "Vertical space",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "space_md",
+      "label": "Tablet vertical space",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "space",
+      "label": "Mobile vertical space",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "style.layout_panel",
+      "id": "layout",
+      "label": "Layout",
+      "default": {
+        "flex-direction": "row",
+        "gap": "20px",
+        "justify-content": "center",
+        "align-items": "center",
+
+        "@media (--mobile)": {
+          "flex-wrap": "wrap"
+        }
+      }
+    },*/
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ]
+}
+{% endschema %}

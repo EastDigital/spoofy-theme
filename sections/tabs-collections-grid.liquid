@@ -1,0 +1,860 @@
+<!-- Tabs-collections-grid.liquid -->
+{{ 'hdt-tabs-collections.css' | asset_url | stylesheet_tag }}
+{%- comment -%}{{ 'hdt-card-products.css' | asset_url | stylesheet_tag }}{%- endcomment -%}
+{%- liquid
+  assign current_width = settings.page_width | append: 'px'
+  assign current_width_tb = '100vw'
+  assign current_width_mb = '100vw'
+  assign space_item = "30px"
+  assign space_item_tb = "15px"
+  assign space_item_mb = "15px" 
+
+  if section.settings.section_fullwidth
+    if section.settings.boxed_fullwidth
+      assign current_width = '100vw - 80px'
+      assign current_width_tb = '100vw - 40px'
+      assign current_width_mb = '100vw - 10px'
+    else
+      assign current_width = '100vw'
+    endif
+  endif
+  assign color_list = 'products.theme_settings.color' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq
+  assign size_list = 'products.theme_settings.size' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq 
+-%}
+{%- style -%}
+  #shopify-section-{{section.id}}{  
+    --section-pt: {{ section.settings.padding_top }}px;
+    --section-pb: {{ section.settings.padding_bottom }}px; 
+    --section-prate: {{ section.settings.padding_rate }};
+  }
+  #{{section.id}} .hdt-tabs-head{
+    --tab-border-width:{{section.settings.border_width}}px
+  }
+  {% if section.settings.tabs_head_spacing>30 %}
+    #{{section.id}} .hdt-tabs-head{
+      --tabs-head-spacing:30px
+    }
+    @media(min-width:1150px){
+      #{{section.id}} .hdt-tabs-head{
+        --tabs-head-spacing:{{section.settings.tabs_head_spacing}}px
+      }
+    }
+    {% else %}
+      #{{section.id}} .hdt-tabs-head{
+        --tabs-head-spacing:{{section.settings.tabs_head_spacing}}px
+      }
+    {% endif %}
+    {% if section.settings.spacing_items>30 %}
+      #{{section.id}} .hdt-tabs-head .hdt-tabs-slider{
+        --slide-spacing:30px;gap:30px
+      }
+      @media(min-width:1150px){
+        #{{section.id}} .hdt-tabs-head .hdt-tabs-slider{
+          --slide-spacing:{{section.settings.spacing_items}}px;
+          gap:{{section.settings.spacing_items}}px
+        }
+      }
+    {% else %}
+      #{{section.id}} .hdt-tabs-head .hdt-tabs-slider{
+        --slide-spacing:{{section.settings.spacing_items}}px;
+        gap:{{section.settings.spacing_items}}px
+      }
+    {% endif %}
+{%- endstyle -%}
+{%- capture sizes -%}
+  (min-width: 1150px) calc(({{ current_width }} -  ({{ space_item }} * ( {{ section.settings.col_dk }} - 1 ))) * 1 / {{ section.settings.col_dk }}),(min-width: 768px) calc( ({{ current_width_tb }} - ({{ space_item_tb }} * ( {{ section.settings.col_tb }} - 1 ))) * 1 / {{ section.settings.col_tb }}), calc( ({{ current_width_mb }} - ({{ space_item_mb }} * ( {{ section.settings.col_mb }} - 1 ) )) * 1 / {{ section.settings.col_mb }})
+{%- endcapture -%}
+
+<div id="{{ section.id }}" class="hdt-section-spacing hdt-s-gradient" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %} hdt-ratio--{{ section.settings.image_ratio }} {% unless section.settings.image_size %} hdt-ratio--contain{% endunless %}">
+    <div class="hdt-tabs-{{ section.settings.tabs_des }}">
+      <div class="hdt-tabs-head hdt-flex {% unless section.settings.heading_inline %}hdt-flex-col hdt-align-center {% else %}hdt-tabs-inline hdt-justify-between hdt-align-center{% endunless %}">
+        {% if section.settings.tabs_heading != blank %}
+          <h4 class="hdt-{{ section.settings.heading_size }} hdt-font-semibold hdt-truncate" hdt-reveal="slide-in" timeline>{{ section.settings.tabs_heading }}</h4>
+        {% endif %}
+        <hdt-tab id="Scroller-{{ section.id }}" class="hdt-tab hdt-tabs-list hdt-{{ section.blocks.size | at_most: 5 }}tab-item hdt-text-uppercase-{{ section.settings.text_transform }} hdt-flex {% unless section.settings.heading_inline %} hdt-row-grid--modify lg:hdt-justify-center{% else %} lg:hdt-justify-end{% endunless %}" aria-controls="{{ section.id }}-content">
+          <hdt-slider id="Slider-{{ section.id }}" class="hdt-tabs-slider hdt-flex md:hdt-justify-center hdt-oh hdt-slider hdt-slider__dots_outline hdt-text-uppercase-{{ section.settings.text_transform }} lg:hdt-slides-10 md:hdt-slides-6 hdt-slides-3" config='{ "id": "Slider-{{ section.id }}", "navUI": false, "dotUI": true }' hdt-reveal="slide-in" timeline>
+            <div class="hdt-slider__viewport hdt-relative">
+              <div class="hdt-slider__container">
+                {%- for block in section.blocks -%}
+                  <div class="hdt-slider__slide">
+                    {%- if block.type == "tab_item" -%}
+                      <button class="hdt-tabs-item-title hdt-inline-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-{{ section.settings.tab_item_size }} hdt-font-{{ section.settings.tab_item_weight }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}" {{ block.shopify_attributes }}>
+                        <span class="hdt-collection-title-text hdt-truncate hdt-relative">{{ block.settings.title }}</span>
+                      </button>
+                    {%- else -%}
+                      <a class="hdt-tabs-item-title hdt-inline-flex hdt-align-center hdt-slider__slide hdt-justify-between hdt-relative hdt-text-{{ section.settings.tab_item_size }} hdt-font-{{ section.settings.tab_item_weight }}" href="{{ block.settings.item_link }}">
+                        <span class="hdt-collection-title-text hdt-truncate hdt-relative">{{ block.settings.title }}</span>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">  <path d="M1.07692 10L0 8.92308L7.38462 1.53846H0.769231V0H10V9.23077H8.46154V2.61538L1.07692 10Z" fill="currentColor"/></svg>
+                      </a>
+                    {%- endif -%}
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          </hdt-slider>
+        </hdt-tab>
+      </div>
+      <div id="{{ section.id }}-content">
+        {%- for block in section.blocks -%}
+          {% if block.type != 'tab_item' %}
+            {% continue %}
+          {% endif %}
+          {%- assign products_id = 'products-' | append: block.id -%}
+          {%- paginate collections[block.settings.collection].products by section.settings.products_count -%}
+          <div class="hdt-tab-item" tab-item {% if forloop.first %} tab-selected {% endif %}>
+            <hdt-reval-items reveal-on-scroll="true" id="{{ products_id }}" scroll-into-view class="hdt-collection-products hdt-collection-has-pr{{ section.settings.product_des }} hdt-pr-border_{{ section.settings.pr_border }} hdt-row-grid hdt-row-grid--modify hdt-justify-center hdt-ratio--{{ section.settings.image_ratio }} {% unless section.settings.image_size %} hdt-ratio--contain{% endunless %} lg:hdt-grid-cols-{{ section.settings.col_dk }} md:hdt-grid-cols-{{ section.settings.col_tb }} hdt-grid-cols-{{ section.settings.col_mb }}">
+              {%- liquid 
+                assign product_collection = block.settings.product_list | default: block.settings.collection.products
+                if product_collection != blank
+                  case section.settings.product_des
+                    when '1'
+                      capture btn_wishlist_code
+                        if settings.wishlist_mode != '0'
+                          render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'top'
+                        endif
+                      endcapture
+                      for product in product_collection limit: section.settings.products_count
+                        unless settings.remove_collection_url or block.settings.product_list != blank
+                          assign product_url = product.url | within: block.settings.collection
+                        endunless
+                        render 'card-product1', card_product: product, class: "hdt-pr-style1", section_id: block.id, sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+                      endfor
+                    when '2'
+                      capture btn_wishlist_code
+                        if settings.wishlist_mode != '0'
+                          render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'right'
+                        endif
+                      endcapture
+                      for product in product_collection limit: section.settings.products_count
+                        unless settings.remove_collection_url or block.settings.product_list != blank
+                          assign product_url = product.url | within: block.settings.collection
+                        endunless
+                        render 'card-product2', card_product: product, section_id: block.id, class: "hdt-pr-style2", sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+                      endfor
+                    when '3'
+                      capture btn_wishlist_code
+                        if settings.wishlist_mode != '0'
+                          render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'left'
+                        endif
+                      endcapture
+                      for product in product_collection limit: section.settings.products_count
+                        unless settings.remove_collection_url or block.settings.product_list != blank
+                          assign product_url = product.url | within: block.settings.collection
+                        endunless
+                        render 'card-product3', card_product: product, section_id: block.id, class: "hdt-pr-style3", sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+                      endfor
+                    when '4'
+                      capture btn_wishlist_code
+                        if settings.wishlist_mode != '0'
+                          render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'left'
+                        endif
+                      endcapture
+                      for product in product_collection limit: section.settings.products_count
+                        unless settings.remove_collection_url or block.settings.product_list != blank
+                          assign product_url = product.url | within: block.settings.collection
+                        endunless
+                        render 'card-product4', card_product: product, section_id: block.id, class: "hdt-pr-style4", sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+                      endfor
+                    when '5'
+                      capture btn_wishlist_code
+                        if settings.wishlist_mode != '0'
+                          render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'top'
+                        endif
+                      endcapture
+                      for product in product_collection limit: section.settings.products_count
+                        unless settings.remove_collection_url or block.settings.product_list != blank
+                          assign product_url = product.url | within: block.settings.collection
+                        endunless
+                        render 'card-product5', card_product: product, section_id: block.id, class: "hdt-pr-style5", sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+                      endfor
+                    when '6'
+                      capture btn_wishlist_code
+                        if settings.wishlist_mode != '0'
+                          render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'top'
+                        endif
+                      endcapture
+                      for product in product_collection limit: section.settings.products_count
+                        unless settings.remove_collection_url or block.settings.product_list != blank
+                          assign product_url = product.url | within: block.settings.collection
+                        endunless
+                        render 'card-product6', card_product: product, section_id: block.id, class: "hdt-pr-style6", sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+                      endfor
+                    when '7'
+                        capture btn_wishlist_code
+                          if settings.wishlist_mode != '0'
+                            render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'top'
+                          endif
+                        endcapture
+                        for product in product_collection limit: section.settings.products_count
+                          unless settings.remove_collection_url or block.settings.product_list != blank
+                            assign product_url = product.url | within: block.settings.collection
+                          endunless
+                          render 'card-product7', card_product: product, section_id: block.id, class: "hdt-pr-style7 hdt-relative", sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+                        endfor
+                    when '8'
+                        capture btn_wishlist_code
+                          if settings.wishlist_mode != '0'
+                            render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'top'
+                          endif
+                        endcapture
+                        for product in product_collection limit: section.settings.products_count
+                          unless settings.remove_collection_url or block.settings.product_list != blank
+                            assign product_url = product.url | within: block.settings.collection
+                          endunless
+                          render 'card-product8', card_product: product, section_id: block.id, class: "hdt-pr-style8", sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+                        endfor
+                    when '9'
+                        capture btn_wishlist_code
+                          if settings.wishlist_mode != '0'
+                            render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'top'
+                          endif
+                        endcapture
+                        for product in product_collection limit: section.settings.products_count
+                          unless settings.remove_collection_url or block.settings.product_list != blank
+                            assign product_url = product.url | within: block.settings.collection
+                          endunless
+                          render 'card-product9', card_product: product, section_id: block.id, class: "hdt-pr-style1 hdt-pr-style9", sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+                        endfor
+                    when '10'
+                        capture btn_wishlist_code
+                          if settings.wishlist_mode != '0'
+                            render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'top'
+                          endif
+                        endcapture
+                        for product in product_collection limit: section.settings.products_count
+                          unless settings.remove_collection_url or block.settings.product_list != blank
+                            assign product_url = product.url | within: block.settings.collection
+                          endunless
+                          render 'card-product10', card_product: product, section_id: block.id, class: "hdt-pr-style1 hdt-pr-style10", sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+                        endfor
+                    when '11' or '12'
+                        capture btn_wishlist_code
+                          if settings.wishlist_mode != '0'
+                            render 'btn-wishlist', class: 'hdt-card-product__btn-wishlist hdt-pr_btn', placement: 'top'
+                          endif
+                        endcapture
+                        for product in product_collection limit: section.settings.products_count
+                          unless settings.remove_collection_url or section.settings.product_list != blank
+                            assign product_url = product.url | within: section.settings.collection
+                          endunless
+                          assign class = "hdt-slider__slide hdt-pr-style1 hdt-pr-style" | append: section.settings.product_des
+                          render 'card-product11', card_product: product, section_id: section.id, class: class, sizes: sizes, image_ratio: section.settings.image_ratio, color_list: color_list, size_list: size_list, product_url: product_url, btn_wishlist_code: btn_wishlist_code, show_vendor: section.settings.show_vendor
+                        endfor
+                  endcase
+                else
+                  for i in (1..section.settings.products_count)
+                    capture current
+                    cycle 1, 2 , 3, 4
+                    endcapture
+                    assign placeholder_image = 'product-apparel-' | append: current
+                    render 'card-product-placeholder', image_ratio: section.settings.image_ratio, placeholder_image: placeholder_image, section_id: block.id
+                  endfor
+                endif
+              -%}
+            </hdt-reval-items>
+            {%- if paginate.next and block.settings.product_list == blank %}
+              {%- if section.settings.pagination_type == "view_all" -%}
+                <div class="hdt-pagination-wrapp hdt-prs-footer hdt-pagination-{{ section.settings.pagination_type }} hdt-flex hdt-justify-{{ section.settings.paginate_pos }}" timeline hdt-reveal="slide-in"  style="--pagination-distance:{{ section.settings.dis_pagination }}px;">
+                  <a class="hdt-view-all-btn hdt-btn hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-{{ section.settings.btn_style }} hdt-font-{{ section.settings.btn_fw }}" href="{{ block.settings.collection.url | default: routes.all_products_collection_url }}" hdt-reveal="slide-in" timeline>
+                    {% assign view_all_df = 'general.pagination.view_all' | t %}
+                    <span>{{ section.settings.btn_label | default: view_all_df | escape }}</span>
+                  </a>
+                </div>
+              {%- elsif section.settings.pagination_type == "load_more" -%} 
+                <div loadmore-btn-wrapp class="hdt-pagination-wrapp hdt-prs-footer hdt-pagination-{{ section.settings.pagination_type }} hdt-flex hdt-justify-{{ section.settings.paginate_pos }}" style="--pagination-distance:{{ section.settings.dis_pagination }}px;">
+                  <wrapp-hdt-lm-url class="hdt-contents">
+                    <a section-id="{{ section.id }}" append="{{ products_id }}" href="{{ paginate.next.url }}" class="hdt-loamore-btn hdt-btn hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-{{ section.settings.btn_style }} hdt-font-{{ section.settings.btn_fw }}">
+                      {% assign loadmore_df = 'general.pagination.load_more_products' | t %}
+                      <span>{{ section.settings.btn_label | default: loadmore_df | escape }}</span>
+                    </a>
+                  </wrapp-hdt-lm-url>
+                </div>
+              {%- endif -%} 
+            {% endif %}
+          </div>
+          {%- endpaginate -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.tabs_collections.grid_name",
+  "tag": "section",
+  "class": "hdt-section hdt-tabs-collections",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.section_heading_options"
+    },
+    {
+      "type": "text",
+      "id": "tabs_heading",
+      "label": "t:sections.tabs_collections.settings.tabs_heading"
+    },
+    
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "text-lg",
+          "label": "t:sections.all.heading.heading_size.options.small"
+        },
+        {
+          "value": "h5",
+          "label": "t:sections.all.heading.heading_size.options.medium"
+        },
+        {
+          "value": "h4",
+          "label": "t:sections.all.heading.heading_size.options.large"
+        },
+        {
+          "value": "h3",
+          "label": "t:sections.all.heading.heading_size.options.extralarge"
+        }
+      ],
+      "label": "t:settings_schema.heading.settings.label",
+      "default": "h4"
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_inline",
+      "label": "t:sections.tabs_collections.settings.heading_inline",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "tabs_head_spacing",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "label": "t:sections.tabs_collections.settings.tabs_head_spacing.label",
+      "info": "t:sections.tabs_collections.settings.tabs_head_spacing.info",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "t:sections.tabs_collections.settings.options_tabs_list"
+    },
+    {
+      "type": "select",
+      "id": "tabs_des",
+      "label": "t:sections.tabs_collections.settings.tabs_des.label",
+      "options": [
+        {
+          "value": "underline",
+          "label": "t:sections.tabs_collections.settings.tabs_des.underline.label"
+        },
+        {
+          "value": "outline",
+          "label": "t:sections.tabs_collections.settings.tabs_des.outline.label"
+        }
+      ],
+      "default": "underline"
+    },
+    {
+      "type": "select",
+      "id": "tab_item_size",
+      "options": [
+        {
+          "value": "lg",
+          "label": "t:sections.tabs_collections.settings.tab_item_size.option_1.label"
+        },
+        {
+          "value": "12xl",
+          "label": "t:sections.tabs_collections.settings.tab_item_size.option_2.label"
+        },
+        {
+          "value": "14xl",
+          "label": "t:sections.tabs_collections.settings.tab_item_size.option_3.label"
+        }
+      ],
+      "label": "t:sections.tabs_collections.settings.tab_item_size.label",
+      "default": "lg"
+    },
+    {
+      "type": "select",
+      "id": "tab_item_weight",
+      "options": [
+        {
+          "value": "normal",
+          "label": "t:sections.tabs_collections.settings.tab_item_weight.option_1.label"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.tabs_collections.settings.tab_item_weight.option_2.label"
+        },
+        {
+          "value": "semibold",
+          "label": "t:sections.tabs_collections.settings.tab_item_weight.option_3.label"
+        },
+        {
+          "value": "extrabold",
+          "label": "t:sections.tabs_collections.settings.tab_item_weight.option_4.label"
+        }
+      ],
+      "label": "t:sections.tabs_collections.settings.tab_item_weight.label",
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_transform",
+      "label": "t:sections.tabs_collections.settings.text_transform",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "label": "t:sections.tabs_collections.settings.border_width",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "spacing_items",
+      "min": 10,
+      "max": 70,
+      "step": 1,
+      "label": "t:sections.tabs_collections.settings.spacing_items.label",
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "t:sections.tabs_collections.settings.options_products"
+    },
+    {
+      "type": "select",
+      "id": "product_des",
+      "label": "t:sections.collection_products.settings.product_des",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        },
+        {
+          "value": "9",
+          "label": "9"
+        },
+        {
+          "value": "10",
+          "label": "10"
+        },
+        {
+          "value": "11",
+          "label": "11"
+        },
+        {
+          "value": "12",
+          "label": "12"
+        },
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt_image",
+          "label": "t:sections.all.images.ratio.adapt_image.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.all.images.ratio.square.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.all.images.ratio.portrait.label"
+        },
+        {
+          "value": "asos",
+          "label": "t:sections.all.images.ratio.asos.label"
+        },
+        {
+          "value": "landscape",
+          "label": "t:sections.all.images.ratio.landscape.label"
+        },
+        {
+          "value": "custom-pr",
+          "label": "t:sections.all.images.ratio.custom.label"
+        }
+      ],
+      "label": "t:sections.all.images.ratio.label",
+      "default": "adapt_image"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_size",
+      "label": "t:sections.all.images.size.cover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "t:sections.collection_products.settings.show_vendor",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "pr_border",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.collection_products.settings.pr_border.none"
+        },
+        {
+          "value": "in_image",
+          "label": "t:sections.collection_products.settings.pr_border.in_image"
+        },
+        {
+          "value": "on_item",
+          "label": "t:sections.collection_products.settings.pr_border.on_item"
+        },
+        {
+          "value": "on_grid",
+          "label": "t:sections.collection_products.settings.pr_border.on_grid"
+        }
+      ],
+      "label": "t:sections.collection_products.settings.pr_border.label",
+      "info": "t:sections.collection_products.settings.pr_border.info",
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.tabs_collections.settings.options_layout"
+    },
+    {
+      "type": "range",
+      "id": "products_count",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "label": "t:sections.all.limit",
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "col_dk",
+      "label": "t:sections.all.items_row.desktop",
+      "default": "4",
+      "options": [
+        {
+          "label": "2",
+          "value": "2"
+        },
+        {
+          "label": "3",
+          "value": "3"
+        },
+        {
+          "label": "4",
+          "value": "4"
+        },
+        {
+          "label": "5",
+          "value": "5"
+        },
+        {
+          "label": "6",
+          "value": "6"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "col_tb",
+      "label": "t:sections.all.items_row.tablet",
+      "default": "2",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        },
+        {
+          "label": "3",
+          "value": "3"
+        },
+        {
+          "label": "4",
+          "value": "4"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "col_mb",
+      "label": "t:sections.all.items_row.mobile",
+      "default": "1",
+      "options": [
+        {
+          "label": "1",
+          "value": "1"
+        },
+        {
+          "label": "2",
+          "value": "2"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Options for grid layout"
+    },
+    {
+      "type": "select",
+      "id": "pagination_type",
+      "label": "t:sections.all.pagination.pagination_value.label",
+      "info": "t:sections.all.pagination.pagination_value.info",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.all.pagination.pagination_value.none.label"
+        },
+        {
+          "value": "view_all",
+          "label": "t:sections.all.pagination.pagination_value.view_all.label"
+        },
+        {
+          "value": "load_more",
+          "label": "t:sections.all.pagination.pagination_value.load_more.label"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "paginate_pos",
+      "label": "t:sections.all.pagination.paginate_pos.label",
+      "default": "center",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.all.pagination.paginate_pos.option_1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.all.pagination.paginate_pos.option_2.label"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.all.pagination.paginate_pos.option_3.label"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "dis_pagination",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.pagination.dis_pagination.label",
+      "default": 30
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "t:sections.tabs_collections.settings.btn_label.label",
+      "info": "t:sections.tabs_collections.settings.btn_label.info",
+      "default": "View all"
+    },
+    {
+      "type": "select",
+      "id": "btn_style",
+      "label": "t:sections.all.button.settings.style.label",
+      "options": [
+        {
+          "value": "solid",
+          "label": "t:sections.all.button.settings.style.options.option_1"
+        },
+        {
+          "value": "outline",
+          "label": "t:sections.all.button.settings.style.options.option_2"
+        },
+        {
+          "value": "link",
+          "label": "t:sections.all.button.settings.style.options.option_4"
+        }
+      ],
+      "default": "solid"
+    },
+    {
+      "type": "select",
+      "id": "btn_fw",
+      "label": "t:sections.all.button.settings.font_weight.label",
+      "options": [
+        {
+          "value": "normal",
+          "label": "t:sections.all.button.settings.font_weight.options.option_1"
+        },
+        {
+          "value": "medium",
+          "label": "t:sections.all.button.settings.font_weight.options.option_2"
+        },
+        {
+          "value": "semibold",
+          "label": "t:sections.all.button.settings.font_weight.options.option_3"
+        },
+        {
+          "value": "bold",
+          "label": "t:sections.all.button.settings.font_weight.options.option_4"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section_layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab_item",
+      "name": "t:sections.tabs_collections.blocks.tab_item.label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.tabs_collections.blocks.tab_item.title",
+          "default": "Tab title"
+        },
+        {
+          "id": "collection",
+          "type": "collection",
+          "label": "t:sections.tabs_collections.blocks.tab_item.collection"
+        },
+        {
+          "type": "product_list",
+          "id": "product_list",
+          "label": "t:sections.collection_products.settings.product_list.label",
+          "info": "t:sections.collection_products.settings.product_list.info"
+        }
+      ]
+    },
+    {
+      "type": "other_link",
+      "name": "t:sections.tabs_collections.blocks.other_link.label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.tabs_collections.blocks.other_link.title",
+          "default": "Tab title"
+        },
+        {
+          "id": "item_link",
+          "type": "url",
+          "label": "t:sections.tabs_collections.blocks.other_link.url"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.tabs_collections.grid_name",
+      "category": "t:sections_categories.03_collections.name",
+      "blocks": [
+        {
+          "type": "tab_item"
+        },
+        {
+          "type": "tab_item"
+        },
+        {
+          "type": "tab_item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

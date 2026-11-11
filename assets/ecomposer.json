@@ -1,0 +1,153 @@
+{
+  "author": "Ecomus",
+  "about": "Ultimate Shopify OS 2.0 Theme",
+  "logo": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files/Ecomus.svg?v=1699583364",
+  "logo_white": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Ecomus_-_white.svg?v=1699583364",
+  "icon": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/logoapp.png?v=1711444442",
+  "icon_white": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/logoapp.png?v=1711444442",
+  "website": "https:\/\/the4.co",
+  "description": "Ecomus theme is a versatile powerhouse with over 20 meticulously crafted demos, catering to various products and industries. From fashion to electronics, outdoor, etc. Ecomus seamlessly fits any business niche.\n [Meet Ecomus](https:\/\/1.envato.market\/nL66Va)",
+  "dev": false,
+  "library": {
+    "categories": [
+      {
+        "id": "home",
+        "title": "Home Page"
+      },
+      {
+        "id": "product",
+        "title": "Product Page"
+      }
+    ],
+    "pages": [
+      {
+        "title": "Home Fashion 01",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/home-01.jpg?v=1711421515",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Fashion 02",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-02.jpg?v=1711421515",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-02.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Fashion 03",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-03.jpg?v=1711421516",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-03.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Fashion 04",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-04.jpg?v=1711421516",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-04.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Fashion 05",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-05.jpg?v=1711421517",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-05.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Fashion 06",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-06.jpg?v=1711421516",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-06.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Fashion 07",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-07.jpg?v=1711421515",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-07.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Fashion 08",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-08.jpg?v=1711421516",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Home-08.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Handbag",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Handbag.jpg?v=1711421516",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Handbag.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Sneaker",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Sneaker.jpg?v=1711421516",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Sneaker.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Tee Shop",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Tee_Shop.jpg?v=1711421516",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Tee_Shop.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Baby Store",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Baby_Store.jpg?v=1711421516",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Baby_Store.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Furniture",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Furniture.jpg?v=1711421516",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Furniture.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Dog Accessories",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Dog_Accessories.jpg?v=1711421516",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Dog_Accessories.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Home Kitchen Wear",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Kitchen_Wear.jpg?v=1711421516",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Kitchen_Wear.ecom?v=1711528070",
+        "categories": [
+          "home"
+        ]
+      },
+      {
+        "title": "Product Default",
+        "thumbnail": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Product_Layout.jpg?v=1711421515",
+        "source": "https:\/\/cdn.shopify.com\/s\/files\/1\/0820\/6975\/0064\/files\/Product_Layout.ecom?v=1711528070",
+        "categories": [
+          "product"
+        ]
+      }
+    ]
+  }
+}

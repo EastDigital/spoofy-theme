@@ -1,0 +1,168 @@
+
+{{ 'hdt-countdown.css' | asset_url | stylesheet_tag }}
+<hdt-countdown class="hdt-countdown{% if block.settings.rounded_full %} hdt-cd-rounded-full{% endif %} hdt-inline-block hdt-countdown-{{ block.settings.cd_style }} hdt-uppercase-{{ block.settings.uppercase }}" color-scheme="{{ block.settings.color_scheme }}" config='{"month":"{{ block.settings.month }}", "date":"{{ block.settings.day }}, {{ block.settings.year }} {{ block.settings.hour }}:{{ block.settings.minute }}", "hideTimerOnComplete": {{ block.settings.hide_on_complete }}, "hasZero": {{ block.settings.prepend_number }}, "hasTextPlural": true }' hdt-reveal="slide-in" timeline>
+  <div class="hdt-countdown__inner hdt-flex" aria-hidden="true" style="--gap: {{ block.settings.space_item }}px;">
+    <div class="hdt-countdown__item hdt-countdown--days" hdt-reveal="slide-in" timeline>
+      <hdt-countdown-amount effect="{{ block.settings.effect_cd }}" class="hdt-countdown__amount" data-days>00</hdt-countdown-amount>
+      <hdt-countdown-text singular="{{ 'sections.countdown_timmer.day' | t | escape }}" class="hdt-countdown__text hdt-grid">{{ 'sections.countdown_timmer.day_plural' | t }}</hdt-countdown-text>
+    </div>
+    <div class="hdt-countdown__item hdt-countdown--hours" hdt-reveal="slide-in" timeline>
+      <hdt-countdown-amount effect="{{ block.settings.effect_cd }}" class="hdt-countdown__amount" data-hours>00</hdt-countdown-amount>
+      <hdt-countdown-text singular="{{ 'sections.countdown_timmer.hr' | t | escape }}" class="hdt-countdown__text hdt-grid">{{ 'sections.countdown_timmer.hr_plural' | t }}</hdt-countdown-text>
+    </div>
+    <div class="hdt-countdown__item hdt-countdown--minutes" hdt-reveal="slide-in" timeline>
+      <hdt-countdown-amount effect="{{ block.settings.effect_cd }}" class="hdt-countdown__amount" data-minutes>00</hdt-countdown-amount>
+      <hdt-countdown-text singular="{{ 'sections.countdown_timmer.min' | t | escape }}" class="hdt-countdown__text hdt-grid">{{ 'sections.countdown_timmer.min_plural' | t }}</hdt-countdown-text>
+    </div>
+    <div class="hdt-countdown__item hdt-countdown--seconds" hdt-reveal="slide-in" timeline>
+      <hdt-countdown-amount effect="{{ block.settings.effect_cd }}" class="hdt-countdown__amount" data-seconds>00</hdt-countdown-amount>
+      <hdt-countdown-text singular="{{ 'sections.countdown_timmer.sec' | t | escape }}" class="hdt-countdown__text hdt-grid">{{ 'sections.countdown_timmer.sec_plural' | t }}</hdt-countdown-text>
+    </div>
+  </div>
+  {%- if block.settings.mess_complete != blank %}<div class="hdt-countdown__message hdt-hidden hdt-s-text">{{ block.settings.mess_complete }}</div>{% endif -%}
+</hdt-countdown>
+
+{% schema %}
+  {
+    "name": "Countdown",
+    "class": "hdt-countdown-text",
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.countdown_text.settings.color.label"
+      },
+      {
+        "type": "select",
+        "id": "cd_style",
+        "label": "Style",
+        "options": [
+          {
+          "value": "solid",
+          "label": "Solid"
+          },
+          {
+            "value": "outline",
+            "label": "Outline"
+          }
+        ],
+        "default": "solid"
+      },
+      {
+        "type": "checkbox",
+        "id": "rounded_full",
+        "label": "Rounded full",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "space_item",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "Space between items",
+        "default": 15
+      },
+      {
+        "type": "number",
+        "id": "year",
+        "default": 2030,
+        "label": "t:sections.countdown-bar.blocks.countdown.settings.year.label",
+        "info": "t:sections.countdown-bar.blocks.countdown.settings.year.info"
+      },
+      {
+        "type": "range",
+        "id": "month",
+        "min": 1,
+        "max": 12,
+        "step": 1,
+        "default": 4,
+        "label": "t:sections.countdown-bar.blocks.countdown.settings.month.label"
+      },
+      {
+        "type": "range",
+        "id": "day",
+        "min": 1,
+        "max": 31,
+        "step": 1,
+        "default": 19,
+        "label": "t:sections.countdown-bar.blocks.countdown.settings.day.label"
+      },
+      {
+        "type": "range",
+        "id": "hour",
+        "min": 0,
+        "max": 23,
+        "step": 1,
+        "default": 12,
+        "label": "t:sections.countdown-bar.blocks.countdown.settings.hour.label"
+      },
+      {
+        "type": "range",
+        "id": "minute",
+        "min": 0,
+        "max": 59,
+        "step": 1,
+        "default": 0,
+        "label": "t:sections.countdown-bar.blocks.countdown.settings.minute.label"
+      },
+      {
+        "type": "select",
+        "id": "effect_cd",
+        "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.label",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__1.label"
+          },
+          {
+            "value": "move_top",
+            "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__2.label"
+          },
+          {
+            "value": "move_bottom",
+            "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__3.label"
+          },
+          {
+            "value": "scale",
+            "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__4.label"
+          },
+          {
+            "value": "rotate",
+            "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__5.label"
+          }
+        ],
+        "default": "move_top"
+      },
+      {
+        "type": "checkbox",
+        "id": "uppercase",
+        "label": "t:sections.countdown_text.settings.uppercase_text.label",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "prepend_number",
+        "label": "t:sections.countdown-bar.blocks.countdown.settings.prepend_number.label",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "hide_on_complete",
+        "default": false,
+        "label": "t:sections.countdown-bar.blocks.countdown.settings.hide_on_complete.label"
+      },
+      {
+        "type": "text",
+        "id": "mess_complete",
+        "label": "t:sections.countdown-bar.blocks.countdown.settings.mess_complete.label"
+      }
+    ],
+    "presets":[
+      {
+        "name": "Countdown"
+      }
+    ]
+  }
+{% endschema %}

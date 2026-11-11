@@ -1,0 +1,70 @@
+<div class="hdt-mini-cart__imgtrust hdt-text-center">
+    {%- if block.settings.image != blank -%}
+      {%- assign image_size_2x = block.settings.wimg | times: 2 -%}
+      <div class="hdt-mini-cart__imgtrust-image hdt-block lg:hdt-inline-block" style="max-width: min(100%, {{ block.settings.wimg }}px);">
+        <img width="{{ block.settings.image.width }}" class="hdt-inline-block" height="{{ block.settings.image.height }}" srcset="{{ block.settings.image | image_url: width: block.settings.image_width }}, {{ block.settings.image | image_url: width: image_size_2x }} 2x" src="{{ block.settings.image | image_url: width: 760 }}" alt="{{ block.settings.image.alt | escape }}" loading="lazy">
+      </div>
+    {%- elsif block.settings.svg != blank -%}
+      {%- assign arr = block.settings.svg | remove: ' ' | split: "," -%}
+      <div class="hdt-mini-cart__imgtrust-svgs hdt-block lg:hdt-inline-block" style="--height-img:{{ block.settings.height }}px;">
+        {%- for img in arr -%}
+          <div class="hdt-payment-item hdt-inline-block">{{ img | payment_type_svg_tag: class: 'hdt-icon-payment hdt-inline-block' }}</div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+{% schema %}
+  {
+    "name": "t:sections.mini-cart.blocks.img_trust.name",
+    "tag": null,
+    "settings": [
+      {
+        "type": "header",
+        "content": "t:sections.mini-cart.blocks.img_trust.settings.header_image.content"
+      },        
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.mini-cart.blocks.img_trust.settings.image.label"
+      },
+      {
+        "type": "range",
+        "id": "wimg",
+        "min": 100,
+        "max": 600,
+        "step": 5,
+        "unit": "px",
+        "label": "t:sections.mini-cart.blocks.img_trust.settings.wimg.label",
+        "default": 350,
+        "visible_if": "{{ block.settings.image != blank }}"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.mini-cart.blocks.img_trust.settings.header_svg.content"
+      },
+      {
+        "type": "textarea",
+        "id": "svg",
+        "label": "t:sections.mini-cart.blocks.img_trust.settings.svg.label",
+        "default": "visa,paypal,master,american_express,amazon_payments",
+        "info": "Review the [list of available values](https:\/\/github.com\/activemerchant\/payment_icons\/tree\/master\/app\/assets\/images\/payment_icons) and copy the name of each icon that you need from that list, without the .svg extension"
+      },
+      {
+        "type": "range",
+        "id": "height",
+        "min": 1,
+        "max": 100,
+        "step": 1,
+        "label": "t:sections.mini-cart.blocks.img_trust.settings.height.label",
+        "unit": "px",
+        "default": 25,
+        "visible_if": "{{ block.settings.svg != blank }}"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.mini-cart.blocks.img_trust.name"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,190 @@
+<!-- paragraph.liquid -->
+{% liquid
+  assign effect = 'hdt-reveal="slide-in" timeline'
+  if section.id contains 'slideshow'
+    assign effect = 'reval'
+  endif   
+%}
+{%- capture css -%}
+  {%- if block.settings.fsize > 11 -%}--fs:{{ block.settings.fsize | divided_by: 10.0000 }}rem;{%- endif -%}
+  {%- if block.settings.ffamily != '' -%}--ff:var({{ block.settings.ffamily }}); {%- endif -%}
+  {%- if block.settings.color != '' and block.settings.color != 'rgba(0,0,0,0)' and block.settings.custom -%}--color:{{ block.settings.color }}; {%- endif -%}
+{%- endcapture -%}
+<div {{ effect }} class="hdt-paragraph hdt-rte {{ block.settings.lheight }} {{ block.settings.fweight }} {{ block.settings.text_color }} {%- if block.settings.custom %} hdt-text-{{ block.settings.align_mb }} md:hdt-text-{{ block.settings.align }} {{ block.settings.class_custom }}{% endif %}" {%- if css != blank %} style="{{ css }}"{% endif %} {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+{%- schema -%}
+  {
+    "name": "Paragraph",
+    "tag": null,
+    "settings": [
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "Text",
+        "default": "<p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue</p>"
+      },
+      {
+        "type": "header",
+        "content": "Font settings",
+        "visible_if": "{{ block.settings.text != blank }}"
+      },
+      {
+        "type": "select",
+        "id": "ffamily",
+        "options": [
+          {
+            "value": "",
+            "label": "t:default"
+          },
+          {
+            "value": "--f_family_1",
+            "label": "t:settings_schema.typography.settings.font_family.font_family_1"
+          },
+          {
+            "value": "--f_family_2",
+            "label": "t:settings_schema.typography.settings.font_family.font_family_2"
+          },
+          {
+            "value": "--f_family_3",
+            "label": "t:settings_schema.typography.settings.font_family.font_family_3"
+          },
+          {
+            "value": "--f_family_4",
+            "label": "t:settings_schema.typography.settings.font_family.font_family_4"
+          },
+          {
+            "value": "--f_family_5",
+            "label": "t:settings_schema.typography.settings.font_family.font_family_5"
+          }
+        ],
+        "label": "t:settings_schema.typography.settings.font_family.label",
+        "default": "",
+        "visible_if": "{{ block.settings.text != blank }}"
+      },
+      {
+        "type": "select",
+        "id": "lheight",
+        "options": [
+          {
+            "value": "",
+            "label": "t:default"
+          },
+          {
+            "value": "hdt-lh-1",
+            "label": "t:settings_schema.typography.settings.line_height.hdt-lh-1"
+          },
+          {
+            "value": "hdt-lh-sm",
+            "label": "t:settings_schema.typography.settings.line_height.hdt-lh-1-2"
+          },
+          {
+            "value": "hdt-lh-lg",
+            "label": "t:settings_schema.typography.settings.line_height.hdt-lh-1-5"
+          }
+        ],
+        "label": "t:settings_schema.typography.settings.line_height.label",
+        "default": "",
+        "visible_if": "{{ block.settings.text != blank }}"
+      },
+      {
+        "type": "range",
+        "id": "fsize",
+        "label": "t:settings_schema.typography.settings.font_size.label",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "default": 0,
+        "visible_if": "{{ block.settings.text != blank }}",
+        "unit": "px",
+        "info": "0-11 is default of page. Does not work with heading tags."
+      },
+      {
+        "type": "select",
+        "id": "fweight",
+        "label": "t:settings_schema.typography.settings.font_weight.label",
+        "options": [
+          {
+            "value": "hdt-fw-lighter",
+            "label": "t:settings_schema.typography.settings.font_weight.lighter"
+          },
+          {
+            "value": "hdt-fw-light",
+            "label": "t:settings_schema.typography.settings.font_weight.light"
+          },
+          {
+            "value": "",
+            "label": "t:settings_schema.typography.settings.font_weight.normal"
+          },
+          {
+            "value": "hdt-fw-medium",
+            "label": "t:settings_schema.typography.settings.font_size.base"
+          },
+          {
+            "value": "hdt-fw-semibold",
+            "label": "t:settings_schema.typography.settings.font_weight.semibold"
+          },
+          {
+            "value": "hdt-fw-bold",
+            "label": "t:settings_schema.typography.settings.font_weight.bold"
+          },
+          {
+            "value": "hdt-fw-bolder",
+            "label": "Bolder"
+          }
+        ],
+        "default": "",
+        "visible_if": "{{ block.settings.text != blank }}"
+      },
+      {
+        "type": "select",
+        "id": "text_color",
+        "options": [
+          {
+            "value": "",
+            "label": "t:default"
+          },
+          {
+            "value": "hdt-text-secondary",
+            "label": "t:settings_schema.colors.secondary"
+          },
+          {
+            "value": "hdt-text-body-tertiary",
+            "label": "t:settings_schema.colors.tertiary"
+          },
+          {
+            "value": "hdt-text-primary",
+            "label": "t:settings_schema.colors.accent"
+          }
+        ],
+        "label": "t:blocks.text.text_color.label",
+        "default": "",
+        "visible_if": "{{ block.settings.text != blank }}"
+      },
+      {
+        "type": "header",
+        "content": "Customize inline",
+      },
+      {
+        "type": "checkbox",
+        "id": "custom",
+        "label": "Enable this option to use the options below."
+      },
+      {
+        "type": "color",
+        "id": "color",
+        "label": "Color",
+        //"available_if": "{{ block.settings.custom }}"
+      },
+      {
+        "type": "text",
+        "id": "class_custom",
+        "label": "Customize class",
+        "info": "Assign a class name to this item for easy customization without impacting others."
+      },
+    ],
+    "presets": [
+      {
+        "name": "Paragraph"
+      }
+    ]
+  }
+{%- endschema -%}

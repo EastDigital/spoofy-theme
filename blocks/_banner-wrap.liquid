@@ -1,0 +1,45 @@
+{% style %}
+  @media (min-width: 768px){
+    .hdt-section:first-child .md\:hdt-height--full.hdt-banner-wrap:has( > *:nth-child(2)){
+      --fill-height-first: calc(50vh - var(--spacing-x) / 2);
+    }
+    @supports(height: 100svh){
+      .hdt-section:first-child .md\:hdt-height--full.hdt-banner-wrap:has( > *:nth-child(2)){
+        --fill-height-first: calc(50svh - var(--spacing-x) / 2);
+        --media-overlap-content-h:var(--fill-height-first, calc(50svh - var(--header-height, 0px) - var(--announcement-bar-height, 0px) - var(--spacing-x) / 2))
+      }
+    }
+  }
+  #shopify-section-{{ section.id }} .hdt-banner-wrap{ 
+    {% if section.settings.image_height_mb=='adapt_image_first' or section.settings.image_height_mb=='fixed' %}
+      --aspect-ratioapt:{{section.settings.fixed_height_mb}}px;
+    {% endif %}
+    {% if section.settings.image_height=='adapt_image_first' or section.settings.image_height=='fixed' %}
+      --aspect-ratioapt-md:{{section.settings.fixed_height}}px;
+      &:has( > *:nth-child(2)){
+        --aspect-ratioapt-md:{{section.settings.fixed_height | divided_by: 2}}px;
+      }
+    {% endif %}}
+{% endstyle %}
+<div class="hdt-col-banner hdt-g-col hdt-g-col-12 lg:hdt-g-col-4">
+  <div class="hdt-banner-wrap hdt-row-grid hdt-grid-cols-1 md:hdt-grid-cols-2 lg:hdt-grid-cols-1 md:hdt-height--{{ section.settings.image_height }} hdt-height--{{ section.settings.image_height_mb }}">
+    {% content_for "blocks" %}
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Banner Wrap",
+    "tag": null,
+    "settings": [
+    
+    ],
+    "blocks": [
+      {
+        "type": "_banner_item_split"
+      },
+      {
+        "type": "_banner-item"
+      }
+    ]
+  }
+{% endschema %}

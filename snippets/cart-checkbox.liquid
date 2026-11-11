@@ -1,0 +1,18 @@
+{%- comment -%}
+  Renders a checkbox cart
+
+  Accepts:
+  - form_id: {String} Form cart ID (required)
+  - block: {Object} (required)
+
+  Usage:
+   {%- render 'cart-checkbox', form_id: form_id, block: block -%}
+{%- endcomment -%}
+
+<hdt-block-required detect="checked" event="change" class="hdt-cart-checkbox" {{ block.shopify_attributes }}>
+  <div class="hdt-checkbox-wrapp hdt-inline-grid hdt-relative hdt-oh">
+    <input form="{{ form_id }}" class="hdt-grid-1x1" type="checkbox" id="{{ form_id }}_agree" required name="agree_checkbox">
+    <svg class="hdt-grid-1x1 hdt-pe-none" width="12" height="12" viewBox="0 0 24 24"><path d="M9 20l-7-7 3-3 4 4L19 4l3 3z"></path></svg>
+  </div>
+  <label for="{{ form_id }}_agree">{{ block.settings.content }}</label>
+</hdt-block-required>

@@ -1,0 +1,39 @@
+{%- unless block.settings.title == blank or block.settings.custom_liquid == blank -%}
+  <!--item-title>
+  <button aria-current="{%- if block.settings.open %}true{% else %}false{% endif %}" class="hdt-s-text hdt-relative hdt-font-semibold">{{ block.settings.title | escape }}</button>
+  -->
+  <div class="hdt-tab-item-content hdt-rte" tab-item {%- if block.settings.open %} tab-selected{% endif %} data-type={{ block.type }} {{ block.shopify_attributes }}>
+    {{ block.settings.custom_liquid }}
+  </div>
+{%- endunless -%}
+{% schema %}
+ {
+   "name": "t:sections.main-product-tabs.blocks.tab_liquid.name",
+   "tag": null,
+   "settings": [
+    {
+      "type": "checkbox",
+      "id": "open",
+      "label": "Open",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.main-product-tabs.blocks.title.label",
+      "default": "Tab Custom Liquid"
+    },
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "t:sections.main-product-tabs.blocks.tab_liquid.settings.custom_liquid.label",
+      "info": "t:sections.main-product-tabs.blocks.tab_liquid.settings.custom_liquid.info"
+    }
+   ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product-tabs.blocks.tab_liquid.name" 
+    }
+  ]
+ }
+{% endschema %}

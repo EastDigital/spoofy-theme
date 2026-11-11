@@ -1,0 +1,62 @@
+<!-- blocks/_collection_heading.liquid -->
+<div class="{% if block.settings.one_line == false %}hdt-flex-col{% else %}hdt-justify-between md:hdt-align-center{% endif %} hdt-text-{{ block.settings.alignment }} hdt-sections-heading" style="--row-gap: {{ block.settings.row_gap }}px;--margin-bottom: {{ block.settings.margin_bottom }}px;">
+  {%- content_for 'blocks' -%}
+</div>
+{% schema %}
+  {
+    "name": "Section Heading",
+    "class": "hdt-collection-heading",
+    "blocks": [
+      {
+        "type": "heading"
+      },
+      {
+        "type": "text"
+      },
+      {
+        "type": "_heading_slider_button"
+      }
+    ],
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "one_line",
+        "label": "Row layout",
+        "default": false,
+       /* "info": "Only work on desktop"*/
+      },
+      {
+        "type": "text_alignment",
+        "id": "alignment",
+        "label": "t:settings_schema.global.settings.text_alignment.label",
+        "default": "center",
+        "info": "Not work for row layout",
+        "visible_if": "{{ block.settings.one_line == false }}"
+      },
+      {
+        "type": "header",
+        "content": "Spacing"
+      },
+      {
+        "type": "range",
+        "id": "row_gap",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "Spacing between items",
+        "default": 15
+      },
+      {
+        "type": "range",
+        "id": "margin_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Margin bottom",
+        "default": 30
+      },
+    ],
+  }
+{% endschema %}

@@ -1,0 +1,25 @@
+<div class="hdt-cart-tax hdt-rte hdt-s-text2" {{ block.shopify_attributes }}>
+  {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+    {{ 'sections.cart.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
+  {%- elsif cart.taxes_included -%}
+    {{ 'sections.cart.taxes_included_but_shipping_at_checkout' | t }}
+  {%- elsif shop.shipping_policy.body != blank -%}
+    {{ 'sections.cart.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url }}
+  {%- else -%}
+    {{ 'sections.cart.taxes_and_shipping_at_checkout' | t }}
+  {%- endif -%}
+</div>
+{% schema %}
+  {
+    "name": "t:sections.mini-cart.blocks.tax.name",
+    "tag": null,
+    "settings": [
+    
+    ],
+    "presets": [
+      {
+        "name": "t:sections.mini-cart.blocks.tax.name"
+      }
+    ]
+  }
+{% endschema %}

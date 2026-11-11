@@ -1,0 +1,396 @@
+<!-- sections/banner-product-carousel.liquid -->
+{%- comment -%}{{ 'hdt-card-products.css' | asset_url | stylesheet_tag }}{%- endcomment -%}
+{{ 'hdt-banner.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+#shopify-section-{{section.id}}{ 
+    {% if section.settings.image_height_mb == 'fixed' %}
+      --aspect-ratioapt:{{ section.settings.fixed_height_mb }}px;
+    {% endif %}
+    {% if section.settings.image_height == 'fixed' %}
+      --aspect-ratioapt-md:{{ section.settings.fixed_height }}px;
+    {% endif %}
+    --section-pt: {{ section.settings.padding_top }}px;
+    --section-pb: {{ section.settings.padding_bottom }}px; 
+    --section-prate: {{ section.settings.padding_rate }};
+  }
+  @media (max-width: 767px){
+    #shopify-section-{{section.id}} .hdt-media-overlap-content{
+      /* --media-overlap-content-gap-r: {{ section.settings.gap_r_mb }}px;
+      --media-overlap-content-gap-c: {{ section.settings.gap_c_mb }}px; */
+    }
+  }
+  @media (min-width: 768px) and (max-width: 1150px){
+    #shopify-section-{{section.id}} .md\:hdt-height--fixed {
+        --media-overlap-content-h: calc(var(--aspect-ratioapt-md, auto) * 0.75);
+    }
+  }
+  #shopify-section-{{section.id}}{
+    --section-pt:{{section.settings.padding_top}}px;
+    --section-pb:{{section.settings.padding_bottom}}px;
+    --section-prate:{{section.settings.padding_rate}}
+  }
+  .hdt-banner-pr_carousel * + .hdt-subheading{
+    margin-top:1.3rem
+  }
+  .hdt-banner-pr_carousel *+.hdt-heading{
+    margin-top:1rem
+  }
+  .hdt-banner-pr_carousel *+.hdt-btn{
+    margin-top:2.2rem
+  }
+  .hdt-banner-pr_carousel .hdt-top-label{
+    margin-top:1.5rem
+  }
+  .hdt-banner-pr_carousel .hdt-top-heading{
+    margin-top:1.4rem
+  }
+  .hdt-banner-pr_carousel .hdt-slider{
+    /* margin-top:2rem */
+  }
+  .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button
+  {
+    z-index:2;
+    /* --size-nav:3.3rem */
+  }
+  .dir--ltr .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--prev,
+  .dir--rtl .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--next{
+    --sl-btn-prev-l:calc(var(--size-nav) * -.5)
+  }
+  .dir--ltr .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--next,
+  .dir--rtl .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--prev{
+    --sl-btn-next-r:calc(var(--size-nav) * -.5)
+  }
+  .hdt-banner-pr_carousel .hdt-product-wrap :where(.hdt-top-label,.hdt-top-heading){
+    display:none
+  }
+  .hdt-banner-pr_carousel .hdt-tophead_mobile{margin-bottom:1.5rem}.hdt-banner-pr_carousel .hdt-tophead_mobile .hdt-top-label{margin-top:0}.hdt-banner-pr_carousel .hdt-slider .hdt-slider__button{
+    display:none
+  }
+  @media (min-width:768px){
+    .hdt-banner-pr_carousel .hdt-product-wrap :where(.hdt-top-label,.hdt-top-heading){
+    display:block
+  }
+  .hdt-banner-pr_carousel .hdt-media-overlap-content{
+    --media-overlap-content-gap-r:7.1rem;
+  --media-overlap-content-gap-c:5.2rem
+  }
+  .hdt-banner-pr_carousel .hdt-top-label{
+    margin-top:3rem
+  }
+  .hdt-banner-pr_carousel .hdt-slider{
+    margin-top:3.2rem;
+  /* margin-bottom:3.5rem */
+  }
+  .hdt-banner-pr_carousel .hdt-block\@mobile{
+    display:none
+  }
+  }
+  @media (min-width:1150px){
+    .hdt-banner-pr_carousel .hdt-top-label{
+    margin-top:5.3rem
+  }
+  .hdt-banner-pr_carousel .hdt-slider{
+    margin-top:6.3rem;
+    /* margin-bottom:6.7rem */
+  }
+  .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button{display:inline-flex}
+  .hdt-banner-pr_carousel .hdt-slider .hdt-slider__dots{
+    /* margin-top:3rem */
+  }
+  }
+  @media (min-width:1440px){
+    .hdt-banner-pr_carousel .hdt-banner-wrap{
+    margin-inline-start:5rem
+  }
+  .dir--ltr .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--prev,
+  .dir--rtl .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--next{
+    --sl-btn-prev-l:calc(var(--size-nav) * -1)
+  }
+  .dir--ltr .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--next,
+  .dir--rtl .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--prev{
+    --sl-btn-next-r:calc(var(--size-nav) * -1)
+  }
+  }
+  @media (min-width:1600px){
+    .dir--ltr .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--prev,
+  .dir--rtl .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--next{
+    --sl-btn-prev-l:-7.4rem
+  }
+  .dir--ltr .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--next,
+  .dir--rtl .hdt-banner-pr_carousel .hdt-slider .hdt-slider__button.hdt-slider__button--prev{
+    --sl-btn-next-r:-7.4rem
+  }
+  .hdt-banner-pr_carousel .hdt-banner-wrap{
+    margin-inline-start:9.3rem
+  }
+  }
+   @media (min-width: 768px) and (max-width: 769px){
+    #hdt-banner_pr-carousel-{{ section.id }}.hdt-slides-2{
+     --slide-size: 100%
+    }
+   .hdt-banner-pr_carousel .hdt-top-label{
+      margin-top:0
+    } 
+  }
+
+{%- endstyle -%}
+{%- capture sizes -%}
+(min-width: 1440px) calc({{ settings.page_width | divided_by: 2 }}px - {{ settings.spacing_grid_horizontal }}px - 93px),(min-width: 1150px) calc({{ settings.page_width | divided_by: 2 }}px - {{ settings.spacing_grid_horizontal }}px), (min-width: 768px) calc(50vw - 30px), calc(100vw - 30px)
+{%- endcapture -%}
+{%- capture section_heading -%}
+  {% content_for 'block', type: 'section-heading', id: 'banner-product-carousel-heading' %}
+{%- endcapture -%}
+<div class="hdt-section-spacing hdt-s-gradient" color-scheme="{{ section.settings.color_scheme }}"{% if section.index != 1 %} hdt-reveal="fade-in"{% endif %}>
+  <div class="hdt-container">
+    <div class="hdt-row-grid hdt-grid-cols-1 md:hdt-grid-cols-2">
+      <div class="hdt-product-wrap hdt-text-center">
+        <div class="hdt-hidden md:hdt-block">
+          {{ section_heading }}
+        </div>
+        {% content_for 'block', type: '_carousel_product', id: 'banner-product-carousel-product' %}
+      </div>
+      <div id="Banner-{{ section.id }}" class="hdt-order-first md:hdt-order-last md:hdt-height--{{ section.settings.image_height }} hdt-height--{{ section.settings.image_height_mb }}{%- if section.settings.video %} is-video{% endif %}">
+        <div class="hdt-tophead_mobile hdt-text-center hdt-block@mobile">
+          {{ section_heading }}
+        </div>
+        <div class="hdt-banner-wrap">
+          {% content_for 'block', type: '_banner-item', id: 'banner-product-carousel-banner' %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.banner_product.name_2",
+  "tag": "section",
+  "class": "hdt-section hdt-banner-pr_carousel",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.banner_product.settings.banner_height.label"
+    },
+    {
+      "type": "select",
+      "id": "image_height",
+      "options": [
+        {
+          "value": "adapt_image",
+          "label": "t:sections.video.settings.video_height.adapt_video"
+        },
+        {
+          "value": "full",
+          "label": "t:sections.video.settings.video_height.full_screen"
+        },
+        {
+          "value": "fixed",
+          "label": "t:sections.video.settings.video_height.fixed"
+        }
+      ],
+      "default": "adapt_image",
+      "label": "t:sections.video.settings.video_height.label",
+      "info": "t:sections.video.settings.video_height.info"
+    },
+    {
+      "type": "range",
+      "id": "fixed_height",
+      "min": 200,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "label": "t:sections.video.settings.video_height.fixed",
+      "default": 860
+    },
+    {
+      "type": "select",
+      "id": "image_height_mb",
+      "options": [
+        {
+          "value": "adapt_image",
+          "label": "t:sections.video.settings.video_height.adapt_video"
+        },
+        {
+          "value": "full",
+          "label": "t:sections.video.settings.video_height.full_screen"
+        },
+        {
+          "value": "fixed",
+          "label": "t:sections.video.settings.video_height.fixed"
+        }
+      ],
+      "default": "adapt_image",
+      "label": "t:sections.video.settings.video_height.label_2"
+    },
+    {
+      "type": "range",
+      "id": "fixed_height_mb",
+      "min": 100,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "label": "t:sections.video.settings.video_height.fixed_2",
+      "default": 300
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+
+  ],
+  "presets": [
+    {
+      "name": "t:sections.banner_product.name_2",
+      "category": "t:sections_categories.02_banner.name",
+      "blocks": [
+        {
+          "type": "section-heading",
+          "id": "banner-product-carousel-heading",
+          "static": true,
+          "settings": {
+            "alignment": "center",
+            "row_gap": 14,
+            "margin_bottom": 63
+          },
+          "blocks": [
+            {
+              "type": "text",
+              "name": "Text",
+              "settings": {
+                "text": "<p>SPRING SALE 30% OFF</p>",
+                "icon_source": "",
+                "icon": "car",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "text_size": "custom",
+                "text_color": "hdt-s-text",
+                "font_size_text_lg": 14,
+                "font_size_text_md": 14,
+                "font_size_text": 14,
+                "font_weight_text": 700,
+                "letter_spacing_text": 0
+              },
+            },
+            {
+              "type": "heading",
+              "name": "Heading",
+              "settings": {
+                "heading": "<p>SHOP THIS LOOK</p>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "line_height": "hdt-lh-sm",
+                "heading_size": "h_custom",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 40,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 800,
+                "letter_spacing_heading": 0
+              },
+            }
+          ],
+        },
+        {
+          "type": "_carousel_product",
+          "id": "banner-product-carousel-product",
+          "static": true,
+          "settings": {
+            "display_color_by_block": true,
+            "color_scheme": "scheme-2",
+            "collection": "jewelry",
+            "product_list": [],
+            "product_des": "1",
+            "image_ratio": "adapt_image",
+            "image_size": true,
+            "show_vendor": false,
+            "pr_border": "none",
+            "products_count": 8,
+            "col_dk": "2",
+            "col_tb": "3",
+            "col_mb": "2",
+            "navUI": true,
+            "btn_vi": "always",
+            "nav_des": "outline",
+            "nav_shape": "rounded",
+            "nav_size": "small",
+            "nav_icon": "chrvon",
+            "dotUI": false,
+            "dots_des": "default",
+            "dots_align": "center",
+            "dot_distance": 30
+          },
+        },
+        {
+          "type": "_banner-item",
+          "id": "banner-product-carousel-banner",
+          "static": true,
+          "settings": {
+            "banner_url": "",
+            "banner_target": false,
+            "img_effect": "none",
+            "b_effect": "none",
+            "color_scheme": "",
+            "content_position": "center",
+            "alignment": "center",
+            "content_position_mb": "center",
+            "alignment_mb": "center"
+          },
+          "blocks": [
+              {
+              "type": "_media",
+              "static": true,
+              "id": "banner-media",
+              "settings": {
+                "source": "image",
+              }
+            }
+          ],
+        }
+      ],
+    },
+    
+  ]
+}
+{% endschema %}

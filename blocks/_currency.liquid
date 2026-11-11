@@ -1,0 +1,21 @@
+{%- if localization.available_countries.size > 1 -%}
+  {%- render 'hdt_currency', id: block.id, color_scheme: settings.color_scheme_dialog -%}
+{%- endif -%}
+{% schema %}
+  {
+    "name": "Country/region selector",
+    "class": "hdt-currency",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Country/region selector",
+        "info": "t:sections.footer.settings.contry_region.info"
+      }
+    ],
+    "presets":[
+      {
+        "name":"Country/region selector"
+      }
+    ]
+  }
+{% endschema %}

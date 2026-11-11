@@ -1,0 +1,74 @@
+{%- liquid
+  assign tagName = "h1"
+  capture heading_title
+    case request.page_type
+      when 'page'
+        echo page.title | default: page_title | escape
+      when 'customers/login'
+        echo 'customer.log_in' | t
+      when 'customers/register'
+        echo 'customer.register.title' | t
+      when 'customers/activate_account'
+        echo 'customer.activate_account.title' | t
+      when 'customers/reset_password'
+        echo 'customer.reset_password.title' | t
+      when 'customers/order'
+        echo 'customer.order.title' | t: name: order.name
+      when 'customers/addresses'
+        echo 'customer.addresses.title' | t
+      when 'customers/account'
+        echo 'customer.account.title' | t
+      when 'blog'
+        echo blog.title | escape
+      when 'search'
+        if template == 'search.compare'
+          echo 'compare_page.title' | t
+        elsif template == 'search.wishlist'
+          echo 'general.wishlist.wishlist_page' | t
+        endif
+      else
+        echo page_title | escape
+        if request.page_type == "policy"
+          assign tagName = "div"
+          echo "<style>.shopify-policy__title{display: none !important}</style>"
+        endif
+    endcase
+  endcapture
+-%}
+{%- if section.blocks.size > 0 -%}
+  <div class="hdt-container">
+    <div class="hdt-main-heading hdt-flex hdt-flex-col hdt-text-center hdt-align-center hdt-spacing_hd hdt-relative">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '1' -%}
+            {%- assign heading_titles = block.settings.heading | default: heading_title -%}
+            <div class="hdt-heading-template-text" {{ block.shopify_attributes }}>
+              <{{ tagName }} class="hdt-{{ block.settings.heading_size }} hdt-s-text {{ block.settings.text_color }}{% if block.settings.hidden_br_mobile %} hdt-br-hidden{% endif %}{% if block.settings.hidden_on_mobile %} hdt-hide-mobile {% endif %}"> {{ heading_titles }} </{{ tagName }}>
+              {%- if block.settings.heading_size == "h_custom" -%}
+                {%- style -%}
+                  .hdt-main-heading {
+                    --heading-fs-lg: {{ block.settings.font_size_heading_lg }}px; --heading-fs-md: {{ block.settings.font_size_heading_md }}px; --heading-fs-mb: {{ block.settings.font_size_heading }}px; --heading-fw: {{ block.settings.font_weight_heading }}; --heading-ls: {{ block.settings.letter_spacing_heading }}px; 
+                  }
+                {%- endstyle -%}
+              {%- endif -%}
+            </div>
+          {%- else -%}
+            <nav class="hdt-breadcrumb" role="navigation" aria-label="breadcrumbs" {{ block.shopify_attributes }}>
+              <ul class="hdt-text-base hdt-font-normal hdt-breadcrumb-list">
+                <li class="hdt-breadcrumb-item hdt-inline-block hdt-s-text">
+                  <a href="{{ routes.root_url }}">{{ 'general.breadcrumb.home' | t }}</a>
+                </li>
+                <svg xmlns="http://www.w3.org/2000/svg" width="5" height="8" viewBox="0 0 5 8" class="hdt-s-text hdt-inline-block" fill="currentColor">
+                  <path d="M0.886718 3.49691e-07L4.88672 4L0.886719 8L0.176719 7.29L3.46672 4L0.176719 0.71L0.886718 3.49691e-07Z"/>
+                </svg>
+                <li class="hdt-breadcrumb-item hdt-inline-block hdt-s-text2">
+                  {{ heading_title }}
+                </li>
+              </ul>
+            </nav>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+

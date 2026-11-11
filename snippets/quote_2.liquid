@@ -1,0 +1,102 @@
+{%-
+  liquid
+  assign image = block.settings.image_first
+  assign widths = '144,244,325,425,750'
+  assign sizes = '100vw'
+-%}
+<div class="hdt-testimonial-inner hdt-flex hdt-flex-col hdt-justify-{{ section.settings.content_align }}">
+  <div class="hdt-col-wrap hdt-testimonial-info hdt-flex hdt-flex-col hdt-text-{{ section.settings.content_align }} hdt-align-{{ section.settings.content_align }}">
+    {%- if section_bf_af -%}
+      {%- if block.settings.heading != blank -%}
+        <div class="hdt-testimonial-heading-item">
+          <span class="hdt-testi-head-style2 hdt-s-text hdt-h5">
+            {{ block.settings.heading }}
+          </span>
+        </div>
+      {%- endif -%}
+      <div class="hdt-poropost-image">
+        <svg xmlns="http://www.w3.org/2000/svg" width="46" height="31" viewBox="0 0 46 31" fill="none">
+          <path d="M32.4413 30.5L37.8204 19.9545L38.1913 19.2273H37.375H26.375V0.5H45.5V19.6071L39.9438 30.5H32.4413ZM6.56633 30.5L11.9454 19.9545L12.3163 19.2273H11.5H0.5V0.5H19.625V19.6071L14.0688 30.5H6.56633Z" stroke="#B5B5B5"/>
+          </svg>
+      </div>
+    {%- else -%}
+    {%- if section.settings.image_width == 'one_img_style2' -%}
+      {%- if block.settings.heading != blank -%}
+        <div class="hdt-testimonial-heading-item">
+          <span class="hdt-testi-head-style2 hdt-s-text hdt-h4">
+            {{ block.settings.heading }}
+          </span>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+    {%- if section.settings.image_width == "one_img_fixed2" -%}
+      <div class="hdt-poropost-image hdt-s-text">
+        <svg xmlns="http://www.w3.org/2000/svg" width="37" height="28" viewBox="0 0 37 28" fill="none">
+          <path d="M3.81481 25.6247C1.79234 23.3999 0.578857 20.973 0.578857 16.928C0.578857 9.84937 5.63504 3.57971 12.7137 0.34375L14.5339 2.97296C7.85976 6.61341 6.44403 11.2651 6.03953 14.2988C7.05077 13.6921 8.4665 13.4898 9.88223 13.6921C13.5227 14.0966 16.3541 16.928 16.3541 20.7707C16.3541 22.5909 15.5451 24.4112 14.3317 25.8269C12.9159 27.2426 11.298 27.8494 9.27549 27.8494C7.05077 27.8494 5.0283 26.8381 3.81481 25.6247ZM24.0395 25.6247C22.0171 23.3999 20.8036 20.973 20.8036 16.928C20.8036 9.84937 25.8598 3.57971 32.9384 0.34375L34.7586 2.97296C28.0845 6.61341 26.6687 11.2651 26.2643 14.2988C27.2755 13.6921 28.6912 13.4898 30.1069 13.6921C33.7474 14.0966 36.5789 16.928 36.5789 20.7707C36.5789 22.5909 35.7699 24.4112 34.5564 25.8269C33.3429 27.2426 31.5227 27.8494 29.5002 27.8494C27.2755 27.8494 25.253 26.8381 24.0395 25.6247Z" fill="currentColor"/>
+          </svg>
+      </div>
+    {%- else -%}
+      <div class="hdt-poropost-image">
+        <svg xmlns="http://www.w3.org/2000/svg" width="46" height="31" viewBox="0 0 46 31" fill="none">
+          <path d="M32.4413 30.5L37.8204 19.9545L38.1913 19.2273H37.375H26.375V0.5H45.5V19.6071L39.9438 30.5H32.4413ZM6.56633 30.5L11.9454 19.9545L12.3163 19.2273H11.5H0.5V0.5H19.625V19.6071L14.0688 30.5H6.56633Z" stroke="#B5B5B5"/>
+          </svg>
+      </div>
+    {%- endif -%}
+    {%- if section.settings.image_width != 'one_img_style2' -%}
+      {%- if block.settings.heading != blank -%}
+        <div class="hdt-testimonial-heading-item {% if section.settings.image_width == "one_img_fixed2" %} hdt-hidden {% endif %}">
+          <span class="hdt-testi-head hdt-s-text hdt-text-xl hdt-font-semibold">
+            {{ block.settings.heading }}
+          </span>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+    {%- endif -%}
+    <div class="hdt-testimonial-rating hdt-flex hdt-justify-{{ section.settings.content_align }}">
+      {%- render 'rating_star', rating: block.settings.rating -%}
+    </div>
+    {%- if block.settings.content != blank -%}
+      <div class="hdt-testimonial-content {{ section.settings.font_size_content }} hdt-s-text hdt-rte {{ block.settings.font_size_content }} {% if section.settings.image_width == "one_img_fixed2" %} hdt-font-medium {% endif %}">
+          {{ block.settings.content }}
+      </div>
+    {%- endif -%}
+    {%- if section.settings.image_width == "one_img_fixed2" -%} <div class="hdt-line-dash"></div> {%- endif -%}
+      <div class="hdt-mix-img hdt-flex hdt-align-center">
+        <div class="hdt-repon-img">
+          <div class="hdt-h-full hdt-relative hdt-oh">
+            {%- if image != blank -%}
+              {{ image | image_url: width: image.width | image_tag: loading: "lazy", width: image.width, height: image.height, sizes: sizes, class: "hdt-object-cover hdt-radius", widths: widths }}
+            {%- else -%}
+              {{ 'detailed-apparel-1' | placeholder_svg_tag: 'hdt-placeholder-svg' }}
+            {%- endif -%}
+          </div>
+        </div>
+        <div class="hdt-metas">
+          <div class="hdt-testimonial-author">
+            {%- if block.settings.author != blank -%}
+              <p class="hdt-testimonial-name hdt-text-base hdt-font-semibold hdt-s-text">
+                {{ block.settings.author }}
+              </p>
+            {%- endif -%} 
+            {%- if block.settings.pos != blank -%}
+              <p class="hdt-testimonial-metas hdt-text-base hdt-s-text2">
+                {{ block.settings.pos }}
+               </p>
+            {%- endif -%}
+          </div>
+          {%- liquid 
+            assign product = block.settings.product
+            assign pr_url = product.url
+            -%}
+          {%- if product != blank -%}
+            <div class="hdt-testimonial-product hdt-row-flex hdt-align-center hdt-relative hdt-justify-{{ section.settings.content_align }}">
+              <div class="hdt-content-wrap">
+                <a href="{{ pr_url }}" class="hdt-testimonial-pr-title hdt-text-base hdt-font-semibold"><span class="hdt-font-normal">{{ 'sections.testimonials.purchase' | t }}</span> {{ product.title }}</a>
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+  </div>
+</div>
+

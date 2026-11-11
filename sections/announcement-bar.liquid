@@ -1,0 +1,237 @@
+{% if section.blocks.size > 0 %}
+<!-- sections/announcement-bar.liquid -->
+<style>{%- if section.settings.show_close_btn and request.design_mode == false -%}.hdt-announcement-hidden {display: none;}{%- endif -%}</style>
+{{ 'hdt-announcement-bar.css' | asset_url | stylesheet_tag }}
+{%- if section.settings.show_close_btn and section.blocks.size > 0 -%}
+  {%- capture close_btn -%}
+  <div class="hdt-announcement-bar__close hdt-flex hdt-align-self-center hdt-justify-end">
+    <wrapp-close-announce class="hdt-flex hdt-align-center hdt-justify-end hdt-p-0" aria-label="{{ 'accessibility.close' | t | escape }}">
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <path d="M12 1.20857L10.7914 0L6 4.79143L1.20857 0L0 1.20857L4.79143 6L0 10.7914L1.20857 12L6 7.20857L10.7914 12L12 10.7914L7.20857 6L12 1.20857Z" fill="currentColor"/>
+      </svg>
+    </wrapp-close-announce>
+  </div>
+  {%- endcapture -%}
+{%- endif -%}
+{%- liquid
+  assign total_size = 0
+  assign class_format_richtext = 'hdt-tag-list'
+  if section.settings.adding_border
+    assign class_format_richtext = 'hdt-rte'
+  endif
+-%}
+<div aria-hidden="false" id="hdt-announcement-main" class="hdt-announcement-bar hdt-s-gradient{% if section.settings.show_line_separator and section.blocks.size > 0 %} hdt-announcement-bar--bottom-border{% endif %} {% if section.settings.hdt_show_pre_next %} hdt-announcement-button-pre-next {% endif %}" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container-full{% if section.settings.design == 'slider' %} hdt-px-15 lg:hdt-px-40{% elsif section.settings.design == 'marquee' and section.settings.show_close_btn %} hdt-pe-15 lg:hdt-pe-40{% endif %}">
+    {%- if section.settings.design == 'slider' -%}
+      <div class="hdt-announcement-bar__grid{% if section.settings.show_close_btn %} hdt-announcement-bar__grid-has-close{% endif %}">
+        {%- if section.blocks.size == 1 -%}
+          <div class="hdt-announcement-bar__wrap hdt-text-center">
+            {%- assign total_size = total_size | plus: section.blocks.first.settings.text.size -%}
+            {%- if section.blocks.first.settings.text != blank -%}
+              <div class="hdt-announcement-bar__item">
+                <p class="hdt-announcement-bar__text hdt-inline-block {{class_format_richtext}}">{{ section.blocks.first.settings.text }}</p>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- elsif section.blocks.size > 1 -%}
+          <hdt-slider id="Slider-{{ section.id }}" class="hdt-announcement-bar__wrap hdt-text-center hdt-slider lg:hdt-slides-1 hdt-relative hdt-oh" config='{ "navUI": true, "loop": true, "autoPlay": {{ section.settings.au_time | times: 1000 }}, "pauseOnHover":{{ section.settings.slider_pause_when_hover }} }'>
+            <div class="hdt-announcement-bar__slider hdt-flex hdt-align-center hdt-justify-center">
+              <button aria-controls="Slider-{{ section.id }}" class="hdt-slider__button hdt-slider__button--prev hdt-inline-flex hdt-align-center hdt-justify-start hdt-p-0" type="button" name="previous"><svg class="hdt-slider__button-icon" width="10px" height="6px" viewBox="0 0 10 6" fill="currentcolor"><path d="M-3.87939e-08 0.886524L5 5.88652L10 0.886523L9.1125 -0.000976601L5 4.11152L0.8875 -0.000976242L-3.87939e-08 0.886524Z"></path></svg></button>
+              <div class="hdt-slider__viewport">
+                <div class="hdt-slider__container">
+                  {%- for block in section.blocks -%}
+                    {%- if block.settings.text != blank -%}
+                      <div class="hdt-slider__slide hdt-announcement-bar__slider-item">
+                        <div class="hdt-announcement-bar__slider-content">
+                          <p class="hdt-announcement-bar__text  hdt-inline-block {{class_format_richtext}}">{{ block.settings.text }}</p>
+                        </div>
+                      </div>
+                    {%- endif -%}
+                    {%- assign total_size = total_size | plus: block.settings.text.size -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+              <button aria-controls="Slider-{{ section.id }}" class="hdt-slider__button hdt-slider__button--next hdt-inline-flex hdt-align-center hdt-justify-end hdt-p-0" type="button" name="next"><svg class="hdt-slider__button-icon" width="10px" height="6px" viewBox="0 0 10 6" fill="currentcolor"><path d="M-3.87939e-08 0.886524L5 5.88652L10 0.886523L9.1125 -0.000976601L5 4.11152L0.8875 -0.000976242L-3.87939e-08 0.886524Z"></path></svg></button>
+            </div>
+          </hdt-slider>
+        {%- endif -%}
+        {{- close_btn -}}
+      </div>
+    {%- else -%}
+    <div class="hdt-announcement-bar__marquee{% if section.settings.show_close_btn %} hdt-announcement-bar__marquee-has-close{% endif %}">
+     <div class="hdt-announcement-bar__marquee-wrap hdt-oh">
+        <hdt-marquee speed-factor="{{ section.settings.speed }}" direction="{{ section.settings.direction }}"{% if section.settings.marquee_pause_when_hover %} pausable{% endif %} class="hdt-marquee hdt-block hdt-relative hdt-oh hdt-current-scrollbar">
+          <div class="hdt-marquee-inner">
+            <div class="hdt-marquee-item">
+              {%- for block in section.blocks -%}
+                {%- if block.settings.text != blank -%}
+                  <div class="hdt-announcement-bar__marquee-item hdt-inline-block hdt-relative {{class_format_richtext}}"><p>{{ block.settings.text }}</p></div>
+                {%- endif -%}
+                {%- assign total_size = total_size | plus: block.settings.text.size -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        </hdt-marquee>
+      </div>
+      {{- close_btn -}}
+    </div>
+    {%- endif -%}
+  </div>
+</div>
+{%- if section.settings.show_close_btn %}<script>window.announceSize = 'theme4:announce-{{ total_size }}-closed';try { if ( sessionStorage.getItem(window.announceSize) != 'true' ) document.getElementById('shopify-section-{{ section.id }}').classList.remove('hdt-announcement-hidden'); } catch (err) {}</script>{% endif -%}
+{%- endif -%}
+{% schema %}
+{
+  "name": "t:sections.announcement-bar.name",
+  "class": "hdt-section-group hdt-announcement-hidden hdt-announcement-bar-section",
+  "max_blocks": 12,
+  "limit": 1,
+  "enabled_on": {
+    "groups": [
+      "header"
+    ]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "design",
+      "label": "t:sections.announcement-bar.settings.design.label",
+      "options": [
+        {
+          "value": "slider",
+          "label": "t:sections.announcement-bar.settings.design.options.slider"
+        },
+        {
+          "value": "marquee",
+          "label": "t:sections.announcement-bar.settings.design.options.marquee"
+        }
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_close_btn",
+      "label": "t:sections.announcement-bar.settings.show_close_btn.label",
+      "default": true,
+    },
+    {
+      "type": "checkbox",
+      "id": "hdt_show_pre_next",
+      "label": "Show pre/next button on mobile",
+      "default": false,
+      "visible_if": "{{ section.settings.design == 'slider' }}"
+    },
+    { 
+      "type": "checkbox",
+      "id": "show_line_separator",
+      "label": "t:sections.announcement-bar.settings.show_line_separator.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "adding_border",
+      "label": "t:sections.all.adding_border.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.announcement-bar.settings.header_slider.label",
+      "visible_if": "{{ section.settings.design == 'slider' }}"
+    },
+    {
+      "type": "range",
+      "id": "au_time",
+      "min": 0,
+      "max": 30,
+      "step": 0.5,
+      "label": "t:sections.announcement-bar.settings.au_time.label",
+      "info": "t:sections.announcement-bar.settings.au_time.info",
+      "unit": "sec",
+      "default": 3.5,
+      "visible_if": "{{ section.settings.design == 'slider' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "slider_pause_when_hover",
+      "default": false,
+      "label": "t:sections.announcement-bar.settings.pause_when_hover.label",
+      "visible_if": "{{ section.settings.design == 'slider' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.announcement-bar.settings.header_marquee.label",
+      "visible_if": "{{ section.settings.design == 'marquee' }}"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 0.1,
+      "max": 1,
+      "step": 0.1,
+      "default": 0.3,
+      "label": "t:sections.announcement-bar.settings.speed.label",
+      "visible_if": "{{ section.settings.design == 'marquee' }}"
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "default": "rtl",
+      "label": "t:sections.announcement-bar.settings.direction.label",
+      "visible_if": "{{ section.settings.design == 'marquee' }}",
+      "options": [
+        {
+          "value": "rtl",
+          "label": "t:sections.announcement-bar.settings.direction.options.rtl"
+        },
+        {
+          "value": "ltr",
+          "label": "t:sections.announcement-bar.settings.direction.options.ltr"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "marquee_pause_when_hover",
+      "default": false,
+      "label": "t:sections.announcement-bar.settings.pause_when_hover.label",
+      "visible_if": "{{ section.settings.design == 'marquee' }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "t:sections.announcement-bar.blocks.announcement.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "default": "Welcome to our store",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.announcement-bar.name",
+      "blocks": [
+        {
+          "type": "announcement",
+          "settings": {
+            "text": "Welcome to our store"
+          }
+        },
+        {
+          "type": "announcement",
+          "settings": {
+            "text": "The best shopify theme"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

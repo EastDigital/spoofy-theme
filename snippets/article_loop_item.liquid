@@ -1,0 +1,25 @@
+{%- liquid
+  assign image = article.image
+-%}
+<div class="hdt-article-item hdt-loop-item">
+  <div class="hdt-article-inner hdt-loop-inner hdt-flex">
+    <div class="hdt-loop-img hdt-relative hdt-oh" style="--aspect-ratioapt: {{ image.aspect_ratio | default: 1.2 }};">
+      <span class="hdt-ratio">
+        {%- if image != blank -%}
+          {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '', sizes: '700px', widths: '720, 600, 500, 400, 300' }} 
+        {%- endif -%}
+      </span>
+      <a data-pr-href class="hdt-full-width-link" href="{{ article.url }}"></a>
+    </div>
+    {%- if article.title != blank -%}
+      <div class="hdt-loop-content">
+        <a class="hdt-article-title hdt-flex hdt-text-base hdt-font-semibold" href="{{ article.url }}">
+          <span class="hdt-article-title-text hdt-truncate">{{ article.title }}</span>
+        </a>
+        <div class="hdt-text-sm hdt-font-normal">
+          {{ article.published_at | time_tag: format: "date" }}
+        </div>
+      </div>
+    {%- endif -%}
+  </div> 
+</div>

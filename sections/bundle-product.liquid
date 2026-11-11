@@ -1,0 +1,547 @@
+<!-- sections/bundle-product.liquid -->
+{{ 'hdt-bundle-product.css' | asset_url | stylesheet_tag }}
+{%- comment -%}{{ 'hdt-card-products.css' | asset_url | stylesheet_tag }}{%- endcomment -%}
+{% liquid
+  assign sizes_main = '(min-width: 1150px) calc(' | append: settings.page_width | append: 'px / 2),(min-width: 768px) calc((100vw - 60px) / 2 ), calc(100vw - 30px)'
+  assign total_price = 0
+  assign has_product = false
+  assign image_size = 160
+%}
+{%- style -%}#shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}} @media (min-width:1440px){#shopify-section-{{section.id}}.hdt-heading{margin-bottom:5.4rem}}@media (max-width:1024px){#shopify-section-{{section.id}}.hdt-section-spacing.hdt-radius-lg{border-radius:0}}{%- endstyle -%}
+{%- liquid
+  assign bundle_form_id = 'bundle-form-' | append: section.id
+-%}
+{%- capture bundle_html -%}
+  {%- for block in section.blocks -%}
+    {%- liquid
+    assign bundle_id = 'bundle-id-' | append: block.id | append: block.settings.product.id
+    assign product = block.settings.product
+    if product == blank
+      continue
+    endif
+    unless has_product
+      assign has_product = true
+      assign first_product = product
+    endunless
+    assign available_v = product.variants | where: "available" 
+    if available_v == blank
+      continue     
+    endif
+    assign available_v_first = available_v.first
+    assign cu_pr = available_v_first.price
+    assign cp_pr = available_v_first.compare_at_price | default: cu_pr
+    assign total_price = total_price | plus: cu_pr
+    assign total_compare_at_price = total_compare_at_price | plus: cp_pr
+    assign v_image = available_v_first.image | default: product.featured_image
+    assign adapt = ''
+    assign img_ratio = v_image.aspect_ratio | default: 1.777
+    if section.settings.image_ratio == 'adapt_image'
+      assign adapt = 'style="--aspect-ratioapt:' | append: img_ratio | append: '"'
+    endif
+    -%}
+    <div class="hdt-bundle-item hdt-relative hdt-slider__slide" id="{{ bundle_id }}" {{ block.shopify_attributes }}>
+      <hdt-bundle-product class="is-checked hdt-flex" observes="observe-{{ block.id }}-{% increment index0 %}" hdt-reveal="slide-in" timeline>
+        <input autocomplete="off" type="checkbox" checked="checked" id="bundle-ck-{{ block.id }}-{% increment index %}" class="sr-only">
+        {% comment %} <label for="bundle-ck-{{ block.id }}-{% increment index2 %}" class="no-js-hidden"><svg class="hdt-hidden hdt-icon-checked" width="10" height="10" viewBox="0 0 24 24"><path d="M9 20l-7-7 3-3 4 4L19 4l3 3z"></path></svg></label> {% endcomment %}
+        {%- liquid
+          if v_image != blank
+          echo '<a href="' | append: product.url | append: '" class="hdt-bundle-img hdt-radius-sm hdt-oh hdt-ratio"'| append: adapt | append: '>'
+          echo v_image | image_url: width: image_size | image_tag: srcset: nil, sizes: '160px', update-img: ''
+          echo '</a>'
+          endif
+        -%}
+        <div class="hdt-flex hdt-bundle-item-info hdt-card-product">
+          <a href="{{ product.url }}" class="hdt-bundle-pr-name hdt-card-product__title hdt-text-lg hdt-font-normal">{{ product.title }}</a>
+          <div update-price>
+            <hdt-compare-at-price class="hdt-compare-at-price"{% unless available_v_first.compare_at_price > available_v_first.price %} hidden{% endunless %}>
+              <span class="sr-only sr-only--inline">{{ 'products.product.price.regular_price' | t }}</span>
+              <span class="hdt-money">{{ available_v_first.compare_at_price | money }}</span>
+            </hdt-compare-at-price>
+            <hdt-price class="hdt-price hdt-text-base hdt-font-semibold">
+              <span class="sr-only sr-only--inline">{{ 'products.product.price.sale_price' | t }}</span>
+              <span class="hdt-money">{{ available_v_first.price | money }}</span>
+            </hdt-price>
+          </div>
+        {%- if product.has_only_default_variant -%}
+          <input data-groups-pr-sl name="items[][id]" data-cpprice="{{ available_v_first.compare_at_price | default: available_v_first.price }}" data-price="{{ available_v_first.price }}" value="{{ available_v_first.id }}" type="hidden">
+        {%- else -%}
+          <div class="hdt-relative hdt-inline-block">
+            <select name="items[][id]" autocomplete="off" class="hdt-select hdt-relative" data-cpprice="{{ available_v_first.compare_at_price | default: available_v_first.price }}" data-price="{{ available_v_first.price }}">
+              {%- for variant in available_v -%}
+                <option class="hdt-absolute" data-img="{{ variant.image | default: product.featured_image | image_url: width: image_size }}" data-cpprice="{{ variant.compare_at_price | default: variant.price }}" data-price="{{ variant.price }}" data-qty="{{ variant.quantity_rule.min }}" value="{{ variant.id }}"{% if forloop.first %} selected="selected"{% endif %}>{{ variant.title | escape }}</option>
+            {%- endfor -%}
+            </select>
+            {% comment %} {%- render 'icon' with 'caret' -%} {% endcomment %}
+          </div>
+        {%- endif -%}
+        <input update-qty value="{{ available_v_first.quantity_rule.min }}" type="hidden" name="items[][quantity]">
+        </div>
+      </hdt-bundle-product>
+    </div>
+  {%- endfor -%}
+{%- endcapture -%}
+<div class="hdt-px-0 lg:hdt-px-40 ">
+  <div class="hdt-section-spacing hdt-s-gradient hdt-radius-lg" color-scheme="{{ section.settings.color_scheme }}">
+    <div class="hdt-container">
+      <div class="hdt-row-grid hdt-grid-cols-1 md:hdt-grid-cols-2 hdt-ratio--{{ section.settings.image_ratio }}">
+        <div data-bundle-parent class="hdt-bundle hdt-order-last md:hdt-order-first">
+          <div class="hdt-bundle-sticky">
+            {%- if section.settings.label != blank -%}
+              <p class="hdt-label hdt-block@tablet hdt-text-base hdt-font-bold hdt-s-text" hdt-reveal="slide-in" timeline>
+                {{ section.settings.label }}
+              </p>
+            {%- endif -%}
+
+            {%- if section.settings.heading != blank -%}
+              <div class="hdt-heading hdt-rte hdt-block@tablet {{ section.settings.text_color }}{% if section.settings.hidden_br_mobile %} hdt-br-hidden{% endif %}{% if section.settings.hidden_on_mobile %} hdt-hide-mobile{% endif %} hdt-{{ section.settings.heading_size }}" hdt-reveal="slide-in" timeline>
+                {{ section.settings.heading }}
+              </div>
+
+              {%- style -%}
+                 #shopify-section-{{section.id}} {
+                  --heading-fs-lg: {{ section.settings.font_size_heading_lg }}px; --heading-fs-md: {{ section.settings.font_size_heading_md }}px; --heading-fs-mb: {{ section.settings.font_size_heading }}px; --heading-fw: {{ section.settings.font_weight_heading }}; --heading-ls: {{ section.settings.letter_spacing_heading }}px;
+                }
+              {%- endstyle -%}
+            {%- endif -%}
+            {%- if section.blocks.size > 0 -%}
+              {%- if has_product -%}
+                <wrapp-hdt-pr-frm-bundle class="hdt-contents">
+                  {%- form 'product',
+                    first_product,
+                    id: bundle_form_id,
+                    class: 'hdt-product-form-bundle',
+                    novalidate: 'novalidate'
+                  -%}
+                    <div class="hdt-bundle-products">
+                      <hdt-slider
+                        id="Slider-{{ section.id }}"
+                        class="hdt-slider hdt-dots-outline hdt-slider__products"
+                        config='{"controlUI": true,"dotUI": true , "active": true, "breakpoints": { "(min-width: 1150px)": { "active": false } } }'
+                      >
+                        <div class="hdt-slider__viewport">
+                          <div class="hdt-slider__container">
+                            {{ bundle_html }}
+                          </div>
+                        </div>
+                        <div
+                          hdt-slider-dots
+                          aria-controls="Slider-{{ section.id }}"
+                          class="hdt-slider__dots hdt-flex hdt-justify-center hdt-align-center"
+                        ></div>
+                      </hdt-slider>
+                    </div>
+                    <div class="hdt-flex hdt-justify-center md:hdt-justify-start">
+                      <button
+                        id="ProductBundleSubmitButton-{{ section.id }}"
+                        type="submit"
+                        name="add"
+                        class="hdt-product-form__submit hdt-inline-flex hdt-justify-center hdt-align-center hdt-btn hdt-btn-solid hdt-relative hdt-oh"
+                        hdt-reveal="slide-in" timeline
+                      >
+                        <span>{{ 'products.product.add_selected_to_cart' | t }}</span>
+                        <span class="hdt-strikethrough"></span>
+                        <div update-total data-cpprice="{{ total_compare_at_price }}" data-price="{{ total_price }}">
+                          <hdt-price class="hdt-price">
+                            <span class="sr-only sr-only--inline">
+                              {{- 'products.product.price.sale_total_price' | t -}}
+                            </span>
+                            <span class="hdt-money">{{ total_price | money_with_currency }}</span>
+                          </hdt-price>
+                        </div>
+                      </button>
+                    </div>
+                  {%- endform -%}
+                </wrapp-hdt-pr-frm-bundle>
+              {%- endif -%}
+            {%- else -%}
+              {%- liquid
+                echo '<div class="hdt-bundle-item_wrap hdt-ratio--adapt_image">'
+                for i in (1..2)
+                  assign placeholder_image = 'product-apparel-' | append: i
+                  assign bundle_id = 'bundle-id-placeholder-' | append: i
+                  render 'bundle-product-placeholder', image_ratio: section.settings.image_ratio, placeholder_image: placeholder_image, bundle_id: bundle_id
+                endfor
+                echo '</div>'
+              -%}
+              <button
+                disabled
+                type="button"
+                class="hdt-total-cart hdt-btn hdt-btn-solid hdt-text-xl hdt-font-semibold hdt-inline-flex hdt-justify-center hdt-align-center hdt-relative hdt-oh"
+                hdt-reveal="slide-in" timeline
+              >
+                <span>Add all to bag - $126.00</span>
+              </button>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <div class="hdt-image_wrap hdt-ratio--adapt_image">
+          <div class="hdt-bundle-img_inner hdt-relative hdt-bundle-sticky">
+            {%- if section.settings.label != blank -%}
+              <p class="hdt-label hdt-block@mobile hdt-text-base hdt-font-bold hdt-s-text" hdt-reveal="slide-in" timeline>
+                {{ section.settings.label }}
+              </p>
+            {%- endif -%}
+            {%- if section.settings.heading != blank -%}
+              <div class="hdt-heading hdt-rte hdt-block@mobile {{ section.settings.text_color }}{% if section.settings.hidden_br_mobile %} hdt-br-hidden{% endif %}{% if section.settings.hidden_on_mobile %} hdt-hide-mobile{% endif %} hdt-{{ section.settings.heading_size }}" hdt-reveal="slide-in" timeline>
+                {{ section.settings.heading }}
+              </div>
+            {%- endif -%}
+            {%- style -%}
+               #shopify-section-{{section.id}} {
+                --heading-fs-lg: {{ section.settings.font_size_heading_lg }}px; --heading-fs-md: {{ section.settings.font_size_heading_md }}px; --heading-fs-mb: {{ section.settings.font_size_heading }}px; --heading-fw: {{ section.settings.font_weight_heading }}; --heading-ls: {{ section.settings.letter_spacing_heading }}px;
+              }
+            {%- endstyle -%}
+            <div
+              class="hdt-image hdt-ratio hdt-radius hdt-oh"
+              style="--aspect-ratioapt: {{ section.settings.image.aspect_ratio | default: 1.777 }}"
+              hdt-reveal="slide-in" timeline
+            >
+              {%- if section.settings.image != blank -%}
+                {{
+                  section.settings.image
+                  | image_url: width: section.settings.image.width
+                  | image_tag:
+                    loading: 'lazy',
+                    sizes: sizes_main,
+                    class: 'hdt-object-pos-mb',
+                    widths: '400,600,800,1000,1200,1400,1600,1800,2000,2200,2400'
+                }}
+              {%- else -%}
+                {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg hdt-placeholder' }}
+              {%- endif -%}
+              {%- if section.blocks.size > 0 -%}
+                <div
+                  hdt-slider-controls
+                  aria-controls="Slider-{{ section.id }}"
+                  class="hdt-bundle-pin_wrap hdt-full-width-link"
+                >
+                  {%- for block in section.blocks -%}
+                    {%- if block.settings.product != blank -%}
+                      {% liquid
+                        assign available_v = block.settings.product.variants | where: 'available'
+                        if available_v == blank
+                          continue
+                        endif
+                      %}
+                      {%- assign bundle_id = 'bundle-id-' | append: block.id | append: block.settings.product.id -%}
+                      <button
+                        type="button"
+                        value="{{ forloop.index0 }}"
+                        aria-current="{%- if forloop.first -%}true{%- else -%}false{%- endif -%}"
+                        class="hdt-bundle-pin_item hdt-absolute no-js-hidden"
+                        style="--pos-x: {{ block.settings.pos_x }}%; --pos-y: {{ block.settings.pos_y }}%"
+                        data-bundle-pin
+                        data-trigger="#{{ bundle_id }}"
+                      >
+                        <span class="sr-only">{{ 'accessibility.go_to_item' | t: number: forloop.index }}</span
+                        ><span></span>
+                      </button>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <div class="hdt-bundle-pin_wrap hdt-full-width-link">
+                  {%- for i in (1..2) -%}
+                    {%- assign bundle_id = 'bundle-id-placeholder-' | append: i -%}
+                    <div
+                      class="hdt-bundle-pin_item hdt-absolute"
+                      style="--pos-x: {{ i | times: 10 }}%; --pos-y: {{ i | times: 10 }}%"
+                      data-bundle-pin
+                      data-trigger="#{{ bundle_id }}"
+                    >
+                      <span></span>
+                    </div>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.bundle_product.name",
+  "tag": "section",
+  "class": "hdt-section hdt-bundle-product",
+  "disabled_on": {
+    "groups": ["*"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.bundle_product.settings.image"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.bundle_product.settings.color"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:sections.bundle_product.settings.label.label",
+      "default": "BUNDLE AND SAVE"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "t:sections.bundle_product.settings.heading.label",
+      "default": "<p>Shop this look</p>"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "hidden_br_mobile",
+      "label": "t:blocks.text.settings.hidden_br_mobile",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "hidden_on_mobile",
+      "label": "t:blocks.text.settings.hidden_on_mobile",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:settings_schema.heading.settings.label",
+      "options": [
+        {
+          "value": "base",
+          "label": "t:settings_schema.heading.settings.base_size"
+        },
+        {
+          "value": "h6",
+          "label": "t:settings_schema.heading.settings.h6_size"
+        },
+        {
+          "value": "h5",
+          "label": "t:settings_schema.heading.settings.h5_size"
+        },
+        {
+          "value": "h4",
+          "label": "t:settings_schema.heading.settings.h4_size"
+        },
+        {
+          "value": "h3",
+          "label": "t:settings_schema.heading.settings.h3_size"
+        },
+        {
+          "value": "h2",
+          "label": "t:settings_schema.heading.settings.h2_size"
+        },
+        {
+          "value": "h1",
+          "label": "t:settings_schema.heading.settings.h1_size"
+        },
+        {
+          "value": "h0",
+          "label": "t:settings_schema.heading.settings.h0_size"
+        },
+        {
+          "value": "h_custom",
+          "label": "t:settings_schema.typography.settings.font_size.custom"
+        }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "options": [
+        {
+          "value": "hdt-s-text",
+          "label": "t:default"
+        },
+        {
+          "value": "hdt-text-secondary",
+          "label": "t:settings_schema.colors.secondary"
+        },
+        {
+          "value": "hdt-text-body-tertiary",
+          "label": "t:settings_schema.colors.tertiary"
+        },
+        {
+          "value": "hdt-text-primary",
+          "label": "t:settings_schema.colors.accent"
+        }
+      ],
+      "label": "t:blocks.text.text_color.label",
+      "default": "hdt-s-text"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        {
+          "value": "adapt_image",
+          "label": "t:sections.all.images.ratio.adapt_image.label"
+        },
+        {
+          "value": "square",
+          "label": "t:sections.all.images.ratio.square.label"
+        },
+        {
+          "value": "portrait",
+          "label": "t:sections.all.images.ratio.portrait.label"
+        },
+        {
+          "value": "asos",
+          "label": "t:sections.all.images.ratio.asos.label"
+        },
+        {
+          "value": "landscape",
+          "label": "t:sections.all.images.ratio.landscape.label"
+        },
+        {
+          "value": "custom-pr",
+          "label": "t:sections.all.images.ratio.custom.label"
+        }
+      ],
+      "label": "Product image ratio",
+      "default": "adapt_image"
+    },
+    {
+      "type": "header",
+      "content": "t:blocks.text.custom_size_options.label",
+      "visible_if": "{{ section.settings.heading_size == 'h_custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_heading_lg",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.label",
+      "default": 50,
+      "visible_if": "{{ section.settings.heading_size == 'h_custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_heading_md",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.tablet_font_size",
+      "default": 30,
+      "visible_if": "{{ section.settings.heading_size == 'h_custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_heading",
+      "min": 10,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.mobile_font_size",
+      "default": 24,
+      "visible_if": "{{ section.settings.heading_size == 'h_custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "font_weight_heading",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "label": "t:settings_schema.typography.settings.font_weight.label",
+      "default": 600,
+      "visible_if": "{{ section.settings.heading_size == 'h_custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing_heading",
+      "min": -10,
+      "max": 10,
+      "step": 0.2,
+      "label": "t:settings_schema.typography.settings.letter_spacing",
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ section.settings.heading_size == 'h_custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "bundle_pin",
+      "name": "t:sections.bundle_product.blocks.name",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "t:sections.bundle_product.blocks.settings.product.label",
+          "info": "t:sections.bundle_product.blocks.settings.product.info"
+        },
+        {
+          "type": "range",
+          "id": "pos_x",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:sections.bundle_product.blocks.settings.pos_x",
+          "default": 50,
+          "visible_if": "{{ block.settings.product != blank }}"
+        },
+        {
+          "type": "range",
+          "id": "pos_y",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "label": "t:sections.bundle_product.blocks.settings.pos_y",
+          "default": 50,
+          "visible_if": "{{ block.settings.product != blank }}"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.bundle_product.name",
+      "category": "t:sections_categories.04_products.name"
+    }
+  ]
+}
+{% endschema %}

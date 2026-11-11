@@ -1,0 +1,367 @@
+{%- liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  unless product.available 
+    continue
+  endunless
+  assign metaobj_theme_countdown = shop.metaobjects.theme_countdown.values | first
+  assign theme_countdown = metaobj_theme_countdown.date_time.value
+  assign product_countdown = product.metafields.theme.countdown.value | default: theme_countdown
+  if product_countdown == blank
+      continue
+  endif
+  if settings.pick_mode == 'no' and product.variants.size > 1
+    assign selected_variant = product.selected_variant
+  elsif settings.pick_mode == 'first' and settings.hide_sold_out == false
+    assign selected_variant = product.selected_variant | default: product.variants.first
+  else
+    assign selected_variant = product.selected_or_first_available_variant
+  endif
+  assign product_form_id = 'product-form-'| append: section.id | append: product.id
+-%}
+<div class="hdt-product-info__item hdt-product__countdown" data-type="{{ block.type }}" {{ block.shopify_attributes }} color-scheme="{{ block.settings.color_scheme }}">
+  <countdown-timer class="hdt-product-info__item hdt-product__countdown hdt-block" data-type="{{ block.type }}" {{ block.shopify_attributes }} {%- unless selected_variant.available %} style="display: none;"{%- endunless -%} form="{{ product_form_id }}">
+      <hdt-countdown class="hdt-block" config='{"month":"{{ product_countdown | date: '%m' | plus: 0 }}", "date":"{{ product_countdown | date: '%d, %Y %H:%M:%S' }}", "hideTimerOnComplete": true, "hasZero": true }'>
+        <div class="hdt-product__countdown-wrap hdt-text-{{ block.settings.alignment }}">
+          {%- if block.settings.content != blank -%}
+            <div class="hdt-product__countdown-mess hdt-inline-flex hdt-align-center hdt-s-text hdt-text-xs hdt-font-bold hdt-icon-block">
+              {%- liquid
+                if block.settings.icon != 'none' or block.settings.svg_upload != blank or block.settings.image_upload != blank
+                  echo '<div class="hdt-pr_countdown-icon">'
+                    assign class = block.settings.ani | append: ' is--infinite '
+                    if block.settings.svg_upload != blank
+                    echo '<div style="width: 25px" class="' | append: class | append:'">'
+                        echo block.settings.svg_upload 
+                      echo '</div>'
+                    elsif block.settings.image_upload != blank
+                      echo block.settings.image_upload | image_url: width: 25 | image_tag: widths: '25, 50, 100, 200, 300, 400, 500', class: class
+                    else
+                      render 'icons', icon: block.settings.icon, class: class
+                    endif
+                  echo '</div>'
+                endif
+              -%}
+              <p class="hdt-inline-block">{{ block.settings.content }}</p>
+            </div>
+          {%- endif -%}
+          <div class="hdt-product__countdown-inner hdt-text-xl hdt-font-semibold hdt-relative hdt-flex hdt-flex-wrap hdt-items-center hdt-justify-{{ block.settings.alignment }}" aria-hidden="true">
+            <div class="hdt-product__countdown-item hdt-flex hdt-text-center">
+              <hdt-countdown-amount effect="{{ block.settings.effect_cd }}" data-days>00</hdt-countdown-amount>
+              <hdt-countdown-text singular="{{ 'sections.countdown_timmer.day' | t }}" class="hdt-grid">{{ 'sections.countdown_timmer.day_plural' | t }}</hdt-countdown-text>
+            </div>
+            <span class="hdt-colon">:</span>
+            <div class="hdt-product__countdown-item hdt-flex hdt-text-center">
+              <hdt-countdown-amount effect="{{ block.settings.effect_cd }}" data-hours>00</hdt-countdown-amount>
+              <hdt-countdown-text singular="{{ 'sections.countdown_timmer.hr' | t }}" class="hdt-grid">{{ 'sections.countdown_timmer.hr_plural' | t }}</hdt-countdown-text>
+            </div>
+            <span class="hdt-colon">:</span>
+            <div class="hdt-product__countdown-item hdt-flex hdt-text-center">
+              <hdt-countdown-amount effect="{{ block.settings.effect_cd }}" data-minutes>00</hdt-countdown-amount>
+              <hdt-countdown-text singular="{{ 'sections.countdown_timmer.min' | t }}" class="hdt-grid">{{ 'sections.countdown_timmer.min_plural' | t }}</hdt-countdown-text>
+            </div>
+            <span class="hdt-colon">:</span>
+            <div class="hdt-product__countdown-item hdt-flex hdt-text-center">
+              <hdt-countdown-amount effect="{{ block.settings.effect_cd }}" data-seconds>00</hdt-countdown-amount>
+              <hdt-countdown-text singular="{{ 'sections.countdown_timmer.sec' | t }}" class="hdt-grid">{{ 'sections.countdown_timmer.sec_plural' | t }}</hdt-countdown-text>
+            </div>
+          </div>
+        </div>
+      </hdt-countdown>
+    </countdown-timer>
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.countdown_timer.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.main-product.blocks.countdown_timer.settings.paragraph.content"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:none"
+        },
+        {
+          "value": "car",
+          "label": "t:blocks.icon.settings.icon.car"
+        },
+        {
+          "value": "truck",
+          "label": "t:blocks.icon.settings.icon.truck"
+        },
+        {
+          "value": "diamond",
+          "label": "t:blocks.icon.settings.icon.diamond"
+        },
+        {
+          "value": "door-lock",
+          "label": "t:blocks.icon.settings.icon.door_lock"
+        },
+        {
+          "value": "gym",
+          "label": "t:blocks.icon.settings.icon.gym"
+        },
+        {
+          "value": "hammer",
+          "label": "t:blocks.icon.settings.icon.hammer"
+        },
+        {
+          "value": "headphones",
+          "label": "t:blocks.icon.settings.icon.headphones"
+        },
+        {
+          "value": "helm",
+          "label": "t:blocks.icon.settings.icon.helm"
+        },
+        {
+          "value": "hourglass",
+          "label": "t:blocks.icon.settings.icon.hourglass"
+        },
+        {
+          "value": "map",
+          "label": "t:blocks.icon.settings.icon.map"
+        },
+        {
+          "value": "piggy",
+          "label": "t:blocks.icon.settings.icon.piggy"
+        },
+        {
+          "value": "refesh",
+          "label": "t:blocks.icon.settings.icon.refresh"
+        },
+        {
+          "value": "rocket",
+          "label": "t:blocks.icon.settings.icon.rocket"
+        },
+        {
+          "value": "shield",
+          "label": "t:blocks.icon.settings.icon.shield"
+        },
+        {
+          "value": "shield2",
+          "label": "t:blocks.icon.settings.icon.shield_2"
+        },
+        {
+          "value": "smile",
+          "label": "t:blocks.icon.settings.icon.smile"
+        },
+        {
+          "value": "scissors",
+          "label": "t:blocks.icon.settings.icon.scissors"
+        },
+        {
+          "value": "shuffle",
+          "label": "t:blocks.icon.settings.icon.shuffle"
+        },
+        {
+          "value": "cloud_upload",
+          "label": "t:blocks.icon.settings.icon.cloud_upload"
+        },
+        {
+          "value": "cash",
+          "label": "t:blocks.icon.settings.icon.cash"
+        },
+        {
+          "value": "way",
+          "label": "t:blocks.icon.settings.icon.way"
+        },
+        {
+          "value": "wristwatch",
+          "label": "t:blocks.icon.settings.icon.wristwatch"
+        },
+        {
+          "value": "world",
+          "label": "t:blocks.icon.settings.icon.world"
+        },
+        {
+          "value": "wallet",
+          "label": "t:blocks.icon.settings.icon.wallet"
+        },
+        {
+          "value": "unlock",
+          "label": "t:blocks.icon.settings.icon.unlock"
+        },
+        {
+          "value": "umbrella",
+          "label": "t:blocks.icon.settings.icon.umbrella"
+        },
+        {
+          "value": "repeat",
+          "label": "t:blocks.icon.settings.icon.repeat"
+        },
+        {
+          "value": "refesh-2",
+          "label": "t:blocks.icon.settings.icon.refresh_2"
+        },
+        {
+          "value": "medal",
+          "label": "t:blocks.icon.settings.icon.medal"
+        },
+        {
+          "value": "portfolio",
+          "label": "t:blocks.icon.settings.icon.portfolio"
+        },
+        {
+          "value": "like",
+          "label": "t:blocks.icon.settings.icon.like"
+        },
+        {
+          "value": "plance",
+          "label": "t:blocks.icon.settings.icon.plance"
+        },
+        {
+          "value": "map-maker",
+          "label": "t:blocks.icon.settings.icon.map_maker"
+        },
+        {
+          "value": "help",
+          "label": "t:blocks.icon.settings.icon.help"
+        },
+        {
+          "value": "gift",
+          "label": "t:blocks.icon.settings.icon.gift"
+        },
+        {
+          "value": "cart",
+          "label": "t:blocks.icon.settings.icon.cart"
+        },
+        {
+          "value": "box",
+          "label": "t:blocks.icon.settings.icon.box"
+        },
+        {
+          "value": "back",
+          "label": "t:blocks.icon.settings.icon.back"
+        },
+        {
+          "value": "back2",
+          "label": "t:blocks.icon.settings.icon.back_2"
+        }
+      ],
+      "default": "none",
+      "label": "t:blocks.icon.settings.icon.label"
+    },
+    {
+      "type": "liquid",
+      "id": "svg_upload",
+      "label": "t:blocks.icon.settings.svg_upload.label",
+      "info": "t:blocks.icon.settings.svg_upload.info"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_upload",
+      "label": "t:blocks.icon.settings.image_upload.label"
+    },
+    {
+      "type": "select",
+      "id": "ani",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.main-product.blocks.ani.settings.options__none.label"
+        },
+        {
+          "value": "hdt-ani-bounce",
+          "label": "t:sections.main-product.blocks.ani.settings.options__1.label"
+        },
+        {
+          "value": "hdt-ani-tada",
+          "label": "t:sections.main-product.blocks.ani.settings.options__2.label"
+        },
+        {
+          "value": "hdt-ani-swing",
+          "label": "t:sections.main-product.blocks.ani.settings.options__3.label"
+        },
+        {
+          "value": "hdt-ani-flash",
+          "label": "t:sections.main-product.blocks.ani.settings.options__4.label"
+        },
+        {
+          "value": "hdt-ani-fadeIn",
+          "label": "t:sections.main-product.blocks.ani.settings.options__5.label"
+        },
+        {
+          "value": "hdt-ani-heartBeat",
+          "label": "t:sections.main-product.blocks.ani.settings.options__6.label"
+        },
+        {
+          "value": "hdt-ani-shake",
+          "label": "t:sections.main-product.blocks.ani.settings.options__7.label"
+        }
+      ],
+      "label": "t:sections.main-product.blocks.ani.label"
+    },
+    {
+      "type": "textarea",
+      "id": "content",
+      "label": "t:sections.main-product.blocks.countdown_timer.settings.content.label",
+      "default": "HURRY UP! SALE ENDS IN"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:settings_schema.global.settings.text_alignment.label",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:settings_schema.global.settings.text_alignment.left"
+        },
+        {
+          "value": "center",
+          "label": "t:settings_schema.global.settings.text_alignment.center"
+        },
+        {
+          "value": "end",
+          "label": "t:settings_schema.global.settings.text_alignment.right"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "effect_cd",
+      "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.label",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__1.label"
+        },
+        {
+          "value": "move_top",
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__2.label"
+        },
+        {
+          "value": "move_bottom",
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__3.label"
+        },
+        {
+          "value": "scale",
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__4.label"
+        },
+        {
+          "value": "rotate",
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__5.label"
+        }
+      ],
+      "default": "move_top"
+    },
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.countdown_timer.name",
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,353 @@
+<!-- Accordion.liquid -->
+{{ 'hdt-accordion.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #shopify-section-{{ section.id }}{
+    --section-pt: {{ section.settings.padding_top }}px;
+    --section-pb: {{ section.settings.padding_bottom }}px; 
+    --section-prate: {{ section.settings.padding_rate }};
+  }
+{% endstyle %}
+{% assign other_content = section.blocks | where: "type", "other_content" | first %}
+<div id="{{ section.id }}" class="hdt-section-spacing hdt-s-gradient" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %} hdt-text-uppercase-{{ section.settings.text_transform }}">
+    <div class="hdt-flex hdt-justify-between hdt-accordion-position-{{ section.settings.accordion_position }} hdt-row-accordion">
+      <div class="hdt-custom-col-12 {% if other_content or section.settings.enable_link_list %}lg:hdt-custom-col-7 md:hdt-custom-col-7 {% endif %} hdt-custom-col-accordion-content" itemscope itemtype="https://schema.org/FAQPage">
+        {%- assign index = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == "title" -%}
+            <h5 id="{{ block.id }}" class="hdt-accordion-title hdt-h5 hdt-font-normal" {{ block.shopify_attributes }} hdt-reveal="slide-in" timeline>{{ block.settings.title }}</h5>
+          {%- else -%}
+            {%- if block.settings.title != blank and block.settings.content != blank -%}
+              <hdt-accordion class="hdt-contents" {{ block.shopify_attributes }}>
+                <details class="hdt-accordion-item" {% if index == 0 and section.settings.open_first %} open {% endif %} itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" hdt-reveal="slide-in" timeline>
+                  {% if block.settings.title != blank %}
+                    <summary class="hdt-flex hdt-justify-between hdt-align-center hdt-text-lg hdt-font-medium" aria-expanded="{% if index == 0 and section.settings.open_first %}true{% else %}false{% endif %}">
+                      <span itemprop="name">{{ block.settings.title }}</span>
+                      {%- if section.settings.accordion_icon == "1" -%} 
+                        <svg class="hdt-accordion-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M-2.40413e-07 5.5L5.5 -2.40413e-07L11 5.5L10.0237 6.47625L5.5 1.9525L0.976249 6.47625L-2.40413e-07 5.5Z" fill="currentColor"/></svg>
+                      {%- else -%}
+                        <span class="hdt-accordion-icon">
+                          <svg class="hdt-icon-plus" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M12 6.85714H6.85714V12H5.14286V6.85714H0V5.14286H5.14286V0H6.85714V5.14286H12V6.85714Z" fill="currentColor"/>
+                          </svg>
+                          <svg class="hdt-icon-minus" width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="12" height="2" fill="currentColor"/>
+                          </svg>
+                        </span>
+                      {%- endif -%}
+                    </summary>
+                  {%- endif -%}
+                  {%- if block.settings.content != blank or block.settings.content_richtext != blank -%}
+                    <div id="#{{ block.id }}-item" class="hdt-accordion-content hdt-text-base hdt-font-normal" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                      <div itemprop="text">
+                        {{ block.settings.content }}{{ block.settings.content_richtext }}
+                      </div>
+                    </div>
+                  {%- endif -%}
+                </details>
+              </hdt-accordion>
+            {%- endif -%}
+            {%- assign index = 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      {%- if other_content or section.settings.enable_link_list -%}
+        <div class="hdt-custom-col-12 {% if other_content or section.settings.enable_link_list %}lg:hdt-custom-col-4 md:hdt-custom-col-5 {% else %}hdt-custom-col-12 {% endif %} hdt-custom-col-other-content"> 
+          {%- for block in section.blocks -%}
+            {%- if block.type == "other_content" -%}
+              
+              <div class="hdt-other-content">
+                {%- if block.settings.heading != blank -%}
+                  <h5 class="hdt-other-content-title hdt-font-normal" hdt-reveal="slide-in" timeline>{{ block.settings.heading }}</h5>
+                {%- endif -%}
+                {{ block.settings.content }}
+                {%- if block.settings.solid_btn_label != blank and block.settings.solid_btn_link != blank -%}
+                  <a class="hdt-solid-btn hdt-btn-solid hdt-btn hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-font-semibold hdt-text-base" href="{{ block.settings.solid_btn_link }}" hdt-reveal="slide-in" timeline>
+                    <span>{{ block.settings.solid_btn_label }}</span>
+                  </a>
+                {%- endif -%}
+                {%- if block.settings.underline_btn_label != blank and block.settings.underline_btn_link != blank -%}
+                  <a class="hdt-underline-btn hdt-btn-link hdt-btn hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-font-semibold hdt-text-base" href="{{ block.settings.underline_btn_link }}" hdt-reveal="slide-in" timeline>
+                    <span>{{ block.settings.underline_btn_label }} </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M0.861539 8L0 7.13846L5.90769 1.23077H0.615385V0H8V7.38462H6.76923V2.09231L0.861539 8Z" fill="currentColor"/></svg>
+                  </a>
+                {%- endif -%}
+              </div>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- if section.settings.enable_link_list -%} 
+            <div class="hdt-accordion-link-list">
+              {%- for block in section.blocks -%}
+                {%- if block.type == "title" -%}
+                  <div class="hdt-link-item" hdt-reveal="slide-in" timeline>
+                    <a class="hdt-flex hdt-align-center hdt-justify-between hdt-text-2xl hdt-font-medium" href="#{{ block.id }}">{{ block.settings.title }} 
+                      <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M0.861539 8L0 7.13846L5.90769 1.23077H0.615385V0H8V7.38462H6.76923V2.09231L0.861539 8Z" fill="currentColor"/></svg>
+                    </a>
+                  </div>
+                {%- elsif block.type == "other_link" -%}
+                  <div class="hdt-link-item" hdt-reveal="slide-in" timeline>
+                    <a class="hdt-flex hdt-align-center hdt-justify-between hdt-text-2xl hdt-font-medium" href="{{ block.settings.link }}">{{ block.settings.title }} 
+                      <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M0.861539 8L0 7.13846L5.90769 1.23077H0.615385V0H8V7.38462H6.76923V2.09231L0.861539 8Z" fill="currentColor"/></svg>
+                    </a>
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.accordion.name",
+  "tag": "section",
+  "class": "hdt-section hdt-accordion",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.section_general_options"
+    },
+    {
+      "type": "select",
+      "id": "accordion_position",
+      "label": "t:sections.accordion.settings.accordion_position.label",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.accordion.settings.accordion_position.option_1.label"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.accordion.settings.accordion_position.option_2.label"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "accordion_icon",
+      "label": "t:sections.accordion.settings.accordion_icon.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.accordion.settings.accordion_icon.option_1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.accordion.settings.accordion_icon.option_2.label"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first",
+      "label": "t:sections.accordion.settings.open_first",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_link_list",
+      "label": "t:sections.accordion.settings.enable_link_list",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section_layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accordion_item",
+      "name": "t:sections.accordion.blocks.accordion_item.label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.accordion.blocks.accordion_item.title"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "t:sections.accordion.blocks.accordion_item.content"
+        },
+        {
+          "type": "richtext",
+          "id": "content_richtext",
+          "label": "t:sections.accordion.blocks.accordion_item.content"
+        }
+      ]
+    },
+    {
+      "type": "title",
+      "name": "Item heading",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Accordion item heading",
+          "default": "Discovery all new items"
+        }
+      ]
+    },
+    {
+      "type": "other_link",
+      "name": "t:sections.accordion.blocks.other_link.label",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.accordion.blocks.other_link.note"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.accordion.blocks.other_link.title",
+          "default": "Other link"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.accordion.blocks.other_link.link"
+        }
+      ]
+    },
+    {
+      "type": "other_content",
+      "limit": 1,
+      "name": "t:sections.accordion.blocks.other_content.label",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.accordion.blocks.other_content.note"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.accordion.blocks.other_content.heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:sections.accordion.blocks.other_content.content"
+        },
+        {
+          "type": "text",
+          "id": "solid_btn_label",
+          "label": "t:sections.accordion.blocks.other_content.solid_btn_label"
+        },
+        {
+          "type": "url",
+          "id": "solid_btn_link",
+          "label": "t:sections.accordion.blocks.other_content.solid_btn_link"
+        },
+        {
+          "type": "text",
+          "id": "underline_btn_label",
+          "label": "t:sections.accordion.blocks.other_content.underline_btn_label"
+        },
+        {
+          "type": "url",
+          "id": "underline_btn_link",
+          "label": "t:sections.accordion.blocks.other_content.underline_btn_link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.accordion.name",
+      "category": "t:sections_categories.05_section.name",
+      "blocks": [
+        {
+          "type": "title",
+          "settings": {
+            "title": "Discovery all new items"
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Pellentesque habitant morbi tristique senectus et netus?",
+            "content": "The perfect way to enjoy brewing tea on low hanging fruit to identify. Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. For me, the most important part of improving at photography has been sharing it. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Pellentesque habitant morbi tristique senectus et netus?",
+            "content": "The perfect way to enjoy brewing tea on low hanging fruit to identify. Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. For me, the most important part of improving at photography has been sharing it. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Pellentesque habitant morbi tristique senectus et netus?",
+            "content": "The perfect way to enjoy brewing tea on low hanging fruit to identify. Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. For me, the most important part of improving at photography has been sharing it. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Pellentesque habitant morbi tristique senectus et netus?",
+            "content": "The perfect way to enjoy brewing tea on low hanging fruit to identify. Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. For me, the most important part of improving at photography has been sharing it. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

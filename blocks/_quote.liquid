@@ -1,0 +1,200 @@
+<div class="hdt-tetimonials-item hdt-slider__slide"hdt-reveal="slide-in" timeline {{ block.shopify_attributes }}>
+  {%-
+    liquid
+    assign image = block.settings.image
+    assign widths = ' 244, 488, 1000 '
+    assign sizes = '100vw'
+  -%}
+  <div class="hdt-testimonial-inner hdt-flex hdt-justify-{{ section.settings.content_align }} hdt-radius">
+    {%- if section.settings.testimonial_des == "3" and image != blank -%}
+      <div class="hdt-col-wrap">
+        <div class="hdt-poropost-image hdt-oh">
+          {{ image | image_url: width: image.width | image_tag: loading: "lazy", width: image.width, height: image.height, sizes: sizes, class: "hdt-object-cover hdt-radius-sm", widths: widths }}
+        </div>
+      </div>
+    {%- endif -%}
+    <div class="hdt-col-wrap hdt-testimonial-info hdt-flex hdt-flex-col hdt-text-{{ section.settings.content_align }}">
+      {%- if section.settings.testimonial_des == "2" -%}
+        <div class="hdt-testimonial-author hdt-row-flex hdt-align-center hdt-justify-{{ section.settings.content_align }}">
+          {%- if block.settings.author != blank -%}
+            <p class="hdt-testimonial-name hdt-text-base hdt-font-bold hdt-s-text">
+              {{ block.settings.author }}
+            </p>
+          {%- endif -%} 
+          {%- if  block.settings.enable_verify == true -%}
+            <span class="hdt-testimonial-enable_ver hdt-flex hdt-align-center hdt-text-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M1.25 2.66667L0 4L3.75 8L10 1.33333L8.75 0L3.75 5.33333L1.25 2.66667Z" fill="#B5B5B5"/>
+              </svg>
+              {{ 'sections.testimonials.verify_customer' | t }}
+            </span>
+          {% endif %}
+        </div>
+        {%- if block.settings.pos != blank -%}
+          <p class="hdt-testimonial-metas hdt-text-base hdt-s-text2">
+            {{ block.settings.pos }}
+           </p>
+        {%- endif -%}
+      {%- endif -%}
+      {%- if section.settings.testimonial_des == "4" -%}
+        <div class="hdt-poropost-image hdt-flex hdt-justify-{{ section.settings.content_align }}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="46" height="31" viewBox="0 0 46 31" fill="none">
+            <path d="M32.4413 30.5L37.8204 19.9545L38.1913 19.2273H37.375H26.375V0.5H45.5V19.6071L39.9438 30.5H32.4413ZM6.56633 30.5L11.9454 19.9545L12.3163 19.2273H11.5H0.5V0.5H19.625V19.6071L14.0688 30.5H6.56633Z" stroke="#B5B5B5"/>
+            </svg>
+        </div>
+      {%- endif -%}
+      <div class="hdt-testimonial-rating hdt-flex hdt-justify-{{ section.settings.content_align }}">
+        {%- render 'rating_star', rating: block.settings.rating -%}
+      </div>
+      {%- if block.settings.heading != blank -%}
+        <div class="hdt-testimonial-heading-item">
+          <span class="hdt-testi-head hdt-s-text hdt-text-xl hdt-font-semibold">
+            {{ block.settings.heading }}
+          </span>
+        </div>
+      {%- endif -%}
+      {%- if block.settings.content != blank -%}
+        <div class="hdt-testimonial-content hdt-s-text hdt-rte">
+            {{ block.settings.content }}
+        </div>
+      {%- endif -%}
+      {%- if section.settings.testimonial_des == "1" or section.settings.testimonial_des == "3" -%}
+        <div class="hdt-testimonial-author">
+          {%- if block.settings.author != blank -%}
+            <p class="hdt-testimonial-name hdt-text-base hdt-font-semibold hdt-s-text">
+              {{ block.settings.author }}
+            </p>
+          {%- endif -%} 
+          {%- if block.settings.pos != blank -%}
+            <p class="hdt-testimonial-metas hdt-text-base hdt-s-text2">
+              {{ block.settings.pos }}
+             </p>
+          {%- endif -%}
+        </div>
+        {%- liquid 
+          assign product = block.settings.product
+          assign image_pr = product.featured_media
+          assign pr_url = product.url
+          -%}
+        {%- if product != blank -%}
+          <div class="hdt-testimonial-line"></div>
+          <div class="hdt-testimonial-product hdt-flex hdt-align-center  hdt-relative hdt-justify-between">
+            <div class="hdt-flex hdt-w-full hdt-align-center hdt-justify-{{ section.settings.content_align }}">
+              <div class="hdt-testimonial-product_img hdt-ratio--adapt_image hdt-col">
+                {%- if image_pr != blank -%}
+                  <a class="hdt-block hdt-pr hdt-oh" href="{{ pr_url }}"style="--aspect-ratioapt: {{ image_pr.aspect_ratio | default: 1 }}; --aspect-ratioapt-md:{{ image_pr.aspect_ratio | default: 1 }}">
+                    {{ image_pr | image_url: width: image_pr.width | image_tag: loading: "lazy", width: image_pr.width, height: image_pr.height, sizes: "70px", class: "hdt-w-full hdt-radius-sm", widths: "70,140,280" }}
+                  </a>
+                {%- endif -%} 
+            </div>
+            <div class="hdt-content-wrap hdt-flex hdt-flex-col hdt-align-start">
+              {% comment %} <div class="hdt-pr-rating hdt-flex hdt-align-center">
+              {%- render 'hdt-pr-single-review' -%}
+              </div> {% endcomment %}
+              <a href="{{ pr_url }}" class="hdt-line-clamp hdt-s-text hdt-testimonial-pr-title hdt-text-base" style="--line-clamp-count: 1">{{ product.title }}</a>
+              <span class="pr-price hdt-font-semibold hdt-text-base hdt-s-text">
+                {%- render 'card-price', product: product, show_volume_note: true, price_class: 'hdt-font-semibold' -%}
+              </span>
+            </div>
+            </div>
+            <a href="{{ pr_url }}" class="pr-btn-link hdt-right-0 hdt-inline-flex hdt-justify-center hdt-align-center hdt-relative">
+              <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none">
+                <path d="M0.969231 9L0 8.03077L6.64615 1.38462H0.692308V0H9V8.30769H7.61538V2.35385L0.969231 9Z" fill="currentColor"/>
+              </svg>
+            </a>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+      {%- if section.settings.testimonial_des == "4" -%}
+        <div class="hdt-testimonial-line {% if section.settings.content_align == "center" %} hdt-line-center {% endif %}"></div>
+        <div class="hdt-testimonial-author">
+          {%- if block.settings.author != blank -%}
+            <p class="hdt-testimonial-name hdt-text-base hdt-font-semibold hdt-s-text">
+              {{ block.settings.author }}
+            </p>
+          {%- endif -%} 
+          {%- if block.settings.pos != blank -%}
+            <p class="hdt-testimonial-metas hdt-text-base hdt-s-text2">
+              {{ block.settings.pos }}
+             </p>
+          {%- endif -%}
+        </div>
+        {%- liquid 
+          assign product = block.settings.product
+          assign pr_url = product.url
+          -%}
+        {%- if product != blank -%}
+          <div class="hdt-testimonial-product hdt-row-flex hdt-align-center hdt-relative hdt-justify-{{ section.settings.content_align }}">
+            <div class="hdt-content-wrap">
+              <a href="{{ pr_url }}" class="hdt-testimonial-pr-title hdt-text-base hdt-font-semibold"><span class="hdt-font-normal hdt-s-text2">{{ 'sections.testimonials.purchase' | t }} </span> {{ product.title }}</a>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>  
+</div>
+
+{% schema %}
+  {
+    "name": "Quote",
+    "tag":null,
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.testimonials.blocks.settings.image.label",
+        "info": "t:sections.testimonials.blocks.settings.image.info"
+      },
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "t:sections.testimonials.blocks.settings.heading.label"
+      },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "t:sections.testimonials.blocks.settings.content.label",
+        "default": "<p>I am so happy to find a web fashion site that offers a great selection of stylish and affordable plus size clothing.</p>"
+      },
+      {
+        "type": "text",
+        "id": "author",
+        "label": "t:sections.testimonials.blocks.settings.author.label",
+        "default": "Author's name"
+      },
+      {
+        "type": "text",
+        "id": "pos",
+        "label": "t:sections.testimonials.blocks.settings.pos.label"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_verify",
+        "label": "t:sections.testimonials.blocks.settings.enable_verify.label",
+        "info": "t:sections.testimonials.blocks.settings.enable_verify.info",
+        "default": false
+      },
+      {
+        "type": "product",
+        "id": "product",
+        "label": "t:sections.testimonials.blocks.settings.product.label",
+        "info": "t:sections.testimonials.blocks.settings.product.info"
+      },
+      {
+        "type": "range",
+        "id": "rating",
+        "min": 2,
+        "max": 5,
+        "step": 1,
+        "label": "t:sections.testimonials.blocks.settings.rating.label",
+        "default": 5
+      }
+    ],
+    "presets": [
+      {
+        "name": "Quote"
+      }
+    ]
+  }
+{% endschema %}

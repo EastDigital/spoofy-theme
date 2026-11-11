@@ -1,0 +1,84 @@
+{%- liquid
+  assign product_url = card_product.url
+  assign featured_image = card_product.featured_image
+  assign first_variant = card_product.variants.first
+-%}
+
+<hdt-card-product class="final-card-wrapper">
+
+  <div class="final-card">
+
+    <!-- IMAGE -->
+    <a href="{{ product_url }}" class="final-image-box">
+      {%- if featured_image != blank -%}
+        <img 
+          src="{{ featured_image | image_url: width: 800 }}" 
+          alt="{{ card_product.title | escape }}"
+          loading="lazy"
+        >
+      {%- else -%}
+        <img src="{{ 'placeholder.png' | asset_url }}" alt="Product">
+      {%- endif -%}
+    </a>
+
+    <!-- CONTENT -->
+    <div class="final-content">
+
+      <!-- TITLE (SINGLE LINE) -->
+      <h3 class="final-title">
+        {{ card_product.title | escape }}
+      </h3>
+
+      <!-- PRICE + RATING -->
+      <div class="price-rating-row">
+
+        <div class="price-wrap">
+          <span class="currency">₹</span>
+          <span class="amount">
+            {{ card_product.price | money_without_currency }}
+          </span>
+        </div>
+
+        <div class="final-rating">
+          ⭐ 4.6
+        </div>
+
+      </div>
+
+      <!-- DISCOUNT -->
+      {% if card_product.compare_at_price > card_product.price %}
+        <div class="final-discount">
+          <span class="compare-price">
+            ₹ {{ card_product.compare_at_price | money_without_currency }}
+          </span>
+          <span class="discount">
+            {{ card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price }}% off
+          </span>
+        </div>
+      {% endif %}
+
+      <!-- ADD TO CART (THEME FUNCTIONALITY) -->
+      <div class="final-btn-wrap">
+        {% if card_product.available %}
+
+          <div class="custom-atc-btn">
+            {% render 'btn-ultra',
+              product: card_product,
+              product_url: product_url,
+              section_id: section_id,
+              show_qty: false
+            %}
+          </div>
+
+        {% else %}
+          <button class="final-btn disabled">
+            SOLD OUT
+          </button>
+        {% endif %}
+      </div>
+
+    </div>
+
+  </div>
+
+</hdt-card-product>

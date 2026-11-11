@@ -1,0 +1,38 @@
+{%- comment -%}
+  Renders a size list
+
+  Accepts:
+  - size_variants: {Array} (required)
+  - size_variants_avai: {Array} (required)
+  - size_count: {Interger} (required)
+  - class: {String} a list class. (optional)
+
+  Usage:
+  {% render 'size-list', size_variants: size_variants, size_variants_avai: size_variants_avai %}
+{%- endcomment -%}
+<div class="hdt-size-list {{ class }}">
+  <div class="hdt-size-list-wrapper">
+    {%- liquid 
+      if settings.enable_size_limit
+        assign size_maximum = settings.size_maximum
+      else
+        assign size_maximum = 9999
+      endif 
+    -%} 
+    {%- if settings.size_mode == 'size' -%}
+      {%- for size in size_variants limit: size_maximum -%}
+        {%- liquid
+        unless size_variants_avai contains size or settings.size_type == 'all'
+          continue
+        endunless
+        -%}
+        <span class="hdt-size-list-item"{% unless size_variants_avai contains size %} unavailable{% endunless %}>{{ size | escape }}</span>
+      {%- endfor -%}
+        {%- if settings.enable_size_limit and size_count > settings.size_maximum -%}
+          <a class="hdt-size-list-item" href="{{ product_url }}"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 14 12" fill="none"><path d="M8.75 11.25L7.525 9.98125L10.6312 6.875H0V5.125H10.6312L7.525 2.01875L8.75 0.75L14 6L8.75 11.25Z" fill="currentColor"/></svg></a>
+        {%- endif -%}
+    {%- else -%}
+      <p class="hdt-size-count">{{- 'products.product.sizes_count' | t: count: size_count -}}</p>
+    {%- endif -%}
+  </div>
+</div>

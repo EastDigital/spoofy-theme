@@ -1,0 +1,193 @@
+{% liquid
+  if article == blank
+    continue
+  endif
+%}
+<div class="hdt-main-article-heading  hdt-article-title hdt-flex hdt-flex-col hdt-align-{{ block.settings.content_align }} hdt-text-{{ block.settings.content_align }} hdt-section-spacing" timeline hdt-reveal="slide-in" style="--section-pt: {{ block.settings.padding_top }}px; --section-pb: {{ block.settings.padding_bottom }}px; --section-prate:{{ block.settings.padding_rate }};" {{ block.shopify_attributes }}>
+  <div class="hdt-article-tags">
+      <div class="hdt-article-category hdt-row-flex">
+        {%- if  block.settings.show_blog_title == 'blog_current' -%}
+          <a class="" href="{{ blog.url }}">{{ blog.title }}</a>
+        {%- else -%}
+          {%- assign article_tags = article.tags | join: ';' | split: ';' -%}
+          {%- assign blog_tags = article_tags | where: 'blog_' -%}
+          {%- for tag in blog_tags -%}
+            <a class="" href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag | remove : 'blog_' | strip }}</a>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+  </div>
+  {%- if block.settings.show_title == true -%}
+    <h1 class="hdt-s-text hdt-{{ block.settings.heading_fs }} hdt-article-heading">{{ article.title }}</h1>
+  {%- endif -%}
+  {%- if block.settings.show_author or block.settings.show_date -%}
+    <div class="hdt-article-metas">
+      {%- if block.settings.show_author == true -%}
+        <div class="hdt-article-author hdt-text-base hdt-inline-block">
+          <span class="hdt-article-by hdt-s-text2">{{ 'blogs.article.by' | t }}</span>
+          <span class="hdt-article-author__name hdt-s-text hdt-font-semibold">{{ article.author | replace_first: 'ad clnt', 'admin' }}</span>
+        </div>
+      {%- endif -%}
+      {%- if block.settings.show_date -%}
+        <div class="hdt-article-time hdt-inline-block hdt-text-base">
+          {%- assign date = block.settings.date -%}<span class="hdt-article-by hdt-s-text2">{{ 'blogs.article.on' | t }}</span>
+          <span class="hdt-article-author__date hdt-s-text hdt-font-semibold">
+            {%- if date contains "%" -%}
+              {{ article.published_at | time_tag: date }}
+            {%- else -%}
+              {{ article.published_at | time_tag: format: date }}
+          {%- endif -%}
+        </span>
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+{% schema %}
+  {
+    "name": "Title",
+    "tag":null,
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_title",
+        "label": "t:sections.main-article.title.show_title.label",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "heading_fs",
+        "label": "t:sections.all.heading_size2.label",
+        "options": [
+          {
+            "value": "h1",
+            "label": "t:sections.all.heading_size2.options__1.label"
+          },
+          {
+            "value": "h2",
+            "label": "t:sections.all.heading_size2.options__2.label"
+          },
+          {
+            "value": "h3",
+            "label": "t:sections.all.heading_size2.options__3.label"
+          },
+          {
+            "value": "h4",
+            "label": "t:sections.all.heading_size2.options__4.label"
+          }
+        ],
+        "default": "h4"
+      },
+      {
+        "type": "select",
+        "id": "show_blog_title",
+        "label": "t:sections.main-article.title.show_blog_title.label",
+        "info": "t:sections.main-article.title.show_blog_title.info",
+        "default": "blog_current",
+        "options": [
+          {
+            "value": "blog_current",
+            "label": "t:sections.main-article.title.show_blog_title.options_1.label"
+          },
+          {
+            "value": "blog_tags",
+            "label": "t:sections.main-article.title.show_blog_title.options_2.label"
+          }
+        ]
+      },
+      {
+        "type": "checkbox",
+        "id": "show_author",
+        "label": "t:sections.feature-blog.settings.show_author",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_date",
+        "label": "t:sections.feature-blog.settings.show_date",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "date",
+        "options": [
+          {
+            "value": "abbreviated_date",
+            "label": "t:sections.feature-blog.settings.date.option_1"
+          },
+          {
+            "value": "basic",
+            "label": "t:sections.feature-blog.settings.date.option_2"
+          },
+          {
+            "value": "date",
+            "label": "t:sections.feature-blog.settings.date.option_3"
+          },
+          {
+            "value": "%b %d",
+            "label": "t:sections.feature-blog.settings.date.option_4"
+          }
+        ],
+        "label": "t:sections.feature-blog.settings.date.label",
+        "info": "t:sections.feature-blog.settings.date.info",
+        "default": "%b %d",
+        "visible_if": "{{ block.settings.show_date }}"
+      },
+      {
+        "type": "select",
+        "id": "content_align",
+        "label": "t:sections.feature-blog.settings.content_align.label",
+        "default": "start",
+        "options": [
+          {
+            "value": "start",
+            "label": "t:sections.feature-blog.settings.content_align.option_1"
+          },
+          {
+            "value": "center",
+            "label": "t:sections.feature-blog.settings.content_align.option_2"
+          }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "padding_rate",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:sections.all.padding.padding_rate",
+        "default": 75
+      }
+    ],
+    "presets":[
+      {
+        "name":"Title"
+      }
+    ]
+  }
+{% endschema %}

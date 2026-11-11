@@ -1,0 +1,12 @@
+{%- liquid
+  assign padding_top = block.settings.padding_top
+  assign padding_right = block.settings.padding_right
+  assign padding_left = block.settings.padding_left
+  assign padding_bottom = block.settings.padding_bottom
+  assign padding_rate_mobile = block.settings.padding_rate_mobile
+-%}
+--padding-top: {{ padding_top }}px;
+--padding-right: {{ padding_right }}px;
+--padding-left: {{ padding_left }}px;
+--padding-bottom: {{ padding_bottom }}px;
+--padding-rate-mobile: {{ padding_rate_mobile }};

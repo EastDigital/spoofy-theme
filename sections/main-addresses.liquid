@@ -1,0 +1,354 @@
+<!-- sections/main-address.liquid -->
+{{ 'hdt-customer.css' | asset_url | stylesheet_tag }}
+{%- style -%}#shopify-section-{{ section.id }} { --section-pt:{{ section.settings.padding_top }}px; --section-pb:{{ section.settings.padding_bottom }}px; --section-prate:{{ section.settings.padding_rate }}; }{%- endstyle -%}
+<script src="{{ 'customer.min.js' | asset_url }}" defer></script>
+<div timeline hdt-reveal="slide-in" class="hdt-main-address hdt-section-spacing hdt-s-gradient" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container">
+    {%- paginate customer.addresses by 5 -%}
+    <div class="hdt-customer hdt-customer-account hdt-customer-addaddress is--addresses hdt-row-grid" data-customer-addresses>
+      {%- render 'account-sidebar' -%}
+      <div class="hdt-account-content hdt-text-center"> 
+        <div data-address>
+          <button type="button" aria-expanded="false" aria-controls="AddAddress" class="hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn hdt-oh hdt-btn-solid hdt-font-semibold"><span class="hdt-truncate">{{ 'customer.addresses.add_new' | t }}</span></button>
+
+          <div id="AddAddress" class="hdt-add-address">
+            <h2 class="hdt-title-addresses hdt-text-10xl hdt-font-normal">{{ 'customer.addresses.add_new' | t }}</h2>
+            {%- form 'customer_address', customer.new_address, aria-labelledBy: 'AddressNewHeading' -%}
+              <div class="hdt-row-grid hdt-grid-cols-1 lg:hdt-grid-cols-2">
+                <div class="hdt-field hdt-relative">
+                  <input class="hdt-input" type="text" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name"  id="AddressFirstNameNew}" placeholder="{{ 'customer.addresses.first_name' | t }}">
+                  <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressFirstNameNew}">{{ 'customer.addresses.first_name' | t }}</label>
+                </div>
+                <div class="hdt-field hdt-relative">
+                  <input class="hdt-input" type="text" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" id="AddressLastNameNew" placeholder="{{ 'customer.addresses.last_name' | t }}">
+                  <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressLastNameNew">{{ 'customer.addresses.last_name' | t }}</label>
+                </div>
+              </div>
+              <div class="hdt-field hdt-relative">
+                <input class="hdt-input" type="text" name="address[company]" value="{{ form.company }}" autocomplete="organization" id="AddressCompanyNew" placeholder="{{ 'customer.addresses.company' | t }}">
+                <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressCompanyNew">{{ 'customer.addresses.company' | t }}</label>
+              </div>
+              <div class="hdt-field hdt-relative">
+                <input class="hdt-input" type="text" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" id="AddressAddress1New" placeholder="{{ 'customer.addresses.address1' | t }}">
+                <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressAddress1New">{{ 'customer.addresses.address1' | t }}</label>
+              </div>
+              <div class="hdt-field hdt-relative">
+                <input class="hdt-input" type="text" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line1" id="AddressAddress2New" placeholder="{{ 'customer.addresses.address2' | t }}">
+                <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressAddress2New">{{ 'customer.addresses.address2' | t }}</label>
+              </div>
+              <div class="hdt-field hdt-relative">
+                <input class="hdt-input" type="text" name="address[city]"  value="{{ form.city }}" autocomplete="address-level2" id="AddressCityNew" placeholder="{{ 'customer.addresses.city' | t }}">
+                <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressCityNew">{{ 'customer.addresses.city' | t }}</label>
+              </div>
+              <div class="hdt-field hdt-relative hdt-text-start">
+                <label for="AddressCountryNew"> {{ 'customer.addresses.country' | t }}</label>
+                  <select id="AddressCountryNew" class="hdt-select" name="address[country]" data-default="{{ form.country }}" data-form-id="{{ section.id }}" autocomplete="country">
+                    {{ all_country_option_tags }}
+                  </select>
+              </div>
+              <div class="hdt-field hdt-relative hdt-text-start" id="AddressProvinceContainerNew"  style="display: none">
+                <label for="AddressProvinceNew"> {{ 'customer.addresses.province' | t }}</label>
+                  <select id="AddressProvinceNew" class="hdt-select" name="address[province]" data-default="{{ form.province }}" autocomplete="address-level1"></select>
+              </div>
+              <div class="hdt-field hdt-relative">
+                <input class="hdt-input" type="text" name="address[zip]" id="AddressZipNew" placeholder="{{ 'customer.addresses.zip' | t }}">
+                <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressZipNew">{{ 'customer.addresses.zip' | t }}</label>
+              </div>
+              <div class="hdt-field hdt-relative">
+                <input class="hdt-input" type="text" name="address[phone]" id="AddressPhoneNew" placeholder="{{ 'customer.addresses.phone' | t }}">
+                <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressPhoneNew">{{ 'customer.addresses.phone' | t }}</label>
+              </div>
+              <div class="hdt-field hdt-relative hdt-text-start hdt-set_as_default_checkbox">
+                {{ form.set_as_default_checkbox }}
+                <label for="address_default_address_new">{{ 'customer.addresses.set_default' | t }}</label>
+              </div>
+              <div class="hdt-field">
+                <button class="hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn hdt-oh hdt-btn-solid hdt-font-semibold"><span class="hdt-truncate">{{ 'customer.addresses.add' | t }}</span></button>
+                <button type="reset" class="hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn hdt-oh hdt-btn-solid hdt-font-semibold"><span class="hdt-truncate">{{ 'customer.addresses.cancel' | t }}</span></button>
+              </div>
+            {%- endform -%}
+          </div>
+        </div>
+        <ul role="list">
+          {%- for address in customer.addresses -%}
+            <li data-address>
+              {%- if address == customer.default_address -%}
+                <h2 class="hdt-title-addresses hdt-text-10xl hdt-font-normal">{{ 'customer.addresses.default' | t }}</h2>
+              {%- endif -%}
+              <div class="hdt-customer-address">
+                <table class="hdt-table-infos">
+                  <tbody>
+                    <tr>
+                      <td><strong>{{ 'customer.addresses.name' | t }}</strong></td>
+                      <td data-label="{{ 'customer.addresses.name' | t }}">{{ address.first_name }} {{ address.last_name }}</td>
+                    </tr>  
+                    {%- if address.company != blank -%}
+                      <tr>
+                        <td><strong>{{ 'customer.addresses.company' | t }}</strong></td>
+                        <td data-label="{{ 'customer.addresses.company' | t }}">{{ address.company }}</td>
+                      </tr>
+                    {%- endif -%}
+                    {%- if address.address1 != blank -%}
+                      <tr>
+                        <td><strong>{{ 'customer.addresses.address1' | t }}</strong></td>
+                        <td data-label="{{ 'customer.addresses.address1' | t }}">{{ address.address1 }}</td>
+                      </tr>
+                    {%- endif -%}
+                    {%- if address.address2 != blank -%}
+                    <tr>
+                      <td><strong>{{ 'customer.addresses.address2' | t }}</strong></td>
+                      <td data-label="{{ 'customer.addresses.address2' | t }}">{{ address.address2 }}</td>
+                    </tr>
+                    {%- endif -%}
+                    {%- if address.city != blank -%}
+                    <tr>
+                      <td><strong>{{ 'customer.addresses.country' | t }}</strong></td>
+                      <td data-label="{{ 'customer.addresses.country' | t }}">{{ address.city }}, {% if address.province_code %}{{ address.default_address.province_code }}, {% endif %}{{ address.country }}</td>
+                    </tr>
+                    {%- endif -%}
+                    {%- if address.zip != blank -%}
+                    <tr>
+                      <td><strong>{{ 'customer.addresses.zip' | t }}</strong></td>
+                      <td data-label="{{ 'customer.addresses.zip' | t }}">{{ address.zip }}</td>
+                    </tr>
+                    {%- endif -%}
+                    {%- if address.phone != blank -%}
+                    <tr>
+                      <td><strong>{{ 'customer.addresses.phone' | t }}</strong></td>
+                      <td data-label="{{ 'customer.addresses.phone' | t }}">{{ address.phone }}</td>
+                    </tr>
+                    {%- endif -%}
+                  </tbody>
+                </table>
+              </div>
+              <button class="hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn hdt-oh hdt-btn-solid hdt-font-semibold" type="button" id="EditFormButton_{{ address.id }}" aria-label="{{ 'customer.addresses.edit_address' | t }} {{ forloop.index }}" aria-controls="EditAddress_{{ address.id }}" aria-expanded="false" data-address-id="{{ address.id }}"><span class="hdt-truncate">{{ 'customer.addresses.edit' | t }}</span></button>
+              <button class="hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn hdt-oh hdt-btn-outline hdt-font-semibold" type="button" aria-label="{{ 'customer.addresses.delete' | t }} {{ forloop.index }}" data-target="{{ address.url }}" data-confirm-message="{{ 'customer.addresses.delete_confirm' | t }}"><span class="hdt-truncate">{{ 'customer.addresses.delete' | t }}</span></button>
+              <hdt-modal effect="slide" color-scheme="{{ settings.color_scheme_dialog }}">
+                <dialog id="EditAddress_{{ address.id }}" class="hdt-dialog hdt-dialog-modal hdt-address-drawer hdt-s-gradient" scroll-lock>
+                  <div class="hdt-dialog-modal__header"><h3  class="hdt-title-address hdt-text-10xl hdt-font-normal">{{ 'customer.addresses.edit_address' | t }}</h3><button ref="closeButton" class="hdt-s-text" aria-controls="EditAddress_{{ address.id }}" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button></div>
+                  <div class="hdt-dialog-modal__inner hdt-current-scrollbar">
+                    {%- form 'customer_address', address -%}
+                      <div class="hdt-row-grid hdt-grid-cols-1 lg:hdt-grid-cols-2">
+                        <div class="hdt-field hdt-relative">
+                          <input class="hdt-input" type="text" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" id="AddressFirstName-{{ address.id }}" placeholder="{{ 'customer.addresses.first_name' | t }}">
+                          <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressFirstName-{{ address.id }}">{{ 'customer.addresses.first_name' | t }}</label>
+                        </div>
+                        <div class="hdt-field hdt-relative">
+                          <input class="hdt-input" type="text" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" id="AddressLastName-{{ address.id }}" placeholder="{{ 'customer.addresses.last_name' | t }}">
+                          <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressLastName-{{ address.id }}">{{ 'customer.addresses.last_name' | t }}</label>
+                        </div>
+                      </div>
+                      <div class="hdt-field hdt-relative">
+                        <input class="hdt-input" type="text" name="address[company]" value="{{ form.company }}" autocomplete="organization" id="AddressCompany-{{ address.id }}" placeholder="{{ 'customer.addresses.company' | t }}">
+                        <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressCompany-{{ address.id }}">{{ 'customer.addresses.company' | t }}</label>
+                      </div>
+                      <div class="hdt-field hdt-relative">
+                        <input class="hdt-input" type="text" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" id="AddressAddress1-{{ address.id }}" placeholder="{{ 'customer.addresses.address1' | t }}">
+                        <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressAddress1-{{ address.id }}">{{ 'customer.addresses.address1' | t }}</label>
+                      </div>
+                      <div class="hdt-field hdt-relative">
+                        <input class="hdt-input" type="text" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line1" id="AddressAddress2-{{ address.id }}" placeholder="{{ 'customer.addresses.address2' | t }}">
+                        <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressAddress2-{{ address.id }}">{{ 'customer.addresses.address2' | t }}</label>
+                      </div>
+                      <div class="hdt-field hdt-relative">
+                        <input class="hdt-input" type="text" name="address[city]"  value="{{ form.city }}" autocomplete="address-level2" id="AddressCity-{{ address.id }}" placeholder="{{ 'customer.addresses.city' | t }}">
+                        <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressCity-{{ address.id }}">{{ 'customer.addresses.city' | t }}</label>
+                      </div>
+                      <div class="hdt-field hdt-relative hdt-text-start">
+                        <label for="AddressCountry_{{ form.id }}"> {{ 'customer.addresses.country' | t }}</label>
+                          <select id="AddressCountry_{{ form.id }}" name="address[country]" class="hdt-select" data-address-country-select data-default="{{ form.country }}" data-form-id="{{ form.id }}" autocomplete="country">
+                            {{ all_country_option_tags }}
+                          </select>
+                      </div>
+                      <div class="hdt-field hdt-relative hdt-text-start" id="AddressProvinceContainer_{{ form.id }}" style="display:none;">
+                        <label for="AddressProvince_{{ form.id }}"> {{ 'customer.addresses.province' | t }}</label>
+                          <select id="AddressProvince_{{ form.id }}" name="address[province]" class="hdt-select" data-default="{{ form.province }}" autocomplete="address-level1"></select>
+                      </div>
+                      <div class="hdt-field hdt-relative">
+                        <input class="hdt-input" type="text" name="address[zip]"  value="{{ form.zip }}" id="AddressZip-{{ address.id }}" placeholder="{{ 'customer.addresses.zip' | t }}">
+                        <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressZip-{{ address.id }}">{{ 'customer.addresses.zip' | t }}</label>
+                      </div>
+                      <div class="hdt-field hdt-relative">
+                        <input class="hdt-input" type="text" name="address[phone]" value="{{ form.phone }}" id="AddressPhone-{{ address.id }}" placeholder="{{ 'customer.addresses.phone' | t }}">
+                        <label class="hdt-absolute hdt-top-0 hdt-pe-none hdt-flex hdt-align-center" for="AddressPhone-{{ address.id }}">{{ 'customer.addresses.phone' | t }}</label>
+                      </div>
+                      <div class="hdt-field hdt-relative hdt-text-start hdt-set_as_default_checkbox">
+                        {{ form.set_as_default_checkbox }}
+                        <label for="address_default_address_{{ form.id }}">{{ 'customer.addresses.set_default' | t }}</label>
+                      </div>
+                      <div class="hdt-field">
+                        <button class="hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn hdt-oh hdt-btn-solid hdt-font-semibold"><span class="hdt-truncate">{{ 'customer.addresses.update' | t }}</span></button>
+                        <button type="reset" aria-controls="EditAddress_{{ address.id }}" aria-label="Close" class="hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn hdt-oh hdt-btn-solid hdt-font-semibold"><span class="hdt-truncate">{{ 'customer.addresses.cancel' | t }}</span></button>
+                      </div>
+                    {%- endform -%}
+                  </div>
+                </dialog>
+              </hdt-modal>
+            </li>
+          {%- endfor -%}
+        </ul>
+        {%- if paginate.pages > 1 -%}{% render 'pagination', paginate: paginate, ajax: false, paginate_pos: 'center', dis_pagination: 15 %}{%- endif -%}
+      </div>
+
+    </div>
+   
+    {%- endpaginate -%}
+  </div>
+</div>
+<script>
+  /*
+  * Shopify Common JS
+  *
+  */
+  if (typeof window.Shopify == 'undefined') {
+    window.Shopify = {};
+  }
+
+  Shopify.bind = function (fn, scope) {
+    return function () {
+      return fn.apply(scope, arguments);
+    };
+  };
+
+  Shopify.setSelectorByValue = function (selector, value) {
+    for (var i = 0, count = selector.options.length; i < count; i++) {
+      var option = selector.options[i];
+      if (value == option.value || value == option.innerHTML) {
+        selector.selectedIndex = i;
+        return i;
+      }
+    }
+  };
+
+  Shopify.addListener = function (target, eventName, callback) {
+    target.addEventListener
+      ? target.addEventListener(eventName, callback, false)
+      : target.attachEvent('on' + eventName, callback);
+  };
+
+  Shopify.postLink = function (path, options) {
+    options = options || {};
+    var method = options['method'] || 'post';
+    var params = options['parameters'] || {};
+
+    var form = document.createElement('form');
+    form.setAttribute('method', method);
+    form.setAttribute('action', path);
+
+    for (var key in params) {
+      var hiddenField = document.createElement('input');
+      hiddenField.setAttribute('type', 'hidden');
+      hiddenField.setAttribute('name', key);
+      hiddenField.setAttribute('value', params[key]);
+      form.appendChild(hiddenField);
+    }
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+  };
+
+  Shopify.CountryProvinceSelector = function (country_domid, province_domid, options) {
+    this.countryEl = document.getElementById(country_domid);
+    this.provinceEl = document.getElementById(province_domid);
+    this.provinceContainer = document.getElementById(options['hideElement'] || province_domid);
+
+    Shopify.addListener(this.countryEl, 'change', Shopify.bind(this.countryHandler, this));
+
+    this.initCountry();
+    this.initProvince();
+  };
+
+  Shopify.CountryProvinceSelector.prototype = {
+    initCountry: function () {
+      var value = this.countryEl.getAttribute('data-default');
+      Shopify.setSelectorByValue(this.countryEl, value);
+      this.countryHandler();
+    },
+
+    initProvince: function () {
+      var value = this.provinceEl.getAttribute('data-default');
+      if (value && this.provinceEl.options.length > 0) {
+        Shopify.setSelectorByValue(this.provinceEl, value);
+      }
+    },
+
+    countryHandler: function (e) {
+      var opt = this.countryEl.options[this.countryEl.selectedIndex];
+      var raw = opt.getAttribute('data-provinces');
+      var provinces = JSON.parse(raw);
+      this.clearOptions(this.provinceEl);
+      if (provinces && provinces.length == 0) {
+        this.provinceContainer.style.display = 'none';
+      } else {
+        for (var i = 0; i < provinces.length; i++) {
+          var opt = document.createElement('option');
+          opt.value = provinces[i][0];
+          opt.innerHTML = provinces[i][1];
+          this.provinceEl.appendChild(opt);
+        }
+
+        this.provinceContainer.style.display = '';
+      }
+    },
+
+    clearOptions: function (selector) {
+      while (selector.firstChild) {
+        selector.removeChild(selector.firstChild);
+      }
+    },
+
+    setOptions: function (selector, values) {
+      for (var i = 0, count = values.length; i < values.length; i++) {
+        var opt = document.createElement('option');
+        opt.value = values[i];
+        opt.innerHTML = values[i];
+        selector.appendChild(opt);
+      }
+    },
+  };
+  window.addEventListener('load', () => {
+    typeof CustomerAddresses !== 'undefined' && new CustomerAddresses();
+  });
+</script>
+{% schema %}
+{
+  "name": "t:sections.main-addresses.name",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ]
+}
+{% endschema %}

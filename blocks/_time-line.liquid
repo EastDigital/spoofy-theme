@@ -1,0 +1,140 @@
+<div class="hdt-timeline-item hdt-relative" {{ block.shopify_attributes }}>
+  <div class="hdt-timeline-inner hdt-relative hdt-timeline-content__{{ block.settings.content_position }} hdt-flex hdt-justify-between hdt-align-center">
+    {%- if block.settings.time != blank -%}
+      <span class="hdt-timeline-time hdt-text-2xl hdt-absolute hdt-inline-flex hdt-justify-center hdt-align-center">{{ block.settings.time }}</span>
+    {%- endif -%}
+    <div class="hdt-timeline-content hdt-relative">
+      {% content_for "blocks" %}
+    </div>
+    <div class="hdt-timeline-image hdt-radius hdt-oh">
+      {%- if block.settings.image != blank -%}
+        {%- assign image = block.settings.image -%}
+        {%- assign sizes = '(min-width: 1150px) calc(' | append: section.settings.content_width | append: 'px / 2 - 95px), (min-width: 768px) calc(100vw / 2 - 30px - 50px ), calc(100vw - 30px)'   -%}
+        {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '' , sizes: sizes, widths: "160,320,360,400,600,800,1000,1200,1400,1440,1920,2000,2400,2800,3600" }}
+      {%- else -%}
+        {%- liquid
+          capture current
+            cycle 1, 2 , 3
+          endcapture
+        -%}
+        {{ 'hero-apparel-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}  
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "t:sections.timeline.name",
+    "tag": null,
+    "blocks": [
+      {
+        "type": "heading"
+      },
+      {
+        "type": "text"
+      },
+      {
+        "type": "button"
+      },
+      {
+        "type": "spacer"
+      },
+      {
+        "type": "paragraph"
+      }
+    ],
+    "settings": [
+      {
+        "type": "text",
+        "id": "time",
+        "label": "t:sections.timeline.blocks.timeline_item.settings.time_label"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.timeline.blocks.timeline_item.settings.image"
+      },
+      {
+        "type": "select",
+        "id": "content_position",
+        "label": "t:sections.timeline.blocks.timeline_item.settings.content_position.label",
+        "options": [
+          {
+            "value": "start",
+            "label": "t:sections.timeline.blocks.timeline_item.settings.content_position.start"
+          },
+          {
+            "value": "end",
+            "label": "t:sections.timeline.blocks.timeline_item.settings.content_position.end"
+          }
+        ],
+        "default": "start"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.timeline.name",
+        "settings": {
+          "time": "1980",
+          "content_position": "end"
+        },
+        "blocks": [
+          {
+            "type": "heading",
+            "settings": {
+              "heading": "<h3><strong>PHASE 1</strong></h3>",
+              "heading_size": "base",
+              "font_size_heading_lg": 50,
+              "font_size_heading_md": 30,
+              "font_size_heading": 24,
+              "font_weight_heading": 600,
+              "letter_spacing_heading": 0
+            }
+          },
+          {
+            "type": "spacer",
+            "settings": {
+              "direction": false,
+              "space_lg": 8,
+              "space_md": 6,
+              "space": 6
+            }
+          },
+          {
+            "type": "heading",
+            "settings": {
+              "heading": "<h3>Inception and Brand Establishment</h3>",
+              "heading_size": "h3",
+              "font_size_heading_lg": 50,
+              "font_size_heading_md": 30,
+              "font_size_heading": 24,
+              "font_weight_heading": 600,
+              "letter_spacing_heading": 0
+            }
+          },
+          {
+            "type": "spacer",
+            "settings": {
+              "direction": false,
+              "space_lg": 10,
+              "space_md": 10,
+              "space": 10
+            }
+          },
+          {
+            "type": "text",
+            "settings": {
+              "text": "<p>Inception, in the context of brand establishment, refers to the initial phase of creating and introducing a brand to the market. It involves laying down the foundational elements that will define the brand's identity, values, and positioning in the minds of consumers.</p>",
+              "text_size": "base",
+              "font_size_text_lg": 16,
+              "font_size_text_md": 14,
+              "font_size_text": 14,
+              "font_weight_text": 400,
+              "letter_spacing_text": 0
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

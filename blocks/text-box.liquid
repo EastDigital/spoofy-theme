@@ -1,0 +1,273 @@
+{% liquid
+  assign effect = 'hdt-reveal="slide-in" timeline'
+  if section.id contains 'slideshow'
+    assign effect = 'reval'
+  endif   
+  if section.id contains 'footer'
+    assign effect = ''
+  endif   
+  
+%}
+<div {{ effect }} id="block-{{ block.id }}" class="hdt-text-box hdt-inline-flex hdt-text-warry hdt-rte {% if block.settings.hidden_br_mobile %} hdt-br-hidden{% endif %}{% if block.settings.hidden_on_mobile %} hdt-hide-mobile {% endif %} hdt-text-{{ block.settings.text_size }}" {{ block.shopify_attributes }} style="color: {{ block.settings.text_color }}; background-color: {{ block.settings.background_color }};padding: var(--spacing-{{ block.settings.padding_top_bottom }}) var(--spacing-{{ block.settings.padding_left_right }});border-radius: {{ block.settings.border_radius }}px;">
+  {%- assign now_y = 'now' | date: '%Y' -%}
+  {{ block.settings.text | replace: "[year]", now_y }}
+</div>
+{%- if block.settings.text_size == "custom" -%}
+  {%- style -%}
+    #block-{{ block.id }} {
+      --text-custom-lg: {{ block.settings.font_size_text_lg }}px; --text-custom-md: {{ block.settings.font_size_text_md }}px; --text-custom-mb: {{ block.settings.font_size_text }}px; --text-fw: {{ block.settings.font_weight_text }}; --text-ls: {{ block.settings.letter_spacing_text }}px; 
+    }
+  {%- endstyle -%}
+{%- endif -%}
+{% schema %}
+{
+  "name": "Text Box",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+      "info": "t:blocks.text.settings.content.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "hidden_br_mobile",
+      "label": "t:blocks.text.settings.hidden_br_mobile",
+      "default": false,
+      "visible_if": "{{ block.settings.text != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "hidden_on_mobile",
+      "label": "t:blocks.text.settings.hidden_on_mobile",
+      "default": false,
+      "visible_if": "{{ block.settings.text != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "t:settings_schema.typography.settings.font_size.label",
+      "options": [
+          {
+            "value": "xs",
+            "label": "t:settings_schema.typography.settings.font_size.xs"
+          },
+          {
+            "value": "sm",
+            "label": "t:settings_schema.typography.settings.font_size.sm"
+          },
+          {
+            "value": "base",
+            "label": "t:settings_schema.typography.settings.font_size.base"
+          },
+          {
+            "value": "lg",
+            "label": "t:settings_schema.typography.settings.font_size.lg"
+          },
+          {
+            "value": "xl",
+            "label": "t:settings_schema.typography.settings.font_size.xl"
+          },
+          {
+            "value": "2xl",
+            "label": "t:settings_schema.typography.settings.font_size.2xl"
+          },
+          {
+            "value": "4xl",
+            "label": "t:settings_schema.typography.settings.font_size.4xl"
+          },
+          {
+            "value": "custom",
+            "label": "t:settings_schema.typography.settings.font_size.custom"
+          }
+        ],
+      "default": "base",
+      "visible_if": "{{ block.settings.text != blank }}"
+    },
+   {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:blocks.text.text_color.label",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "padding_top_bottom",
+      "label": "Padding top and bottom",
+      "options": [
+        {
+          "value": "0-2",
+          "label": "2px"
+        },
+        {
+          "value": "0-4", 
+          "label": "4px"
+        },
+        {
+          "value": "0-6",
+          "label": "6px"
+        },
+        {
+          "value": "0-8",
+          "label": "8px"
+        },
+        {
+          "value": "1",
+          "label": "10px"
+        },
+        {
+          "value": "1-2",
+          "label": "12px"
+        },
+        {
+          "value": "1-4",
+          "label": "14px"
+        },
+        {
+          "value": "1-6",
+          "label": "16px"
+        },
+        {
+          "value": "1-8",
+          "label": "18px"
+        },
+        {
+          "value": "2",
+          "label": "20px"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "padding_left_right",
+      "label": "Padding left and right",
+      "options": [
+        {
+          "value": "0-2",
+          "label": "2px"
+        },
+        {
+          "value": "0-4",
+          "label": "4px"
+        },
+        {
+          "value": "0-6",
+          "label": "6px"
+        },
+        {
+          "value": "0-8",
+          "label": "8px"
+        },
+        {
+          "value": "1",
+          "label": "10px"
+        },
+        {
+          "value": "1-2",
+          "label": "12px"
+        },
+        {
+          "value": "1-4",
+          "label": "14px"
+        },
+        {
+          "value": "1-6",
+          "label": "16px"
+        },
+        {
+          "value": "1-8",
+          "label": "18px"
+        },
+        {
+          "value": "2",
+          "label": "20px"
+        }
+      ],
+      "default": "0-6"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+    },
+    {
+      "type": "header",
+      "content": "t:blocks.text.custom_size_options.label",
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_text_lg",
+      "min": 10,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.label",
+      "default": 16,
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_text_md",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.tablet_font_size",
+      "default": 14,
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_text",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.mobile_font_size",
+      "default": 14,
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_weight_text",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "label": "t:settings_schema.typography.settings.font_weight.label",
+      "default": 400,
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing_text",
+      "min": -10,
+      "max": 10,
+      "step": 0.2,
+      "label": "t:settings_schema.typography.settings.letter_spacing",
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text Box"
+    }
+  ]
+}
+{% endschema %}

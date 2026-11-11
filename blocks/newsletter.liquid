@@ -1,0 +1,79 @@
+<div class="hdt-newsletter-wrap hdt-block " style=" --width: {{ block.settings.form_width }}px; --margin_bottom:{{ block.settings.margin_bottom }}px;" {{ block.shopify_attributes }}>
+  {% render 'newsletter', button_lb: block.settings.button_lb, btn_fw: block.settings.btn_fw, form_id: block.id, agree_form: block.settings.agree_form, content: block.settings.content %}
+</div>
+{% schema %}
+  {
+    "name": "Newsletter",
+    "tag": null,
+    "settings": [
+      {
+        "type": "text",
+        "id": "button_lb",
+        "label": "t:sections.newsletter.settings.button_lb.label",
+        "default": "Subscribe",
+        "info": "t:sections.newsletter.settings.button_lb.info"
+      },
+      {
+        "type": "select",
+        "id": "btn_fw",
+        "label": "t:sections.all.button.settings.font_weight.label",
+        "options": [
+          {
+            "value": "normal",
+            "label": "t:sections.all.button.settings.font_weight.options.option_1"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.all.button.settings.font_weight.options.option_2"
+          },
+          {
+            "value": "semibold",
+            "label": "t:sections.all.button.settings.font_weight.options.option_3"
+          },
+          {
+            "value": "bold",
+            "label": "t:sections.all.button.settings.font_weight.options.option_4"
+          }
+        ],
+        "default": "normal"
+      },
+      {
+        "type": "range",
+        "id": "form_width",
+        "label": "t:sections.newsletter.settings.form_width",
+        "max": 800,
+        "min": 300,
+        "step": 5,
+        "unit": "px",
+        "default": 500
+      },
+      {
+        "type":"checkbox",
+        "id":"agree_form",
+        "label":"t:sections.newsletter.settings.agree_form.label",
+        "info": "t:sections.newsletter.settings.agree_form.info"
+      },
+      {
+        "type": "inline_richtext",
+        "id": "content",
+        "label": "t:sections.newsletter.settings.content.label",
+        "default": "I agree with the terms and conditions"
+      },
+      {
+        "type": "range",
+        "id": "margin_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.newsletter.settings.margin_bottom.label",
+        "default": 30
+      }
+    ],
+    "presets":[
+      {
+        "name":"Newsletter"
+      }
+    ]
+  }
+{% endschema %}

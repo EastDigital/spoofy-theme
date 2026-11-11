@@ -1,0 +1,100 @@
+{%- comment -%}
+  Renders a product card
+
+  Accepts:
+  - card_product: {Object} Product Liquid object (required)
+  - section_id: {String} The ID of the section that contains this card. (required)
+  - sizes: {String} a list sizes of image.
+  - class: {String} a list class.
+  - image_ratio: {String} Size of the product image card. Values are "square" and "portrait". Default is "square" (optional)
+  - show_vendor: {Boolean} Show the product vendor. Default: false
+  - show_rating: {Boolean} Show the product rating. Default: false
+  - color_list: {Array}
+  - size_list: {Array}
+
+  Usage:
+  {%- render 'card-product', card_product: product, show_vendor: section.settings.show_vendor -%}
+{%- endcomment -%}
+
+{%- liquid
+  unless product_url
+    assign product_url = card_product.url
+  endunless
+  assign featured_media = card_product.featured_media | default: settings.placeholder_img
+  assign color_count = 0
+  assign size_count = 0
+  
+  if card_product.has_only_default_variant == false and settings.color_mode != 'hide' or settings.size_mode != 'hide'
+     assign available_variants = card_product.variants | where: "available"
+     for option in card_product.options_with_values
+        assign name_downcase = option.name | downcase
+        if settings.color_mode != 'hide' and color_list contains name_downcase and color_count == 0
+          assign color_option_index = 'option' | append: forloop.index
+          assign color_variants = option.values
+          assign color_variants_avai = available_variants | map: color_option_index | uniq
+          if settings.color_type == 'all'
+            assign color_count = color_variants.size
+          else
+            if card_product.options_with_values.size == 1
+              assign color_variants = color_variants_avai
+            endif
+            assign color_count = color_variants_avai.size
+          endif
+        elsif settings.size_mode != 'hide' and size_list contains name_downcase and size_count == 0
+          assign size_option_index = 'option' | append: forloop.index
+          assign size_variants_avai = available_variants | map: size_option_index | uniq
+          assign size_variants = option.values
+          if settings.size_type == 'all'
+            assign size_count = size_variants.size
+          else
+            if card_product.options_with_values.size == 1
+              assign size_variants = size_variants_avai
+            endif
+            assign size_count = size_variants_avai.size
+          endif
+        endif
+     endfor
+  endif
+  -%}
+  
+  <hdt-card-product class="hdt-card-product {{ class }}{% if settings.show_ultra_btn == false %} hdt-no-ultra_btn{% endif %}{% if card_product.available == false %} hdt-pr-sold_out{% endif %}">
+    <div class="hdt-card-product__wrapper" calc-nav hdt-reveal="slide-in" timeline>
+      <div class="hdt-card-product__media hdt-relative hdt-oh">
+          {%- render 'card-product-media', card_product: card_product, product_url: product_url, sizes: sizes, image_ratio: image_ratio -%}
+        {%- render 'badges', product: card_product, use_variant: false -%}
+        <div class="hdt-product-btns hdt-pr-btns-group2 hdt-absolute">
+          {%- liquid
+            echo btn_wishlist_code | replace_first: '19041994', card_product.id | replace_first: 'handle_nt_94', card_product.handle
+            if settings.compare_mode != "0"
+              render 'btn-compare', product_id: card_product.id, product_handle: card_product.handle, class: 'hdt-pr_btn hdt-card-product__btn-compare', placement: 'top'
+            endif -%}
+          {%- if settings.show_quick_view %}{% render 'btn-quick-view', class: 'hdt-pr_btn', product: card_product, section_id: section_id, placement: 'top' %}{% endif -%}
+        </div>
+        {%- if card_product.metafields.theme.countdown.value != blank %}{% render 'countdown' with card_product.metafields.theme.countdown.value, class: "hdt-pr-countdown hdt-text-base hdt-font-semibold" -%}{%- endif -%}
+        {% render 'scrolling_badge', product: card_product %}
+      </div>
+      <div class="hdt-card-product__info hdt-card-align-{{ settings.pr_card_alignment }} hdt-relative">
+        {%- if settings.show_rating %}{% render 'hdt-pr-card-rating', product: card_product %}{% endif -%}
+        {%- liquid
+        if card_product.vendor.size > 0 and show_vendor
+          render 'vendor' with card_product.vendor, class: 'hdt-inline-block hdt-text-base hdt-font-normal'
+        endif -%}
+        <a data-pr-url href="{{ product_url }}" class="hdt-card-product__title hdt-text-{{ settings.pr_title_size }} hdt-font-{{ settings.pr_title_weight }} {% if settings.hdt_show_long_title == false %} hdt-line-clamp {% endif %}" data-instant>{{ card_product.title | escape }}</a>
+        {%- liquid
+          render 'card-price', product: card_product, show_volume_note: true, price_class: "hdt-text-base hdt-font-semibold"
+          if size_count > 0
+            render 'size-list', size_variants: size_variants, size_variants_avai: size_variants_avai, size_count: size_count
+          endif
+          if color_count > 0
+            render 'color-list', section_id: section_id, product: card_product, product_url: product_url, color_variants: color_variants, color_variants_avai: color_variants_avai, color_count: color_count, color_option_index: color_option_index, placement: 'top'
+          endif
+        -%}
+        {%- if settings.show_ultra_btn %}
+          <div class="hdt-product-btns hdt-pr-btns-group1">
+            {% render 'btn-ultra', class: 'hdt-pr_btn hdt-text-base hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn hdt-btn-solid', product: card_product, product_url: product_url, section_id: section_id, disable_sr_only: true, show_qty: settings.show_qty %}
+          </div>
+          
+        {% endif -%}
+      </div>
+    </div>
+  </hdt-card-product>

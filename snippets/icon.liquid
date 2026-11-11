@@ -1,0 +1,108 @@
+{%- capture class -%}{{ class }}hdt-icon hdt-icon-{{ icon | handle }}{%- endcapture -%}
+
+{%- case icon -%}
+  {%- when 'error' -%}
+    <svg aria-hidden="true" focusable="false" class="{{ class }}" width="15" height="15" viewBox="0 0 13 13">
+      <circle cx="6.5" cy="6.50049" r="5.5" stroke="white" stroke-width="2"></circle>
+      <circle cx="6.5" cy="6.5" r="5.5" fill="currentColor" stroke="currentColor" stroke-width="0.7"></circle>
+      <path d="M5.87413 3.52832L5.97439 7.57216H7.02713L7.12739 3.52832H5.87413ZM6.50076 9.66091C6.88091 9.66091 7.18169 9.37267 7.18169 9.00504C7.18169 8.63742 6.88091 8.34917 6.50076 8.34917C6.12061 8.34917 5.81982 8.63742 5.81982 9.00504C5.81982 9.37267 6.12061 9.66091 6.50076 9.66091Z" fill="white"></path>
+      <path d="M5.87413 3.17832H5.51535L5.52424 3.537L5.6245 7.58083L5.63296 7.92216H5.97439H7.02713H7.36856L7.37702 7.58083L7.47728 3.537L7.48617 3.17832H7.12739H5.87413ZM6.50076 10.0109C7.06121 10.0109 7.5317 9.57872 7.5317 9.00504C7.5317 8.43137 7.06121 7.99918 6.50076 7.99918C5.94031 7.99918 5.46982 8.43137 5.46982 9.00504C5.46982 9.57872 5.94031 10.0109 6.50076 10.0109Z" fill="white" stroke="currentColor" stroke-width="0.7">
+    </path></svg>
+  {%- when 'success' -%}
+    <svg aria-hidden="true" focusable="false" class="{{ class }}" width="15" height="15" viewBox="0 0 13 13">
+      <path d="M6.5 12.35C9.73087 12.35 12.35 9.73086 12.35 6.5C12.35 3.26913 9.73087 0.65 6.5 0.65C3.26913 0.65 0.65 3.26913 0.65 6.5C0.65 9.73086 3.26913 12.35 6.5 12.35Z" fill="#428445" stroke="white" stroke-width="0.7"/>
+      <path d="M5.53271 8.66357L9.25213 4.68197" stroke="white"/>
+      <path d="M4.10645 6.7688L6.13766 8.62553" stroke="white">
+    </svg>
+  {%- when 'close' -%}
+    <svg part="hdt-close-icon" class="{{ class }}" role="presentation" fill="none" focusable="false" width="{{ width | default: 16 }}" height="{{ height | default: 16 }}" viewBox="0 0 16 16" fill="none">
+      <path d="M16 1.4L14.6 0L8 6.6L1.4 0L0 1.4L6.6 8L0 14.6L1.4 16L8 9.4L14.6 16L16 14.6L9.4 8L16 1.4Z" fill="currentColor"/>
+    </svg>
+  {%- when 'share' -%}
+    <svg class="{{ class }}" role="presentation" focusable="false" width="17" height="20" fill="none"><path d="M12.75 12.188a3.42 3.42 0 0 0-2.273.86L7.29 11a3.443 3.443 0 0 0 0-2l3.188-2.047a3.424 3.424 0 1 0-1.016-1.575L6.272 7.422a3.437 3.437 0 1 0 0 5.152l3.189 2.051a3.438 3.438 0 1 0 3.289-2.437Zm0-9.375a1.563 1.563 0 1 1 0 3.125 1.563 1.563 0 0 1 0-3.125ZM4 11.563a1.562 1.562 0 1 1 0-3.125 1.562 1.562 0 0 1 0 3.125Zm8.75 5.625a1.563 1.563 0 1 1 0-3.126 1.563 1.563 0 0 1 0 3.126Z" fill="currentColor"/></svg>
+  {%- when 'caret' -%}
+    <svg aria-hidden="true" focusable="false" class="{{ class }}" width="10" viewBox="0 0 10 6"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor"></svg>
+  {%- when 'minus' -%}
+    <svg class="hdt-inline-block" width="9" height="1" viewBox="0 0 9 1" fill="currentColor"><path d="M9 1H5.14286H3.85714H0V1.50201e-05H3.85714L5.14286 0L9 1.50201e-05V1Z"/></svg>
+  {%- when 'plus' -%}
+    <svg class="hdt-inline-block"  width="9" height="9" viewBox="0 0 9 9" fill="currentColor"><path d="M9 5.14286H5.14286V9H3.85714V5.14286H0V3.85714H3.85714V0H5.14286V3.85714H9V5.14286Z"/></svg>
+  {%- when 'discount' -%}
+    <svg aria-hidden="true" focusable="false" class="{{ class }}" width="12" height="12" viewBox="0 0 12 12"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 0h3a2 2 0 012 2v3a1 1 0 01-.3.7l-6 6a1 1 0 01-1.4 0l-4-4a1 1 0 010-1.4l6-6A1 1 0 017 0zm2 2a1 1 0 102 0 1 1 0 00-2 0z" fill="currentColor"></svg>
+  {%- when 'list_view' -%}
+    <svg width="19" height="13" viewBox="0 0 19 13" fill="none">
+      <circle cx="2.4375" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="2.4375" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <rect x="7" y="2" width="12" height="1" fill="currentColor"/>
+      <rect x="7" y="10" width="12" height="1" fill="currentColor"/>
+    </svg>
+  {%- when 'grid_view_1' -%}
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+      <circle cx="8.4375" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="8.4375" cy="10.5625" r="2.4375" fill="currentColor"/>
+    </svg>
+  {%- when 'grid_view_2' -%}
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+      <circle cx="2.4375" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="10.5625" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="2.4375" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="10.5625" cy="10.5625" r="2.4375" fill="currentColor"/>
+    </svg>
+  {%- when 'grid_view_3' -%}
+    <svg width="22" height="13" viewBox="0 0 22 13" fill="none">
+      <circle cx="2.4375" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="10.5625" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="18.6875" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="2.4375" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="10.5625" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="18.6875" cy="10.5625" r="2.4375" fill="currentColor"/>
+    </svg>
+  {%- when 'grid_view_4' -%}
+    <svg width="30" height="13" viewBox="0 0 30 13" fill="none">
+      <circle cx="2.4375" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="10.5625" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="18.6875" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="26.8125" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="2.4375" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="10.5625" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="18.6875" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="26.8125" cy="10.5625" r="2.4375" fill="currentColor"/>
+    </svg>
+  {%- when 'grid_view_5' -%}
+    <svg width="38" height="13" viewBox="0 0 38 13" fill="none">
+      <circle cx="2.4375" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="10.5625" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="18.6875" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="26.8125" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="35.4375" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="2.4375" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="10.5625" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="18.6875" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="26.8125" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="35.4375" cy="10.5625" r="2.4375" fill="currentColor"/>
+    </svg>
+  {%- when 'grid_view_6' -%}
+    <svg width="46" height="13" viewBox="0 0 46 13" fill="none">
+      <circle cx="2.4375" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="10.5625" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="18.6875" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="26.8125" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="35.4375" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="43.4375" cy="2.4375" r="2.4375" fill="currentColor"/>
+      <circle cx="2.4375" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="10.5625" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="18.6875" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="26.8125" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="35.4375" cy="10.5625" r="2.4375" fill="currentColor"/>
+      <circle cx="43.4375" cy="10.5625" r="2.4375" fill="currentColor"/>
+    </svg>
+
+    {%- when 'zoom' -%}
+      <svg aria-hidden="true" focusable="false" class="{{ class }}" width="19" height="19" viewBox="0 0 19 19" fill="none">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M4.66724 7.93978C4.66655 7.66364 4.88984 7.43922 5.16598 7.43853L10.6996 7.42464C10.9758 7.42395 11.2002 7.64724 11.2009 7.92339C11.2016 8.19953 10.9783 8.42395 10.7021 8.42464L5.16849 8.43852C4.89235 8.43922 4.66793 8.21592 4.66724 7.93978Z" fill="currentColor"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.92576 4.66463C8.2019 4.66394 8.42632 4.88723 8.42702 5.16337L8.4409 10.697C8.44159 10.9732 8.2183 11.1976 7.94215 11.1983C7.66601 11.199 7.44159 10.9757 7.4409 10.6995L7.42702 5.16588C7.42633 4.88974 7.64962 4.66532 7.92576 4.66463Z" fill="currentColor"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.8324 3.03011C10.1255 0.323296 5.73693 0.323296 3.03011 3.03011C0.323296 5.73693 0.323296 10.1256 3.03011 12.8324C5.73693 15.5392 10.1255 15.5392 12.8324 12.8324C15.5392 10.1256 15.5392 5.73693 12.8324 3.03011ZM2.32301 2.32301C5.42035 -0.774336 10.4421 -0.774336 13.5395 2.32301C16.6101 5.39361 16.6366 10.3556 13.619 13.4588L18.2473 18.0871C18.4426 18.2824 18.4426 18.599 18.2473 18.7943C18.0521 18.9895 17.7355 18.9895 17.5402 18.7943L12.8778 14.1318C9.76383 16.6223 5.20839 16.4249 2.32301 13.5395C-0.774335 10.4421 -0.774335 5.42035 2.32301 2.32301Z" fill="currentColor"/>
+      </svg>
+    {%- when 'video_play' -%}
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M13.3005 9.60895L9.147 6.58968C9.07238 6.53528 8.98417 6.50258 8.89212 6.4952C8.80007 6.48783 8.70778 6.50606 8.62545 6.54788C8.54311 6.5897 8.47396 6.65348 8.42562 6.73216C8.37729 6.81084 8.35166 6.90137 8.35158 6.99371V13.0303C8.3513 13.1227 8.37672 13.2135 8.425 13.2924C8.47328 13.3713 8.54252 13.4352 8.62501 13.477C8.7075 13.5188 8.79998 13.5369 8.89215 13.5293C8.98432 13.5216 9.07255 13.4885 9.147 13.4336L13.3005 10.417C13.3647 10.371 13.417 10.3103 13.453 10.2401C13.4891 10.1698 13.5079 10.092 13.5079 10.013C13.5079 9.934 13.4891 9.85616 13.453 9.7859C13.417 9.71564 13.3647 9.65498 13.3005 9.60895Z" fill="currentColor"></path><path d="M10.0017 0C4.47699 0 0 4.47699 0 10.0017C0 15.5243 4.47699 20 10.0017 20C15.525 20 20.0027 15.5237 20.0027 10.0017C20.0033 4.47699 15.525 0 10.0017 0ZM10.0017 18.3313C5.40087 18.3313 1.67072 14.6031 1.67072 10.0017C1.67072 5.4022 5.40087 1.66938 10.0017 1.66938C14.6018 1.66938 18.3313 5.40154 18.3313 10.0017C18.3319 14.6031 14.6018 18.3313 10.0017 18.3313Z" fill="currentColor"></path></svg>
+    {%- when '3d-model' -%}<svg aria-hidden="true" focusable="false" class="{{ class }}" width="14" height="16.33" fill="none"viewBox="0 0 18 21"> <path d="M7.67998 20.629L1.28002 16.723C0.886205 16.4784 0.561675 16.1368 0.337572 15.731C0.113468 15.3251 -0.00274623 14.8686 -1.39464e-05 14.405V6.59497C-0.00238367 6.13167 0.113819 5.6755 0.33751 5.26978C0.561202 4.86405 0.884959 4.52227 1.278 4.27698L7.67796 0.377014C8.07524 0.131403 8.53292 0.000877102 8.99999 9.73346e-08C9.46678 -0.000129605 9.92446 0.129369 10.322 0.374024V0.374024L16.722 4.27399C17.1163 4.51985 17.4409 4.86287 17.6647 5.27014C17.8885 5.67742 18.0039 6.13529 18 6.59998V14.409C18.0026 14.8725 17.8864 15.3289 17.6625 15.7347C17.4386 16.1405 17.1145 16.4821 16.721 16.727L10.321 20.633C9.92264 20.8742 9.46565 21.0012 8.99999 21C8.53428 20.9998 8.07761 20.8714 7.67998 20.629V20.629ZM8.72398 2.078L2.32396 5.97803C2.22303 6.04453 2.14066 6.13551 2.08452 6.24255C2.02838 6.34959 2.00031 6.46919 2.00298 6.59003V14.4C2.00026 14.5205 2.02818 14.6396 2.08415 14.7463C2.14013 14.853 2.22233 14.9438 2.32298 15.01L7.99999 18.48V10.919C8.00113 10.5997 8.08851 10.2867 8.25292 10.0129C8.41732 9.73922 8.65267 9.51501 8.93401 9.36401L15.446 5.841L9.28001 2.08002C9.19614 2.02738 9.09901 1.99962 8.99999 2C8.90251 1.99972 8.8069 2.02674 8.72398 2.078V2.078Z" fill="currentColor"/></svg>
+{%- endcase -%}

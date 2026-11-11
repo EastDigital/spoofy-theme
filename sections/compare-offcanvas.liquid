@@ -1,0 +1,46 @@
+<!-- sections/compare-offcanvas.liquid -->
+<style>#drawerCompare{top:auto;height:auto}#drawerCompare::part(content){max-width:none}#drawerCompare::part(body){padding:var(--spacing-2-8) 0}#drawerCompare::part(close-button){width:var(--spacing-3);height:var(--spacing-3);position:absolute;left:auto;right:var(--spacing-3);top:var(--spacing-2);background:transparent;border:none;cursor:pointer;transition:0.3s color ease}.dir--rtl #drawerCompare::part(close-button){left:var(--spacing-3);right:auto}#drawerCompare .hdt-compare-head{flex:0 0 22%}#drawerCompare .hdt-compare-buttons{flex:0 0 15%}#drawerCompare .hdt-compare-products{flex:1 1 63%;overflow-x:auto}#drawerCompare .hdt-compare-buttons-wrap{margin-inline-start:auto;text-align:center}#drawerCompare .hdt-compare-products>div{flex:0 0 16.666%;padding:0 var(--spacing-1)}#drawerCompare .hdt-compare-head__title{font-size:var(--text-10xl)}#drawerCompare .hdt-compapre-button__view-page{min-width:14.7rem;min-height:47px}#drawerCompare .hdt-compapre-button__clear-all{margin-top:var(--spacing-2-4);margin-inline-start:0!important}#drawerCompare .hdt-compare-remove{width:2.5rem;height:2.5rem;background:rgb(var(--color-background));color:rgb(var(--color-foreground));position:absolute;top:var(--spacing-0-6);right:var(--spacing-0-6);z-index:1;transition:0.3s color ease}.dir--rtl #drawerCompare .hdt-compare-remove{left:var(--spacing-0-6);;right:auto}@media (max-width:1024px){.hdt-compare-list{flex-direction:column;max-height:100%;overflow-y:auto}#drawerCompare .hdt-compare-buttons,#drawerCompare .hdt-compare-head,#drawerCompare .hdt-compare-products{flex:0 0 100%;margin-bottom:20px;align-items:center}#drawerCompare .hdt-compare-buttons{margin-bottom:0;width:100%}#drawerCompare .hdt-compare-buttons-wrap{display:flex;gap:var(--spacing-1-4);justify-content:space-between;padding:0 var(--spacing-1-2);width:100%;margin:0}#drawerCompare .hdt-compare-products>div{flex:0 0 25%}#drawerCompare .hdt-compare-products{width:100%;overflow-x:auto;max-width:100%}#drawerCompare::part(body){padding:var(--spacing-2) 0}#drawerCompare::part(close-button){right:var(--spacing-2)}.dir--rtl #drawerCompare::part(close-button){left:var(--spacing-2)}}@media(max-width:767px){#drawerCompare .hdt-compare-head__title{font-size:var(--text-6xl)}#drawerCompare .hdt-compare-products>div{flex:0 0 33.333%;padding:0 var(--spacing-0-8)}}@media(max-width:575px){#drawerCompare .hdt-compare-products>div{flex:0 0 50%}}@media (-moz-touch-enabled:0),(hover:hover) and (min-width:1150px){#drawerCompare::part(close-button):hover,#drawerCompare .hdt-compare-remove:hover{color:rgb(var(--color-accent))}}</style>
+<hdt-drawer id="drawerCompare" class="hdt-drawer hdt-hidden hdt-bottom-0 hdt-left-0 hdt-right-0" effect="bottom" color-scheme="{{ settings.color_scheme_dialog }}">
+  <h3 slot="header" class="hdt-hidden"></h3>
+  <div class="hdt-container">
+    <div class="hdt-compare-list hdt-flex hdt-align-center">
+      <div slot="header" class="hdt-compare-head hdt-flex hdt-align-center">
+        <h3 class="hdt-compare-head__title">{{ 'compare_popup.title' | t }}</h3>
+      </div>
+      <offcanvas-compare class="hdt-compare-offcanvas hdt-compare-products hdt-flex hdt-current-scrollbar hdt-ratio--adapt_image">
+        {%- for product in search.results -%}
+          {%- assign image = product.featured_media | default: settings.placeholder_img -%}
+          <div class="hdt-compare-item-{{ product.id }}">
+            <div class="hdt-relative hdt-oh">
+              <hdt-compare role="button" class="hdt-compare-remove hdt-flex hdt-algin-center hdt-justify-center hdt-align-center hdt-radius-full" data-id="{{ product.id }}" data-handle="{{ product.handle }}" action="remove" remove-on-page>
+                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
+                  <path d="M8 0.7L7.3 0L4 3.3L0.7 0L0 0.7L3.3 4L0 7.3L0.7 8L4 4.7L7.3 8L8 7.3L4.7 4L8 0.7Z" fill="currentColor"/>
+                </svg>
+                <span class="sr-only">{{ 'compare_page.remove' | t }}</span>
+              </hdt-compare>
+              {%- if image != blank -%}
+                <a href="{{ product.url }}" class="hdt-compare-image hdt-block hdt-relative hdt-oh" style="--aspect-ratioapt:{{ image.aspect_ratio | default: 0.7777 }}">
+                  <div class="hdt-ratio">
+                    {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, sizes: '(max-width: 767px) 132px, 264px', widths: '132, 160, 380, 292, 584, 700, 800, 900, 1000, 1200, 1400, 1600' }}
+                  </div>
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </offcanvas-compare>
+      <div class="hdt-compare-buttons hdt-flex hdt-align-center">
+        <div class="hdt-compare-buttons-wrap">
+          <hdt-compare-a>
+            <a href="{{ routes.search_url }}/?view=compare" class="hdt-compapre-button__view-page hdt-btn hdt-text-base hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-solid hdt-font-semibold">{{ 'compare_popup.viewpage' | t }}</a>
+          </hdt-compare-a>
+          <div class="hdt-compapre-button__clear-all">
+            <hdt-clear-all class="hdt-btn hdt-text-base hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-link hdt-font-semibold" of-fn="compare">
+              {{ 'compare_popup.clear' | t }}
+            </hdt-clear-all>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</hdt-drawer>

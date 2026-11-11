@@ -1,0 +1,258 @@
+<!-- Accordion_inline.liquid -->
+{{ 'hdt-accordion.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  #shopify-section-{{ section.id }}{
+    --section-pt: {{ section.settings.padding_top }}px;
+    --section-pb: {{ section.settings.padding_bottom }}px; 
+    --section-prate: {{ section.settings.padding_rate }};
+  }
+{% endstyle %}
+<style>.hdt-main-accordion-inline{--cols:12}.hdt-accordion-inline .hdt-accordion-heading{grid-column:1 / 13;margin-bottom:10px}.hdt-accordion-inline .hdt-accordion-inline-content{grid-column:1 / 13}.hdt-accordion-inline .hdt-accordion-item:first-child summary{}@media(min-width:1150px){.hdt-accordion-inline .hdt-accordion-heading{grid-column:1 / 5;margin:0}.hdt-accordion-inline .hdt-accordion-inline-content{grid-column:5 / 13}.hdt-accordion-inline .hdt-accordion-item summary{padding:14px 0}.hdt-accordion-inline .hdt-accordion-item summary{font-size:var(--text-xl)}}</style>
+<div id="{{ section.id }}" class="hdt-section-spacing hdt-s-gradient" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %} hdt-text-uppercase-{{ section.settings.text_transform }}">
+    <div class="hdt-row-grid hdt-main-accordion-inline">
+      <div class="hdt-accordion-heading">
+        {%- if section.settings.top_heading != blank -%}
+          <{{ section.settings.heading_tag }} class="hdt-section-title hdt-title hdt-s-text hdt-{{ section.settings.heading_size }} " hdt-reveal="slide-in" timeline> {{ section.settings.top_heading }} </{{ section.settings.heading_tag }}>
+        {%- endif -%} 
+      </div>
+      <div class="hdt-accordion-inline-content" itemscope itemtype="https://schema.org/FAQPage">
+        {%- assign index = 0 -%}
+        {%- for block in section.blocks -%}
+            {%- if block.settings.title != blank and block.settings.content != blank -%}
+              <hdt-accordion class="hdt-contents" {{ block.shopify_attributes }}>
+                <details class="hdt-accordion-item" aria-expanded="{% if forloop.first %} true {% else %} false {% endif %}"  {% if index == 0 and section.settings.open_first %} open {% endif %} itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" hdt-reveal="slide-in" timeline>
+                  {%- if block.settings.title != blank -%}
+                    <summary class="hdt-flex hdt-justify-between hdt-align-center hdt-text-lg hdt-font-medium" aria-expanded="{% if index == 0 and section.settings.open_first %}true{% else %}false{% endif %}">
+                      <span itemprop="name">{{ block.settings.title }}</span> 
+                      {%- if section.settings.accordion_icon == "1" -%} 
+                        <svg class="hdt-accordion-icon" xmlns="http://www.w3.org/2000/svg" width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M-2.40413e-07 5.5L5.5 -2.40413e-07L11 5.5L10.0237 6.47625L5.5 1.9525L0.976249 6.47625L-2.40413e-07 5.5Z" fill="currentColor"/></svg>
+                      {%- else -%}
+                        <span class="hdt-accordion-icon">
+                          <svg class="hdt-icon-plus" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M12 6.85714H6.85714V12H5.14286V6.85714H0V5.14286H5.14286V0H6.85714V5.14286H12V6.85714Z" fill="currentColor"/>
+                          </svg>
+                          <svg class="hdt-icon-minus" width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="12" height="2" fill="currentColor"/>
+                          </svg>
+                        </span>
+                      {%- endif -%}
+                    </summary>
+                  {%- endif -%}
+                  {%- if block.settings.content != blank or block.settings.content_richtext != blank -%}
+                    <div id="#{{ block.id }}-item" class="hdt-accordion-content hdt-text-base hdt-font-normal" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer" hdt-reveal="slide-in" timeline>
+                      <div itemprop="text">
+                        {{ block.settings.content }}{{ block.settings.content_richtext }}
+                      </div>
+                    </div>
+                  {%- endif -%}
+                </details>
+              </hdt-accordion>
+            {%- endif -%}
+            {%- assign index = 1 -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.accordion.name2",
+  "tag": "section",
+  "class": "hdt-section hdt-accordion hdt-accordion-inline",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "top_heading",
+      "label": "Accordion item heading",
+      "default": "Discovery all new items"
+    },
+    {
+      "type": "select",
+      "id": "heading_tag",
+      "label": "t:sections.title.settings.heading_tag.label",
+      "default": "h3",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.title.settings.heading_tag.options_2.label"
+        },
+        {
+          "value": "h3",
+          "label": "t:sections.title.settings.heading_tag.options_3.label"
+        },
+        {
+          "value": "h4",
+          "label": "t:sections.title.settings.heading_tag.options_4.label"
+        },
+        {
+          "value": "h5",
+          "label": "t:sections.title.settings.heading_tag.options_5.label"
+        },
+        {
+          "value": "h6",
+          "label": "t:sections.title.settings.heading_tag.options_6.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h5",
+          "label": "t:sections.all.heading.heading_size.options.medium"
+        },
+        {
+          "value": "h4",
+          "label": "t:sections.all.heading.heading_size.options.large"
+        }
+      ],
+      "label": "t:settings_schema.heading.settings.label",
+      "default": "h4"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section_general_options"
+    },
+    {
+      "type": "select",
+      "id": "accordion_icon",
+      "label": "t:sections.accordion.settings.accordion_icon.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.accordion.settings.accordion_icon.option_1.label"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.accordion.settings.accordion_icon.option_2.label"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first",
+      "label": "t:sections.accordion.settings.open_first",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section_layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accordion_item",
+      "name": "t:sections.accordion.blocks.accordion_item.label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.accordion.blocks.accordion_item.title"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "t:sections.accordion.blocks.accordion_item.content"
+        },
+        {
+          "type": "richtext",
+          "id": "content_richtext",
+          "label": "t:sections.accordion.blocks.accordion_item.content"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.accordion.name2",
+      "category": "t:sections_categories.05_section.name",
+      "blocks": [
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Pellentesque habitant morbi tristique senectus et netus?",
+            "content": "The perfect way to enjoy brewing tea on low hanging fruit to identify. Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. For me, the most important part of improving at photography has been sharing it. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Pellentesque habitant morbi tristique senectus et netus?",
+            "content": "The perfect way to enjoy brewing tea on low hanging fruit to identify. Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. For me, the most important part of improving at photography has been sharing it. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Pellentesque habitant morbi tristique senectus et netus?",
+            "content": "The perfect way to enjoy brewing tea on low hanging fruit to identify. Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. For me, the most important part of improving at photography has been sharing it. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+          }
+        },
+        {
+          "type": "accordion_item",
+          "settings": {
+            "title": "Pellentesque habitant morbi tristique senectus et netus?",
+            "content": "The perfect way to enjoy brewing tea on low hanging fruit to identify. Duis autem vel eum iriure dolor in hendrerit vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. For me, the most important part of improving at photography has been sharing it. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

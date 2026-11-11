@@ -1,0 +1,171 @@
+{%- comment -%}
+  Renders product variant options
+
+  Accepts:
+  - product: {Object} product object.
+  - option: {Object} current product_option object.
+  - block: {Object} block object.
+  - product_form_id: {String} Id of the product form to which the variant picker is associated.
+  - picker_type: {String} a picker type
+  - hide_sold_out
+  - color_option_index
+  - un_no_pick
+  - selected_value
+
+  Usage:
+  {%- render 'product-variant-options', product: product, option: option, block: block -%}
+{%- endcomment -%}
+{%- liquid
+  assign color_picker_type = block.settings.color_picker_type
+  if option_type == 'color' or option_type == 'color_rounded'
+    assign color_white = 'products.theme_settings.color_white' | t | downcase | strip
+    if color_picker_type contains 'color' or color_picker_type == 'image' or color_picker_type == 'image_rounded'
+    assign colors = shop.metafields.ecomrise.colors.value
+    assign color_values = shop.metaobjects.theme_swatch.values | first
+    assign colors2 = color_values.colors.value
+    assign use_style_color = true
+    endif
+  else
+    assign use_style_color = false
+  endif
+  -%}
+
+  {%- for value in option.values -%}
+
+    {%- liquid
+    assign option_unavailable = true
+    assign option_soldout = true
+    case option.position
+      when 1
+        if variants_option1_arr contains value
+          assign option_unavailable = false
+        endif
+        if variants_option1_available_arr contains value
+          assign option_soldout = false
+        endif
+      when 2
+        if variants_option2_arr contains value
+          assign option_unavailable = false
+        endif
+        if variants_option2_available_arr contains value
+          assign option_soldout = false
+        endif
+      when 3
+        if variants_option3_arr contains value
+          assign option_unavailable = false
+        endif
+        if variants_option3_available_arr contains value
+          assign option_soldout = false
+        endif
+    endcase
+    -%}
+
+    {%- if option_type == 'color' or option_type == 'color_rounded' -%}
+      {%- liquid
+      if use_style_color
+        assign color_downcase = value | downcase
+        assign color_handle = value | handle
+        assign color_obj = colors[color_handle] | default: colors2[color_handle]
+        assign color_style_inline = ''
+        if color_picker_type == 'image' or color_picker_type == 'image_rounded'
+          assign variants_has_color = product.variants | where: color_option_index, value
+          assign variant_first_color = variants_has_color | first
+          if variant_first_color.featured_image
+            assign variant_first_image = variant_first_color
+          else
+            assign variant_first_image = variants_has_color | where: 'featured_image' | first
+          endif
+          assign variant_image = variant_first_image.featured_image
+        else
+          assign variant_image = nil
+        endif
+        assign image = variant_image | default: value.swatch.image | default: images[color_obj.imageName]
+        if image != blank
+          assign color_image = image | image_url: width: 90
+          assign color_image_style = '--hdt-bg-image: url(' | append: color_image | append: ');'
+        else
+          assign color_image_style = nil
+          if value.swatch.color
+            assign color_style_inline = '--hdt-bg-color: ' | append: value.swatch.color | append: ';'
+          else
+            assign color_style_inline = color_obj.colorsCSS
+          endif
+        endif
+      endif
+      -%}
+      {%- capture color_style -%}{%- if use_style_color and color_image_style or color_style_inline.size > 0 %} style="{{ color_image_style }}{{ color_style_inline }}"{% endif -%}{%- endcapture -%}
+
+      {%- if color_picker_type == 'color' or color_picker_type == 'color_rounded' -%}
+        <input autocomplete="off" is-value type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" name="{{ option.name | escape }}" value="{{ value | escape }}" form="{{ product_form_id }}"{% if selected_value == value and un_no_pick %} checked{% endif %} class="sr-only {% if option_unavailable %}is-unavailable{% elsif option_soldout %}is-disabled{% endif %}">
+        <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="hdt-product-form_value is-type-color">
+          <hdt-tooltip inner>
+            <span class="hdt-form-color-pattern {% if color_white == color_downcase %} hdt-bg-color-white{% endif %}" {{ color_style }}></span>
+            {%- unless hide_sold_out %}<span class="sr-only">{{ 'products.product.variant_sold_out' | t }}</span>{% endunless -%}
+            <span class="hdt-form-color-name sr-only">{{- value | escape -}}</span>
+          </hdt-tooltip>
+        </label>
+      {%- elsif color_picker_type == 'image' or color_picker_type == 'image_rounded' -%}
+        <input autocomplete="off" is-value type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" name="{{ option.name | escape }}" value="{{ value | escape }}" form="{{ product_form_id }}"{% if selected_value == value and un_no_pick %} checked{% endif %} class="sr-only {% if option_unavailable %}is-unavailable{% elsif option_soldout %}is-disabled{% endif %}">
+        {%- if variant_image != blank -%}
+          <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="hdt-product-form_value hdt-product-form_value_has-image is-type-color{% if color_white == color_downcase %} hdt-bg-color-white{% endif %}">
+            <hdt-tooltip inner>
+              {{ image | image_url: width: 160 | image_tag: widths: '50, 100, 160', loading: 'lazy' }}
+              {%- unless hide_sold_out %}<span class="sr-only">{{ 'products.product.variant_sold_out' | t }}</span>{% endunless -%}
+              <span class="hdt-form-color-name sr-only">{{- value | escape -}}</span>
+            </hdt-tooltip>
+          </label>
+        {%- else -%}
+          <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="hdt-product-form_value is-type-color">
+            <hdt-tooltip inner>
+              <span class="hdt-form-color-pattern {% if color_white == color_downcase %} hdt-bg-color-white{% endif %}" {{ color_style }}></span>
+              {%- unless hide_sold_out %}<span class="sr-only">{{ 'products.product.variant_sold_out' | t }}</span>{% endunless -%}
+              <span class="hdt-form-color-name sr-only">{{- value | escape -}}</span>
+            </hdt-tooltip>
+          </label>
+        {%- endif -%}
+      {%- elsif color_picker_type == 'radio_variant' or color_picker_type == 'radio_full' -%}
+        <div class="hdt-swatch__item hdt-flex hdt-align-center{% if option_unavailable %} is-unavailable{% endif %}">
+          <input autocomplete="off" is-value type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" name="{{ option.name | escape }}" value="{{ value | escape }}" form="{{ product_form_id }}"{% if selected_value == value and un_no_pick %} checked{% endif %} class="{% if option_soldout %}is-disabled{% endif %}">
+          <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="hdt-product-form_value is-type-{{ color_picker_type }}">
+            {%- unless hide_sold_out %}<span class="sr-only">{{ 'products.product.variant_sold_out' | t }}</span>{% endunless -%}
+            <span class="hdt-form-color-name">{{- value | escape -}}</span>
+          </label>
+        </div>
+      {%- elsif color_picker_type contains 'dropdown' -%}
+        <button type="button" role="option" value="{{ value | escape }}" aria-selected="{% if selected_value == value and un_no_pick %}true{% else %}false{% endif %}" class="hdt-product-form_value is-type-{{ color_picker_type }} {% if option_unavailable %}is-unavailable{% elsif option_soldout %}is-disabled{% endif %}">
+          <span class="hdt-block-swatch__color{% if color_white == color_downcase %} hdt-bg-color-white{% endif %}" {{ color_style }}></span>
+          <span class="hdt-form-color-name">{{- value | escape -}}</span>
+        </button>
+      {%- else -%}
+        <input autocomplete="off" is-value type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" name="{{ option.name | escape }}" value="{{ value | escape }}" form="{{ product_form_id }}"{% if selected_value == value and un_no_pick %} checked{% endif %} class="sr-only {% if option_unavailable %}is-unavailable{% elsif option_soldout %}is-disabled{% endif %}">
+        <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="hdt-product-form_value is-type-{{ color_picker_type }}">
+          {%- unless hide_sold_out %}<span class="sr-only">{{ 'products.product.variant_sold_out' | t }}</span>{% endunless -%}
+          <span class="hdt-block-swatch__color{% if color_white == color_downcase %} hdt-bg-color-white{% endif %}" {{ color_style }}></span>
+          <span class="hdt-form-color-name">{{- value | escape -}}</span>
+        </label>
+      {%- endif -%}
+    {%- elsif block.settings.picker_type == 'radio_variant' or block.settings.picker_type == 'radio_full' -%}
+      <div class="hdt-selector__item hdt-flex hdt-align-center{% if option_unavailable %} is-unavailable{% endif %}">
+        <input autocomplete="off" is-value type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" name="{{ option.name | escape }}" value="{{ value | escape }}" form="{{ product_form_id }}"{% if selected_value == value and un_no_pick %} checked{% endif %} class="{% if option_soldout %}is-disabled{% endif %}">
+        <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="hdt-product-form_value is-type-{{ block.settings.picker_type }}">
+          {%- unless hide_sold_out %}<span class="sr-only">{{ 'products.product.variant_sold_out' | t }}</span>{% endunless -%}
+          <span class="hdt-form-color-name">{{- value | escape -}}</span>
+        </label>
+      </div>
+    {%- elsif block.settings.picker_type == 'circle'-%}
+      <input autocomplete="off" is-value type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" name="{{ option.name | escape }}" value="{{ value | escape }}" form="{{ product_form_id }}"{% if selected_value == value and un_no_pick %} checked{% endif %} class="sr-only {% if option_unavailable %}is-unavailable{% elsif option_soldout %}is-disabled{% endif %}">
+      <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="hdt-product-form_value  is-type-circle">
+        {%- unless hide_sold_out %}<span class="sr-only">{{ 'products.product.variant_sold_out' | t }}</span>{% endunless -%}
+        {{- value | escape -}}
+      </label>
+    {%- elsif block.settings.picker_type == 'dropdown' -%}
+      <button type="button" role="option" value="{{ value | escape }}" aria-selected="{% if selected_value == value and un_no_pick %}true{% else %}false{% endif %}"{% if option_soldout or option_unavailable %} class="{% if option_unavailable %}is-unavailable{% else %}is-disabled{% endif %}"{% endif %}>{{ value }}</button>
+    {%- else -%}
+      <input autocomplete="off" is-value type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" name="{{ option.name | escape }}" value="{{ value | escape }}" form="{{ product_form_id }}"{% if selected_value == value and un_no_pick %} checked{% endif %} class="sr-only {% if option_unavailable %}is-unavailable{% elsif option_soldout %}is-disabled{% endif %}">
+      <label for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}" class="hdt-product-form_value  is-type-block">
+        {%- unless hide_sold_out %}<span class="sr-only">{{ 'products.product.variant_sold_out' | t }}</span>{% endunless -%}
+        {{- value | escape -}}
+      </label>
+    {%- endif -%}
+
+  {%- endfor -%}

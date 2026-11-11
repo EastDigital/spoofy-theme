@@ -1,0 +1,136 @@
+{%- liquid
+  assign collection = closest.collection
+  assign image = block.settings.image | default: collection.metafields.theme.featured_image_collection.value | default: collection.image | default: collection.products.first.featured_image
+  assign title = block.settings.title | default: collection.title
+  assign collection_link = block.settings.collection_link | default: collection.url
+-%}
+
+{%- case collection_des -%}
+  {%- when '1' -%}
+    <div class="hdt-collection-item hdt-collection-style{{ collection_des }}" {{ block.shopify_attributes }}>
+      <div class="hdt-collection-inner hdt-relative hdt-oh hdt-grid" hdt-reveal="slide-in" timeline>
+        <div class="hdt-collection-img" style="--aspect-ratioapt: {{ image.aspect_ratio | default: 1.2 }};">
+          <span class="hdt-ratio" calc-nav>
+            {%- if image != blank -%}
+              {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '' , sizes: sizes, widths: "160,320,360,400,600,800,1000,1200,1400,1440,1920,2000,2400,2800,3600" }}
+            {%- else -%}
+              {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'hdt-placeholder-svg' }}  
+            {%- endif -%}
+          </span>
+          <a data-pr-href class="hdt-full-width-link" href="{{ collection_link }}"></a>
+        </div>
+        {%- if title != blank -%}
+          <div class="hdt-collection-content hdt-absolute hdt-place-self-{{ content_position }}">
+            <a class="hdt-collection-title hdt-truncate hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-{{ content_size }} hdt-font-{{ content_weight }}" href="{{ collection_link }}">
+              <span class="hdt-collection-title-text hdt-truncate">{{ title }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.07692 10L0 8.92308L7.38462 1.53846H0.769231V0H10V9.23077H8.46154V2.61538L1.07692 10Z" fill="currentColor"/></svg>
+            </a>
+          </div>
+        {%- endif -%}
+      </div> 
+    </div>
+  {%- when '2' -%}
+    {%- liquid
+      assign count = collection.all_products_count | default: 0
+    -%}
+    <div class="hdt-collection-item hdt-collection-style{{ collection_des }}" {{ block.shopify_attributes }}>
+      <div class="hdt-collection-inner hdt-relative hdt-oh hdt-grid" hdt-reveal="slide-in" timeline>
+        <div class="hdt-collection-img hdt-ratio hdt-relative" style="--aspect-ratioapt: {{ image.aspect_ratio | default: 1.2 }};" calc-nav>
+          {%- if image != blank -%}
+            {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '' , sizes: sizes, widths: "160,320,360,400,600,800,1000,1200,1400,1440,1920,2000,2400,2800,3600" }}
+          {%- else -%}
+            {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'hdt-placeholder-svg' }}  
+          {%- endif -%}
+          <a data-pr-href class="hdt-full-width-link" href="{{ collection_link }}"></a>
+        </div>
+        {%- if title != blank -%}
+          <div class="hdt-collection-content hdt-absolute hdt-top-0 hdt-bottom-0 hdt-flex hdt-flex-col hdt-justify-between hdt-place-self-{{ content_position }}">
+            <div class="hdt-collection-top-content">
+              <a class="hdt-collection-title hdt-truncate hdt-inline-flex hdt-align-center hdt-text-{{ content_size }} hdt-font-{{ content_weight }}" href="{{ collection_link }}"><span class="hdt-collection-title-text hdt-truncate">{{ title }}</span></a>
+              <div class="hdt-collection-count hdt-text-base hdt-font-normal"><span>{{ 'sections.collection_list.items_count' | t : count: count }} </span></div>
+            </div>
+            {%- if collection_link != blank -%}
+              <div class="hdt-collection-bottom-content">
+                <a href="{{ collection_link }}" class="hdt-collection-link hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-base hdt-font-semibold">
+                  <span>{{ 'sections.collection_list.button_text.style2' | t }}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.07692 10L0 8.92308L7.38462 1.53846H0.769231V0H10V9.23077H8.46154V2.61538L1.07692 10Z" fill="currentColor"/></svg>
+                </a>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div> 
+    </div>
+  {%- when '3' or '4' or '5' or '6' or '7' or '8' -%}
+    {%- liquid
+      assign count = collection.all_products_count | default: 0
+    -%}
+    <div class="hdt-collection-item hdt-collection-style{{ collection_des }}" {{ block.shopify_attributes }}>
+      <div class="hdt-collection-inner" {% if collection_des == '6' %}calc-nav{% endif %} hdt-reveal="slide-in" timeline>
+        <div class="hdt-collection-img hdt-relative hdt-oh hdt-grid" {% if collection_des != '6' %}calc-nav{% endif %} style="--aspect-ratioapt: {{ image.aspect_ratio | default: 1.2 }};">
+          <span class="hdt-ratio">
+            {%- if image != blank -%}
+              {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '' , sizes: sizes, widths: "160,320,360,400,600,800,1000,1200,1400,1440,1920,2000,2400,2800,3600" }}
+            {%- else -%}
+              {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'hdt-placeholder-svg' }}  
+            {%- endif -%}
+          </span>
+          <a data-pr-href class="hdt-full-width-link" href="{{ collection_link }}"></a>
+          {%- if collection_link != blank and collection_des == '3' -%}
+            <a href="{{ collection_link }}" class="hdt-collection-link hdt-inline-flex hdt-align-center hdt-justify-center hdt-radius-full hdt-absolute hdt-place-self-{{ content_position }}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.07692 10L0 8.92308L7.38462 1.53846H0.769231V0H10V9.23077H8.46154V2.61538L1.07692 10Z" fill="currentColor"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+        {%- if title != blank -%}
+          <div class="hdt-collection-content hdt-text-{{ content_position }}">
+            <a class="hdt-collection-title hdt-truncate hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-{{ content_size }} hdt-font-{{ content_weight }}" href="{{ collection_link }}">
+              <span class="hdt-collection-title-text hdt-truncate">{{ title }}</span>
+            </a>
+            {%- if collection_des == '3' or collection_des == '4' or collection_des == '5' -%}
+              <div class="hdt-collection-count hdt-text-base hdt-font-normal"><span>{{ 'sections.collection_list.items_count' | t : count: count }} </span></div>
+            {%- endif -%}
+            {%- if collection_des == '8' and collection.description != blank -%}
+              <p class="hdt-collection-description hdt-text-base hdt-font-normal hdt-rte">{{ collection.description | strip_html }}</p>
+            {%- endif -%}
+            {%- if collection_link != blank and collection_des == '8' -%}
+              <div class="hdt-collection-bottom-content">
+                <a href="{{ collection_link }}" class="hdt-collection-link hdt-relative hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-base hdt-font-semibold">
+                  <span>{{ 'sections.collection_list.button_text.style8' | t }}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.07692 10L0 8.92308L7.38462 1.53846H0.769231V0H10V9.23077H8.46154V2.61538L1.07692 10Z" fill="currentColor"/></svg>
+                </a>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div> 
+    </div>
+{%- endcase -%}
+
+
+{% schema %}
+{
+  "name": "t:sections.collection_list.blocks.collection_item",
+  "tag": null,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.collection_list.blocks.image",
+      "info": "t:sections.collection_list.blocks.image_info"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.collection_list.blocks.title",
+      "info": "t:sections.collection_list.blocks.title_info",
+    },
+    {
+      "type": "url",
+      "id": "collection_link",
+      "label": "t:sections.collection_list.blocks.link",
+      "info": "t:sections.collection_list.blocks.link_info"
+    }
+  ]
+}
+{% endschema %}

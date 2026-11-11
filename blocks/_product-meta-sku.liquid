@@ -1,0 +1,30 @@
+{%- liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  if product == blank 
+    continue
+  endif
+  if settings.pick_mode == 'no' and product.variants.size > 1
+    assign selected_variant = product.selected_variant
+  elsif settings.pick_mode == 'first' and settings.hide_sold_out == false
+    assign selected_variant = product.selected_variant | default: product.variants.first
+  else
+    assign selected_variant = product.selected_or_first_available_variant
+  endif
+  assign product_form_id = 'product-form-' | append: section.id | append: product.id 
+-%}
+<hdt-variant-live is="sku" form="{{ product_form_id }}"{% if selected_variant.sku == '' %} hidden{% endif %} class="hdt-sku-wrapper hdt-product__meta-item hdt-s-text">{{ 'products.product.sku' | t }} <span update-value>{{ selected_variant.sku }}</span></hdt-variant-live>
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.meta.settings.show_sku.label",
+  "tag": null,
+  "settings": [
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.meta.settings.show_sku.label" ,
+    }
+  ]
+}
+{% endschema %}

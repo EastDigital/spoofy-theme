@@ -1,0 +1,52 @@
+{%- liquid
+  assign featured_media = card_product.featured_media | default: settings.placeholder_img
+-%}
+<hdt-product-card-media class="hdt-contents">
+  <a data-pr-url href="{{ product_url }}" data-instant{% if product_des != "pr_discount1" %} calc-nav{% endif %} class="hdt-card-product__media-wrapp hdt-ratio"{% if image_ratio == 'adapt_image' %} style="--aspect-ratioapt: {{ featured_media.aspect_ratio | default: '127.7777778%' }}"{% endif %}>
+  {%- if featured_media -%}
+    {%- if featured_media.media_type == 'video' -%}
+    <hdt-video-player autoplay id="media-{{ section.id }}-{{ card_product.id }}" main-media>
+      {{- card_product.featured_media | video_tag: image_size: '1500x', playsinline: true, muted: true, loop: true, controls: false, preload: 'metadata' -}}
+    </hdt-video-player>
+    {% elsif featured_media.media_type == 'external_video' %}
+      <hdt-video-player type="external_video" host="{{ featured_media.host }}" autoplay id="media-{{ section.id }}-{{ card_product.id }}" main-media>
+        {% comment %} {{ featured_media.preview_image | image_url: width: 1946 | image_tag: loading: lazy, sizes: sizes, widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946' }} {% endcomment %}
+        <template>
+          {%- liquid
+          if featured_media.host == 'youtube'
+            echo featured_media | external_video_url: autoplay: autoplay, loop: loop, mute: mute, controls: false , playlist: featured_media.external_id | external_video_tag
+          else
+            echo featured_media | external_video_url: autoplay: autoplay, loop: loop, mute: mute, controls: false | external_video_tag
+          endif
+          -%}
+        </template>
+      </hdt-video-player>
+    {%- else -%}
+      {{ featured_media | image_url: width: featured_media.width | image_tag: loading: 'lazy', sizes: sizes, widths: '165, 360, 533, 668, 720, 940', data-widths: '[165, 360, 533, 668, 720, 940]', class: 'hdt-card-product__media--main' }}
+    {%- endif -%}
+    {% if card_product.media[1] != null and settings.show_secondary_image %}
+      {%  assign next_media = card_product.media[featured_media.position] | default: card_product.media[1] %}
+      {%- if next_media.media_type == 'video' -%}
+        <hdt-video-player id="media-{{ section.id }}-{{ card_product.id }}-second" second-media>
+          {{- next_media | video_tag: image_size: '1500x', playsinline: true, muted: true, loop: true, controls: false, preload: 'metadata', class: 'hdt-card-product__media--hover' -}}
+        </hdt-video-player>
+      {% elsif next_media.media_type == 'external_video' %}
+        <hdt-video-player type="external_video" host="{{ next_media.host }}" autoplay id="media-{{ section.id }}-{{ card_product.id }}" second-media>
+          {% comment %} {{ next_media.preview_image | image_url: width: 1946 | image_tag: loading: lazy, sizes: sizes, widths: '246, 493, 600, 713, 823, 990, 1100, 1206, 1346, 1426, 1646, 1946' }} {% endcomment %}
+          <template>
+            {%- liquid
+            if next_media.host == 'youtube'
+              echo next_media | external_video_url: autoplay: autoplay, loop: loop, mute: mute, controls: false , playlist: next_media.external_id | external_video_tag: class: 'hdt-card-product__media--hover'
+            else
+              echo next_media | external_video_url: autoplay: autoplay, loop: loop, mute: mute, controls: false | external_video_tag: class: 'hdt-card-product__media--hover'
+            endif
+            -%}
+          </template>
+        </hdt-video-player>
+      {%- else -%}
+          {{ next_media | image_url: width: next_media.width | image_tag: loading: 'lazy', sizes: sizes, widths: '165, 360, 533, 668, 720, 940', class: 'hdt-card-product__media--hover' }}
+      {%- endif -%}
+    {% endif %}
+  {%- endif -%}
+  </a>
+</hdt-product-card-media>

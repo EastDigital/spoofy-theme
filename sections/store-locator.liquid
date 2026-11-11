@@ -1,0 +1,308 @@
+<!-- Store-locator.liquid -->
+<style>
+  .hdt-store-locator .hdt-store-list-wrap {
+    position: relative;
+  }
+  .hdt-store-locator .hdt-store-list {
+    gap: 15px;
+  }
+  .hdt-store-locator .hdt-store-list .hdt-store-item {
+    padding-top: 18px;
+    padding-bottom: 20px;
+    padding-inline-start: 15px;
+    padding-inline-end: 15px;
+    background-color: rgb(var(--color-button-text));
+    color: rgb(var(--color-button));
+    border: solid 1px rgb(var(--color-line-border));
+    border-radius: var(--radius);
+  }
+  .hdt-store-locator .hdt-map-inner {
+    border-radius: var(--radius);
+  }
+  .hdt-store-locator .hdt-map-inner :where(iframe) {
+    width: 100%;
+  }
+  .hdt-store-locator .hdt-store-list .hdt-store-item[aria-current='true'] {
+    color: rgb(var(--color-button-text));
+    background-color: rgb(var(--color-button));
+    border-color: rgb(var(--color-button));
+  }
+  .hdt-store-locator .hdt-store-title {
+    color: inherit;
+    transition: 0.4s ease 0s;
+    line-height: var(--font-heading-line-height);
+    margin-bottom: 17px;
+    font-size: 2rem;
+  }
+  .hdt-store-locator .hdt-store-title svg {
+    scroll-margin-inline-end: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0);
+    z-index: 1;
+    margin: auto;
+    transition: 0.4s ease 0s;
+  }
+  .hdt-store-locator .hdt-store-info {
+    line-height: var(--font-body-line-height);
+  }
+  .hdt-store-locator .hdt-store-info > div {
+    word-wrap: break-word;
+  }
+  .hdt-store-locator .hdt-store-list .hdt-store-item[aria-current='false'] .hdt-store-info > span {
+    color: rgb(var(--color-foreground));
+  }
+  .hdt-store-locator .hdt-store-list .hdt-store-item[aria-current='false'] .hdt-store-info > div {
+    color: rgb(var(--color-foreground2));
+  }
+  .hdt-store-locator .hdt-store-list .hdt-store-item[aria-current='true'] .hdt-store-title {
+    padding-inline-start: 26px;
+  }
+  .hdt-store-locator .hdt-store-list .hdt-store-item[aria-current='true'] .hdt-store-title svg {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+  }
+  .hdt-store-map * {
+    border-radius: 1rem;
+  }
+  @media (min-width: 768px) {
+    .hdt-store-locator .hdt-store-list .hdt-store-item {
+      padding-inline-start: 17px;
+      padding-inline-end: 17px;
+      scroll-snap-align: start;
+    }
+    .hdt-store-locator .hdt-store-list {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      max-height: 100%;
+      gap: 10px;
+      overflow-y: auto;
+    }
+    .hdt-store-locator .hdt-store-list-wrap {
+      grid-column: span 5;
+    }
+    .hdt-store-locator .hdt-store-map {
+      grid-column: span 7;
+    }
+  }
+  @media (min-width: 1150px) {
+    .hdt-store-locator .hdt-store-list-wrap {
+      grid-column: span 4;
+    }
+    .hdt-store-locator .hdt-store-map {
+      grid-column: span 8;
+    }
+    .hdt-store-locator .hdt-store-list .hdt-store-item {
+      padding-top: 28px;
+      padding-bottom: 30px;
+      padding-inline-start: 27px;
+      padding-inline-end: 27px;
+    }
+  }
+  @media (max-width: 767px) {
+    .hdt-store-locator .hdt-store-list .hdt-store-item[aria-current='false'] .hdt-store-title {
+      margin-bottom: 0;
+    }
+    .hdt-store-locator .hdt-store-list .hdt-store-item[aria-current='false'] .hdt-store-info {
+      display: none;
+    }
+  }
+</style>
+<div
+  id="{{ section.id }}"
+  style="--section-pt: {{ section.settings.padding_top }}px; --section-pb: {{ section.settings.padding_bottom }}px; --section-prate:{{ section.settings.padding_rate }};"
+  class="hdt-section-spacing hdt-s-gradient"
+  color-scheme="{{ section.settings.color_scheme }}"
+>
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %}">
+    <div class="hdt-row-grid md:hdt-grid-cols-12 hdt-grid-cols-1">
+      <hdt-tab class="hdt-tab hdt-store-list-wrap" aria-controls="{{ section.id }}-content">
+        <div class="hdt-store-list hdt-text-start hdt-flex hdt-flex-col md:hdt-grid md:hdt-grid-cols-12 hdt-grid-cols-1 hdt-scroll-snap hdt-snap-y hdt-snap-start" hdt-reveal="slide-in" timeline>
+          {%- for block in section.blocks -%}
+            <button
+              class="hdt-store-item hdt-text-start"
+              aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {% if block.settings.title != blank %}
+                <h6 class="hdt-font-normal hdt-store-title hdt-relative hdt-flex hdt-align-center">
+                  <svg
+                    class="hdt-absolute hdt-top-0 hdt-left-0 hdt-bottom-0"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="13"
+                    height="16"
+                    viewBox="0 0 13 16"
+                    fill="none"
+                  >
+                    <path d="M6.40984 3.43944C4.77197 3.43944 3.43944 4.77197 3.43944 6.40984C3.43944 8.04772 4.77197 9.38025 6.40984 9.38025C8.04772 9.38025 9.38025 8.04772 9.38025 6.40984C9.38025 4.77197 8.04775 3.43944 6.40984 3.43944ZM6.40984 8.12956C5.46159 8.12956 4.69012 7.35809 4.69012 6.40984C4.69012 5.46159 5.46159 4.69012 6.40984 4.69012C7.35809 4.69012 8.12956 5.46159 8.12956 6.40984C8.12956 7.35809 7.35809 8.12956 6.40984 8.12956Z" fill="currentColor"/><path d="M6.40984 0C2.87544 0 0 2.87547 0 6.40984V6.58703C0 8.37453 1.02481 10.4575 3.04606 12.7781C4.51131 14.4603 5.95609 15.6333 6.01684 15.6824L6.40984 16L6.80284 15.6825C6.86363 15.6333 8.30841 14.4603 9.77362 12.7781C11.7948 10.4575 12.8197 8.37456 12.8197 6.58706V6.40987C12.8197 2.87547 9.94425 0 6.40984 0ZM11.569 6.58706C11.569 9.60784 7.67678 13.2646 6.40984 14.3746C5.14256 13.2642 1.25069 9.60763 1.25069 6.58706V6.40987C1.25069 3.56512 3.56509 1.25072 6.40984 1.25072C9.25459 1.25072 11.569 3.56512 11.569 6.40987V6.58706Z" fill="currentColor"/>
+                  </svg>
+                  {{ block.settings.title }}
+                </h6>
+              {% endif %}
+              {% if block.settings.address_content != blank %}
+                <div class="hdt-store-info">
+                  <span class="hdt-text-base hdt-font-semibold">{{ 'sections.store_locator.blocks.address' | t }}</span>
+                  <div class="hdt-font-normal">{{ block.settings.address_content }}</div>
+                </div>
+              {% endif %}
+              {% if block.settings.phone_content != blank %}
+                <div class="hdt-store-info">
+                  <span class="hdt-text-base hdt-font-semibold">{{ 'sections.store_locator.blocks.phone' | t }}</span>
+                  <div class="hdt-font-normal">{{ block.settings.phone_content }}</div>
+                </div>
+              {% endif %}
+              {% if block.settings.email_content != blank %}
+                <div class="hdt-store-info">
+                  <span class="hdt-text-base hdt-font-semibold">{{ 'sections.store_locator.blocks.email' | t }}</span>
+                  <div class="hdt-font-normal">{{ block.settings.email_content }}</div>
+                </div>
+              {% endif %}
+            </button>
+          {%- endfor -%}
+        </div>
+      </hdt-tab>
+      <div id="{{ section.id }}-content" class="hdt-store-map">
+        {%- for block in section.blocks -%}
+          <div
+            class="hdt-tab-item"
+            tab-item
+            {% if forloop.first %}
+              tab-selected
+            {% endif %}
+          >
+            <div class="hdt-map-inner hdt-relative hdt-oh">
+              {% if block.settings.map != blank %}
+                {{ block.settings.map }}
+              {% else %}
+                <div style="background-color: rgba(0,0,0,0.1)">
+                  {{ 'image' | placeholder_svg_tag: 'hdt-placeholder-svg' }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.store_locator.name",
+  "tag": "section",
+  "class": "hdt-section hdt-store-locator",
+  "disabled_on": {
+    "groups": ["*"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.section_layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "store_item",
+      "name": "t:sections.store_locator.blocks.store_item.label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.store_locator.blocks.store_item.name",
+          "default": "Store name"
+        },
+        {
+          "type": "text",
+          "id": "address_content",
+          "label": "t:sections.store_locator.blocks.store_item.address",
+          "default": "66 Mott St, New York, New York, Zip Code: 10006, AS"
+        },
+        {
+          "type": "text",
+          "id": "phone_content",
+          "label": "t:sections.store_locator.blocks.store_item.phone",
+          "default": "(623) 934-2400"
+        },
+        {
+          "type": "text",
+          "id": "email_content",
+          "label": "t:sections.store_locator.blocks.store_item.email",
+          "default": "Ecomus@example.com"
+        },
+        {
+          "type": "liquid",
+          "id": "map",
+          "label": "t:sections.store_locator.blocks.store_item.map",
+          "info": "[You can get the map at here](https://www.google.com/maps), need to use iframes"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.store_locator.name",
+      "category": "t:sections_categories.05_section.name",
+      "blocks": [
+        {
+          "type": "store_item"
+        },
+        {
+          "type": "store_item"
+        },
+        {
+          "type": "store_item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,390 @@
+{% liquid
+  assign effect = 'hdt-reveal="slide-in" timeline'
+  if section.id contains 'slideshow'
+    assign effect = 'reval'
+  endif   
+  if section.id contains 'footer'
+    assign effect = ''
+  endif   
+
+%}
+<div {{ effect }} id="block-{{ block.id }}" class="hdt-text-warry hdt-block-text hdt-rte {{ block.settings.text_color }}{% if block.settings.hidden_br_mobile %} hdt-br-hidden{% endif %}{% if block.settings.hidden_on_mobile %} hdt-hide-mobile{% endif %} hdt-text-{{ block.settings.text_size }} hdt-font-{{ block.settings.font_weight }}" {{ block.shopify_attributes }} {%- if block.settings.text_size == "custom" %} style="--text-custom-lg: {{ block.settings.font_size_text_lg }}px; --text-custom-md: {{ block.settings.font_size_text_md }}px; --text-custom-mb: {{ block.settings.font_size_text }}px; --text-fw: {{ block.settings.font_weight_text }}; --text-ls: {{ block.settings.letter_spacing_text }}px;"{% endif %}>
+  {%- liquid
+    assign now_y = 'now' | date: '%Y'
+    capture icon_pick
+      echo '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><use xlink:href="#hdt-icon-'
+      echo block.settings.icon
+      echo '"></use></svg>'
+    endcapture
+    assign text_with_icon = block.settings.text | replace: "[year]", now_y | replace: "[icon_source]", block.settings.icon_source | replace: '[icon]', icon_pick
+  -%}
+  {{ text_with_icon }}
+</div>
+{% schema %}
+{
+  "name": "t:blocks.text.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:blocks.text.settings.content.label",
+      "default": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+      "info": "Shift + Enter to line break. \nUsing [icon_source] to add icon svg. \nUsing [icon] to add icon."
+    },
+    {
+      "type": "textarea",
+      "id": "icon_source",
+      "label": "Icon SVG",
+      "info": "t:blocks.icon.settings.svg_upload.info",
+      "visible_if": "{{ block.settings.text contains '[icon_source]' }}"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "t:blocks.icon.settings.icon.label",
+      "visible_if": "{{ block.settings.text contains '[icon]' }}",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:none"
+        },
+        {
+          "value": "car",
+          "label": "t:blocks.icon.settings.icon.car"
+        },
+        {
+          "value": "truck",
+          "label": "t:blocks.icon.settings.icon.truck"
+        },
+        {
+          "value": "diamond",
+          "label": "t:blocks.icon.settings.icon.diamond"
+        },
+        {
+          "value": "door-lock",
+          "label": "t:blocks.icon.settings.icon.door_lock"
+        },
+        {
+          "value": "gym",
+          "label": "t:blocks.icon.settings.icon.gym"
+        },
+        {
+          "value": "hammer",
+          "label": "t:blocks.icon.settings.icon.hammer"
+        },
+        {
+          "value": "headphones",
+          "label": "t:blocks.icon.settings.icon.headphones"
+        },
+        {
+          "value": "helm",
+          "label": "t:blocks.icon.settings.icon.helm"
+        },
+        {
+          "value": "hourglass",
+          "label": "t:blocks.icon.settings.icon.hourglass"
+        },
+        {
+          "value": "map",
+          "label": "t:blocks.icon.settings.icon.map"
+        },
+        {
+          "value": "piggy",
+          "label": "t:blocks.icon.settings.icon.piggy"
+        },
+        {
+          "value": "refesh",
+          "label": "t:blocks.icon.settings.icon.refresh"
+        },
+        {
+          "value": "rocket",
+          "label": "t:blocks.icon.settings.icon.rocket"
+        },
+        {
+          "value": "shield",
+          "label": "t:blocks.icon.settings.icon.shield"
+        },
+        {
+          "value": "shield2",
+          "label": "t:blocks.icon.settings.icon.shield_2"
+        },
+        {
+          "value": "smile",
+          "label": "t:blocks.icon.settings.icon.smile"
+        },
+        {
+          "value": "scissors",
+          "label": "t:blocks.icon.settings.icon.scissors"
+        },
+        {
+          "value": "shuffle",
+          "label": "t:blocks.icon.settings.icon.shuffle"
+        },
+        {
+          "value": "cloud_upload",
+          "label": "t:blocks.icon.settings.icon.cloud_upload"
+        },
+        {
+          "value": "cash",
+          "label": "t:blocks.icon.settings.icon.cash"
+        },
+        {
+          "value": "way",
+          "label": "t:blocks.icon.settings.icon.way"
+        },
+        {
+          "value": "wristwatch",
+          "label": "t:blocks.icon.settings.icon.wristwatch"
+        },
+        {
+          "value": "world",
+          "label": "t:blocks.icon.settings.icon.world"
+        },
+        {
+          "value": "wallet",
+          "label": "t:blocks.icon.settings.icon.wallet"
+        },
+        {
+          "value": "unlock",
+          "label": "t:blocks.icon.settings.icon.unlock"
+        },
+        {
+          "value": "umbrella",
+          "label": "t:blocks.icon.settings.icon.umbrella"
+        },
+        {
+          "value": "repeat",
+          "label": "t:blocks.icon.settings.icon.repeat"
+        },
+        {
+          "value": "refesh-2",
+          "label": "t:blocks.icon.settings.icon.refresh_2"
+        },
+        {
+          "value": "medal",
+          "label": "t:blocks.icon.settings.icon.medal"
+        },
+        {
+          "value": "portfolio",
+          "label": "t:blocks.icon.settings.icon.portfolio"
+        },
+        {
+          "value": "like",
+          "label": "t:blocks.icon.settings.icon.like"
+        },
+        {
+          "value": "plance",
+          "label": "t:blocks.icon.settings.icon.plance"
+        },
+        {
+          "value": "map-maker",
+          "label": "t:blocks.icon.settings.icon.map_maker"
+        },
+        {
+          "value": "help",
+          "label": "t:blocks.icon.settings.icon.help"
+        },
+        {
+          "value": "gift",
+          "label": "t:blocks.icon.settings.icon.gift"
+        },
+        {
+          "value": "cart",
+          "label": "t:blocks.icon.settings.icon.cart"
+        },
+        {
+          "value": "box",
+          "label": "t:blocks.icon.settings.icon.box"
+        },
+        {
+          "value": "back",
+          "label": "t:blocks.icon.settings.icon.back"
+        },
+        {
+          "value": "back2",
+          "label": "t:blocks.icon.settings.icon.back_2"
+        }
+      ],
+      "default": "car"
+    },
+    {
+      "type": "checkbox",
+      "id": "hidden_br_mobile",
+      "label": "t:blocks.text.settings.hidden_br_mobile",
+      "default": false,
+      "visible_if": "{{ block.settings.text != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "hidden_on_mobile",
+      "label": "t:blocks.text.settings.hidden_on_mobile",
+      "default": false,
+      "visible_if": "{{ block.settings.text != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "t:settings_schema.typography.settings.font_size.label",
+      "options": [
+        {
+          "value": "xs",
+          "label": "t:settings_schema.typography.settings.font_size.xs"
+        },
+        {
+          "value": "sm",
+          "label": "t:settings_schema.typography.settings.font_size.sm"
+        },
+        {
+          "value": "base",
+          "label": "t:settings_schema.typography.settings.font_size.base"
+        },
+        {
+          "value": "lg",
+          "label": "t:settings_schema.typography.settings.font_size.lg"
+        },
+        {
+          "value": "xl",
+          "label": "t:settings_schema.typography.settings.font_size.xl"
+        },
+        {
+          "value": "2xl",
+          "label": "t:settings_schema.typography.settings.font_size.2xl"
+        },
+        {
+          "value": "4xl",
+          "label": "t:settings_schema.typography.settings.font_size.4xl"
+        },
+        {
+          "value": "custom",
+          "label": "t:settings_schema.typography.settings.font_size.custom"
+        }
+      ],
+      "default": "base",
+      "visible_if": "{{ block.settings.text != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "t:settings_schema.typography.settings.font_weight.label",
+      "options": [
+        {
+          "value": "",
+          "label": "t:default"
+        },
+        {
+          "value": "light",
+          "label": "t:settings_schema.typography.settings.font_weight.light"
+        },
+        {
+          "value": "normal",
+          "label": "t:settings_schema.typography.settings.font_weight.normal"
+        },
+        {
+          "value": "medium",
+          "label": "t:settings_schema.typography.settings.font_weight.medium"
+        },
+        {
+          "value": "semibold",
+          "label": "t:settings_schema.typography.settings.font_weight.semibold"
+        },
+        {
+          "value": "bold",
+          "label": "t:settings_schema.typography.settings.font_weight.bold"
+        },
+      ],
+      "default": "",
+      "visible_if": "{{ block.settings.text != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "options": [
+        {
+          "value": "hdt-s-text",
+          "label": "t:default"
+        },
+        {
+          "value": "hdt-text-secondary",
+          "label": "t:settings_schema.colors.secondary"
+        },
+        {
+          "value": "hdt-text-body-tertiary",
+          "label": "t:settings_schema.colors.tertiary"
+        },
+        {
+          "value": "hdt-text-primary",
+          "label": "t:settings_schema.colors.accent"
+        }
+      ],
+      "label": "t:blocks.text.text_color.label",
+      "default": "hdt-s-text",
+      "visible_if": "{{ block.settings.text != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "t:blocks.text.custom_size_options.label",
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_text_lg",
+      "min": 10,
+      "max": 70,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.label",
+      "default": 16,
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_text_md",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.tablet_font_size",
+      "default": 14,
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_text",
+      "min": 10,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.mobile_font_size",
+      "default": 14,
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_weight_text",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "label": "t:settings_schema.typography.settings.font_weight.label",
+      "default": 400,
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "letter_spacing_text",
+      "min": -10,
+      "max": 10,
+      "step": 0.2,
+      "label": "t:settings_schema.typography.settings.letter_spacing",
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ block.settings.text_size == 'custom' and block.settings.text != blank }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.text.name"
+    }
+  ]
+}
+{% endschema %}

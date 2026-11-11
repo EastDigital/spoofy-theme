@@ -1,0 +1,76 @@
+{%- comment -%}
+  Renders a set of links for paginated results. Must be used within paginate tags.
+
+  Accepts:
+  - paginate: {Object} (required)
+  - section_id: {String} The ID of the section that contains this card. (required)
+  - anchor: {String} (optional) This can be added so that on page reload it takes you to wherever you've placed your anchor tag. (optional)
+  - append_id: {String} The ID
+  - class: {String} a list class.
+  - pagination_type: {String} (optional)
+  - load_more_label: {String} (optional) articles, products
+
+  Usage:
+  {%- paginate results by 2 -%}
+    {%- render 'pagination', paginate: paginate -%}
+  {%- endpaginate -%}
+{%- endcomment -%}
+
+{%- if paginate.parts.size > 0 -%}
+  {%- if pagination_type == 'load_more' or pagination_type == 'infinite' -%}
+    {%- if paginate.next.is_link -%}
+      {%- liquid
+        if load_more_label == 'articles'
+          assign label = 'general.pagination.load_more_articles' | t
+        else
+          assign label = 'general.pagination.load_more_products' | t
+        endif
+        -%}
+      <div loadmore-btn-wrapp class="hdt-pagination-wrapp {{ class }} hdt-text-{{ paginate_pos }}"style="--pagination-distance:{{ dis_pagination }}px">
+        <wrapp-hdt-lm-main-url {% if pagination_type == 'infinite' %}render-on-scroll {% endif %}section-id="{{ section_id }}" append="{{ append_id }}" {% if is_prepend_btn %} prepend{% endif %}>
+          <a href="{{ paginate.next.url }}" class="hdt-loamore-btn hdt-btn hdt-oh hdt-relative hdt-btn-solid hdt-inline-flex hdt-align-center hdt-justify-center"><span>{{ label | escape }}</span></a>
+        </wrapp-hdt-lm-main-url>
+      </div>
+    {%- endif -%}
+  {%- else -%}
+    <div class="hdt-pagination-wrapp {{ class }}" style="--pagination-distance:{{ dis_pagination }}px">
+      <nav class="hdt-pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t | escape }}">
+        <ul class="hdt-pagination__list hdt-flex hdt-justify-{{ paginate_pos }}" role="list">
+          {%- if paginate.previous -%}
+            <li>
+              <wrapp-hdt-facet-url>
+                <a rel="prev" href="{{ paginate.previous.url }}{{ anchor }}" class="hdt-pagination__item hdt-btn hdt-oh hdt-relative hdt-btn-solid hdt-pagination__item--next hdt-pagination__item-arrow hdt-inline-flex hdt-align-center hdt-justify-center" aria-label="{{ 'general.pagination.previous' | t | escape }}">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11"><path d="M6.02344 0L0.523438 5.5L6.02344 11L6.99969 10.0237L2.47594 5.5L6.99969 0.97625L6.02344 0Z" fill="currentColor"/></svg>
+                </a>
+              </wrapp-hdt-facet-url>
+            </li>
+          {%- endif -%}
+          {%- for part in paginate.parts -%}
+            <li>
+              {%- if part.is_link -%}
+                <wrapp-hdt-facet-url>
+                  <a href="{{ part.url }}{{ anchor }}" class="hdt-pagination__item hdt-btn hdt-oh hdt-relative hdt-btn-solid hdt-inline-flex hdt-align-center hdt-justify-center" aria-label="{{ 'general.pagination.page' | t: number: part.title | escape }}"><span>{{ part.title }}</span></a>
+                </wrapp-hdt-facet-url>
+              {%- else -%}
+                {%- if part.title == paginate.current_page -%}
+                  <span class="hdt-pagination__item hdt-pagination__item--current hdt-btn hdt-oh hdt-relative hdt-inline-flex hdt-align-center hdt-justify-center hdt-pe-none" aria-current="page">{{ part.title }}</span>
+                {%- else -%}
+                  <span class="hdt-pagination__item hdt-flex hdt-justify-center hdt-btn hdt-pagination-part" aria-current="page">{{ part.title }}</span>
+                {%- endif -%}
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+          {%- if paginate.next -%}
+            <li>
+              <wrapp-hdt-facet-url><a rel="next" href="{{ paginate.next.url }}{{ anchor }}" class="hdt-pagination__item hdt-btn hdt-oh hdt-relative hdt-btn-solid hdt-pagination__item--prev hdt-pagination__item-arrow hdt-inline-flex hdt-align-center hdt-justify-center" aria-label="{{ 'general.pagination.next' | t | escape }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11">
+                  <path d="M1.5 11L7 5.5L1.5 4.80825e-07L0.52375 0.976251L5.0475 5.5L0.523751 10.0238L1.5 11Z" fill="currentColor"/>
+                  </svg>
+              </a></wrapp-hdt-facet-url>
+            </li>
+          {%- endif -%}
+        </ul>
+      </nav>
+    </div>
+  {%- endif -%}
+{%- endif -%}

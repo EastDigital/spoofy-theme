@@ -1,0 +1,251 @@
+
+{%- liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  assign id_hidden = 'badges-' | append: block.id
+-%}
+{%-  assign product_form_id = 'product-form-' | append: section.id | append: product.id -%}
+<div class="hdt-product-info__item hdt-product__badges" id="{{ id_hidden }}" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+  {%- capture special -%}
+  {%- if block.settings.special.size > 0 -%}
+    <hdt-badge is="available" class="hdt-badge hdt-badge__on-special" form="{{ product_form_id }}">{%- capture special_name -%}{{ block.settings.special | metafield_text }}{%- endcapture -%}{{ special_name }}</hdt-badge>
+    <div class="hdt-product__status-content hdt-inline-flex hdt-align-center" style="vertical-align: middle;">
+      {%- liquid
+        assign min = block.settings.min
+        assign max = block.settings.max | at_least: min
+        assign diff = max | minus: min
+        assign randomNumber = "now" | date: "%N" | modulo: diff | plus: min
+        assign class = block.settings.ani | append: ' is--infinite hdt-inine-block'
+      -%}
+      {%- if block.settings.icon_svg != 'none' -%}
+        {%- render 'icon_theme_svg', icon_svg: block.settings.icon_svg, class: class -%}
+      {%- endif -%}
+      <p class="hdt-s-text hdt-font-semibold">{{ block.settings.content | replace: "[count]", randomNumber }}</p>
+    </div>
+    <style>.hdt-product__status-content {display: none}hdt-badge[is="available"]:not([hidden]) + .hdt-product__status-content {display: inline-flex}</style>
+  {%- endif -%}
+  {%- endcapture -%}
+  {%- liquid
+    assign sale_text_t = 'products.product.on_sale_single' | t
+    assign sale_percent_t = 'products.product.save_percent_single' | t: percent: 'save_1904' | replace_first: 'save_1904', '<span percent>save_1904</span>'
+    render 'badges', special_badge: special, special_name: special_name, product: product, use_variant: true, form_id: product_form_id, id_hidden: id_hidden, update_hidden: true, sale_text_t: sale_text_t, sale_percent_t: sale_percent_t, use_onsale_badge: false
+    -%}
+</div>
+{% schema %}
+{
+  "name": "Badges",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:blocks.badges.settings.header.content"
+    },
+    {
+      "type": "text",
+      "id": "special",
+      "label": "t:blocks.badges.settings.special.label"
+    },
+    {
+      "type": "range",
+      "id": "min",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "default": 10,
+      "label": "t:blocks.badges.settings.min.label"
+    },
+    {
+      "type": "range",
+      "id": "max",
+      "min": 2,
+      "max": 100,
+      "step": 1,
+      "default": 80,
+      "label": "t:blocks.badges.settings.max.label"
+    },
+    {
+      "type": "textarea",
+      "id": "content",
+      "label": "t:blocks.badges.settings.content.label",
+      "default": "Selling fast! [count] people have this in their carts."
+    },
+    {
+      "type": "select",
+      "id": "icon_svg",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__1.label"
+        },
+        {
+          "value": "box",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__2.label"
+        },
+        {
+          "value": "box2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__3.label"
+        },
+        {
+          "value": "payment",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__4.label"
+        },
+        {
+          "value": "payment2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__5.label"
+        },
+        {
+          "value": "return",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__6.label"
+        },
+        {
+          "value": "return2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__7.label"
+        },
+        {
+          "value": "support",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__8.label"
+        },
+        {
+          "value": "wave",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__9.label"
+        },
+        {
+          "value": "plants",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__10.label"
+        },
+        {
+          "value": "flowerpot",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__11.label"
+        },
+        {
+          "value": "leaf",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__12.label"
+        },
+        {
+          "value": "leaf2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__13.label"
+        },
+        {
+          "value": "smile",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__14.label"
+        },
+        {
+          "value": "smile2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__15.label"
+        },
+        {
+          "value": "delicious",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__16.label"
+        },
+        {
+          "value": "health",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__17.label"
+        },
+        {
+          "value": "energy",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__18.label"
+        },
+        {
+          "value": "skin",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__19.label"
+        },
+        {
+          "value": "crescent_moon",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__20.label"
+        },
+        {
+          "value": "diamond",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__21.label"
+        },
+        {
+          "value": "various_sizes",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__22.label"
+        },
+        {
+          "value": "dividing_icon",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__23.label"
+        },
+        {
+          "value": "arrow_up",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__24.label"
+        },
+        {
+          "value": "flash",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__25.label"
+        },
+        {
+          "value": "flash2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__26.label"
+        },
+        {
+          "value": "ship",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__27.label"
+        },
+        {
+          "value": "clock",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__28.label"
+        },
+        {
+          "value": "fire",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__29.label"
+        },
+        {
+          "value": "delivery",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__30.label"
+        },
+        {
+          "value": "return_order",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__31.label"
+        }
+      ],
+      "default": "flash",
+      "label": "t:blocks.badges.settings.icon.label"
+    },
+    {
+      "type": "select",
+      "id": "ani",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:none"
+        },
+        {
+          "value": "hdt-ani-bounce",
+          "label": "t:blocks.badges.settings.ani.options__1.label"
+        },
+        {
+          "value": "hdt-ani-tada",
+          "label": "t:blocks.badges.settings.ani.options__2.label"
+        },
+        {
+          "value": "hdt-ani-swing",
+          "label": "t:blocks.badges.settings.ani.options__3.label"
+        },
+        {
+          "value": "hdt-ani-flash",
+          "label": "t:blocks.badges.settings.ani.options__4.label"
+        },
+        {
+          "value": "hdt-ani-fadeIn",
+          "label": "t:blocks.badges.settings.ani.options__5.label"
+        },
+        {
+          "value": "hdt-ani-heartBeat",
+          "label": "t:blocks.badges.settings.ani.options__6.label"
+        },
+        {
+          "value": "hdt-ani-shake",
+          "label": "t:blocks.badges.settings.ani.options__7.label"
+        }
+      ],
+      "label": "t:blocks.badges.settings.ani.label"
+    }
+  ],
+  "presets": [
+    { 
+      "name": "Badges",
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,28 @@
+{%- liquid
+  assign show_vendor = show_vendor | default: false
+  assign image = product.featured_media | default: settings.placeholder_img
+-%}
+  <div class="hdt-card-product hdt-pr-loop hdt-loop-item {{ class }}">
+    <div class="hdt-card-product__wrapper hdt-flex hdt-loop-inner">
+      <div class="hdt-card-product__media hdt-loop-img hdt-relative hdt-oh">
+        {%- if image != blank %}
+          <div class="hdt-product-img hdt-ratio" style="--aspect-ratioapt: {{ image.aspect_ratio | default: 1 }}">
+            {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '', sizes: sizes, widths: widths }}
+          </div>
+        {%- endif -%}
+        <a data-pr-href class="hdt-full-width-link" href="{{ product.url }}"></a>
+      </div>
+      <div class="hdt-card-product__info">
+        {%- if settings.show_rating %}{% render 'hdt-pr-card-rating', product: card_product %}{% endif -%}
+        {%- liquid
+        if settings.show_rating
+          render 'hdt-pr-card-rating', product: card_product
+        endif
+        if product.vendor.size > 0 and show_vendor
+          render 'vendor' with product.vendor, class: 'hdt-inline-block hdt-text-base hdt-font-normal'
+        endif -%}
+        <a data-pr-url href="{{ product.url }}" class="hdt-card-product__title hdt-text-base hdt-font-normal" data-instant>{{ product.title | escape }}</a>
+        {%- render 'card-price', section_id: section_id, product: product, show_volume_note: true, price_class: "hdt-text-base hdt-font-semibold" -%}
+      </div>
+    </div>
+  </div>

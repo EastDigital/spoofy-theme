@@ -1,0 +1,224 @@
+<!-- sections/categories-section.liquid -->
+{%- style -%}
+#shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}} }
+{%- endstyle -%}
+{%- liquid
+  echo 'categories-section.min.css' | asset_url | stylesheet_tag
+-%}
+<div class="hdt-section-spacing hdt-s-gradient" id="{{ section.id }}" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container">
+    {% content_for 'block', type: 'section-heading', id: 'categories' %}
+    <div class="hdt-wrapper hdt-oh">
+      <div class="hdt-wrap hdt-flex hdt-slides-{{ section.settings.style }} lg:hdt-justify-center hdt-text-center hdt-ratio--square">
+        <hdt-slider id="Slider-{{ section.id }}" class="hdt-slider hdt-slides-9 hdt-categories_container hdt-block hdt-oh" config='{ "id": "Slider-{{ section.id }}", "active": true, "breakpoints": { "(max-width: 1149px)": { "active": false } } }'>
+          <div class="hdt-slider__viewport">
+            <div class="hdt-slider__container md@hdt-scroll-snap md@hdt-snap-flex">
+              {% content_for 'blocks' %}
+              {%- if section.settings.title != blank -%}
+                <div class="hdt-slider__slide hdt-shopall" hdt-reveal="slide-in" timeline>
+                  <div class="hdt-shopall_wrap hdt-flex hdt-flex-col hdt-align-center">
+                    <div class="hdt-shopall_icon">
+                      <a href="{{ section.settings.item_link }}" target="{{ target | default: '_self' }}" class="hdt-shop-all hdt-inline-flex hdt-align-center hdt-justify-center hdt-radius-full hdt-oh hdt-btn hdt-btn-outline">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                          <path d="M1.07692 10L0 8.92308L7.38462 1.53846H0.769231V0H10V9.23077H8.46154V2.61538L1.07692 10Z" fill="currentColor"/>
+                        </svg>
+                      </a>
+                    </div>
+                    <a href="#" target="{{ target | default: '_self' }}" class="hdt-block hdt-btn hdt-btn-link  hdt-text-base hdt-font-semibold">{{ section.settings.title }}</a>
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </hdt-slider>
+        {%- if section.settings.title != blank -%}
+          <div class="hdt-shopall_wrap hdt-flex-col hdt-align-center hdt-hidden lg:hdt-flex" hdt-reveal="slide-in" timeline>
+            <div class="hdt-shopall_icon">
+              <a {% if section.settings.item_link == blank %}role="link" disabled="true"{% else %}href="{{ section.settings.item_link }}"{% endif %} target="{{ target | default: '_self' }}" class="hdt-shop-all hdt-inline-flex hdt-align-center hdt-justify-center hdt-radius-full hdt-oh hdt-btn hdt-btn-outline">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M1.07692 10L0 8.92308L7.38462 1.53846H0.769231V0H10V9.23077H8.46154V2.61538L1.07692 10Z" fill="currentColor"/>
+                </svg>
+              </a>
+            </div>
+            <a {% if section.settings.item_link == blank %}role="link" disabled="true"{% else %}href="{{ section.settings.item_link }}"{% endif %} target="{{ target | default: '_self' }}" class="hdt-block hdt-btn hdt-btn-link  hdt-text-base hdt-font-semibold">{{ section.settings.title }}</a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.categories-section.name",
+  "class": "hdt-categories-section hdt-section",
+  "tag": "section",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Static button settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.collection_list.blocks.view_all_title",
+      "default": "Discovery all new items",
+      "info": "Not show if title blank"
+    },
+    {
+      "type": "url",
+      "id": "item_link",
+      "label": "t:sections.collection_list.blocks.view_all_link",
+      "visible_if": "{{ section.settings.title != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "General settings"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:sections.categories-section.settings.spacing_item.label",
+      "options": [
+        {
+          "value": "small",
+          "label": "t:sections.categories-section.settings.spacing_item.options.options_2"
+        },
+        {
+          "value": "normal",
+          "label": "t:sections.categories-section.settings.spacing_item.options.options_1"
+        }
+      ],
+      "default": "normal"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "_category"
+    },
+    {
+      "type": "section-heading"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.categories-section.name",
+      "category": "t:sections_categories.03_collections.name",
+      "settings": {
+        "title": "Discovery all new items",
+        "item_link": ""
+      },
+      "blocks": [
+        {
+          "type": "section-heading",
+          "id": "categories",
+          "static": true,
+          "settings": {
+            "alignment": "center"
+          },
+          "blocks": [
+            {
+              "type": "heading",
+              "settings": {
+                "heading": "<h4>Categories</h4>",
+                "heading_size": "h4",
+              }
+            }
+          ]
+        },
+        {
+          "type": "_category",
+          "settings": {
+            "collection": "",
+            "title": "Collection name",
+            "collection_link": ""
+          }
+        },
+        {
+          "type": "_category",
+          "settings": {
+            "collection": "",
+            "title": "Collection name",
+            "collection_link": ""
+          }
+        },
+        {
+          "type": "_category",
+          "settings": {
+            "collection": "",
+            "title": "Collection name",
+            "collection_link": ""
+          }
+        },
+        {
+          "type": "_category",
+          "settings": {
+            "collection": "",
+            "title": "Collection name",
+            "collection_link": ""
+          }
+        },
+        {
+          "type": "_category",
+          "settings": {
+            "collection": "",
+            "title": "Collection name",
+            "collection_link": ""
+          }
+        },
+        {
+          "type": "_category",
+          "settings": {
+            "collection": "",
+            "title": "Collection name",
+            "collection_link": ""
+          }
+        },
+      ]
+    }
+  ]
+}
+{% endschema %}

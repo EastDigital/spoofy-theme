@@ -1,0 +1,166 @@
+{%- liquid
+  assign color_white = 'products.theme_settings.color_white' | t | downcase | strip
+  assign and_locale = 'products.theme_settings.and' | t | append: ' ' | prepend: ', '
+  assign and_locale_1 = 'products.theme_settings.and' | t | append: ' ' | prepend: ' '
+  assign option_values = block.settings.option_values | replace_last: and_locale, ', ' | replace_last: and_locale_1, ', ' | split: ', '
+  assign product_list = block.settings.product_list
+  assign linked_type = block.settings.linked_type
+  assign colors = shop.metafields.ecomrise.colors.value
+  assign color_values = shop.metaobjects.theme_swatch.values | first
+  assign colors_2 = color_values.colors.value
+  -%}
+
+  {%- capture code_html -%}
+    {%- if linked_type == 'color' or linked_type == 'color_rounded' -%}
+      {%- for item in product_list -%}
+        {%- liquid
+        assign value = option_values[forloop.index0] | default: item.title
+        assign color_downcase = value | downcase
+        if product.id == item.id
+          assign value_selected = value
+          assign class_selected = ' is-selected'
+        else
+          assign class_selected = ''
+        endif
+        assign color_handle = value | handle
+        assign color_obj = colors[color_handle] | default: colors_2[color_handle]
+        assign color_style_inline = ''
+        assign image = images[color_obj.imageName]
+        if image != blank
+          assign color_image = image | image_url: width: 200
+          assign color_image_style = '--hdt-bg-image: url(' | append: color_image | append: ');'
+        else
+          assign color_image_style = nil
+          assign color_style_inline = color_obj.colorsCSS
+        endif
+        -%}
+        {%- capture color_style -%}{%- if color_image_style or color_style_inline.size > 0 %} style="{{ color_image_style }}{{ color_style_inline }}"{% endif -%}{%- endcapture -%}
+        
+        <a href="{{ item.url }}" class="hdt-product-form_value is-type-color{% if color_white == color_downcase %} hdt-bg-color-white{% endif %}{{ class_selected }}">
+          <hdt-tooltip>
+            <span class="hdt-form-color-pattern {% if color_white == color_downcase %} hdt-bg-color-white{% endif %}" {{ color_style }}></span>
+            <span class="hdt-form-color-name sr-only">{{- value -}}</span>
+           </hdt-tooltip>
+        </a>
+     
+      {%- endfor -%}
+
+    {%- elsif linked_type == 'block_with_color' -%}
+
+      {%- for item in product_list -%}
+        {%- liquid
+        assign value = option_values[forloop.index0] | default: item.title
+        assign color_downcase = value | downcase
+        if product.id == item.id
+          assign value_selected = value
+          assign class_selected = ' is-selected'
+        else
+          assign class_selected = ''
+        endif
+        assign color_handle = value | handle
+        assign color_obj = colors[color_handle] | default: colors_2[color_handle]
+        assign color_style_inline = ''
+        assign image = images[color_obj.imageName]
+        if image != blank
+          assign color_image = image | image_url: width: 200
+          assign color_image_style = '--hdt-bg-image: url(' | append: color_image | append: ');'
+        else
+          assign color_image_style = nil
+          assign color_style_inline = color_obj.colorsCSS
+        endif
+        -%}
+        <a href="{{ item.url }}" class="hdt-product-form_value is-type-block_with_color{{ class_selected }}">
+          <span class="hdt-block-swatch__color{% if color_white == color_downcase %} hdt-bg-color-white{% endif %}"{%- if color_image_style or color_style_inline.size > 0 %} style="{{ color_image_style }}{{ color_style_inline }}"{% endif -%}></span>
+          <span class="hdt-form-color-name">{{- value -}}</span>
+        </a>
+      {%- endfor -%}
+
+    {%- elsif linked_type == 'image' or linked_type == 'image_with_title'-%}
+
+      {%- for item in product_list -%}
+        {%- liquid
+        assign value = option_values[forloop.index0] | default: item.title
+        assign color_downcase = value | downcase
+        if product.id == item.id
+          assign value_selected = value
+          assign class_selected = ' is-selected'
+        else
+          assign class_selected = ''
+        endif
+        assign color_handle = value | handle
+        assign color_obj = colors[color_handle] | default: colors_2[color_handle]
+        assign color_style_inline = ''
+        assign image = images[color_obj.imageName]
+        if image != blank and item.featured_image == blank
+          assign color_image = image | image_url: width: 200
+          assign color_image_style = '--hdt-bg-image: url(' | append: color_image | append: ');'
+        else
+          assign color_image_style = nil
+          assign color_style_inline = color_obj.colorsCSS
+        endif
+        -%}
+        {%- if item.featured_image != blank -%}
+          {%- if linked_type == 'image' -%}
+            <a href="{{ item.url }}" class="hdt-product-form_value hdt-product-form_value_has-image is-type-color{% if color_white == color_downcase %} hdt-bg-color-white{% endif %}{{ class_selected }}">
+                <hdt-tooltip>
+                  {{ item.featured_image | image_url: width: 400 | image_tag: widths: '100, 200, 400', loading: 'lazy' }}
+                  <span class="hdt-form-color-name sr-only">{{- value -}}</span>
+                </hdt-tooltip>
+            </a>
+          {%- else -%}
+          <a href="{{ item.url }}" class="hdt-product-form_wrap-link hdt-text-center hdt-block {{ class_selected }}">
+             <hdt-tooltip>
+                <div  class="hdt-product-form_value is-type-color{% if color_white == color_downcase %} hdt-bg-color-white{% endif %}">
+                  {{ item.featured_image | image_url: width: 400 | image_tag: widths: '100, 200, 400', loading: 'lazy' }}
+                </div>
+                <div class="hdt-linked-product-title hdt-truncate hdt-text-sm hdt-font-semibold hdt-s-text">{{- value -}}</div>
+               </hdt-tooltip>
+            </a>
+          
+          {%- endif -%}
+        {%- else -%}
+          {%- if linked_type == 'image' -%}
+            <a href="{{ item.url }}" class="hdt-product-form_value is-type-color{{ class_selected }}">
+              <hdt-tooltip>
+                <span class="hdt-form-color-pattern {% if color_white == color_downcase %} hdt-bg-color-white{% endif %}" {%- if color_image_style or color_style_inline.size > 0 %} style="{{ color_image_style }}{{ color_style_inline }}"{% endif -%}></span>
+                <span class="hdt-form-color-name sr-only">{{- value -}}</span>
+                </hdt-tooltip>
+            </a>
+            {%- else -%}
+            <a href="{{ item.url }}" class="hdt-product-form_wrap-link hdt-text-center hdt-block {{ class_selected }}">
+              <hdt-tooltip>
+                <span class="hdt-form-color-pattern {% if color_white == color_downcase %} hdt-bg-color-white{% endif %}" {%- if color_image_style or color_style_inline.size > 0 %} style="{{ color_image_style }}{{ color_style_inline }}"{% endif -%}></span>
+                <div class="hdt-linked-product-title hdt-truncate hdt-text-sm hdt-font-semibold hdt-s-text">{{- value -}}</div>
+              </hdt-tooltip>
+            </a>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+    {%- else -%}
+
+      {%- for item in product_list -%}
+        {%- liquid
+        assign value = option_values[forloop.index0] | default: item.title
+        assign color_downcase = value | downcase
+        if product.id == item.id
+          assign value_selected = value
+          assign class_selected = ' is-selected'
+        else
+          assign class_selected = ''
+        endif
+        -%}
+        <a href="{{ item.url }}" class="hdt-product-form_value is-type-block{{ class_selected }}">
+          <span class="hdt-form-color-name">{{- value -}}</span>
+        </a>
+      {%- endfor -%}
+
+    {%- endif -%}
+  {%- endcapture -%}
+
+  <div class="hdt-variant-picker hdt-color-mode__{{ linked_type }} hdt-color-size__{{ block.settings.linked_size }}">
+    <div class="hdt-product-form__input is-style-color" type="{{ linked_type }}">
+      <div class="hdt-product-form__label hdt-s-text"><span>{{ block.settings.option_name }}: <span class="hdt-font-semibold">{{ value_selected }}</span></span></div>
+      <div class="hdt-product-form__values">{{ code_html }}</div>
+    </div>
+  </div>

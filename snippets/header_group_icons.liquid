@@ -1,0 +1,107 @@
+{%- if has_text -%}
+	<div class="hdt-site-top_nav hdt-site-top_nav_has_text hdt-flex hdt-align-center hdt-justify-end">
+		{%- if section.settings.enabled_user -%}
+			<div class="hdt-site-nav_icon hdt-site-nav_user lg:hdt-inline-flex hdt-align-center hdt-hidden">
+				<a class="hdt-inline-flex hdt-align-center hdt-relative" data-no-instant href="{{ routes.account_url }}"{% unless customer or request.page_type contains 'customers' or settings.login_popup == false %} aria-controls="login-form-popup"{% endunless %}>
+					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64" fill="currentColor"><path d="M56,64V57.48A8.43,8.43,0,0,0,47.56,49H16.44A8.43,8.43,0,0,0,8,57.48V64H.9V57.48A15.53,15.53,0,0,1,16.44,41.94H47.56A15.53,15.53,0,0,1,63.1,57.48V64Zm-23.47-27a18.66,18.66,0,0,1-13.11-5.43,18.54,18.54,0,0,1,0-26.22A18.53,18.53,0,0,1,51.07,18.51,18.52,18.52,0,0,1,32.54,37.05Zm0-30a11.44,11.44,0,1,0,8.09,3.35A11.36,11.36,0,0,0,32.54,7.07Z"/></svg>
+				  <span class="hdt-icon-text hdt-text-lg hdt-font-medium">{% if customer %}{{ 'customer.account.title' | t }}{% else %}{{ 'customer.account.login' | t }}{% endif %}</span>
+				</a>
+			</div>
+		{%- endif -%}
+		{%- if settings.compare_mode != "0" -%}
+			{%- if section.settings.enabled_compare -%}
+				<div class="hdt-site-nav_icon hdt-site-nav_compare lg:hdt-inline-flex hdt-align-center hdt-hidden">
+					<hdt-compare-a class="hdt-contents">
+						<a href="{{ routes.search_url }}/?view=compare" class="hdt-inline-flex hdt-align-center hdt-relative hdt-has-count-box">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+								<path d="M6.59 5.17L1.41 0L0 1.41L5.17 6.58L6.59 5.17ZM10.5 0L12.54 2.04L0 14.59L1.41 16L13.96 3.46L16 5.5V0H10.5ZM10.83 9.41L9.42 10.82L12.55 13.95L10.5 16H16V10.5L13.96 12.54L10.83 9.41Z"/>
+							</svg>
+							<span class="hdt-icon-text hdt-text-lg hdt-font-medium">{{ 'general.compare.compare_text' | t }}</span>
+						</a>
+					</hdt-compare-a>
+				</div>
+			{%- endif -%}
+		{%- endif -%}
+		{%- if settings.wishlist_mode != '0' -%}
+			{%- if section.settings.enabled_wishlist -%}
+				<div class="hdt-site-nav_icon hdt-site-nav_wishlist lg:hdt-inline-flex hdt-align-center hdt-hidden">
+					<hdt-wishlist-a class="hdt-contents">
+						<a href="{{ routes.search_url }}/?view=wishlist" class="hdt-inline-flex hdt-align-center hdt-relative hdt-has-count-box">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="18" viewBox="0 0 20 18" fill="currentColor">
+							  <path d="M9.90736 15.2534L9.80926 15.3515L9.70136 15.2534C5.04196 11.0256 1.96185 8.22997 1.96185 5.3951C1.96185 3.43324 3.43324 1.96185 5.3951 1.96185C6.90572 1.96185 8.37711 2.94278 8.897 4.27684H10.7215C11.2414 2.94278 12.7128 1.96185 14.2234 1.96185C16.1853 1.96185 17.6567 3.43324 17.6567 5.3951C17.6567 8.22997 14.5766 11.0256 9.90736 15.2534ZM14.2234 0C12.5166 0 10.8785 0.79455 9.80926 2.04033C8.74005 0.79455 7.10191 0 5.3951 0C2.37384 0 0 2.36403 0 5.3951C0 9.09319 3.33515 12.1243 8.38692 16.7052L9.80926 18L11.2316 16.7052C16.2834 12.1243 19.6185 9.09319 19.6185 5.3951C19.6185 2.36403 17.2447 0 14.2234 0Z"/>
+							</svg>
+							<span class="hdt-icon-text hdt-text-lg hdt-font-medium">{{ 'general.wishlist.wishlist_text' | t }}</span>
+						</a>
+					</hdt-wishlist-a>
+				</div>
+			{%- endif -%}
+		{%- endif -%}
+		<div class="hdt-site-nav_icon hdt-site-nav_search lg:hdt-hidden hdt-inline-flex hdt-align-center">
+			<a href="{{ routes.search_url }}" class="hdt-inline-flex hdt-align-center hdt-relative" aria-controls="drawer-search-form">
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><path d="M17.7241 16.1932L13.6436 12.1127C14.626 10.8049 15.1563 9.21299 15.1546 7.57728C15.1546 3.39919 11.7554 0 7.57728 0C3.39919 0 0 3.39919 0 7.57728C0 11.7554 3.39919 15.1546 7.57728 15.1546C9.21299 15.1563 10.8049 14.626 12.1127 13.6436L16.1932 17.7241C16.3998 17.9088 16.6692 18.0073 16.9461 17.9996C17.2231 17.9918 17.4865 17.8783 17.6824 17.6824C17.8783 17.4865 17.9918 17.2231 17.9996 16.9461C18.0073 16.6692 17.9088 16.3998 17.7241 16.1932ZM2.16494 7.57728C2.16494 6.50682 2.48237 5.4604 3.07708 4.57034C3.6718 3.68029 4.51709 2.98657 5.50607 2.57693C6.49504 2.16728 7.58328 2.0601 8.63318 2.26893C9.68307 2.47777 10.6475 2.99325 11.4044 3.75018C12.1613 4.5071 12.6768 5.47149 12.8856 6.52138C13.0945 7.57128 12.9873 8.65952 12.5776 9.64849C12.168 10.6375 11.4743 11.4828 10.5842 12.0775C9.69416 12.6722 8.64774 12.9896 7.57728 12.9896C6.14237 12.9879 4.76672 12.4171 3.75208 11.4025C2.73744 10.3878 2.16666 9.01219 2.16494 7.57728Z"/></svg>
+			</a>
+		</div>
+		
+		<div class="hdt-site-nav_icon hdt-site-nav_cart hdt-inline-flex hdt-align-center">
+			<a class="hdt-inline-flex hdt-align-center hdt-relative hdt-has-count-box" href="{{ routes.cart_url }}"{% if request.page_type != 'cart' %} aria-controls="CartDrawer"{% endif %}>
+				<svg class="lg:hdt-block hdt-hidden" xmlns="http://www.w3.org/2000/svg" width="26" height="29" viewBox="0 0 26 29" fill="currentColor">
+				  <path d="M24.5556 29H1.44444C1.06135 29 0.693954 28.8472 0.423068 28.5753C0.152182 28.3034 0 27.9346 0 27.55V1.45C0 1.06544 0.152182 0.696623 0.423068 0.424695C0.693954 0.152767 1.06135 0 1.44444 0H24.5556C24.9386 0 25.306 0.152767 25.5769 0.424695C25.8478 0.696623 26 1.06544 26 1.45V27.55C26 27.9346 25.8478 28.3034 25.5769 28.5753C25.306 28.8472 24.9386 29 24.5556 29ZM23.1111 26.1V2.9H2.88889V26.1H23.1111ZM8.66667 5.8V8.7C8.66667 9.85369 9.12321 10.9601 9.93587 11.7759C10.7485 12.5917 11.8507 13.05 13 13.05C14.1493 13.05 15.2515 12.5917 16.0641 11.7759C16.8768 10.9601 17.3333 9.85369 17.3333 8.7V5.8H20.2222V8.7C20.2222 10.6228 19.4613 12.4669 18.1069 13.8265C16.7525 15.1862 14.9155 15.95 13 15.95C11.0845 15.95 9.24755 15.1862 7.89312 13.8265C6.53869 12.4669 5.77778 10.6228 5.77778 8.7V5.8H8.66667Z"/>
+				</svg>
+				<svg class="lg:hdt-hidden hdt-block" xmlns="http://www.w3.org/2000/svg" width="17" height="18" viewBox="0 0 17 18" fill="currentColor">
+					<path d="M15.3 18H0.9C0.661305 18 0.432387 17.9052 0.263604 17.7364C0.0948211 17.5676 0 17.3387 0 17.1V0.9C0 0.661305 0.0948211 0.432387 0.263604 0.263604C0.432387 0.0948211 0.661305 0 0.9 0H15.3C15.5387 0 15.7676 0.0948211 15.9364 0.263604C16.1052 0.432387 16.2 0.661305 16.2 0.9V17.1C16.2 17.3387 16.1052 17.5676 15.9364 17.7364C15.7676 17.9052 15.5387 18 15.3 18ZM14.4 16.2V1.8H1.8V16.2H14.4ZM5.4 3.6V5.4C5.4 6.11608 5.68446 6.80284 6.19081 7.30919C6.69716 7.81554 7.38392 8.1 8.1 8.1C8.81608 8.1 9.50284 7.81554 10.0092 7.30919C10.5155 6.80284 10.8 6.11608 10.8 5.4V3.6H12.6V5.4C12.6 6.59347 12.1259 7.73807 11.282 8.58198C10.4381 9.42589 9.29347 9.9 8.1 9.9C6.90653 9.9 5.76193 9.42589 4.91802 8.58198C4.07411 7.73807 3.6 6.59347 3.6 5.4V3.6H5.4Z"/>
+				</svg>
+				<hdt-cart-count class="hdt-count-box hdt-absolute">{{ cart.item_count }}</hdt-cart-count>
+			</a>
+		</div>
+	</div>
+{%- else -%}
+	<div class="hdt-site-top_nav hdt-flex hdt-align-center hdt-justify-end">
+		<div class="hdt-site-nav_icon hdt-site-nav_search hdt-inline-flex hdt-align-center">
+			<a href="{{ routes.search_url }}" class="hdt-inline-flex hdt-align-center hdt-relative" aria-controls="drawer-search-form">
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M17.7241 16.1932L13.6436 12.1127C14.626 10.8049 15.1563 9.21299 15.1546 7.57728C15.1546 3.39919 11.7554 0 7.57728 0C3.39919 0 0 3.39919 0 7.57728C0 11.7554 3.39919 15.1546 7.57728 15.1546C9.21299 15.1563 10.8049 14.626 12.1127 13.6436L16.1932 17.7241C16.3998 17.9088 16.6692 18.0073 16.9461 17.9996C17.2231 17.9918 17.4865 17.8783 17.6824 17.6824C17.8783 17.4865 17.9918 17.2231 17.9996 16.9461C18.0073 16.6692 17.9088 16.3998 17.7241 16.1932ZM2.16494 7.57728C2.16494 6.50682 2.48237 5.4604 3.07708 4.57034C3.6718 3.68029 4.51709 2.98657 5.50607 2.57693C6.49504 2.16728 7.58328 2.0601 8.63318 2.26893C9.68307 2.47777 10.6475 2.99325 11.4044 3.75018C12.1613 4.5071 12.6768 5.47149 12.8856 6.52138C13.0945 7.57128 12.9873 8.65952 12.5776 9.64849C12.168 10.6375 11.4743 11.4828 10.5842 12.0775C9.69416 12.6722 8.64774 12.9896 7.57728 12.9896C6.14237 12.9879 4.76672 12.4171 3.75208 11.4025C2.73744 10.3878 2.16666 9.01219 2.16494 7.57728Z" fill="currentColor"/></svg>
+			</a>
+		</div>
+		{%- if section.settings.enabled_user -%}
+			<div class="hdt-site-nav_icon hdt-site-nav_user lg:hdt-inline-flex md:hdt-inline-flex hdt-align-center hdt-hidden">
+				<a class="hdt-inline-flex hdt-align-center hdt-relative" data-no-instant href="{{ routes.account_url }}"{% unless customer or request.page_type contains 'customers' or settings.login_popup == false %} aria-controls="login-form-popup"{% endunless %}>
+					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 64 64" fill="currentColor"><path d="M56,64V57.48A8.43,8.43,0,0,0,47.56,49H16.44A8.43,8.43,0,0,0,8,57.48V64H.9V57.48A15.53,15.53,0,0,1,16.44,41.94H47.56A15.53,15.53,0,0,1,63.1,57.48V64Zm-23.47-27a18.66,18.66,0,0,1-13.11-5.43,18.54,18.54,0,0,1,0-26.22A18.53,18.53,0,0,1,51.07,18.51,18.52,18.52,0,0,1,32.54,37.05Zm0-30a11.44,11.44,0,1,0,8.09,3.35A11.36,11.36,0,0,0,32.54,7.07Z"/></svg>
+				</a>
+			</div>
+		{%- endif -%}
+		{%- if settings.compare_mode != "0" -%}
+			{%- if section.settings.enabled_compare -%}
+				<div class="hdt-site-nav_icon hdt-site-nav_compare lg:hdt-inline-flex md:hdt-inline-flex hdt-align-center hdt-hidden">
+					<hdt-compare-a class="hdt-contents">
+						<a href="{{ routes.search_url }}/?view=compare" class="hdt-inline-flex hdt-align-center hdt-relative hdt-has-count-box">
+							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+							  <path d="M7.41375 5.81625L1.58625 0L0 1.58625L5.81625 7.4025L7.41375 5.81625ZM11.8125 0L14.1075 2.295L0 16.4137L1.58625 18L15.705 3.8925L18 6.1875V0H11.8125ZM12.1838 10.5863L10.5975 12.1725L14.1187 15.6938L11.8125 18H18V11.8125L15.705 14.1075L12.1838 10.5863Z" fill="currentColor"/>
+							</svg>
+						</a>
+					</hdt-compare-a>
+				</div>
+			{%- endif -%}
+		{%- endif -%}
+		{%- if settings.wishlist_mode != '0' -%}
+			{%- if section.settings.enabled_wishlist -%}
+				<div class="hdt-site-nav_icon hdt-site-nav_wishlist lg:hdt-inline-flex md:hdt-inline-flex hdt-align-center hdt-hidden">
+					<hdt-wishlist-a class="hdt-contents">
+						<a href="{{ routes.search_url }}/?view=wishlist" class="hdt-inline-flex hdt-align-center hdt-relative hdt-has-count-box">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="18" viewBox="0 0 20 18" fill="currentColor">
+							  <path d="M9.90736 15.2534L9.80926 15.3515L9.70136 15.2534C5.04196 11.0256 1.96185 8.22997 1.96185 5.3951C1.96185 3.43324 3.43324 1.96185 5.3951 1.96185C6.90572 1.96185 8.37711 2.94278 8.897 4.27684H10.7215C11.2414 2.94278 12.7128 1.96185 14.2234 1.96185C16.1853 1.96185 17.6567 3.43324 17.6567 5.3951C17.6567 8.22997 14.5766 11.0256 9.90736 15.2534ZM14.2234 0C12.5166 0 10.8785 0.79455 9.80926 2.04033C8.74005 0.79455 7.10191 0 5.3951 0C2.37384 0 0 2.36403 0 5.3951C0 9.09319 3.33515 12.1243 8.38692 16.7052L9.80926 18L11.2316 16.7052C16.2834 12.1243 19.6185 9.09319 19.6185 5.3951C19.6185 2.36403 17.2447 0 14.2234 0Z"/>
+							</svg>
+							<hdt-wishlist-count class="hdt-count-box hdt-absolute">0</hdt-wishlist-count>
+						</a>
+					</hdt-wishlist-a>
+				</div>
+			{%- endif -%}
+		{%- endif -%}
+		<div class="hdt-site-nav_icon hdt-site-nav_cart hdt-inline-flex hdt-align-center">
+			<a class="hdt-inline-flex hdt-align-center hdt-relative hdt-has-count-box" href="{{ routes.cart_url }}"{% if request.page_type != 'cart' %} aria-controls="CartDrawer"{% endif %}>
+				<svg xmlns="http://www.w3.org/2000/svg" width="17" height="18" viewBox="0 0 17 18" fill="currentColor">
+					<path d="M15.3 18H0.9C0.661305 18 0.432387 17.9052 0.263604 17.7364C0.0948211 17.5676 0 17.3387 0 17.1V0.9C0 0.661305 0.0948211 0.432387 0.263604 0.263604C0.432387 0.0948211 0.661305 0 0.9 0H15.3C15.5387 0 15.7676 0.0948211 15.9364 0.263604C16.1052 0.432387 16.2 0.661305 16.2 0.9V17.1C16.2 17.3387 16.1052 17.5676 15.9364 17.7364C15.7676 17.9052 15.5387 18 15.3 18ZM14.4 16.2V1.8H1.8V16.2H14.4ZM5.4 3.6V5.4C5.4 6.11608 5.68446 6.80284 6.19081 7.30919C6.69716 7.81554 7.38392 8.1 8.1 8.1C8.81608 8.1 9.50284 7.81554 10.0092 7.30919C10.5155 6.80284 10.8 6.11608 10.8 5.4V3.6H12.6V5.4C12.6 6.59347 12.1259 7.73807 11.282 8.58198C10.4381 9.42589 9.29347 9.9 8.1 9.9C6.90653 9.9 5.76193 9.42589 4.91802 8.58198C4.07411 7.73807 3.6 6.59347 3.6 5.4V3.6H5.4Z"/>
+				</svg>
+				<hdt-cart-count class="hdt-count-box hdt-absolute">{{ cart.item_count }}</hdt-cart-count>
+			</a>
+		</div>
+	</div>
+{%- endif -%}

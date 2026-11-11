@@ -1,0 +1,77 @@
+.hdt-pickup-availability-list__item + .hdt-pickup-availability-list__item{
+  margin-top: 3rem;
+}
+.hdt-pickup-availability__preview .hdt-icon-svg {
+  min-width: 1.8rem;
+  min-height: 1.8rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: 0.3rem;
+}
+.hdt-pickup-availability__info{
+  margin-inline-start: 1rem;
+}
+.hdt-pickup-availability__info button{
+  text-decoration: underline;
+  border: none;
+  padding: 0;
+  background: transparent;
+}
+.hdt-pickup-availability__title{
+  font-size: var(--text-10xl);
+}
+.hdt-modal-pickup-availability::part(header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.hdt-modal-pickup-availability::part(close-button) {
+  color: rgb(var(--color-foreground));
+  background: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+.hdt-modal-pickup-availability::part(content) {
+  width: 100%;
+  border-radius: 0.3rem;
+  margin: 0.8rem;
+}
+.hdt-pickup-availability-list__location{
+  margin-bottom: 1.5rem;
+}
+.hdt-pickup-availability-list__preview{
+  margin: 1.5rem 0 2rem 0;
+}
+.hdt-pickup-availability-list__button{
+  margin-top: 1.4rem;
+  padding: 0;
+  background-color: transparent;
+  border-bottom: 0.1rem solid currentColor;
+  gap: 0.4rem;
+  transition: color .3s ease;
+}
+@media (min-width: 768px) {
+  .hdt-modal-pickup-availability::part(content) {
+    max-width: min(62.5rem,90vw);
+  }
+}
+@media(min-width:1150px){
+  .hdt-modal-pickup-availability::part(content) {
+    padding: 3rem 3.6rem;
+  }
+  .hdt-pickup-availability-list__item + .hdt-pickup-availability-list__item{
+    margin-top: 4.2rem;
+  }
+}
+
+@media (-moz-touch-enabled: 0), (hover: hover) and (min-width: 1150px){
+  .hdt-modal-pickup-availability::part(close-button):hover,
+  .hdt-pickup-availability-list__button:hover {
+    color: rgb(var(--color-accent));
+  }
+}

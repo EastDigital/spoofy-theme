@@ -1,0 +1,46 @@
+
+{% cycle 'index_tabs': '', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 %}
+{%- capture tab_list -%}
+  {% content_for "blocks" %}
+{%- endcapture -%}
+{%- assign tab_list_title = tab_list | split: '<!--item-title>' -%}
+<div class="hdt-type-tab" {{ block.shopify_attributes }}>
+  <div class="hdt-product-tab__wrap hdt-product-tab--default">
+    <hdt-tab class="hdt-product-tab__main hdt-pr-tab-block hdt-flex hdt-justify-center hdt-scroll-snap hdt-snap-x" aria-controls="product-tabs-{{ section.settings.tabs_design }}-{{ section.id }}">
+      {%- for tab in tab_list_title -%}
+        {{- tab | split: '-->' | first -}}
+      {%- endfor -%}
+    </hdt-tab>
+    <div class="hdt-product-tab__content" id="product-tabs-{{ section.settings.tabs_design }}-{{ section.id }}">
+      {{ tab_list }}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "t:sections.main-product-tabs.blocks.group_product_tab.name",
+    "tag": null,
+    "blocks": [
+      {
+        "type":"_product-tab-des"
+      },
+      {
+        "type":"_product-tab-add"
+      },
+      {
+        "type":"_product-tab-review"
+      },
+      {
+        "type":"_product-tab-html"
+      },
+      {
+        "type":"_product-tab-customliquid"
+      }
+    ],
+    "presets": [
+      { 
+        "name": "t:sections.main-product-tabs.blocks.group_product_tab.name" 
+      }
+    ]
+  }
+{% endschema %}

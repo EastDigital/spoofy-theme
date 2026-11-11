@@ -1,0 +1,84 @@
+{%- comment -%}
+  vertical_offset_for_trigger: Reduce below value if you need the back to the top button to appear higher up on the page. That value is in pixels.
+{%- endcomment -%}
+
+{%- liquid
+  assign vertical_offset_for_trigger = 100
+-%}
+{% style %}.hdt-back-to-top{right:40px;bottom:var(--backtop-bottom,55px);cursor:pointer;z-index:100;pointer-events:none;opacity:0;visibility:hidden;transition:.25s;position:fixed;z-index:100;transition:0.4s ease 0s;width:40px;height:40px;text-align:center;line-height:40px;font-size:35px;border-radius:var(--backtop-radius);background:#fff;color:rgb(var(--color-accent)/0.5);display:inline-flex;align-items:center;justify-content:center;pointer-events:auto;transition:opacity .4s ease,visibility .4s ease,margin-right 0s,border-color .25s ease-in,color .25s ease-in;box-shadow:0 0 3px 0 rgb(var(--color-accent)/0.2);--backtop-radius:var(--radius-button)}:is(.hdt-modal-opened,.is--opend-drawer) .hdt-back-to-top{margin-right:var(--scroll-w)}.hdt-back-to-top.is--show{opacity:1;visibility:visible;z-index:21}.hdt-back-to-top svg{width:12px}.hdt-back-to-top.hdt-back-to-top__design2{line-height:42px;border:1px solid rgb(var(--color-accent)/0.5);box-shadow:none;--backtop-radius:var(--radius-full);color:rgb(var(--color-accent)/0.5)}.hdt-back-to-top:hover,.hdt-back-to-top.hdt-back-to-top__design2:hover{border-color:rgb(var(--color-accent));color:rgb(var(--color-accent))}.hdt-back-to-top .hdt-circle--inner{display:flex;align-items:center;justify-content:center}.hdt-back-to-top .hdt-circle-css{position:absolute;width:100%;height:100%;border-radius:var(--backtop-radius)}.hdt-back-to-top.hdt-back-to-top__design1 .hdt-circle--inner,.hdt-back-to-top.hdt-back-to-top__design1 .hdt-circle--bg{--backtop-radius:var(--radius-button)}.hdt-back-to-top.hdt-back-to-top__design2 .hdt-circle-css{--backtop-radius:var(--radius-full)}.hdt-back-to-top.hdt-progress_bar_true,.hdt-back-to-top.hdt-progress_bar_true:hover{border:none;box-shadow:none;color:var(--cricle-active)}.hdtp-hover .hdt-back-to-top.hdt-progress_bar_true:hover svg{-webkit-animation:move_on_top .5s ease-in-out forwards;animation:move_on_top .5s ease-in-out forwards}@keyframes move_on_top{0%{transform:translateY(0%)}25%{opacity:0;transform:translateY(-100%)}50%{opacity:0;transform:translateY(100%)}75%{opacity:1;transform:translateY(0%)}}@media(max-width:1024px){.hdt-back-to-top{right:15px}.hdt-back-to-top span{width:40px;height:40px;text-align:center;line-height:40px}}.sticky-is--active .hdt-back-to-top{bottom:calc(10px + var(--stickyATC-height, 45px))}.hdt-circle-css{position:relative;width:100px;height:100px;display:flex;justify-content:center;align-items:center;--border-minus:calc(var(--border-w, 1px) * 2);--hdt-light-color:#fff}.hdt-circle--inner{width:calc(100% - var(--border-minus));height:calc(100% - var(--border-minus));background:var(--hdt-light-color);position:relative;z-index:2;border-radius:var(--backtop-radius)}.hdt-circle--bg{position:absolute;z-index:1;width:100%;height:100%;border-radius:var(--backtop-radius);background:conic-gradient(var(--cricle-active,#000) var(--cricle-degrees),var(--cricle-normal,#eee) var(--cricle-degrees));mask:radial-gradient(circle,transparent 62%,white calc(62% + 1px));-webkit-mask:radial-gradient(circle,transparent 62%,white calc(62% + 1px));will-change:background;transition:background .15s ease-in-out 0s}@media (max-width:767px){.hdt-back-to-top{width:32px;height:32px}}.sticky-shown .hdt-back-to-top{bottom:calc(1rem + var(--hdt-sticky-atc-height, 3rem))}{% endstyle %}
+<back-to-top config='{"hiddenMobile": {{ section.settings.enable_hidden_mobile }},"scrollTop": {{ vertical_offset_for_trigger }} }' class="hdt-back-to-top hdt-back-to-top__design{{ section.settings.backtop_des }} hdt-pf hdt-progress_bar_{{ section.settings.enable_progress_bar }} hdt-op-0" rel="nofollow" href="#" aria-label="{{ 'general.aria.back_to_top' | t }}" style="--border-w:1px;--cricle-normal:{{ section.settings.border_cl }};--cricle-active:{{ section.settings.border_cl_active }};">
+  {%- if section.settings.enable_progress_bar -%}
+    <div class="hdt-circle-css" style="--border-w:1px;">
+      <div class="hdt-circle--inner">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="9.98 12.06 12.05 6.79" width="14" height="14"><path d="M16.767 12.809l-0.754-0.754-6.035 6.035 0.754 0.754 5.281-5.281 5.256 5.256 0.754-0.754-3.013-3.013z" fill="currentColor"></path></svg>
+      </div>
+      <div class="hdt-circle--bg"></div>
+    </div>
+  {%- else -%}
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="9.98 12.06 12.05 6.79" width="14" height="14"><path d="M16.767 12.809l-0.754-0.754-6.035 6.035 0.754 0.754 5.281-5.281 5.256 5.256 0.754-0.754-3.013-3.013z" fill="currentColor"></path></svg>
+  {%- endif -%}
+</back-to-top>
+
+{%- schema -%}
+{
+  "name": "t:sections.back_to_top.name",
+  "class": "hdt-section-admn2-fixed",
+  "limit": 1,
+  "presets": [
+    {
+      "name": "t:sections.back_to_top.name"
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "custom.system"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_hidden_mobile",
+      "label": "t:sections.back_to_top.settings.hidden_mobile",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "backtop_des",
+      "default": "1",
+      "label": "t:sections.back_to_top.settings.backtop_des.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:sections.back_to_top.settings.backtop_des.design_1"
+        },
+        {
+          "value": "2",
+          "label": "t:sections.back_to_top.settings.backtop_des.design_2"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.back_to_top.settings.progress_bar.header"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_progress_bar",
+      "label": "t:sections.back_to_top.settings.progress_bar.enable",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "border_cl",
+      "label": "t:sections.back_to_top.settings.progress_bar.color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "border_cl_active",
+      "label": "t:sections.back_to_top.settings.progress_bar.active_color",
+      "default": "#000000"
+    }
+  ]
+}
+{% endschema %}

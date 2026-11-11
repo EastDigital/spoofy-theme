@@ -1,0 +1,95 @@
+
+{%- liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  if product == blank 
+    continue
+  endif
+  unless product.available
+    continue
+  endunless
+
+  assign show_dialog_size_chart = true
+  assign image_size_chart = block.settings.size_chart_image
+  if block.settings.size_chart == '2'
+    assign show_dialog_size_chart = false
+    assign size_list = 'products.theme_settings.size' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq
+    for option in product.options_with_values
+      assign name = option.name | downcase
+      if size_list contains name
+        assign show_dialog_size_chart = true
+        break
+      endif
+    endfor
+  endif
+-%}
+{%- if block.settings.size_chart_source == 'page' and block.settings.size_chart_page != blank and show_dialog_size_chart -%}
+  <button class="hdt-s-text hdt-text-base hdt-font-semibold" aria-controls="modal-{{ block.id }}" aria-expanded="false">{{ 'products.product.size_chart_button' | t }}</button>
+  <hdt-modal effect="slide" color-scheme="{{ settings.color_scheme_dialog }}">
+    <dialog id="modal-{{ block.id }}" class="hdt-dialog hdt-dialog-modal hdt-product__modal hdt-modal__size-chart" scroll-lock>
+    <div class="hdt-dialog-modal__header"><h3 class="hdt-product__modal-title">{{ block.settings.size_chart_page.title }}</h3><button class="hdt-s-text" aria-controls="modal-{{ block.id }}" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button></div>
+    <div class="hdt-dialog-modal__inner hdt-current-scrollbar hdt-rte">{{ block.settings.size_chart_page.content }}</div>
+    </dialog>
+  </hdt-modal>
+{%- elsif block.settings.size_chart_source == 'image' and image_size_chart != blank and show_dialog_size_chart -%}
+  <wrapp-open-pswp-btn data-obj-img='{ "src": "{{ image_size_chart | image_url: width: image_size_chart.width }}", "width": "{{ image_size_chart.width }}", "height": "{{ image_size_chart.height }}", "alt": "{{ image_size_chart.alt }}" }'><button class="hdt-s-text hdt-text-base hdt-font-semibold">{{ 'products.product.size_chart_button' | t }}</button></wrapp-open-pswp-btn>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Size chart",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "size_chart",
+      "label": "t:sections.main-product.blocks.extra_link.settings.size_chart.label",
+      "default": "3",
+      "options": [
+        {
+          "value": "2",
+          "label": "t:sections.main-product.blocks.extra_link.settings.size_chart.options__2.label"
+        },
+        {
+          "value": "3",
+          "label": "t:sections.main-product.blocks.extra_link.settings.size_chart.options__3.label"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "size_chart_source",
+      "options": [
+        {
+          "value": "page",
+          "label": "t:sections.main-product.blocks.variant_picker.settings.size_chart_source.options__1.label"
+        },
+        {
+          "value": "image",
+          "label": "t:sections.main-product.blocks.variant_picker.settings.size_chart_source.options__2.label"
+        }
+      ],
+      "default": "page",
+      "label": "t:sections.main-product.blocks.variant_picker.settings.size_chart_source.label"
+    },
+    {
+      "type": "page",
+      "id": "size_chart_page",
+      "label": "t:sections.main-product.blocks.variant_picker.settings.size_chart_page.label",
+      "info": "t:sections.main-product.blocks.variant_picker.settings.size_chart_page.info"/*,
+      "visible_if": "{{ block.settings.size_chart_source == 'page' }}"*/
+    },
+    {
+      "type": "image_picker",
+      "id": "size_chart_image",
+      "label": "t:sections.main-product.blocks.variant_picker.settings.size_chart_image.label",
+      "visible_if": "{{ block.settings.size_chart_source == 'image' }}"
+    }
+  ],
+  "presets": [
+    { 
+      "name": "Size chart",
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,175 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "heading-page": {
+      "type": "main-heading",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "spacing_hd": 5,
+        "padding_top": 88,
+        "padding_bottom": 88,
+        "padding_rate": 75
+      }
+    },
+    "7cf53d2f-1d77-4fe9-80cc-7242596e17a1": {
+      "type": "main-article",
+      "blocks": {
+        "article_title_tkYcaa": {
+          "type": "_article-title",
+          "settings": {
+            "show_title": true,
+            "heading_fs": "h3",
+            "show_blog_title": "blog_current",
+            "show_author": true,
+            "show_date": true,
+            "date": "%b %d",
+            "content_align": "center",
+            "padding_top": 0,
+            "padding_bottom": 30,
+            "padding_rate": 75
+          }
+        },
+        "article_image_qhYTQP": {
+          "type": "_article-image",
+          "settings": {
+            "padding_top": 0,
+            "padding_bottom": 30,
+            "padding_rate": 75
+          }
+        },
+        "article_content_YFiUkA": {
+          "type": "_article-content",
+          "settings": {
+            "padding_top": 0,
+            "padding_bottom": 30,
+            "padding_rate": 75
+          }
+        },
+        "article_tag_shares_BNWQ7H": {
+          "type": "_article-tag-shares",
+          "settings": {
+            "enable_social_facebook": true,
+            "enable_social_twitter": true,
+            "enable_social_pinterest": true,
+            "enable_social_tumblr": true,
+            "enable_social_telegram": true,
+            "enable_social_whatsapp": true,
+            "enable_social_email": true,
+            "socials_style": "simple",
+            "socials_size": "medium",
+            "padding_top": 0,
+            "padding_bottom": 30,
+            "padding_rate": 75
+          }
+        },
+        "article_comments_xdkdYe": {
+          "type": "_article-comments",
+          "settings": {
+            "padding_top": 0,
+            "padding_bottom": 30,
+            "padding_rate": 75
+          }
+        },
+        "article_navigation_nCDzmL": {
+          "type": "_article-navigation",
+          "settings": {
+            "article": "",
+            "padding_top": 27,
+            "padding_bottom": 23,
+            "padding_rate": 75
+          }
+        },
+        "article_related_hPdUPg": {
+          "type": "_article-related",
+          "settings": {
+            "limit": 8,
+            "col_dk": "3",
+            "col_tb": "3",
+            "col_mb": "2",
+            "show_blog_title": "blog_current",
+            "show_content": false,
+            "show_tags": false,
+            "show_author": false,
+            "show_comment": false,
+            "show_readmore": true,
+            "show_date": false,
+            "date": "%b %d",
+            "color_scheme": "scheme-1",
+            "navUI": false,
+            "dotUI": true,
+            "spacing_dot": 30,
+            "Content_align": "start",
+            "image_ratio": "-adapt_image",
+            "image_size": "cover",
+            "padding_top": 80,
+            "padding_bottom": 30,
+            "padding_rate": 75
+          },
+          "blocks": {
+            "heading_tPqPYm": {
+              "type": "heading",
+              "settings": {
+                "heading": "<p>Related Articles</p>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "heading_size": "h5",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 50,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            "spacer_tYeddQ": {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 50,
+                "space_md": 38,
+                "space": 26
+              }
+            }
+          },
+          "block_order": [
+            "heading_tPqPYm",
+            "spacer_tYeddQ"
+          ]
+        }
+      },
+      "block_order": [
+        "article_title_tkYcaa",
+        "article_image_qhYTQP",
+        "article_content_YFiUkA",
+        "article_tag_shares_BNWQ7H",
+        "article_comments_xdkdYe",
+        "article_navigation_nCDzmL",
+        "article_related_hPdUPg"
+      ],
+      "custom_css": [
+        ".hdt-dots-outline .hdt-slider__dot {--size-dot: 20px;}",
+        ".hdt-dots-outline .hdt-slider__dot:before {--size-dot: 6px;}"
+      ],
+      "settings": {
+        "section_fullwidth": false,
+        "color_scheme": "scheme-315cb898-5db9-42ff-9aab-c627dfdb0c65",
+        "padding_top": 30,
+        "padding_bottom": 20,
+        "padding_rate": 75
+      }
+    }
+  },
+  "order": [
+    "heading-page",
+    "7cf53d2f-1d77-4fe9-80cc-7242596e17a1"
+  ]
+}

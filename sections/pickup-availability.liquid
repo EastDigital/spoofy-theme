@@ -1,0 +1,4 @@
+{%- liquid
+  assign product_form_id = 'product-form-' | append: section.id | append: product.id
+  render 'pickup-availability', form_id: product_form_id
+-%}

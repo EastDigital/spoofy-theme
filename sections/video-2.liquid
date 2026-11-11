@@ -1,0 +1,129 @@
+<!-- sections/video-2.liquid -->
+{% style %}#shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}}.hdt-video-2 hdt-video-player{width:100%}.hdt-video-2 iframe{max-width:100%}.hdt-ratio--adapt_video .hdt-ratio{--ratio-percent:calc(100% / (var(--aspect-ratioapt)))}.hdt-ratio--4_3 .hdt-ratio{--ratio-percent:75%}.hdt-ratio--16_9 .hdt-ratio{--ratio-percent:56.25%}.hdt-ratio--21_9 .hdt-ratio{--ratio-percent:42.85%}{% endstyle %}
+{% liquid
+  assign video_ratio = section.settings.video_ratio
+%}
+<div class="hdt-container{% if section.settings.full_width %}-full{% endif %} hdt-section-spacing hdt-s-gradient hdt-ratio--{{ video_ratio }} is-video" style="--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}" color-scheme="{{ section.settings.color_scheme }}"{% if section.index != 1 %} hdt-reveal="fade-in"{% endif %}>
+  <div class="hdt-flex hdt-justify-center hdt-align-center{% unless section.settings.full_width %} hdt-radius{% endunless %} hdt-oh">
+    {%- if section.settings.video -%}
+      <div class="hdt-ratio" {% if video_ratio == 'adapt_video' %} style="--aspect-ratioapt: {{ section.settings.video.aspect_ratio }}"{% endif %}>
+        <hdt-video-player>
+          {{- section.settings.video | video_tag: image_size: '1500x', playsinline: true, loop: true, controls: true, preload: 'metadata' -}}
+        </hdt-video-player>
+      </div>
+    {%- else -%}
+      {% if video_ratio == 'adapt_video' %}
+        {{ section.settings.external_video_url }}
+      {%- else -%}    
+         <div class="hdt-ratio">
+          {{ section.settings.external_video_url }}
+        </div>
+      {% endif %}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.video.name_2",
+  "tag": "section",
+  "class": "hdt-section hdt-video-2 section-allow-transparent",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "presets": [
+    {
+      "name": "t:sections.video.name_2",
+      "category": "t:sections_categories.02_banner.name",
+      "settings": {
+        "external_video_url": "<iframe width=\"1905\" height=\"712\" src=\"https:\/\/www.youtube.com\/embed\/_9VUPq3SxOc\" title=\"Share your brand story by adding a video to your store\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" allowfullscreen><\/iframe>",
+        "full_width": false
+      }
+    }
+  ],
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "t:sections.video.settings.video.label",
+      "info": "t:sections.video.settings.video.info"
+    },
+    {
+      "type": "textarea",
+      "id": "external_video_url",
+      "label": "t:sections.video.settings.video.url"
+    },
+    {
+      "type": "select",
+      "id": "video_ratio",
+      "label": "t:sections.video.settings.video_ratio.label",
+      "options": [
+        {
+          "value": "adapt_video",
+          "label": "t:sections.video.settings.video_ratio.adapt_video"
+        },
+        {
+          "value": "4_3",
+          "label": "t:sections.video.settings.video_ratio.4_3"
+        },
+        {
+          "value": "16_9",
+          "label": "t:sections.video.settings.video_ratio.16_9"
+        },
+        {
+          "value": "21_9",
+          "label": "t:sections.video.settings.video_ratio.21_9"
+        }
+      ],
+      "default": "adapt_video"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.video.settings.color"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:sections.video.settings.full_width",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ]
+}
+{% endschema %}

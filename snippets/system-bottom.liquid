@@ -1,0 +1,107 @@
+<ul hidden>
+  <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
+  <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
+  <li id="a11y-external-message">{{ 'accessibility.link_messages.external' | t }}</li>
+  <li id="a11y-new-window-external-message">{{ 'accessibility.link_messages.new_window_and_external' | t }}</li>
+</ul>
+
+<script>
+  window.themeHDN.routes = {
+    search_url: "{{ routes.search_url }}",
+    predictive_search_url: '{{ routes.predictive_search_url }}'
+  };
+  window.themeHDN.extras = {
+    addToCart: `{{ 'products.product.add_to_cart' | t }}`,
+    soldOut: `{{ 'products.product.sold_out' | t }}`,
+    preOrder: `{{ 'products.product.pre_order' | t }}`,
+    unavailable: `{{ 'products.product.unavailable' | t }}`,
+    savePercent: `{{ 'products.product.save_percent' | t: percent: '[sale]' }}`,
+    quantity: {
+      increment: `{{ 'products.product.quantity.multiples_of' | t: quantity: 1904 }}`,
+      min: `{{ 'products.product.quantity.minimum_of' | t: quantity: 1904 }}`,
+      max: `{{ 'products.product.quantity.maximum_of' | t: quantity: 1904 }}`
+    },
+    pswp: {
+      close: `{{ 'light_box_image.close' | t }}`,
+      zoom: `{{ 'light_box_image.zoom' | t }}`,
+      prev: `{{ 'light_box_image.prev' | t }}`,
+      next: `{{ 'light_box_image.next' | t }}`,
+      errorMsg: `{{ 'light_box_image.errorMsg' | t }}`
+    },
+    exit_popup:{
+      copy: `{{ 'general.aria.exit_popup.copy' | t }}`,
+      copied: `{{ 'general.aria.exit_popup.copied' | t }}`
+    },
+    timezone: {{ settings.countdown_timezone | json }},
+    order: {
+      dayNames  : {{ 'products.product.product_single.order_dayNames' | t | json }},
+      monthNames: {{ 'products.product.product_single.order_monthNames' | t | json }}
+    },
+    AddedWishlistRemove: {% if settings.wis_atc_added == '1' %}false{% else %}true{% endif %},
+    text_wis_add: `{{ 'general.wishlist.add_to_wishlist' | t }}`,
+    text_wis_adding: `{{ 'general.wishlist.adding_to_wishlist' | t }}`,
+    text_wis_added: `{{ 'general.wishlist.browse_wishlist' | t }}`,
+    text_wis_remove: `{{ 'general.wishlist.remove_wishlist' | t }}`,
+    enableComparePopup: {%-if settings.compare_mode == "1" %}{{ settings.enable_compare_popup }}{%- else -%}false{%- endif -%},
+    text_cp_add: `{{ 'general.compare.add_to_compare' | t }}`,
+    text_cp_added: `{{ 'general.compare.browse_compare' | t }}`,
+    icon_cp_add : `<svg height="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false" class="hdt-svg-cp"><use xlink:href="#hdt-icon-cp"></use></svg>`,
+    icon_cp_added : `<svg width="18" height="18" aria-hidden="true" focusable="false" class="hdt-svg-cp is-ic--added" viewBox="0 0 16 16"><use xlink:href="#hdt-icon-cp-added"></use></svg>`,
+    icon_wis_add : `<svg width="18" height="18" aria-hidden="true" focusable="false" class="hdt-svg-wis" viewBox="0 0 64 64"><use xlink:href="#hdt-icon-wis"></use></svg>`,
+    icon_wis_added: `<svg width="18" height="18" aria-hidden="true" focusable="false" class="hdt-svg-wis is-ic--added" viewBox="0 0 16 16"><use xlink:href="#hdt-icon-wis-added"></use></svg>`,
+    icon_wis_remove: `<svg class="hdt-svg-wis is-ic--remove" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M1.6 4.8H14.4V15.2C14.4 15.4122 14.3157 15.6157 14.1657 15.7657C14.0157 15.9157 13.8122 16 13.6 16H2.4C2.18783 16 1.98434 15.9157 1.83431 15.7657C1.68429 15.6157 1.6 15.4122 1.6 15.2V4.8ZM3.2 6.4V14.4H12.8V6.4H3.2ZM5.6 8H7.2V12.8H5.6V8ZM8.8 8H10.4V12.8H8.8V8ZM4 2.4V0.8C4 0.587827 4.08429 0.384344 4.23431 0.234315C4.38434 0.0842854 4.58783 0 4.8 0H11.2C11.4122 0 11.6157 0.0842854 11.7657 0.234315C11.9157 0.384344 12 0.587827 12 0.8V2.4H16V4H0V2.4H4ZM5.6 1.6V2.4H10.4V1.6H5.6Z" fill="currentColor"/></svg> `
+  }
+</script>
+{%- if settings.wishlist_mode == "2" %}{% assign customer_meta_wis_prs = customer.metafields.ecomrise.wishlist.value.ecomrise_ids %}<script type="application/json" id="hdt_wishlist_list">{% if customer_meta_wis_prs != blank %}{{- customer_meta_wis_prs | join: ' ' | strip -}}{% endif %}</script>{% endif -%}
+{%- if settings.compare_mode == "2" %}{% assign customer_meta_compare_prs = customer.metafields.ecomrise.compare.value.ecomrise_ids %}<script type="application/json" id="hdt_compare_list">{% if customer_meta_compare_prs != blank %}{{- customer_meta_compare_prs | join: ' ' | strip -}}{% endif %}</script>{% endif -%}
+{%- render 'search-form' -%}
+{%- render 'hdt_customer_form_popup' -%}
+{%- if settings.show_quick_view or settings.show_quick_add %}<hdt-tmp-quick hidden></hdt-tmp-quick>{% endif -%}
+<script type="module" src="{{ 'global.min.js' | asset_url }}" fetchpriority="high"></script>
+<script type="module" src="{{ 'custom.js' | asset_url }}"></script>
+{%- assign arr_page_type = 'collection, search, blog, list-collections' | split: ', ' -%}
+{%- if arr_page_type contains request.page_type %}<script type="module" src="{{ 'facets.min.js' | asset_url }}"></script>{% endif -%}
+{%- if settings.currency_type == "2" -%}
+<script src="{{ 'currencies.js' | shopify_asset_url }}" defer></script>
+<script type="module" src="{{ 'hdt-currencies.js' | asset_url }}"></script>
+{%- endif -%}
+{%- if request.design_mode -%}{%- render 'var_adm' -%}{% endif -%}
+{%- unless template.name == "password" -%}
+{%- comment -%} begin popover currencies {%- endcomment -%}
+{%- liquid
+  assign supported_codes = settings.supported_currencies | newline_to_br | split: '<br />'
+  if settings.currency_type == "1" and localization.available_countries.size > 9
+      echo '<hdt-lazy-html section-id="popover-currencies"> </hdt-lazy-html>'
+  elsif settings.currency_type == "2" and supported_codes.size > 9
+    echo '<hdt-lazy-html section-id="popover-currencies"> </hdt-lazy-html>'
+  else
+    render 'popover-currencies'
+  endif
+  -%}
+{%- comment -%} end popover currencies {%- endcomment -%}
+{%- comment -%} begin popover language {%- endcomment -%}
+{%- style -%} @media(min-width: 768px) {.hdt-popover-language{ box-shadow: 0 0 1.8rem 0 rgb(var(--color-overlay, 0 0 0) / .2) !important; .hdt-popover__inner{max-height: 45vh;overflow-y:auto} }} .hdt-languages{ vertical-align: middle; line-height: normal; } .hdt-languages>button { background: transparent; color: rgb(var(--color-foreground)); transition: all .3s ease; } .hdt-languages>button svg { width: 1rem; height: auto; margin-inline-start: 1rem; ; position: relative; top: -0.1rem } :where(.hdt-popover-language)::part(content) { padding: 1.5rem 2rem } :where(.hdt-popover-language)::part(body) { padding: 0; } .hdt-popover-language button { line-height:2.6rem; background: transparent; color: rgb(var(--color-foreground)); transition: all .3s ease; } .hdt-popover-language button[aria-selected="true"] { color: rgb(var(--color-accent)) !important; } @media(max-width:767px){ .hdt-popover-language button {line-height:3rem;} } @media (-moz-touch-enabled: 0), (hover: hover) and (min-width: 1150px) { .hdt-languages>button:hover, .hdt-popover-language button:hover { background: transparent; color: rgb(var(--color-foreground) / .8); } }{%- endstyle -%}
+{%- liquid
+  assign current_locale = request.locale
+  assign current_locale_iso_code = current_locale.iso_code 
+-%}
+<hdt-popover popover-active-min-width="1150" data-auto-close="desktop" placement="bottom" color-scheme="{{ settings.color_scheme_dialog }}">
+  <dialog id="popover-languages" class="hdt-popover hdt-popover-language hdt-dropdown hdt-text-start hdt-flag-size-{{ settings.size_currency }}" scroll-lock>
+    <div class="hdt-popover__arrow"></div>
+    <div class="hdt-popover__body">
+      {% comment %} <div class="hdt-popover__header"></div> {% endcomment %}
+      <div class="hdt-popover__inner hdt-current-scrollbar">
+        {%- form 'localization', id: 'localization_form_language' -%}
+          <hdt-richlist role="listbox" selected="{{ current_locale_iso_code }}">
+            {%- for locale in localization.available_languages -%}
+              <button type="submit" name="language_code" role="option" value="{{ locale.iso_code }}" aria-selected="{% if locale.iso_code == current_locale_iso_code %}true{% else %}false{% endif %}">{{ locale.endonym_name | escape }}</button>
+            {%- endfor -%}
+          </hdt-richlist>
+        {%- endform -%}
+      </div>
+    </div>
+  </dialog>
+</hdt-popover>
+{%- comment -%}  end opover language {%- endcomment -%}
+{%- endunless -%}

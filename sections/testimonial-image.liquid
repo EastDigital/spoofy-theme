@@ -1,0 +1,424 @@
+<!-- section/testimonials-with-image.liquid -->
+{{ 'testimonials.css' | asset_url | stylesheet_tag }}
+{{ 'top-head.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  capture capture_blocks
+    content_for 'blocks'
+  endcapture
+  assign array_blocks = capture_blocks | remove_first: '[split_child]' | split: '[split_child]'
+  assign images_html = ''
+  assign contents_html = ''
+  for slide in array_blocks
+    assign modulo_even = forloop.index | modulo: 2
+    if modulo_even == 0
+      assign contents_html = contents_html | append: slide
+    else
+      assign images_html = images_html | append: slide
+    endif
+  endfor
+-%}
+{%- style -%}
+  #shopify-section-{{section.id}} {
+    --section-pt:{{section.settings.padding_top}}px;
+    --section-pb:{{section.settings.padding_bottom}}px;
+    --section-prate:{{section.settings.padding_rate}}
+  }
+  #{{section.id}} .hdt-slider__dots {
+    display:flex
+  }
+  .hdt-nav-btns-group {
+    top:50%;
+    transform:translateY(-50%)
+  }
+  @media(max-width:767px) {
+    #{{section.id}} .hdt-slider__button {
+      display:none
+    }
+    .hdt-repon-img svg {
+      max-width: 10rem;
+      max-height: 10rem
+    }
+  }
+  @media(min-width:768px) {
+    #{{section.id}} .hdt-slider__dots {
+      display:none
+    }
+    #{{section.id}} .hdt-slider__dots.hdt-show-dot-true {
+      display:flex
+    }
+  }
+{%- endstyle -%}
+<div id="{{ section.id }}" class="hdt-testimonial-w-image hdt-section-spacing hdt-section-testimonials hdt-testimoials" color-scheme="{{ section.settings.color_scheme }}" style="--dis_dot: 30px">
+  <div class="hdt-container {%- if section.settings.section_fullwidth -%}-full{% endif %} hdt-{{ section.settings.image_width }} {% if section.settings.dri_img_first == true %} hdt-order-first_trued {% endif %} hdt-relative ">    
+    <div class="hdt-main-testimonial hdt-s-gradient hdt-relative hdt-rounded hdt-row-grid {% if section.settings.image_width == "one_img" or section.settings.image_width == "one_img_style2" %} md:hdt-grid-cols-2 hdt-grid-cols-1 {% endif %}">      
+      <div class="hdt-slide-left {% if section.settings.section_fullwidth %} hdt-px-15 {% endif %} hdt-testimonial-wrap  hdt-inline-flex hdt-align-center" hdt-reveal="slide-in" timeline>
+        {%- if section.settings.section_background != blank -%}
+          {%- assign se_bg = section.settings.section_background -%}
+          {{ se_bg | image_url: width: se_bg.width | image_tag: width: se_bg.width, height: se_bg.height, widths:'300,400,500,600,700,800,900,1000,1200,1400,1600,1800,1900,2000,2200,2400,2600,2800,3000,3200,3400,3600', class: 'hdt-absolute hdt-top-0 hdt-left-0 hdt-h-full hdt-object-cover hdt-w-full', loading: 'lazy' }}
+        {%- endif -%}
+        <hdt-slider autoHeight id="Slider-{{ section.id }}" aria-controls="Slider-{{ section.id }}" class="hdt-slider hdt-slider__dots_outline hdt-w-full lg:hdt-slide-spacing-30 md:hdt-slide-spacing-15 hdt-slide-spacing-15 lg:hdt-slides-1 md:hdt-slides-1 hdt-slides-1 hdt-dots-outline {% if section.settings.navUI %} hdt-nav-btns-{{ section.settings.nav_des }} hdt-nav-{{ section.settings.nav_pos }}{% endif %} hdt-relative" config='{"navUI":{{ section.settings.navUI }},"dotUI":true,"autoHeight": true }'>
+          <div class="hdt-slider__viewport hdt-relative">
+            <div class="hdt-slider__container">
+              {{ contents_html }}
+            </div>
+            {%- if section.settings.navUI -%}
+              {%- if section.settings.nav_pos == 'middle_in' and section.settings.navUI == true -%}
+                {%- render 'nav_slider',
+                  nav_des: section.settings.nav_des,
+                  nav_icon: section.settings.nav_icon,
+                  class: 'hdt-radius-full'
+                -%}
+              {%- endif -%}
+            {%- endif -%}
+            <div hdt-slider-dots aria-controls="Slider-{{ section.id }}" class="hdt-slider__dots hdt-show-dot-{{ section.settings.dotUI }} hdt-flex hdt-align-center hdt-justify-start"></div>
+          </div>
+        </hdt-slider>
+      </div>
+      <div class="hdt-testimonial-img-wrap hdt-ratio--adapt_image hdt-{{ section.settings.image_width }} {% if section.settings.dri_img_first == true %} hdt-order-first {% endif %}" hdt-reveal="slide-in" timeline>
+        <hdt-slider-sync id="Slider-{{ section.id }}" aria-controls="Slider-{{ section.id }}" class="hdt-slider hdt-slide-spacing-30">
+          <div class="hdt-slider__viewport">
+            <div class="hdt-slider__container">
+              {{ images_html }}
+            </div>
+          </div>
+        </hdt-slider-sync>
+      </div>
+      {%- if section.settings.navUI -%}
+        {%- if section.settings.image_width == 'one_img_fixed2' -%}
+          {%- if section.settings.nav_pos == 'middle_out' -%}
+            <div class="hdt-absolute hdt-nav-btns-group hdt-w-full hdt-slider {% if section.settings.navUI %} hdt-nav-btns-{{ section.settings.nav_des }} hdt-nav-{{ section.settings.nav_pos }}{% endif %}">
+              {%- render 'nav_slider', nav_des: section.settings.nav_des, nav_icon: section.settings.nav_icon -%}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Testimonial with image",
+  "class": "hdt-section hdt-testimonials-with-image",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "blocks": [
+    {
+      "type": "_testimonial-item"
+    }
+  ],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "section_background",
+      "label": "t:sections.all.bg_img"
+    },
+    {
+      "type": "header",
+      "content": "General options"
+    },
+    {
+      "type": "checkbox",
+      "id": "dri_img_first",
+      "label": "t:sections.testimonials.settings.dri_img_first.label",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "image_width",
+      "label": "t:sections.testimonials.settings.image_width.label",
+      "default": "one_img",
+      "options": [
+        {
+          "value": "one_img",
+          "label": "t:sections.testimonials.settings.image_width.option_1.label"
+        },
+        {
+          "value": "one_img_fixed",
+          "label": "t:sections.testimonials.settings.image_width.option_3.label"
+        },
+        {
+          "value": "one_img_fixed2",
+          "label": "t:sections.testimonials.settings.image_width.option_4.label"
+        },
+        {
+          "value": "two_img",
+          "label": "t:sections.testimonials.settings.image_width.option_5.label"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.slider.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "navUI",
+      "label": "t:sections.all.slider.navUI",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "nav_pos",
+      "label": "t:sections.all.slider.nav_pos.label",
+      "info": "t:sections.testimonials.settings.info",
+      "options": [
+        {
+          "value": "middle_in",
+          "label": "t:sections.all.slider.nav_pos.options.middle_in"
+        },
+        {
+          "value": "middle_out",
+          "label": "t:sections.all.slider.nav_pos.options.middle_out"
+        }
+      ],
+      "default": "middle_in",
+      "visible_if": "{{ section.settings.navUI }}"
+    },
+    {
+      "type": "select",
+      "id": "nav_des",
+      "label": "t:sections.all.slider.nav_des.label",
+      "options": [
+        {
+          "value": "default",
+          "label": "t:sections.all.slider.nav_des.options.default"
+        },
+        {
+          "value": "outline",
+          "label": "t:sections.all.slider.nav_des.options.outline"
+        },
+        {
+          "value": "simple",
+          "label": "t:sections.all.slider.nav_des.options.simple"
+        }
+      ],
+      "default": "default",
+      "visible_if": "{{ section.settings.navUI }}"
+    },
+    {
+      "type": "select",
+      "id": "nav_icon",
+      "label": "Navigation icon",
+      "options": [
+        {
+          "value": "chrvon",
+          "label": "Chevron"
+        },
+        {
+          "value": "arrow_right",
+          "label": "Arrow"
+        }
+      ],
+      "default": "chrvon",
+      "visible_if": "{{ section.settings.navUI }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "dotUI",
+      "label": "t:sections.all.slider.dotUI",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section_layout"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.title.settings.padding_top.label",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "t:sections.title.settings.padding_bottom.label",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials with image",
+      "category": "t:sections_categories.05_section.name",
+      "blocks": [
+        {
+          "type": "_testimonial-item",
+          "settings": {
+            "image_first": "shopify://shop_images/test2_773e7e44-7006-492f-93a0-8b5ea4e32679.jpg"
+          },
+          "blocks": [
+            {
+              "type": "_icon",
+              "settings": {
+                "icon": "car",
+                "svg_upload": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"46\" height=\"31\" viewBox=\"0 0 46 31\" fill=\"none\">\n          <path d=\"M32.4413 30.5L37.8204 19.9545L38.1913 19.2273H37.375H26.375V0.5H45.5V19.6071L39.9438 30.5H32.4413ZM6.56633 30.5L11.9454 19.9545L12.3163 19.2273H11.5H0.5V0.5H19.625V19.6071L14.0688 30.5H6.56633Z\" stroke=\"#B5B5B5\"></path>\n          </svg>",
+                "width_lg": 40,
+                "width_md": 44,
+                "width": 44
+              }
+            },
+            {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 24,
+                "space_md": 24,
+                "space": 16
+              }
+            },
+            {
+              "type": "heading",
+              "settings": {
+                "heading": "<p>OUR CUSTOMER'S RAVE REVIEWS</p>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "heading_size": "h_custom",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 13,
+                "font_size_heading_md": 13,
+                "font_size_heading": 12,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 24,
+                "space_md": 24,
+                "space": 16
+              }
+            },
+            {
+              "type": "_rating-star",
+              "settings": {
+                "rating": 5,
+                "pr_rating": "#ff7b54"
+              }
+            },
+            {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 24,
+                "space_md": 24,
+                "space": 16
+              }
+            },
+            {
+              "type": "text",
+              "settings": {
+                "text": "<p>\"I have been shopping with this web fashion site for over a year now<br/>and I can confidently say it is the best online fashion site out there. The shipping is always fast and the customer service team is friendly and helpful. I highly recommend this site to anyone looking for affordable clothing.\"</p>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "text_size": "custom",
+                "text_color": "hdt-s-text",
+                "font_size_text_lg": 20,
+                "font_size_text_md": 20,
+                "font_size_text": 16,
+                "font_weight_text": 400,
+                "letter_spacing_text": 0
+              }
+            },
+            {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 24,
+                "space_md": 24,
+                "space": 16
+              }
+            },
+            {
+              "type": "_user-infomation",
+              "settings": {},
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "<p>Robert smith</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "heading_size": "h_custom",
+                    "text_color": "hdt-s-text",
+                    "font_size_heading_lg": 14,
+                    "font_size_heading_md": 14,
+                    "font_size_heading": 14,
+                    "font_weight_heading": 600,
+                    "letter_spacing_heading": 0
+                  }
+                },
+                {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p>Purchase item: <strong> </strong><a href=\"/collections/all\" title=\"All products\"><strong>Patterned scarf</strong></a></p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "custom",
+                    "text_color": "hdt-s-text",
+                    "font_size_text_lg": 14,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "dri_img_first": false,
+        "image_width": "one_img",
+        "navUI": false,
+        "nav_pos": "middle_in",
+        "nav_des": "default",
+        "nav_icon": "chrvon",
+        "dotUI": false,
+        "color_scheme": "",
+        "section_fullwidth": false,
+        "padding_top": 30,
+        "padding_bottom": 30,
+        "padding_rate": 75
+      }
+    }
+  ]
+}
+{% endschema %}

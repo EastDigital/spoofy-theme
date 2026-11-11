@@ -1,0 +1,52 @@
+<!-- blocks/section-heading.liquid -->
+<div class="hdt-text-{{ block.settings.alignment }} hdt-sections-heading hdt-flex-col" style="--row-gap: {{ block.settings.row_gap }}px;--margin-bottom: {{ block.settings.margin_bottom }}px;">
+  {%- content_for 'blocks' -%}
+</div>
+
+{% schema %}
+{
+  "name": "Section heading",
+  "tag": null,
+  "blocks": [
+
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+  ],  
+  "settings": [
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "t:settings_schema.global.settings.text_alignment.label",
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "row_gap",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Spacing between items",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin bottom",
+      "default": 30
+    },
+  ]
+}
+{% endschema %}

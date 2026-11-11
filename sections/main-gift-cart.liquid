@@ -1,0 +1,141 @@
+<div class="hdt-main-gift-cart hdt-s-gradient hdt-section-spacing" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container hdt-s-text hdt-text-center">
+    <div class="hdt-gift-cart-wapper">
+      <div class="hdt-gift-cart-head">
+        {%- if section.settings.logo != blank -%}
+          <div class="hdt-gift-card__image-wrapper">
+            {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
+            {%- assign width = section.settings.logo_width -%}
+            <a href="{{ shop.url }}" class="hdt-block">
+              {{ section.settings.logo | image_url: width: width | image_tag: class: 'hdt-gift-card__image', alt: logo_alt }}
+            </a>
+          </div>
+        {%- else -%}
+          <h5 class="hdt-gift-card__shop-name">{{ shop.name }}</h5>
+        {%- endif -%}
+      </div>
+      <div class="hdt-gift-card__image-wrapper hdt-gift-card__image-featured">
+        {%- assign image = section.settings.image -%}
+        {%- if image != blank -%}
+          {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: 'hdt-radius', sizes: "462px", widths: "462, 924"}}
+        {%- else -%} 
+          <img class="hdt-gift-card__image hdt-radius" src="{{ 'gift-card/card.svg' | shopify_asset_url }}" alt="" height="{{ 462 | divided_by: 1.59 }}" width="462">
+        {%- endif -%}
+      </div>
+      <div class="hdt-gift-card__price">
+        <h1 class="hdt-h4">
+          {%- if settings.currency_code_enabled -%}
+            {{ gift_card.balance | money_with_currency }}
+          {%- else -%}
+            {{ gift_card.balance | money }}
+          {%- endif -%}
+        </h1>
+        {%- if gift_card.enabled == false or gift_card.expired -%}
+          <p class="hdt-badge hdt-badge__sold_out">{{ 'gift_cards.issued.expired' | t }}</p>
+        {%- endif -%}
+      </div>
+        {%- if gift_card.expires_on -%}
+        {%- assign gift_card_expiration_date = gift_card.expires_on | date: '%B %e, %Y' -%}
+        <p class="hdt-gift-card__text">
+          {{ 'gift_cards.issued.expiration_date' | t: expires_on: gift_card_expiration_date }}
+        </p>
+        {%- endif -%}
+      <div class="hdt-gift-card__qr hdt-row-flex hdt-radius lg:hdt-flex-cols-2 md:hdt-flex-cols-2 hdt-flex-cols-1 hdt-align-center">
+        <div class="hdt-col md:hdt-text-start hdt-text-center ">
+          <p class="hdt-gift-card__text">{{ 'gift_cards.issued.how_to_use_gift_card' | t }}</p>
+        </div>
+        <div class="hdt-col">
+          <h3 id="hdt-gift-card-code" class="hdt-h6 hdt-font-semibold">{{ gift_card.code | format_code }}</h3>
+          <div class="hdt-gift-card__qr-code" data-identifier="{{ gift_card.qr_identifier }}"></div>
+          {%- if gift_card.pass_url -%}
+            <a href="{{ gift_card.pass_url }}" class="hdt-gift_card__apple-wallet">
+              <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" width="120" height="40" alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}" loading="lazy">
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="hdt-gift-card__buttons">
+        <span class="hdt-gift-card__copy-success hdt-gift-form__message" role="status"></span>
+        <template>
+          {%- render 'icon' with 'success' -%} {{ 'gift_cards.issued.copy_code_success' | t }}
+        </template>
+        <button class="hdt-gift-card__copy-button hdt-btn hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-solid hdt-font-semibold">{{ 'gift_cards.issued.copy_code' | t }}</button>
+        <a href="{{ shop.url }}" class="hdt-gift-card__visit-store hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn hdt-oh hdt-btn-link hdt-font-semibold" target="_blank" rel="noopener" aria-describedby="a11y-new-window-message">
+          {{ 'gift_cards.issued.shop_link' | t }}
+          <svg class="hdt-icon hdt-icon-2" xmlns="http://www.w3.org/2000/svg" width="12" height="12"  viewBox="0 0 64 64" fill="currentColor"><path d="M6.89,64,0,57.11,47.26,9.85H4.92V0H64V59.08H54.15V16.74Z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{%- style -%}
+  #shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}}
+  .hdt-gift-cart-wapper{ max-width:101rem; margin: 0 auto; } .hdt-gift-card__image-wrapper { margin: 3rem auto; max-width: 46.2rem; } .hdt-gift-card__image { margin: 0 auto; object-fit: scale-down; } .hdt-gift-card__qr{ margin-top:3.6rem; padding:3rem 1.5rem; border:.1rem solid rgb(var(--color-line-border)); } .hdt-gift-card__buttons{ margin-top:3.6rem; } .hdt-gift-card__price { display: flex; flex-wrap: wrap; gap: 0rem 1rem; align-items: center; justify-content: center; margin-top:3.8rem; } .hdt-gift-card__price h1 { margin: 0; } .hdt-gift-cart-head { margin-bottom: 3.6rem; } .hdt-gift-card__text { font-size: var(--text-xl) } .hdt-gift-card__qr{ --spacing-x:0px; --spacing-y:30px; } .hdt-gift-card__qr-code { margin-top: 3rem; } .hdt-gift-card__qr-code img, .hdt-gift_card__apple-wallet img { margin: 0 auto; } .gift-card__buttons .hdt-gift-card__copy-button, .gift-card__buttons .hdt-gift-card__visit-store { margin: 1rem 0; min-width: 25rem; } .hdt-gift-form__message:not(:empty) { align-items: center; display: flex; justify-content: center; margin-bottom: 1rem; } .hdt-gift-card__copy-success { color: rgb(var(--color-success-text)); } .hdt-gift-form__message svg { flex-shrink: 0; height: 1.3rem; margin-right: 0.5rem; width: 1.3rem; } @media (min-width: 768px){ .hdt-gift-card__qr .hdt-col:last-child{ border-inline-start: .1rem solid rgb(var(--color-line-border)); } .hdt-gift-card__qr-code { margin: 3rem 0; } .hdt-gift-card__qr { padding: 4rem 2rem; } .hdt-gift-card__buttons{ margin-top:5.5rem; } } @media (min-width: 1150px){ .hdt-gift-card__qr .hdt-col:first-child{ padding:5.5rem; } .hdt-gift-card__text { font-size: var(--text-2xl); } .hdt-gift-cart-head{ margin-bottom:9.5rem; } }
+{%- endstyle -%}
+{% schema %}
+{
+  "name": "t:sections.main-gift-cart.name",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:sections.main-gift-cart.settings.logo.label"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "default": 100,
+      "unit": "px",
+      "label": "t:sections.main-gift-cart.settings.logo_width.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.main-gift-cart.settings.image.label",
+      "info":"t:sections.main-gift-cart.settings.image.info"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ]
+}
+{% endschema %}

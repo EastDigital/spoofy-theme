@@ -1,0 +1,194 @@
+[split_child]
+{%- liquid
+  assign widths = '367,450, 550, 750, 1100, 1200, 1600'
+  assign check_full = settings.page_width | append: 'px'
+  if section.settings.section_fullwidth
+    assign check_full = '100vw '
+  endif
+-%}
+{%- case section.settings.image_width -%}
+  {%- when 'one_img' -%}
+    {%- capture sizes -%}
+      (min-width: 768px) calc( {{ check_full }} / 2), calc( 100vw - 30px)
+    {%- endcapture -%}
+  {%- when 'one_img_style2' -%}
+    {%- capture sizes -%}
+        (min-width: 768px) calc( {{ check_full }} / 2), calc( 100vw - 30px)
+      {%- endcapture -%}
+  {%- when 'one_img_fixed' -%}
+    {%- capture sizes2 -%}
+      (min-width:768px) calc(calc( {{ check_full }} * 3 / 12 ) + 30px), calc( 100vw - 30px )
+    {%- endcapture -%}
+  {%- when 'one_img_fixed2' -%}
+    {%- capture sizes2 -%}
+      (min-width:768px) calc(calc( {{ check_full }} * 4 / 12 ) + 30px), calc( 100vw - 30px )
+    {%- endcapture -%}
+  {%- when 'two_img' -%}
+    {%- capture sizes1 -%}
+    (min-width:768px) calc( {{ check_full }} / 2 * 0.79 ), calc( 100vw - 30px )
+  {%- endcapture -%}
+    {%- capture sizes2 -%}
+      (min-width:768px) calc( {{ check_full }} / 2 * 0.53 ), calc( 100vw - 30px )
+    {%- endcapture -%}
+{%- endcase -%}
+<div class="hdt-slider__slide ">
+  <div class="hdt-group_image {% if section.settings.image_width == "two_img" %} hdt-group_twoimg hdt-relative{% endif %}">
+    <style>
+      .hdt-user-information-img {
+        display: flex;
+      }
+      @media (min-width: 768px) {
+        .hdt-user-information-img {
+          display: none;
+        }
+      }
+    </style>
+    {%- if section.settings.image_width == 'one_img' or section.settings.image_width == 'one_img_style2' -%}
+      {%- if block.settings.image_first != blank -%}
+        <div
+          class="hdt-h-full hdt-radius hdt-relative hdt-oh hdt-ratio"
+          style="--aspect-ratioapt:{{ block.settings.image_first.aspect_ratio }}"
+        >
+          {{
+            block.settings.image_first
+            | image_url: width: block.settings.image_first.width
+            | image_tag:
+              loading: 'lazy',
+              width: block.settings.image_first.width,
+              height: block.settings.image_first.height,
+              class: 'hdt-full-width-link hdt-object-cover hdt-object-center hdt-w-full hdt-h-full',
+              sizes: sizes,
+              widths: widths
+          }}
+        </div>
+      {%- else -%}
+        <div
+          class="hdt-h-full hdt-radius hdt-relative hdt-oh hdt-ratio"
+          style="--aspect-ratioapt:{{ block.settings.image.aspect_ratio | default: 1.2 }}"
+        >
+          {{ 'detailed-apparel-1' | placeholder_svg_tag: 'hdt-placeholder-svg' }}
+        </div>
+      {%- endif -%}
+    {%- elsif section.settings.image_width == 'one_img_fixed' or section.settings.image_width == 'one_img_fixed2' -%}
+      {%- if block.settings.image_first != blank -%}
+        <div
+          class="hdt-h-full hdt-radius hdt-relative hdt-oh hdt-ratio"
+          style="--aspect-ratioapt:{{ block.settings.image_first.aspect_ratio }}"
+        >
+          {{
+            block.settings.image_first
+            | image_url: width: block.settings.image_first.width
+            | image_tag:
+              loading: 'lazy',
+              width: block.settings.image_first.width,
+              height: block.settings.image_first.height,
+              class: 'hdt-full-width-link hdt-object-cover hdt-object-center hdt-w-full hdt-h-full',
+              sizes: sizes2,
+              widths: widths
+          }}
+        </div>
+      {%- else -%}
+        <div
+          class="hdt-h-full hdt-radius hdt-relative hdt-oh hdt-ratio"
+          style="--aspect-ratioapt:{{ block.settings.image.aspect_ratio | default: 1.2 }}"
+        >
+          {{ 'detailed-apparel-1' | placeholder_svg_tag: 'hdt-placeholder-svg' }}
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      {%- if block.settings.image_first != blank -%}
+        <div class="hdt-image_item_1">
+          <div
+            class="hdt-h-full hdt-radius hdt-relative hdt-oh hdt-ratio"
+            style="--aspect-ratioapt:{{ block.settings.image_first.aspect_ratio }}"
+          >
+            {{
+              block.settings.image_first
+              | image_url: width: block.settings.image_first.width
+              | image_tag:
+                loading: 'lazy',
+                width: block.settings.image_first.width,
+                height: block.settings.image_first.height,
+                class: 'hdt-full-width-link hdt-object-cover hdt-object-center hdt-w-full hdt-h-full',
+                sizes: sizes1,
+                widths: widths
+            }}
+          </div>
+        </div>
+      {%- else -%}
+        <div
+          class="hdt-h-full hdt-image_item_1 hdt-radius hdt-relative hdt-oh hdt-ratio"
+          style="--aspect-ratioapt:{{ block.settings.image.aspect_ratio | default: 1.2 }}"
+        >
+          {{ 'detailed-apparel-1' | placeholder_svg_tag: 'hdt-placeholder-svg hdt-radius' }}
+        </div>
+      {%- endif -%}
+      {%- if block.settings.image_second != blank -%}
+        <div class="hdt-image_item_2">
+          <div
+            class="hdt-h-full hdt-radius hdt-relative hdt-oh hdt-ratio"
+            style="--aspect-ratioapt:{{ block.settings.image_second.aspect_ratio }}"
+          >
+            {{
+              block.settings.image_second
+              | image_url: width: block.settings.image_second.width
+              | image_tag:
+                loading: 'lazy',
+                width: block.settings.image_second.width,
+                height: block.settings.image_second.height,
+                class: 'hdt-full-width-link hdt-object-cover hdt-object-center hdt-w-full hdt-h-full',
+                sizes: sizes2,
+                widths: widths
+            }}
+          </div>
+        </div>
+      {%- else -%}
+        <div
+          class="hdt-h-full hdt-image_item_2 hdt-radius hdt-relative hdt-oh hdt-ratio"
+          style="--aspect-ratioapt:{{ block.settings.image.aspect_ratio | default: 0.8 }}"
+        >
+          {{ 'detailed-apparel-1' | placeholder_svg_tag: 'hdt-placeholder-svg hdt-radius' }}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</div>
+[split_child]
+<div class="hdt-tetimonials-item hdt-slider__slide" timeline {{ block.shopify_attributes }}>
+  {%- content_for 'blocks' -%}
+</div>
+
+{% schema %}
+{
+  "name": "Slide item split",
+  "tag": null,
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "button" },
+    { "type": "spacer" },
+    { "type": "_rating-star" },
+    { "type": "_icon" },
+    { "type": "_user-infomation" },
+    { "type": "line" }
+  ],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image_first",
+      "label": "t:sections.testimonials.blocks.settings.image_first.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_second",
+      "label": "t:sections.testimonials.blocks.settings.image_second.label"
+    },
+   
+  ],
+  "presets": [
+    {
+      "name": "Slide item split"
+    }
+  ]
+}
+{% endschema %}

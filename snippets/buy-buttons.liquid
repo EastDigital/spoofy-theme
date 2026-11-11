@@ -1,0 +1,71 @@
+{%- comment -%}
+  Renders product buy-buttons.
+  Accepts:
+  - product: {Object} product object.
+  - selected_variant: {Object} (required)
+  - block: {Object} passing the block information.
+  - product_form_id: {String} product form id.
+  - section_id: {String} id of section to which this snippet belongs.
+  - show_pickup_availability: {Boolean} for the pickup availability. If true the pickup availability is rendered, false - not rendered (optional).
+
+  data-hide-errors: use if you want show hidden cart error
+
+  Usage:
+  {% render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true %}
+{%- endcomment -%}
+{%- if product != blank -%}
+  {%- liquid
+    #assign selected_variant = product.selected_or_first_available_variant
+    if selected_variant.inventory_management == 'shopify' and selected_variant.inventory_quantity <= 0 and selected_variant.available
+      assign is_pre_order = true
+    else
+      assign is_pre_order = false
+    endif
+    assign gift_card_recipient_feature_active = false
+    if block.settings.show_gift_card_recipient and product.gift_card?
+      assign gift_card_recipient_feature_active = true
+    endif
+
+    assign show_dynamic_checkout = false
+    if block.settings.show_dynamic_checkout and gift_card_recipient_feature_active == false
+      assign show_dynamic_checkout = true
+    endif
+
+    assign check_against_inventory = true
+    if selected_variant.inventory_management != 'shopify' or selected_variant.inventory_policy == 'continue'
+      assign check_against_inventory = false
+    endif
+    if selected_variant.quantity_rule.min > selected_variant.inventory_quantity and check_against_inventory
+      assign quantity_rule_soldout = true
+    endif
+    assign variant_picker_block = section.blocks | where: 'type', 'variant_picker' | first
+  -%}
+  <wrapp-hdt-pr-frm class="hdt-contents">
+    {%- form 'product', product, id: product_form_id, class: 'hdt-product-form', data-gift-card-recipient: gift_card_recipient_feature_active -%}
+      <input type="hidden" name="id" value="{{ selected_variant.id }}"{% if variant_picker_block != blank and product.has_only_default_variant == false %} disabled{% endif %}>
+      {%- if gift_card_recipient_feature_active -%}
+        {%- render 'gift-card-recipient-form', product: product, form: form, section: section, form_id: product_form_id -%}
+      {%- endif -%}
+      <div class="hdt-form__message-wrapper hdt-form__message--error" ref="addToCartTextError" role="alert" hidden>{% render 'icon' with 'error' %} <span class="hdt-error-message"></span></div>
+      <hdt-buy-buttons class="hdt-product-form__buttons" form="{{ product_form_id }}">
+        <button ref="addToCartButton" type="submit" name="add" class="hdt-product-form__submit"{% if selected_variant.available == false or quantity_rule_soldout or un_no_pick == false %} disabled{% endif %}>
+          <span>{% if un_no_pick == false %}{{ 'products.product.choose_options' | t }}{% elsif is_pre_order %}{{ 'products.product.pre_order' | t }}{% elsif selected_variant.available == false or quantity_rule_soldout %}{{ 'products.product.sold_out' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}</span>
+        </button>
+        {%- if show_dynamic_checkout and product.available -%}
+          {{ form | payment_button }}
+          {%- comment -%}
+          {%- unless selected_variant.available -%}
+            <style>#shopify-section-{{ section.id }} .shopify-payment-button {display: none; }</style>
+          {%- endunless -%}
+          {%- endcomment -%}
+        {%- endif -%}
+      </hdt-buy-buttons>
+    {%- endform -%}
+  </wrapp-hdt-pr-frm>
+{%- else -%}
+  <div class="hdt-product-form">
+    <div class="hdt-product-form__buttons form">
+      <button type="submit" name="add" class="hdt-product-form__submit hdt-btn hdt-btn-solid" disabled>{{ 'products.product.sold_out' | t }}</button>
+    </div>
+  </div>
+{%- endif -%}

@@ -1,0 +1,531 @@
+<div class="hdt-dialog-drawer__body">
+  {%- liquid
+    assign menu_mobile = section.settings.main_menu_mobile | default: section.settings.main_menu | default: linklists.theme_brands
+    assign menu_categories = section.settings.menu_categories
+    if section.settings.only_click_icon
+      assign only_click_icon = 'only-click-icon'
+    else
+      assign only_click_icon = ''
+    endif
+  -%}
+  {%- if menu_mobile != blank -%}
+    {%- liquid
+      if request.design_mode or search.terms == "submenu" or section.index == null
+        assign lazyMn = false
+      else
+        assign lazyMn = section.settings.lazy_mn
+      endif
+    -%}
+  
+    {%- if lazyMn -%}
+      <hdt-lazy-submenu id="sub-hdt-nav-mb"{% if key_brand != blank %} key="{{ key_brand }}"{%- endif %} data-section="{{ section.id }}"></hdt-lazy-submenu>
+    {%- else -%}
+      <nav id="sub-hdt-nav-mb" class="hdt-navigation hdt-navigation-mobile hdt-menu-uppercase-{{ section.settings.text_transform }} hdt-current-scrollbar" >
+        {%- if section.settings.show_menu_mb -%}
+        <hdt-tab aria-controls="{{ section.id }}-menu-mb-content" class="hdt-mobile-tabs-switcher" style="margin-bottom: 1.5rem; background-color: #F3F3F3; padding: 5px;border-radius: 3px;">
+          <button type="button" class="hdt-mobile-tab-btn" aria-current="true" data-tab="menu">MENU</button>
+          <button type="button" class="hdt-mobile-tab-btn" data-tab="categories">CATEGORIES</button>
+        </hdt-tab>
+        {%- endif -%}
+        <div id="{{ section.id }}-menu-mb-content" class="hdt-mobile-tabs-content">
+          <div class="hdt-mobile-tab-panel" tab-item tab-selected data-tab-panel="menu">
+            <ul id="hdt-nav-ul-mb" class="hdt-nav__ul-mb hdt-tab-item hdt-flex hdt-flex-col">
+              {%- for link in menu_mobile.links -%}
+                {%- liquid
+                  assign li_class = ""
+                  if link.links != blank
+                    assign li_class = "hdt-has-children hdt-relative"
+                  endif
+                -%}
+                <li class="hdt-menu-item hdt-flex hdt-justify-center hdt-flex-col {{ li_class }}">
+                  {%- if li_class != "" -%}
+                    <hdt-accordion class="hdt-contents" {{ only_click_icon }}>
+                      <details>
+                        <summary data-url="{{ link.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium{% if link.current %} hdt-menu-link--active{% endif %}">
+                          {%- assign arr_title = link.title | remove: "[is_heading]" | split: '[' -%}
+                          {%- assign arr_label = arr_title[1] | split: ',' -%}
+                          {%- assign cat_img = link.object.image | default: link.object.featured_image | default: link.object.products.first.featured_image -%}
+                          <span class="hdt-menu-link-text hdt-flex hdt-align-center hdt-justify-center{% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+                            {%- if cat_img != null -%}
+                              {% if show_img_categories %}
+                                <span class="hdt-category-img hdt-relative">
+                                  {{ cat_img | image_url: width: 34 | image_tag: loading: 'lazy', width: 34, height: 34, class: 'hdt-radius-full', style: 'object-fit:cover;' }}
+                                </span>
+                              {% endif %}
+                            {%- endif -%}
+                            <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                            {%- if arr_label.size > 0 -%}
+                              <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                                {%- for label in arr_label limit: 2 -%}
+                                  {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                                  <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                                {%- endfor -%}
+                              </span>
+                            {%- endif -%}
+                          </span>
+                          {%- if li_class != "" -%}
+                            <span class="hdt-btn-open-sub hdt-relative" accordion-icon></span>
+                          {%- endif -%}
+                        </summary>
+                        <ul class="hdt-mb-sub-menu hdt-menu-list hdt-mb-sub-menu-lever-1" role="list"  >
+                          {%- for childlink in link.links -%}
+                            <li class="hdt-menu-item hdt-flex hdt-justify-center hdt-flex-col {% if childlink.links != blank %} hdt-has-children hdt-relative {% endif %}">
+                              {%- if childlink.links != blank -%}        
+                                <hdt-accordion class="hdt-contents" {{ only_click_icon }}>      
+                                  <details>
+                                    <summary data-url="{{ childlink.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-normal {% if childlink.current %} hdt-menu-link--active{% endif %}" {% if childlink.current %} aria-current="page" {% endif %}>
+                                      {%- assign arr_title = childlink.title | remove: "[is_heading]" | split: '[' -%}
+                                      {%- assign arr_label = arr_title[1] | split: ',' -%}
+                                      {%- assign cat_img = childlink.object.image | default: childlink.object.featured_image | default: childlink.object.products.first.featured_image -%}
+                                      <span class="hdt-menu-link-text hdt-flex hdt-align-center hdt-justify-center {% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+                                        {%- if cat_img != null -%}
+                                          {% if show_img_categories %}
+                                        <span class="hdt-category-img hdt-relative">
+                                            {{ cat_img | image_url: width: 34 | image_tag: loading: 'lazy', width: 34, height: 34, class: 'hdt-radius-full', style: 'object-fit:cover;' }}
+                                          </span>
+                                          {% endif %}
+                                        {%- endif -%}
+                                        <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                                        {%- if arr_label.size > 0 -%}
+                                          <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                                            {%- for label in arr_label limit: 2 -%}
+                                              {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                                              <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                                            {%- endfor -%}
+                                          </span>
+                                        {%- endif -%}
+                                      </span>
+                                      <span class="hdt-btn-open-sub hdt-relative" accordion-icon></span>
+                                    </summary>
+                                  <ul class="hdt-mb-sub-menu hdt-menu-list hdt-mb-sub-menu-lever-2" role="list">
+                                    {%- for grandchildlink in childlink.links -%}
+                                      <li class="hdt-menu-item hdt-flex hdt-justify-center hdt-flex-col">
+                                        <a id="hdt-menu-{{ grandchildlink.handle }}" href="{{ grandchildlink.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-normal {% if childlink.current %} hdt-menu-link--active{% endif %}" {% if grandchildlink.current %} aria-current="page" {% endif %}>
+                                          {%- assign arr_title = grandchildlink.title | remove: "[is_heading]" | split: '[' -%}
+                                          {%- assign arr_label = arr_title[1] | split: ',' -%}
+                                          {%- assign cat_img = grandchildlink.object.image | default: grandchildlink.object.featured_image | default: grandchildlink.object.products.first.featured_image -%}
+                                          <span class="hdt-menu-link-text hdt-flex hdt-align-center hdt-justify-center {% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %} {%- if grandchildlink.title contains '[is_heading]' %} hdt-font-semibold{% endif %}">
+                                            {%- if cat_img != null -%}
+                                              {% if show_img_categories %}
+                                            <span class="hdt-category-img hdt-relative">
+                                                {{ cat_img | image_url: width: 34 | image_tag: loading: 'lazy', width: 34, height: 34, class: 'hdt-radius-full', style: 'object-fit:cover;' }}
+                                              </span>
+                                              {% endif %}
+                                            {%- endif -%}
+                                            <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                                            {%- if arr_label.size > 0 -%}
+                                              <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                                                {%- for label in arr_label limit: 2 -%}
+                                    {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                                    <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                                  {%- endfor -%}
+                                              </span>
+                                            {%- endif -%}
+                                          </span>
+                                        </a>
+                                      </li>
+                                    {%- endfor -%}
+                                  </ul>
+                                </details>
+                              </hdt-accordion>
+                            {%- else -%}
+                              <a href="{{ childlink.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-normal{% if childlink.current %} hdt-menu-link--active{% endif %}" {% if childlink.current %} aria-current="page" {% endif %}>
+                                {%- assign arr_title = childlink.title | remove: "[is_heading]" | split: '[' -%}
+                                {%- assign arr_label = arr_title[1] | split: ',' -%}
+                                {%- assign cat_img = childlink.object.image | default: childlink.object.featured_image | default: childlink.object.products.first.featured_image -%}
+                                <span class="hdt-menu-link-text hdt-flex hdt-align-center hdt-justify-center {% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+                                  {%- if cat_img != null -%}
+                                    {% if show_img_categories %}
+                                  <span class="hdt-category-img hdt-relative">
+                                      {{ cat_img | image_url: width: 34 | image_tag: loading: 'lazy', width: 34, height: 34, class: 'hdt-radius-full', style: 'object-fit:cover;' }}
+                                    </span>
+                                    {% endif %}
+                                  {%- endif -%}
+                                  <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                                  {%- if arr_label.size > 0 -%}
+                                    <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                                      {%- for label in arr_label limit: 2 -%}
+                                        {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                                        <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                                      {%- endfor -%}
+                                    </span>
+                                  {%- endif -%}
+                                </span>
+                              </a>
+                            {%- endif -%}
+                          </li>
+                        {%- endfor -%}
+                        </ul>
+                      </details>
+                    </hdt-accordion>
+                  {%- else -%}
+                    <a href="{{ link.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium{% if link.current %} hdt-menu-link--active{% endif %}" {% if link.current %} aria-current="page" {% endif %}>
+                      {%- assign arr_title = link.title | remove: "[is_heading]" | split: '[' -%}
+                      {%- assign arr_label = arr_title[1] | split: ',' -%}
+                      {%- assign cat_img = link.object.image | default: link.object.featured_image | default: link.object.products.first.featured_image -%}
+                      <span class="hdt-menu-link-text hdt-flex hdt-align-center hdt-justify-center {% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+                        {%- if cat_img != null -%}
+                          {% if show_img_categories %}
+                          <span class="hdt-category-img hdt-relative">
+                            {{ cat_img | image_url: width: 34 | image_tag: loading: 'lazy', width: 34, height: 34, class: 'hdt-radius-full', style: 'object-fit:cover;' }}
+                          </span>
+                          {% endif %}
+                        {%- endif -%}
+                        <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                        {%- if arr_label.size > 0 -%}
+                          <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                            {%- for label in arr_label limit: 2 -%}
+                              {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                              <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                            {%- endfor -%}
+                          </span>
+                        {%- endif -%}
+                      </span>
+                    </a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+          <div class="hdt-mobile-tab-panel" tab-item data-tab-panel="categories">
+            <ul id="hdt-nav-ul-mb" class="hdt-nav__ul-mb hdt-tab-item hdt-flex hdt-flex-col hdt-categories-list">
+              {%- for link in menu_categories.links -%}
+                {%- liquid
+                  assign li_class = ""
+                  if link.links != blank
+                    assign li_class = "hdt-has-children hdt-relative"
+                  endif
+                -%}
+                <li class="hdt-menu-item hdt-flex hdt-justify-center hdt-flex-col {{ li_class }}">
+                  {%- if li_class != "" -%}
+                    <hdt-accordion class="hdt-contents" {{ only_click_icon }}>
+                      <details>
+                        <summary data-url="{{ link.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium{% if link.current %} hdt-menu-link--active{% endif %}">
+                          {%- assign arr_title = link.title | remove: "[is_heading]" | split: '[' -%}
+                          {%- assign arr_label = arr_title[1] | split: ',' -%}
+                          {%- assign cat_img = link.object.image | default: link.object.featured_image | default: link.object.products.first.featured_image -%}
+                          <span class="hdt-menu-link-text hdt-flex hdt-align-center hdt-justify-center {% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+                            {%- if cat_img != null -%}
+                              {% if show_img_categories %}
+                            <span class="hdt-category-img hdt-relative">
+                                {{ cat_img | image_url: width: 34 | image_tag: loading: 'lazy', width: 34, height: 34, class: 'hdt-radius-full', style: 'object-fit:cover;' }}
+                              </span>
+                              {% endif %}
+                            {%- endif -%}
+                            <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                            {%- if arr_label.size > 0 -%}
+                              <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                                {%- for label in arr_label limit: 2 -%}
+                                  {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                                  <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                                {%- endfor -%}
+                              </span>
+                            {%- endif -%}
+                          </span>
+                          {%- if li_class != "" -%}
+                            <span class="hdt-btn-open-sub hdt-relative" accordion-icon></span>
+                          {%- endif -%}
+                        </summary>
+                        <ul class="hdt-mb-sub-menu hdt-menu-list hdt-mb-sub-menu-lever-1" role="list"  >
+                          {%- for childlink in link.links -%}
+                            <li class="hdt-menu-item hdt-flex hdt-justify-center hdt-flex-col {% if childlink.links != blank %} hdt-has-children hdt-relative {% endif %}">
+                              {%- if childlink.links != blank -%}        
+                                <hdt-accordion class="hdt-contents" {{ only_click_icon }}>      
+                                  <details>
+                                    <summary data-url="{{ childlink.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-normal {% if childlink.current %} hdt-menu-link--active{% endif %}" {% if childlink.current %} aria-current="page" {% endif %}>
+                                      {%- assign arr_title = childlink.title | remove: "[is_heading]" | split: '[' -%}
+                                      {%- assign arr_label = arr_title[1] | split: ',' -%}
+                                      {%- assign cat_img = childlink.object.image | default: childlink.object.featured_image | default: childlink.object.products.first.featured_image -%}
+                                      <span class="hdt-menu-link-text hdt-flex hdt-align-center hdt-justify-center {% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+                                        {%- if cat_img != null -%}
+                                          {% if show_img_categories %}
+                                        <span class="hdt-category-img hdt-relative">
+                                            {{ cat_img | image_url: width: 34 | image_tag: loading: 'lazy', width: 34, height: 34, class: 'hdt-radius-full', style: 'object-fit:cover;' }}
+                                          </span>
+                                          {% endif %}
+                                        {%- endif -%}
+                                        <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                                        {%- if arr_label.size > 0 -%}
+                                          <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                                            {%- for label in arr_label limit: 2 -%}
+                                              {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                                              <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                                            {%- endfor -%}
+                                          </span>
+                                        {%- endif -%}
+                                      </span>
+                                      <span class="hdt-btn-open-sub hdt-relative" accordion-icon></span>
+                                    </summary>
+                                  <ul class="hdt-mb-sub-menu hdt-menu-list hdt-mb-sub-menu-lever-2" role="list">
+                                    {%- for grandchildlink in childlink.links -%}
+                                      <li class="hdt-menu-item hdt-flex hdt-justify-center hdt-flex-col">
+                                        <a id="hdt-menu-{{ grandchildlink.handle }}" href="{{ grandchildlink.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-normal {% if childlink.current %} hdt-menu-link--active{% endif %}" {% if grandchildlink.current %} aria-current="page" {% endif %}>
+                                          {%- assign arr_title = grandchildlink.title | remove: "[is_heading]" | split: '[' -%}
+                                          {%- assign arr_label = arr_title[1] | split: ',' -%}
+                                          {%- assign cat_img = grandchildlink.object.image | default: grandchildlink.object.featured_image | default: grandchildlink.object.products.first.featured_image -%}
+                                          <span class="hdt-menu-link-text hdt-flex hdt-align-center hdt-justify-center {% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %} {%- if grandchildlink.title contains '[is_heading]' %} hdt-font-semibold{% endif %}">
+                                            {%- if cat_img != null -%}
+                                              {% if show_img_categories %}
+                                            <span class="hdt-category-img hdt-relative">
+                                                {{ cat_img | image_url: width: 34 | image_tag: loading: 'lazy', width: 34, height: 34, class: 'hdt-radius-full', style: 'object-fit:cover;' }}
+                                              </span>
+                                              {% endif %}
+                                            {%- endif -%}
+                                            <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                                            {%- if arr_label.size > 0 -%}
+                                              <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                                                {%- for label in arr_label limit: 2 -%}
+                                    {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                                    <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                                  {%- endfor -%}
+                                              </span>
+                                            {%- endif -%}
+                                          </span>
+                                        </a>
+                                      </li>
+                                    {%- endfor -%}
+                                  </ul>
+                                </details>
+                              </hdt-accordion>
+                            {%- else -%}
+                              <a href="{{ childlink.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-normal{% if childlink.current %} hdt-menu-link--active{% endif %}" {% if childlink.current %} aria-current="page" {% endif %}>
+                                {%- assign arr_title = childlink.title | remove: "[is_heading]" | split: '[' -%}
+                                {%- assign arr_label = arr_title[1] | split: ',' -%}
+                                {%- assign cat_img = childlink.object.image | default: childlink.object.featured_image | default: childlink.object.products.first.featured_image -%}
+                                <span class="hdt-menu-link-text hdt-flex hdt-align-center hdt-justify-center {% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+                                  {%- if cat_img != null -%}
+                                    {% if show_img_categories %}
+                                  <span class="hdt-category-img hdt-relative">
+                                      {{ cat_img | image_url: width: 34 | image_tag: loading: 'lazy', width: 34, height: 34, class: 'hdt-radius-full', style: 'object-fit:cover;' }}
+                                    </span>
+                                    {% endif %}
+                                  {%- endif -%}
+                                  <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                                  {%- if arr_label.size > 0 -%}
+                                    <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                                      {%- for label in arr_label limit: 2 -%}
+                                        {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                                        <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                                      {%- endfor -%}
+                                    </span>
+                                  {%- endif -%}
+                                </span>
+                              </a>
+                            {%- endif -%}
+                          </li>
+                        {%- endfor -%}
+                        </ul>
+                      </details>
+                    </hdt-accordion>
+                  {%- else -%}
+                    <a href="{{ link.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium{% if link.current %} hdt-menu-link--active{% endif %}" {% if link.current %} aria-current="page" {% endif %}>
+                      {%- assign arr_title = link.title | remove: "[is_heading]" | split: '[' -%}
+                      {%- assign arr_label = arr_title[1] | split: ',' -%}
+                      {%- assign cat_img = link.object.image | default: link.object.featured_image | default: link.object.products.first.featured_image -%}
+                      <span class="hdt-menu-link-text hdt-flex hdt-align-center hdt-justify-center {% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+                        {%- if cat_img != null -%}
+                        <span class="hdt-category-img hdt-relative">
+                            {{ cat_img | image_url: width: 34 | image_tag: loading: 'lazy', width: 34, height: 34, class: 'hdt-radius-full', style: 'object-fit:cover;' }}
+                          </span>
+                        {%- endif -%}
+                        <span class="hdt-block hdt-line-clamp">{{ arr_title[0] }}</span>
+                        {%- if arr_label.size > 0 -%}
+                          <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">
+                            {%- for label in arr_label limit: 2 -%}
+                              {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                              <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+                            {%- endfor -%}
+                          </span>
+                        {%- endif -%}
+                      </span>
+                    </a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        </div>
+        <div class="hdt-mobile-other-content">
+          <div class="hdt-mobile_group_icons hdt-flex">
+            {%- if section.settings.enabled_wishlist -%}
+              <div class="hdt-site-nav_icon hdt-site-nav_user hdt-inline-flex hdt-align-center">
+                <hdt-wishlist-a class="hdt-contents">
+                  <a class="hdt-inline-flex hdt-align-center hdt-relative hdt-radius-xs" href="{{ routes.search_url }}/?view=wishlist">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="14" viewBox="0 0 16 14" fill="none"><path d="M7.70572 11.8638L7.62943 11.9401L7.5455 11.8638C3.92153 8.57548 1.52589 6.40109 1.52589 4.19619C1.52589 2.6703 2.6703 1.52589 4.19619 1.52589C5.37112 1.52589 6.51553 2.28883 6.91989 3.32643H8.33896C8.74332 2.28883 9.88774 1.52589 11.0627 1.52589C12.5886 1.52589 13.733 2.6703 13.733 4.19619C13.733 6.40109 11.3373 8.57548 7.70572 11.8638ZM11.0627 0C9.73515 0 8.46104 0.617984 7.62943 1.58692C6.79782 0.617984 5.52371 0 4.19619 0C1.84632 0 0 1.83869 0 4.19619C0 7.07248 2.59401 9.42997 6.52316 12.9929L7.62943 14L8.73569 12.9929C12.6649 9.42997 15.2589 7.07248 15.2589 4.19619C15.2589 1.83869 13.4125 0 11.0627 0Z" fill="currentColor"/></svg>
+                    <span class="hdt-icon-text hdt-text-base hdt-font-medium">{{ 'general.wishlist.wishlist_text' | t }}</span>
+                  </a>
+                </hdt-wishlist-a>
+              </div>
+            {%- endif -%}
+            <div class="hdt-site-nav_icon hdt-site-nav_search hdt-inline-flex hdt-align-center">
+              <a href="/search" class="hdt-inline-flex hdt-align-center hdt-relative hdt-radius-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M13.7854 12.5947L10.6117 9.421C11.3758 8.4038 11.7883 7.16566 11.7869 5.89344C11.7869 2.64382 9.14306 0 5.89344 0C2.64382 0 0 2.64382 0 5.89344C0 9.14306 2.64382 11.7869 5.89344 11.7869C7.16566 11.7883 8.4038 11.3758 9.421 10.6117L12.5947 13.7854C12.7554 13.929 12.9649 14.0057 13.1803 13.9997C13.3957 13.9936 13.6006 13.9054 13.753 13.753C13.9054 13.6006 13.9936 13.3957 13.9997 13.1803C14.0057 12.9649 13.929 12.7554 13.7854 12.5947ZM1.68384 5.89344C1.68384 5.06086 1.93073 4.24698 2.39329 3.55471C2.85584 2.86245 3.51329 2.32289 4.2825 2.00428C5.0517 1.68566 5.89811 1.6023 6.71469 1.76473C7.53127 1.92715 8.28135 2.32808 8.87008 2.9168C9.4588 3.50553 9.85972 4.25561 10.0222 5.07219C10.1846 5.88877 10.1012 6.73518 9.7826 7.50438C9.46399 8.27359 8.92443 8.93104 8.23217 9.39359C7.5399 9.85615 6.72602 10.103 5.89344 10.103C4.7774 10.1017 3.70745 9.65776 2.91828 8.8686C2.12912 8.07943 1.68518 7.00948 1.68384 5.89344Z" fill="currentColor"/></svg>
+                <span class="hdt-icon-text hdt-text-base hdt-font-medium">{{ 'general.search.search_text' | t }}</span>
+              </a>
+            </div>
+          </div>
+          {%- if section.settings.note_mobile != blank -%}
+            <div class="hdt-notice-mobile">{{ section.settings.note_mobile }}</div>
+          {%- endif -%}
+        </div>
+      </nav>
+    {%- endif -%}
+  {%- else -%}
+    <p>{{ 'sections.header.menu_empty' | t }}</p>
+  {%- endif -%}
+  
+</div>
+<div slot="footer" class="hdt-mobile_bottom">
+	{%- if section.settings.enabled_user -%}
+		<div class="hdt-site-nav_icon hdt-site-nav_user hdt-inline-flex hdt-align-center">
+			<a class="hdt-inline-flex hdt-align-center hdt-relative hdt-radius-xs" href="{{ routes.account_url }}"{% unless customer or settings.login_side == false %} {% unless template.name == "login" or template.name == "register" %}
+				 data-drawer-delay- data-drawer-options='{ "id":"#hdt-login-sidebar" }' {% endunless %}{% endunless %}>
+				<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M13.4818 13.8852H12.1703V12.5738C12.1703 12.052 11.9631 11.5517 11.5941 11.1827C11.2252 10.8138 10.7248 10.6066 10.2031 10.6066H3.39344C2.8717 10.6066 2.37134 10.8138 2.00241 11.1827C1.63349 11.5517 1.42623 12.052 1.42623 12.5738V13.8852H0.114754V12.5738C0.114754 11.7042 0.460186 10.8703 1.07506 10.2554C1.68993 9.64051 2.52388 9.29508 3.39344 9.29508H10.2031C11.0727 9.29508 11.9066 9.64051 12.5215 10.2554C13.1364 10.8703 13.4818 11.7042 13.4818 12.5738V13.8852ZM6.91621 7.98361C6.39953 7.98361 5.88792 7.88184 5.41057 7.68412C4.93323 7.48639 4.4995 7.19659 4.13415 6.83124C3.76881 6.46589 3.479 6.03217 3.28128 5.55482C3.08355 5.07747 2.98178 4.56586 2.98178 4.04918C2.98178 3.5325 3.08355 3.02089 3.28128 2.54354C3.479 2.06619 3.76881 1.63247 4.13415 1.26712C4.4995 0.901776 4.93323 0.611968 5.41057 0.414244C5.88792 0.216521 6.39953 0.114754 6.91621 0C7.95969 0.114754 8.96042 0.529273 9.69827 1.26712C10.4361 2.00497 10.8506 3.00571 10.8506 4.04918C10.8506 5.09266 10.4361 6.09339 9.69827 6.83124C8.96042 7.56909 7.95969 7.98361 6.91621 7.98361ZM6.91621 6.67213C7.61186 6.67213 8.27902 6.39579 8.77092 5.90389C9.26282 5.41199 9.53916 4.74483 9.53916 4.04918C9.53916 3.35353 9.26282 2.68637 8.77092 2.19447C8.27902 1.70258 7.61186 1.42623 6.91621 1.42623C6.22056 1.42623 5.5534 1.70258 5.0615 2.19447C4.56961 2.68637 4.29326 3.35353 4.29326 4.04918C4.29326 4.74483 4.67227 5.41199 5.14265 5.90389C5.61303 6.39579 6.251 6.67213 6.91621 6.67213Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M13.5965 14H12.0556V12.5738C12.0556 12.0825 11.8604 11.6113 11.513 11.2639C11.1656 10.9165 10.6944 10.7213 10.2031 10.7213H3.39344C2.90214 10.7213 2.43096 10.9165 2.08356 11.2639C1.73615 11.6113 1.54098 12.0825 1.54098 12.5738V14H0V12.5738C0 11.6738 0.357523 10.8106 0.993916 10.1742C1.63031 9.53785 2.49345 9.18033 3.39344 9.18033H10.2031C11.1031 9.18033 11.9662 9.53785 12.6026 10.1742C13.239 10.8106 13.5965 11.6738 13.5965 12.5738V14ZM6.91621 8.09836C6.38447 8.09836 5.85793 7.99363 5.36666 7.79014C4.87539 7.58664 4.42901 7.28838 4.05301 6.91238C3.67701 6.53638 3.37875 6.09 3.17526 5.59873C2.97177 5.10747 2.86703 4.58093 2.86703 4.04918C2.86703 3.51743 2.97177 2.9909 3.17526 2.49963C3.37875 2.00836 3.67701 1.56198 4.05301 1.18598C4.42901 0.809976 4.87539 0.511716 5.36666 0.308225C5.85793 0.104735 6.38447 -1.13998e-08 6.91621 0C7.99012 1.13998e-08 9.02005 0.426609 9.77942 1.18598C10.5388 1.94535 10.9654 2.97527 10.9654 4.04918C10.9654 5.12309 10.5388 6.15301 9.77942 6.91238C9.02005 7.67175 7.99012 8.09836 6.91621 8.09836ZM6.91621 6.55738C7.58143 6.55738 8.2194 6.29312 8.68977 5.82274C9.16015 5.35237 9.42441 4.7144 9.42441 4.04918C9.42441 3.38397 9.16015 2.746 8.68977 2.27562C8.2194 1.80524 7.58143 1.54098 6.91621 1.54098C6.251 1.54098 5.61303 1.80524 5.14265 2.27562C4.67227 2.746 4.40801 3.38397 4.40801 4.04918C4.40801 4.7144 4.67227 5.35237 5.14265 5.82274C5.61303 6.29312 6.251 6.55738 6.91621 6.55738ZM13.4818 13.8852V12.5738C13.4818 11.7042 13.1364 10.8703 12.5215 10.2554C11.9066 9.64051 11.0727 9.29508 10.2031 9.29508H3.39344C2.52388 9.29508 1.68993 9.64051 1.07506 10.2554C0.460186 10.8703 0.114754 11.7042 0.114754 12.5738V13.8852H1.42623V12.5738C1.42623 12.052 1.63349 11.5517 2.00241 11.1827C2.37134 10.8138 2.8717 10.6066 3.39344 10.6066H10.2031C10.7248 10.6066 11.2252 10.8138 11.5941 11.1827C11.9631 11.5517 12.1703 12.052 12.1703 12.5738V13.8852H13.4818ZM5.41057 7.68412C5.88792 7.88184 6.39953 7.98361 6.91621 7.98361C7.95969 7.98361 8.96042 7.56909 9.69827 6.83124C10.4361 6.09339 10.8506 5.09266 10.8506 4.04918C10.8506 3.00571 10.4361 2.00497 9.69827 1.26712C8.96042 0.529273 7.95969 0.114754 6.91621 0.114754C6.39953 0.114754 5.88792 0.216521 5.41057 0.414244C4.93323 0.611968 4.4995 0.901776 4.13415 1.26712C3.76881 1.63247 3.479 2.06619 3.28128 2.54354C3.08355 3.02089 2.98178 3.5325 2.98178 4.04918C2.98178 4.56586 3.08355 5.07747 3.28128 5.55482C3.479 6.03217 3.76881 6.46589 4.13415 6.83124C4.4995 7.19659 4.93323 7.48639 5.41057 7.68412ZM8.77092 5.90389C8.27902 6.39579 7.61186 6.67213 6.91621 6.67213C6.22056 6.67213 5.5534 6.39579 5.0615 5.90389C4.56961 5.41199 4.29326 4.74483 4.29326 4.04918C4.29326 3.35353 4.56961 2.68637 5.0615 2.19447C5.5534 1.70258 6.22056 1.42623 6.91621 1.42623C7.61186 1.42623 8.27902 1.70258 8.77092 2.19447C9.26282 2.68637 9.53916 3.35353 9.53916 4.04918C9.53916 4.74483 9.26282 5.41199 8.77092 5.90389Z" fill="currentColor"/></svg>
+				<span class="hdt-icon-text hdt-text-base hdt-font-medium">{% if customer %}{{ 'customer.account.title' | t }}{% else %}{{ 'customer.account.login' | t }}{% endif %}</span>
+			</a>
+		</div>
+	{%- endif -%}
+	<div class="hdt-mb-language_currencies hdt-flex hdt-align-center">
+		{%- if localization.available_countries.size >= 1 -%}				
+			{%- unless localization.available_countries.size <= 1 and settings.currency_type == "1" -%}
+				{%- render 'hdt_currency' -%}
+			{%- endunless -%}
+		{%- endif -%}
+		{%- if localization.available_languages.size > 1 -%}
+			{%- render 'hdt_language' -%}
+		{%- endif -%}
+	</div>
+</div>
+
+<style>
+.hdt-mobile-tabs-switcher {
+  display: flex;
+  gap: 0.5rem;
+}
+.hdt-mobile-tab-btn {
+  flex: 1;
+  font-weight: 700 !important;
+  padding: 0.7rem 0;
+  background: transparent;
+  color: #222;
+  font-weight: 600;
+  border-radius: 3px;
+  font-size: 1.1rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.hdt-mobile-tab-btn[aria-current="true"] {
+  background: #222;
+  color: #fff;
+  border-color: #222;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.hdt-mobile-tab-panel {
+  width: 100%;
+}
+
+.hdt-categories-list .hdt-menu-item {
+  padding-left: 0;
+}
+.hdt-categories-list .hdt-menu-link {
+  padding: 0.5rem 0;
+  min-height: 44px;
+}
+.hdt-categories-list .hdt-category-img {
+  width: 34px ;
+  height: 34px ;
+  min-width: 34px ;
+  min-height: 34px ;
+  max-width: 34px ;
+  max-height: 34px ;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px ;
+  padding: 0 ;
+}
+.hdt-categories-list .hdt-category-img img {
+  width: 34px ;
+  height: 34px ;
+  object-fit: cover ;
+  border-radius: 50% ;
+  display: block;
+}
+.hdt-categories-list .hdt-menu-link-text {
+  display: flex;
+  align-items: center;
+}
+.hdt-categories-list .hdt-mb-sub-menu-lever-1 {
+  padding-left: 36px;
+  border-left: 2px solid #f0f0f0;
+  margin-left: 10px;
+}
+.hdt-categories-list .hdt-mb-sub-menu-lever-2 {
+  padding-left: 36px;
+  border-left: 2px solid #f5f5f5;
+  margin-left: 10px;
+}
+.hdt-categories-list .hdt-mb-sub-menu-lever-1 .hdt-category-img,
+.hdt-categories-list .hdt-mb-sub-menu-lever-2 .hdt-category-img {
+  width: 34px;
+  height: 34px;
+  min-width: 28px;
+}
+.hdt-categories-list .hdt-mb-sub-menu-lever-1 .hdt-menu-link,
+.hdt-categories-list .hdt-mb-sub-menu-lever-2 .hdt-menu-link {
+  min-height: 36px;
+  padding: 0.45rem 0;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var tabBtns = document.querySelectorAll('.hdt-mobile-tab-btn');
+  var tabPanels = document.querySelectorAll('.hdt-mobile-tab-panel');
+  
+  function toggleOtherContent(tab) {
+    // Tìm phần tử other content trong nav
+    var nav = document.getElementById('sub-hdt-nav-mb');
+    var otherContent = nav ? nav.querySelector('.hdt-mobile-other-content') : null;
+    
+    if (!otherContent) return;
+    
+    if(tab === 'CATEGORIES') {
+      console.log('Hiding other content');
+      otherContent.style.display = 'none';
+    } else {
+      console.log('Showing other content');
+      otherContent.style.display = '';
+    }
+  }
+  
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var tab = btn.getAttribute('data-tab');
+      
+      tabBtns.forEach(b => {
+        b.removeAttribute('aria-current');
+        b.classList.remove('active');
+      });
+      btn.setAttribute('aria-current', 'true');
+      btn.classList.add('active');
+      
+      tabPanels.forEach(panel => {
+        if(panel.getAttribute('data-tab-panel') === tab) {
+          panel.style.display = 'block';
+        } else {
+          panel.style.display = 'none';
+        }
+      });
+      toggleOtherContent(tab);
+    });
+  });
+  
+  var currentTabBtn = document.querySelector('.hdt-mobile-tab-btn[aria-current="true"]');
+  if(currentTabBtn) {
+    toggleOtherContent(currentTabBtn.getAttribute('data-tab'));
+  }
+});
+
+
+</script>

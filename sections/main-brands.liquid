@@ -1,0 +1,280 @@
+<!-- sections/main-brands.liquid -->
+<style>.hdt-main-page_brands .hdt-brands-filter{max-width:1200px;margin:0 auto;gap:10px;padding-bottom:30px}.hdt-filter-item.is-disable{display:none}.hdt-item-inner{gap:10px}.hdt-filter-item-inner{gap:10px}.hdt-layout-brand_2 .hdt-filter-item-inner{gap:20px}.hdt-layout-brand_1 .hdt-content-brands .hdt-col{margin-bottom:5px}button.hdt-btn-filter{position:relative;margin:0;padding:8px 15px;min-width:42px;border:1px solid rgb(var(--color-line-border));border-radius:var(--radius-button)}button.hdt-btn-filter.is-disable{pointer-events:none}button.hdt-btn-filter.is-disable span{opacity:.2}.hdt-filter-item.is-disable{display:none!important}.hdt-filter-item{padding:15px;border:1px solid rgb(var(--color-line-border))}.hdt-layout-brand_2 .hdt-filter-item{border-top:transparent;border-right:transparent;border-left:transparent;border-radius:unset}.hdt-layout-brand_2 .hdt-brands-source__linklist{border-top:1px solid rgb(var(--color-line-border))}.hdt-layout-brand_1 .hdt-filter-item{padding:15px}.hdt-titles-filter.hdt-titles-filter_border{border-right:1px solid rgb(var(--color-line-border))}.hdt-tab-link.is--active,.hdt-tab-link_all.is--active{background-color:rgb(var(--color-button-text));color:rgb(var(--color-button))}.hdt-btn-filte{background-color:rgb(var(--color-button));color:rgb(var(--color-button-text))}@keyframes slideInRight{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}.hdt-tab-content{animation:slideInRight 0.5s ease-in-out}@media(min-width:768px){.hdt-main-page_brands .hdt-brands-filter{padding-bottom:47px}.hdt-layout-brand_1 .hdt-filter-item{padding:25px 30px}.hdt-item-inner{gap:20px}button.hdt-tab-link_all{padding:8px 20px}}@media (-moz-touch-enabled:0),(hover:hover) and (min-width:1150px){.hdt-btn-filter:hover{background-color:rgb(var(--color-button-text));color:rgb(var(--color-button))}.hdt-item-inner a:hover{color:rgb(var(--color-accent))}}</style>
+<div class="hdt-main-page_brands hdt-section-spacing hdt-s-gradient hdt-layout-brand_{{ section.settings.layout_brand }}" style="--section-pt: {{ section.settings.padding_top }}px; --section-pb: {{ section.settings.padding_bottom }}px; --section-prate:{{ section.settings.padding_rate }};" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %}">
+    {%- if section.settings.options == 'shop_vendor' -%}
+      <div class="hdt-row-grid hdt-grid-cols-2 md:hdt-grid-cols-2 lg:hdt-grid-cols-4">
+        {%- for product_vendor in shop.vendors -%}
+          {%- liquid
+          assign pr_vendor_url = product_vendor | url_for_vendor
+          assign use_link_vendor = settings.use_link_vendor 
+          if use_link_vendor
+              assign pr_vendor_handle = product_vendor | handle
+              assign collection_vendor = collections[pr_vendor_handle]
+              assign pr_vendor_url = collection_vendor.url | default: pr_vendor_url
+              assign use_link_vendor = settings.use_link_vendor
+          endif -%}
+          <div class="hdt-filter-item hdt-col hdt-flex hdt-align-center hdt-justify-center">
+              <div class="hdt-vendor-item hdt-text-center">
+                  <a href="{{ pr_vendor_url }}">{{ product_vendor }}</a>
+              </div>
+          </div>  
+        {%- endfor -%}
+      </div>
+    {%- elsif page.metafields.theme.vendor -%}
+      {%- paginate page.metafields.theme.vendor.value by 200 -%}
+      <tabs-brands class="hdt-tabs-brands hdt-oh">
+        <div class="hdt-brands-filter hdt-row-flex hdt-justify-start md:hdt-justify-center">
+          {%- assign items = section.settings.bcc | split: "," -%}
+          <button class="hdt-btn-filter hdt-tab-link hdt-tab-link_all hdt-oh hdt-text-base hdt-font-semibold hdt-col hdt-s-text is--active" data-filter="all"><span>{{ 'sections.page.show_view_all' | t }}</span></button>
+          {%- for item in items -%}
+            {%- assign match_found = false -%}
+            {%- assign isItemNumber = item | plus: 0 -%}
+            {%- assign brands = page.metafields.theme.vendor.value -%}
+            {%- for brand in brands -%}
+              {%- assign brandFirstChar = brand.name | slice: 0 | downcase -%}
+              {%- assign isBrandFirstCharNumber = brandFirstChar | plus: 0 -%}
+              {%- if isItemNumber != 0 -%}
+                {%- if isBrandFirstCharNumber != 0 -%}
+                  {%- assign match_found = true -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- else -%}
+                {%- assign firstChar = item | slice: 0 | downcase -%}
+                {%- unless firstChar == 0 -%}
+                    {%- if firstChar == brandFirstChar -%}
+                        {%- assign match_found = true -%}
+                        {%- break -%}
+                    {%- endif -%}
+                {%- endunless -%}
+              {%- endif -%}
+            {%- endfor -%}
+            <button class="hdt-btn-filter hdt-tab-link hdt-text-base hdt-oh hdt-font-semibold hdt-col hdt-s-text{% unless match_found %} is-disable{% endunless %}" data-filter="hdt_filter_{{ item | downcase }}"><span>{{ item }}</span></button>
+        {%- endfor -%}
+        </div>
+          <div class="hdt-brands-source__linklist {% if section.settings.layout_brand == "1" %} hdt-row-grid hdt-grid-cols-2 md:hdt-grid-cols-3 lg:hdt-grid-cols-4 {% endif %}">
+            {%- if section.settings.bcc != blank  -%}
+              {%- assign items = section.settings.bcc | split: "," -%}
+              {%- for item in items -%}
+                {%- assign match_found = false -%}
+                {%- assign isItemNumber = item | plus: 0 -%}
+                {%- assign brands = page.metafields.theme.vendor.value -%}
+                {%- for brand in brands -%}
+                  {%- assign brandFirstChar = brand.name | slice: 0 | downcase -%}
+                  {%- assign isBrandFirstCharNumber = brandFirstChar | plus: 0 -%}
+                  {%- if isItemNumber != 0 -%}
+                    {%- if isBrandFirstCharNumber != 0 -%}
+                      {%- assign match_found = true -%}
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- else -%}
+                  {%- assign firstChar = item | slice: 0 | downcase -%}
+                  {%- unless firstChar == 0 -%}
+                    {%- if firstChar == brandFirstChar -%}
+                        {%- assign match_found = true -%}
+                        {%- break -%}
+                    {%- endif -%}
+                  {%- endunless -%}
+                {%- endif -%}
+              {%- endfor -%}
+                <div id="hdt_filter_{{ item | handle| downcase }}" class="hdt-filter-item hdt-radius-xs hdt-oh hdt-tab-content {% unless match_found %} is-disable{% endunless %} hdt-col">
+                  <div class="hdt-filter-item-inner {% if section.settings.layout_brand == "1" %} hdt-flex hdt-flex-col hdt-align-start hdt-justify-center {% else %}hdt-custom-row hdt-flex hdt-justify-start hdt-align-center{% endif %} ">
+                    <div class="hdt-titles-filter hdt-flex hdt-justify-center {% if section.settings.layout_brand == "1" %} hdt-align-start {% else %} hdt-titles-filter_border hdt-custom-col-2 hdt-align-center {% endif %}">
+                      <h4 class="hdt-font-normal hdt-h3 hdt-titles-link {% unless section.settings.layout_brand == "1" %}lg:hdt-px-30 {% endunless %}  hdt-s-text">{{ item }}</h4>
+                    </div>
+                    <div class="hdt-content-brands {% if section.settings.layout_brand =="1" %} hdt-flex hdt-flex-col hdt-flex-cols-1 {% else %}hdt-row-grid hdt-w-full hdt-grid-cols-2 md:hdt-grid-cols-4 lg:hdt-grid-cols-6{% endif %}">
+                      {%- assign brands = page.metafields.theme.vendor.value -%}
+                      {%- for brand in brands -%}
+                        {%- assign brandNameFirstLetter = brand.name | slice: 0 | downcase -%}
+                        {%- assign itemFirstLetter = item | slice: 0 | downcase -%}
+                        {%- assign isItemNumber = item | slice: 0 | plus: 0 -%}
+                        {%- assign isBrandNameNumber = brand.name | slice: 0 | plus: 0 -%}
+                        {%- if isItemNumber == 0 -%}
+                          {%- if brandNameFirstLetter == itemFirstLetter -%}
+                            <div class="hdt-col hdt-item-inner hdt-text-base hdt-font-normal hdt-flex hdt-flex-col hdt-s-text2 hdt-justify-center {% if section.settings.img_brand == true %} hdt-align-center {% else %} hdt-align-start {% endif %}">
+                                {%- if section.settings.img_brand != blank and brand.image != blank -%}
+                                  <a href="{% if brand.link != blank %}{{ brand.link.value.url }} {% else %} {{ brand.collection.value.url }} {% endif %}">
+                                    {{ brand.image | image_url: width: brand.image.width | image_tag: class: 'hdt-brand-img', sizes: '200px', widths: "170,200,280" }}
+                                  </a>
+                                {%- endif -%}
+                                <a href="{% if brand.link != blank %}{{ brand.link.value.url }} {% else %} {{ brand.collection.value.url }} {% endif %}">{{ brand.name }}</a>
+                            </div>
+                          {%- endif -%}
+                        {%- else -%}
+                          {%- if isBrandNameNumber != 0 -%}
+                              <div class="hdt-col hdt-item-inner hdt-text-base hdt-font-normal hdt-flex hdt-s-text2 hdt-flex-col hdt-justify-center {% if section.settings.img_brand == true %} hdt-align-center {% else %} hdt-align-start {% endif %}">
+                                  {%- if section.settings.img_brand != blank and brand.image != blank -%}
+                                    <a href="{% if brand.link != blank %}{{ brand.link.value.url }} {% else %} {{ brand.collection.value.url }} {% endif %}">
+                                      {{ brand.image | image_url: width: brand.image.width | image_tag: class: 'hdt-brand-img', sizes: '200px', widths: "170,200,280" }}
+                                    </a>                                  
+                                  {%- endif -%}
+                                  <a href="{% if brand.link != blank %}{{ brand.link.value.url }} {% else %} {{ brand.collection.value.url }} {% endif %}" target="_blank">{{ brand.name }}</a>
+                              </div>
+                            {%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  </div>  
+                </div>
+            {%- endfor -%}
+          {%- else -%}
+            {%- assign items = "123,A,B,C,D,E,F,G,H,I,J,K,L,N,O,P,Q,R,S,T,U,V,W,X,Y,Z" | split: "," -%}
+            {%- for item in items -%}
+              <div id="hdt_filter_{{ item | handle| downcase }}" class="hdt-filter-item hdt-radius-xs hdt-oh hdt-tab-content hdt-col">
+                <div class="hdt-filter-item-inner {% if section.settings.layout_brand == "1" %} hdt-flex hdt-flex-col hdt-align-start hdt-justify-center {% else %}hdt-custom-row hdt-flex hdt-justify-start hdt-align-center{% endif %} ">
+                  <div class="hdt-titles-filter hdt-flex hdt-justify-center {% if section.settings.layout_brand == "1" %} hdt-align-start {% else %} hdt-titles-filter_border hdt-custom-col-2 hdt-align-center {% endif %}">
+                    <h4 class="hdt-font-normal hdt-h3 hdt-titles-link {% unless section.settings.layout_brand == "1" %}lg:hdt-px-30 {% endunless %}  hdt-s-text">{{ item }}</h4>
+                  </div>
+                  <div class="hdt-content-brands {% if section.settings.layout_brand =="1" %} hdt-flex hdt-flex-col hdt-flex-cols-1 {% else %}hdt-row-grid hdt-w-full hdt-grid-cols-2 md:hdt-grid-cols-4 lg:hdt-grid-cols-6{% endif %}">
+                    {%- assign brands = page.metafields.theme.vendor.value -%}
+                    {%- for brand in brands -%}
+                      {%- assign brandNameFirstLetter = brand.name | slice: 0 | downcase -%}
+                      {%- assign itemFirstLetter = item | slice: 0 | downcase -%}
+                      {%-assign isItemNumber = item | slice: 0 | plus: 0 -%}
+                      {%- assign isBrandNameNumber = brand.name | slice: 0 | plus: 0 -%}
+                      {%- if isItemNumber == 0 -%}
+                        {%- if brandNameFirstLetter == itemFirstLetter -%}
+                          <div class="hdt-col hdt-item-inner hdt-text-base hdt-font-normal hdt-flex hdt-s-text2 hdt-flex-col hdt-justify-center {% if section.settings.img_brand == true %} hdt-align-center {% else %} hdt-align-start {% endif %}">
+                              {%- if section.settings.img_brand != blank and brand.image != blank -%}
+                                <a href="{% if brand.link != blank %}{{ brand.link.value.url }} {% else %} {{ brand.collection.value.url }} {% endif %}">
+                                  {{ brand.image | image_url: width: brand.image.width | image_tag: class: 'hdt-brand-img', sizes: '200px', widths: "170,200,280" }}
+                                </a>
+                              {%- endif -%}
+                              <a href="{% if brand.link != blank %}{{ brand.link.value.url }} {% else %} {{ brand.collection.value.url }} {% endif %}">{{ brand.name }}</a>
+                          </div>
+                        {%- endif -%}
+                      {%- else -%}
+                        {%- if isBrandNameNumber != 0 -%}
+                            <div class="hdt-col hdt-item-inner hdt-text-base hdt-font-normal hdt-flex hdt-s-text2 hdt-flex-col hdt-justify-center {% if section.settings.img_brand == true %} hdt-align-center {% else %} hdt-align-start {% endif %}">
+                                {%- if section.settings.img_brand != blank and brand.image != blank -%}
+                                  <a href="{% if brand.link != blank %}{{ brand.link.value.url }} {% else %} {{ brand.collection.value.url }} {% endif %}">
+                                    {{ brand.image | image_url: width: brand.image.width | image_tag: class: 'hdt-brand-img', sizes: '200px', widths: "170,200,280" }}
+                                  </a>                                  
+                                {%- endif -%}
+                                <a href="{% if brand.link != blank %}{{ brand.link.value.url }} {% else %} {{ brand.collection.value.url }} {% endif %}" target="_blank">{{ brand.name }}</a>
+                            </div>
+                          {%- endif -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                </div>  
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </tabs-brands>
+    {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.main-page-brands.name",
+    "class": "hdt-section hdt-main-page_brands",
+    "enabled_on": {
+      "templates": [
+        "page"
+      ]
+    },
+    "settings": [
+      {
+        "type":"select",
+        "id":"layout_brand",
+        "label":"t:sections.main-page-brands.settings.layout_brand.label",
+        "options":[
+          {
+            "value":"1",
+            "label":"t:sections.main-page-brands.settings.layout_brand.options.option_1.label"
+          },
+          {
+            "value":"2",
+            "label":"t:sections.main-page-brands.settings.layout_brand.options.option_2.label"
+          }
+        ],
+        "info":"t:sections.main-page-brands.settings.layout_brand.info",
+        "default":"1"
+      },
+      {
+        "type":"select",
+        "id":"options",
+        "label":"t:sections.main-page-brands.settings.options.label",
+        "default":"shop_vendor",
+        "options":[
+          {
+            "label":"t:sections.main-page-brands.settings.options.option.option_1",
+            "value":"shop_vendor"
+          },
+          {
+            "label":"t:sections.main-page-brands.settings.options.option.option_2",
+            "value":"linklist"
+          }
+        ]
+      },
+      {
+        "type":"textarea",
+        "id":"bcc",
+        "label":"t:sections.main-page-brands.settings.bcc.label",
+        "info":"t:sections.main-page-brands.settings.bcc.info",
+        "default":"123,A,B,C,D,E,F,G,H,I,J,K,L,N,O,P,Q,R,S,T,U,V,W,X,Y,Z"
+      },
+      {
+        "type":"checkbox",  
+        "id":"img_brand",
+        "label":"t:sections.main-page-brands.settings.img_brand.label",
+        "default": false
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "default": "scheme-1"
+      },
+      {
+        "type": "checkbox",
+        "id": "section_fullwidth",
+        "label": "t:sections.all.section_fullwidth",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 50,
+        "max": 150,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 50
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 50,
+        "max": 150,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 70
+      },
+      {
+        "type": "range",
+        "id": "padding_rate",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:sections.all.padding.padding_rate",
+        "default": 75
+      }
+    ],
+    "presets":[
+      {
+        "name":"t:sections.main-page-brands.name"
+      }
+    ]
+  }
+{% endschema %}

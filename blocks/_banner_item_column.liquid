@@ -1,0 +1,49 @@
+{% content_for 'blocks' %}
+{% schema %}
+  {
+    "name": "Column",
+    "class": "hdt-banner-column",
+    "settings": [
+    
+    ],
+    "blocks": [
+      {
+        "type": "heading"
+      },
+      {
+        "type": "text"
+      },
+      {
+        "type": "button"
+      },
+      {
+        "type": "spacer"
+      },
+      {
+        "type": "paragraph"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Column",
+        "blocks": [
+          {
+            "type": "heading",
+            "settings": {
+              "heading": "<p>SALE OFF UP TO 70%</p>",
+              "hidden_br_mobile": false,
+              "hidden_on_mobile": false,
+              "heading_size": "h5",
+              "text_color": "",
+              "font_size_heading_lg": 50,
+              "font_size_heading_md": 30,
+              "font_size_heading": 24,
+              "font_weight_heading": 600,
+              "letter_spacing_heading": 0
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,22 @@
+{%- comment -%}
+  Renders a type
+
+  Accepts:
+  - type: {String} The type of the product. (required)
+  - class: {String} a list class. (optional)
+
+  Usage:
+  {% render 'type' with card_product.type, class: 'xxx' %}
+{%- endcomment -%}
+
+{%-liquid
+  assign type_handle = type | handle
+  if settings.use_url_collection_type and collections[type_handle] != blank
+    assign type_url = collections[type_handle].url
+  else
+    assign type_url = type | url_for_type
+  endif
+-%}
+
+<span class="sr-only">{{ 'accessibility.type' | t }}</span>
+<a href="{{ type_url }}" class="hdt-product__type {{ class }}">{{ type | escape }}</a>

@@ -1,0 +1,511 @@
+<!-- sections/toolbar-mobile.liquid -->
+{%- if section.blocks.size > 0 -%}
+<div class="hdt-toolbar hdt-s-gradient hdt-toolbar-label-{{ section.settings.show_txt }} hdt-fixed hdt-right-0 hdt-left-0 hdt-bottom-0 hdt-flex hdt-align-center hdt-justify-between hdt-text-sm hdt-font-semibold hdt-s-text" color-scheme="{{ section.settings.color_scheme }}">
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'shop' -%}
+        <div class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative{% if request.page_type == 'collection' %} hdt-toolbar-item__active{% endif %}">
+          {%- if block.settings.collection_list != blank or block.settings.menu_categories != blank -%}
+            {{- 'hdt-list-categories.css' | asset_url | stylesheet_tag -}}
+            <button aria-controls="hdt-shop-toolbar-mb" class="hdt-toolbar-item-btn hdt-flex hdt-flex hdt-align-center hdt-justify-center hdt-flex-col">
+              <span class="hdt-toolbar-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.39 64.26" width="18" height="18" fill="currentColor"><path d="M45.47,64.26a11.21,11.21,0,0,1-11.2-11.2V45.34a11.21,11.21,0,0,1,11.2-11.2h7.72a11.21,11.21,0,0,1,11.2,11.2v7.72a11.22,11.22,0,0,1-11.2,11.2Zm0-22.53a3.61,3.61,0,0,0-3.61,3.61v7.72a3.61,3.61,0,0,0,3.61,3.6h7.72a3.6,3.6,0,0,0,3.6-3.6V45.34a3.61,3.61,0,0,0-3.6-3.61ZM11.2,64.26A11.22,11.22,0,0,1,0,53.06V45.34a11.21,11.21,0,0,1,11.2-11.2h7.72a11.21,11.21,0,0,1,11.2,11.2v7.72a11.21,11.21,0,0,1-11.2,11.2Zm0-22.53a3.61,3.61,0,0,0-3.61,3.61v7.72a3.61,3.61,0,0,0,3.61,3.6h7.72a3.61,3.61,0,0,0,3.61-3.6V45.34a3.61,3.61,0,0,0-3.61-3.61ZM45.47,30.12a11.21,11.21,0,0,1-11.2-11.2V11.2A11.21,11.21,0,0,1,45.47,0h7.72a11.21,11.21,0,0,1,11.2,11.2v7.72a11.22,11.22,0,0,1-11.2,11.2Zm0-22.53a3.61,3.61,0,0,0-3.61,3.61v7.72a3.61,3.61,0,0,0,3.61,3.61h7.72a3.61,3.61,0,0,0,3.6-3.61V11.2a3.61,3.61,0,0,0-3.6-3.61ZM11.2,30.12A11.22,11.22,0,0,1,0,18.92V11.2A11.21,11.21,0,0,1,11.2,0h7.72a11.21,11.21,0,0,1,11.2,11.2v7.72a11.21,11.21,0,0,1-11.2,11.2Zm0-22.53A3.61,3.61,0,0,0,7.59,11.2v7.72a3.61,3.61,0,0,0,3.61,3.61h7.72a3.61,3.61,0,0,0,3.61-3.61V11.2a3.61,3.61,0,0,0-3.61-3.61Z"/></svg>
+              </span>
+              {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+            </button>
+            {%- capture hdt-drawer-shop -%}
+              <hdt-drawer class="hdt-drawer hdt-drawer-not-header hdt-contents hdt-left-0" color-scheme="{{ section.settings.color_scheme }}">
+                <dialog id="hdt-shop-toolbar-mb" class="hdt-dialog hdt-dialog-drawer" scroll-lock pos="left">
+                  <button ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="hdt-shop-toolbar-mb" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+                  <div class="hdt-dialog-drawer__inner">
+                    <div class="hdt-dialog-drawer__body">
+                      <div class="hdt-list-categories-inner">
+                        <ul class="hdt-categories-list">
+                          {%- if block.settings.collection_list != blank -%}
+                            {%- for collection in block.settings.collection_list -%}
+                              <li class="hdt-category-item hdt-relative hdt-flex hdt-justify-center hdt-flex-col hdt-has-img">
+                                <a id="hdt-menu-{{ collection.handle }}" href="{{ collection.url }}" class="hdt-category-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium">
+                                  <span class="hdt-category-title hdt-flex hdt-align-center">
+                                      {%- assign image_item = collection.metafields.theme.image_collection_list.value | default: collection.image | default: collection.featured_image | default: collection.products.first.featured_image -%}
+                                      {%- if image_item != null -%}
+                                        <span class="hdt-category-img hdt-relative">
+                                          {{ image_item | image_url: width: image_item.width | image_tag: loading: 'lazy', width: image_item.width, height: image_item.height, class: 'hdt-radius-f hdt-radius-full', sizes: '40px', widths: '40,34,30' }}
+                                        </span>
+                                      {%- endif -%}
+                                    <span class="hdt-category-link-text"> {{- collection.title | escape -}} </span>
+                                  </span>
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          {%- elsif block.settings.menu_categories != blank -%}
+                            {%- for link in block.settings.menu_categories.links -%}
+                              <li class="hdt-category-item hdt-relative hdt-flex hdt-justify-center hdt-flex-col{% if link.links != blank %} hdt-has-children hdt-relative{% endif %} {% if link.type == "collection_link" %}hdt-has-img{% endif %}">
+                                {%- if link.links != blank -%}
+                                  <hdt-accordion class="hdt-contents" only-click-icon>
+                                    <details>
+                                      <summary id="hdt-menu-{{ link.handle }}" data-url="{{ link.url }}" class="hdt-category-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium">
+                                        <span class="hdt-category-title hdt-flex hdt-align-center">
+                                          {%- if link.type == "collection_link" -%}
+                                            {%- assign image_item = link.object.metafields.theme.image_collection_list.value | default: link.object.image | default: link.object.featured_image | default: link.object.products.first.featured_image -%}
+                                            {%- if image_item != null -%}
+                                              <span class="hdt-category-img hdt-relative">
+                                                {{ image_item | image_url: width: image_item.width | image_tag: loading: 'lazy', width: image_item.width, height: image_item.height, class: 'hdt-radius-f hdt-radius-full', sizes: '40px', widths: '40,34,30' }}
+                                              </span>
+                                            {%- endif -%}
+                                          {%- endif -%}
+                                          <span class="hdt-category-link-text"> {{- link.title -}} </span>
+                                        </span>
+                                        {%- if link.links != blank -%}
+                                          <span class="hdt-btn-open-sub hdt-relative" accordion-icon></span>
+                                        {%- endif -%}
+                                      </summary>
+                                      <div id="hdt-categories-sub-menu{{ forloop.index }}" class="hdt-categories-sub-menu">
+                                        <ul class="hdt-menu-list hdt-categories-sub-menu-lever-1" role="list"  >
+                                          {%- for childlink in link.links -%}
+                                            <li class="hdt-category-item hdt-relative hdt-flex hdt-justify-center hdt-flex-col{% if childlink.links != blank %} hdt-has-children hdt-relative{% endif %} {% if childlink.type == "collection_link" %}hdt-has-img{% endif %}">
+                                              {%- if childlink.links != blank -%}
+                                                <hdt-accordion class="hdt-contents" only-click-icon>
+                                                  <details>
+                                                    <summary id="hdt-menu-{{ childlink.handle }}" data-url="{{ childlink.url }}" class="hdt-category-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium">
+                                                      <span class="hdt-category-title hdt-flex hdt-align-center">
+                                                        {%- if childlink.type == "collection_link" -%}
+                                                          {%- assign image_item = childlink.object.image | default: childlink.object.featured_image | default: childlink.object.products.first.featured_image -%}
+                                                          {%- if image_item != null -%}
+                                                            <span class="hdt-category-img hdt-relative">
+                                                              {{ image_item | image_url: width: image_item.width | image_tag: loading: 'lazy', width: image_item.width, height: image_item.height, class: 'hdt-radius-f hdt-radius-full', sizes: '40px', widths: '40,34,30' }}
+                                                            </span>
+                                                          {%- endif -%}
+                                                        {%- endif -%}
+                                                        <span class="hdt-category-link-text"> {{- childlink.title -}} </span>
+                                                      </span>
+                                                      <span class="hdt-btn-open-sub hdt-relative" accordion-icon></span>
+                                                    </summary>
+                                                    <div id="hdt-categories-sub-menu{{ forloop.index }}" class="hdt-categories-sub-menu">
+                                                      <ul class="hdt-menu-list hdt-categories-sub-menu-lever-2" role="list">
+                                                        {%- for grandchildlink in childlink.links -%}
+                                                          <li class="hdt-category-item hdt-relative hdt-flex hdt-justify-center hdt-flex-col {% if grandchildlink.type == "collection_link" %}hdt-has-img{% endif %}">
+                                                            <a id="hdt-menu-{{ grandchildlink.handle }}" href="{{ grandchildlink.url }}" class="hdt-category-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium">
+                                                              <span class="hdt-category-title hdt-flex hdt-align-center hdt-oh">
+                                                                {%- if grandchildlink.type == "collection_link" -%}
+                                                                  {%- assign image_item = grandchildlink.object.image | default: grandchildlink.object.featured_image | default: grandchildlink.object.products.first.featured_image -%}
+                                                                  {%- if image_item != null %}
+                                                                    <span class="hdt-category-img hdt-relative">
+                                                                      {{ image_item | image_url: width: image_item.width | image_tag: loading: 'lazy', width: image_item.width, height: image_item.height, class: 'hdt-radius-f hdt-radius-full', sizes: '40px', widths: '40,34,30' }}
+                                                                    </span>
+                                                                  {%- endif -%}
+                                                                {%- endif -%}
+                                                                <span class="hdt-category-link-text"> {{ grandchildlink.title | escape }} </span> 
+                                                              </span>
+                                                            </a>
+                                                          </li>
+                                                        {%- endfor -%}
+                                                      </ul>
+                                                    </div>
+                                                  </details>
+                                                </hdt-accordion>
+                                              {%- else -%}
+                                                <a id="hdt-menu-{{ childlink.handle }}" href="{{ childlink.url }}" class="hdt-category-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium{% if childlink.current %} hdt-category-link--active{% endif %}" {% if childlink.current %} aria-current="page" {% endif %}>
+                                                  <span class="hdt-category-title hdt-flex hdt-align-center">
+                                                    {%- if childlink.type == "collection_link" -%}
+                                                      {%- assign image_item = childlink.object.metafields.theme.image_collection_list.value | default: childlink.object.image | default: childlink.object.featured_image | default: childlink.object.products.first.featured_image -%}
+                                                      {%- if image_item != null -%}
+                                                        <span class="hdt-category-img hdt-relative">
+                                                          {{ image_item | image_url: width: image_item.width | image_tag: loading: 'lazy', width: image_item.width, height: image_item.height, class: 'hdt-radius-f hdt-radius-full', sizes: '40px', widths: '40,34,30' }}
+                                                        </span>
+                                                      {%- endif -%}
+                                                    {%- endif -%}
+                                                    <span class="hdt-category-link-text"> {{- childlink.title | escape -}} </span>
+                                                  </span>
+                                                </a>
+                                              {%- endif -%}
+                                            </li>
+                                          {%- endfor -%}
+                                        </ul>
+                                      </div>
+                                    </details>
+                                  </hdt-accordion>
+                                {%- else -%}
+                                  <a id="hdt-menu-{{ link.handle }}" href="{{ link.url }}" class="hdt-category-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-base hdt-font-medium{% if link.current %} hdt-category-link--active{% endif %}" {% if link.current %} aria-current="page" {% endif %}>
+                                    <span class="hdt-category-title hdt-flex hdt-align-center">
+                                      {%- if link.type == "collection_link" -%}
+                                        {%- assign image_item = link.object.metafields.theme.image_collection_list.value | default: link.object.image | default: link.object.featured_image | default: link.object.products.first.featured_image -%}
+                                        {%- if image_item != null -%}
+                                          <span class="hdt-category-img hdt-relative">
+                                            {{ image_item | image_url: width: image_item.width | image_tag: loading: 'lazy', width: image_item.width, height: image_item.height, class: 'hdt-radius-f hdt-radius-full', sizes: '40px', widths: '40,34,30' }}
+                                          </span>
+                                        {%- endif -%}
+                                      {%- endif -%}
+                                      <span class="hdt-category-link-text"> {{- link.title | escape -}} </span>
+                                    </span>
+                                  </a>
+                                {%- endif -%}
+                               </li>
+                            {%- endfor -%}
+                          {%- endif -%}
+                        </ul>
+                      </div>
+                    </div>
+                    <div slot="footer" class="hdt-list-categories-bottom">
+                      <a href="{{ routes.collections_url }}" class="hdt-view-all hdt-inline-flex hdt-align-center hdt-btn hdt-btn-link hdt-font-medium hdt-text-base">{{ 'sections.header.view_all_categories' | t }} 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M0.861539 8L0 7.13846L5.90769 1.23077H0.615385V0H8V7.38462H6.76923V2.09231L0.861539 8Z" fill="currentColor"/></svg></a>
+                    </div>
+                  </div>
+                </dialog>
+              </hdt-drawer>
+            {%- endcapture -%}
+          {%- else -%}
+            <a href="{{ collections[block.settings.link].url | default: routes.all_products_collection_url }}" class="hdt-toolbar-item-btn hdt-flex hdt-flex hdt-align-center hdt-justify-center hdt-flex-col">
+              <span class="hdt-toolbar-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64.39 64.26" width="18" height="18" fill="currentColor"><path d="M45.47,64.26a11.21,11.21,0,0,1-11.2-11.2V45.34a11.21,11.21,0,0,1,11.2-11.2h7.72a11.21,11.21,0,0,1,11.2,11.2v7.72a11.22,11.22,0,0,1-11.2,11.2Zm0-22.53a3.61,3.61,0,0,0-3.61,3.61v7.72a3.61,3.61,0,0,0,3.61,3.6h7.72a3.6,3.6,0,0,0,3.6-3.6V45.34a3.61,3.61,0,0,0-3.6-3.61ZM11.2,64.26A11.22,11.22,0,0,1,0,53.06V45.34a11.21,11.21,0,0,1,11.2-11.2h7.72a11.21,11.21,0,0,1,11.2,11.2v7.72a11.21,11.21,0,0,1-11.2,11.2Zm0-22.53a3.61,3.61,0,0,0-3.61,3.61v7.72a3.61,3.61,0,0,0,3.61,3.6h7.72a3.61,3.61,0,0,0,3.61-3.6V45.34a3.61,3.61,0,0,0-3.61-3.61ZM45.47,30.12a11.21,11.21,0,0,1-11.2-11.2V11.2A11.21,11.21,0,0,1,45.47,0h7.72a11.21,11.21,0,0,1,11.2,11.2v7.72a11.22,11.22,0,0,1-11.2,11.2Zm0-22.53a3.61,3.61,0,0,0-3.61,3.61v7.72a3.61,3.61,0,0,0,3.61,3.61h7.72a3.61,3.61,0,0,0,3.6-3.61V11.2a3.61,3.61,0,0,0-3.6-3.61ZM11.2,30.12A11.22,11.22,0,0,1,0,18.92V11.2A11.21,11.21,0,0,1,11.2,0h7.72a11.21,11.21,0,0,1,11.2,11.2v7.72a11.21,11.21,0,0,1-11.2,11.2Zm0-22.53A3.61,3.61,0,0,0,7.59,11.2v7.72a3.61,3.61,0,0,0,3.61,3.61h7.72a3.61,3.61,0,0,0,3.61-3.61V11.2a3.61,3.61,0,0,0-3.61-3.61Z"/></svg>
+              </span>
+              {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- when 'search' -%}
+        <div class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative{% if request.page_type == 'search' and template.suffix == "" %} hdt-toolbar-item__active{% endif %}">
+          <a href="{{ routes.search_url }}" class="hdt-toolbar-item-btn hdt-flex hdt-align-center hdt-justify-center hdt-flex-col" aria-controls="drawer-search-form">
+            <span class="hdt-toolbar-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+                <path d="M17.7241 16.1932L13.6436 12.1127C14.626 10.8049 15.1563 9.21299 15.1546 7.57728C15.1546 3.39919 11.7554 0 7.57728 0C3.39919 0 0 3.39919 0 7.57728C0 11.7554 3.39919 15.1546 7.57728 15.1546C9.21299 15.1563 10.8049 14.626 12.1127 13.6436L16.1932 17.7241C16.3998 17.9088 16.6692 18.0073 16.9461 17.9996C17.2231 17.9918 17.4865 17.8783 17.6824 17.6824C17.8783 17.4865 17.9918 17.2231 17.9996 16.9461C18.0073 16.6692 17.9088 16.3998 17.7241 16.1932ZM2.16494 7.57728C2.16494 6.50682 2.48237 5.4604 3.07708 4.57034C3.6718 3.68029 4.51709 2.98657 5.50607 2.57693C6.49504 2.16728 7.58328 2.0601 8.63318 2.26893C9.68307 2.47777 10.6475 2.99325 11.4044 3.75018C12.1613 4.5071 12.6768 5.47149 12.8856 6.52138C13.0945 7.57128 12.9873 8.65952 12.5776 9.64849C12.168 10.6375 11.4743 11.4828 10.5842 12.0775C9.69416 12.6722 8.64774 12.9896 7.57728 12.9896C6.14237 12.9879 4.76672 12.4171 3.75208 11.4025C2.73744 10.3878 2.16666 9.01219 2.16494 7.57728Z"/>
+              </svg>
+            </span>
+            {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+          </a>
+        </div>
+      {%- when 'account' -%}
+        <div class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative{% if request.page_type contains 'customers' %} hdt-toolbar-item__active{% endif %}">
+          <a href="{{ routes.account_url }}" data-no-instant class="hdt-toolbar-item-btn hdt-flex hdt-align-center hdt-justify-center hdt-flex-col" {% unless customer or request.page_type contains 'customers' or settings.login_sidebar == false %} aria-controls="login-form-popup"{% endunless %}>
+            <span class="hdt-toolbar-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><path d="M56,64V57.48A8.43,8.43,0,0,0,47.56,49H16.44A8.43,8.43,0,0,0,8,57.48V64H.9V57.48A15.53,15.53,0,0,1,16.44,41.94H47.56A15.53,15.53,0,0,1,63.1,57.48V64Zm-23.47-27a18.66,18.66,0,0,1-13.11-5.43,18.54,18.54,0,0,1,0-26.22A18.53,18.53,0,0,1,51.07,18.51,18.52,18.52,0,0,1,32.54,37.05Zm0-30a11.44,11.44,0,1,0,8.09,3.35A11.36,11.36,0,0,0,32.54,7.07Z"/></svg>
+            </span>
+            {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+          </a>
+        </div>
+      {%- when 'wishlist' -%}
+        {%- if settings.wishlist_mode == '0' -%}{%- continue -%}{%- endif -%} 
+        <hdt-wishlist-a class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative{% if request.page_type == 'search' and template.suffix == "wishlist" %} hdt-toolbar-item__active{% endif %}">
+          <a href="{{ routes.search_url }}/?view=wishlist" class="hdt-toolbar-item-btn hdt-flex hdt-align-center hdt-justify-center hdt-flex-col">
+            <span class="hdt-toolbar-icon hdt-relative">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="18" height="18" fill="currentColor"><path d="M32.32,52.4l-.32.32-.35-.32C16.45,38.61,6.4,29.49,6.4,20.24A10.94,10.94,0,0,1,17.6,9,12.55,12.55,0,0,1,29,16.59h6A12.55,12.55,0,0,1,46.4,9a10.94,10.94,0,0,1,11.2,11.2C57.6,29.49,47.55,38.61,32.32,52.4ZM46.4,2.64A19.23,19.23,0,0,0,32,9.3,19.23,19.23,0,0,0,17.6,2.64,17.41,17.41,0,0,0,0,20.24c0,12.06,10.88,22,27.36,36.9L32,61.36l4.64-4.22C53.12,42.19,64,32.3,64,20.24A17.41,17.41,0,0,0,46.4,2.64Z"></path></svg>
+              <hdt-wishlist-count class="hdt-toolbar__count-box hdt-absolute hdt-absolute hdt-radius-full hdt-text-center hdt-text-xs hdt-font-medium">0</hdt-wishlist-count>
+            </span>
+            {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+          </a>
+        </hdt-wishlist-a>
+      {%- when 'cart' -%}
+        <div class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative{% if request.page_type == 'cart' %} hdt-toolbar-item__active{% endif %}">
+          <a href="{{ routes.cart_url }}" class="hdt-toolbar-item-btn hdt-flex hdt-align-center hdt-justify-center hdt-flex-col"{% if request.page_type != 'cart' %} aria-controls="CartDrawer"{% endif %}>
+            <span class="hdt-toolbar-icon hdt-relative">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="currentColor"><path d="M16.3028 19H1.90281C1.66412 19 1.4352 18.9052 1.26642 18.7364C1.09763 18.5676 1.00281 18.3387 1.00281 18.1V1.9C1.00281 1.66131 1.09763 1.43239 1.26642 1.26361C1.4352 1.09483 1.66412 1 1.90281 1H16.3028C16.5415 1 16.7704 1.09483 16.9392 1.26361C17.108 1.43239 17.2028 1.66131 17.2028 1.9V18.1C17.2028 18.3387 17.108 18.5676 16.9392 18.7364C16.7704 18.9052 16.5415 19 16.3028 19ZM15.4028 17.2V2.8H2.80281V17.2H15.4028ZM6.40281 4.6V6.4C6.40281 7.11609 6.68728 7.80285 7.19362 8.30919C7.69997 8.81554 8.38673 9.1 9.10281 9.1C9.8189 9.1 10.5057 8.81554 11.012 8.30919C11.5183 7.80285 11.8028 7.11609 11.8028 6.4V4.6H13.6028V6.4C13.6028 7.59348 13.1287 8.73807 12.2848 9.58199C11.4409 10.4259 10.2963 10.9 9.10281 10.9C7.90934 10.9 6.76475 10.4259 5.92083 9.58199C5.07692 8.73807 4.60281 7.59348 4.60281 6.4V4.6H6.40281Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M6.52281 4.48V6.4C6.52281 7.08426 6.79463 7.7405 7.27848 8.22434C7.76232 8.70818 8.41855 8.98 9.10281 8.98C9.78707 8.98 10.4433 8.70818 10.9271 8.22434C11.411 7.7405 11.6828 7.08426 11.6828 6.4V4.48H13.7228V6.4C13.7228 7.6253 13.2361 8.80042 12.3696 9.66684C11.5032 10.5333 10.3281 11.02 9.10281 11.02C7.87751 11.02 6.7024 10.5333 5.83598 9.66684C4.96956 8.80042 4.48281 7.6253 4.48281 6.4V4.48H6.52281ZM16.3028 19.12H1.90281C1.63229 19.12 1.37285 19.0125 1.18156 18.8213C0.990276 18.63 0.882812 18.3705 0.882812 18.1V1.9C0.882812 1.62948 0.990276 1.37004 1.18156 1.17876C1.37285 0.987469 1.63229 0.880005 1.90281 0.880005H16.3028C16.5733 0.880005 16.8328 0.987469 17.0241 1.17876C17.2154 1.37004 17.3228 1.62948 17.3228 1.9V18.1C17.3228 18.3705 17.2154 18.63 17.0241 18.8213C16.8328 19.0125 16.5733 19.12 16.3028 19.12ZM15.4028 2.8V17.2H2.80281V2.8H15.4028ZM2.92281 2.92V17.08H15.2828V2.92H2.92281ZM1.90281 19H16.3028C16.5415 19 16.7704 18.9052 16.9392 18.7364C17.108 18.5676 17.2028 18.3387 17.2028 18.1V1.9C17.2028 1.66131 17.108 1.43239 16.9392 1.26361C16.7704 1.09483 16.5415 1 16.3028 1H1.90281C1.66412 1 1.4352 1.09483 1.26642 1.26361C1.09763 1.43239 1.00281 1.66131 1.00281 1.9V18.1C1.00281 18.3387 1.09763 18.5676 1.26642 18.7364C1.4352 18.9052 1.66412 19 1.90281 19ZM6.40281 4.6H4.60281V6.4C4.60281 7.59348 5.07692 8.73807 5.92083 9.58199C6.76475 10.4259 7.90934 10.9 9.10281 10.9C10.2963 10.9 11.4409 10.4259 12.2848 9.58199C13.1287 8.73807 13.6028 7.59348 13.6028 6.4V4.6H11.8028V6.4C11.8028 7.11609 11.5183 7.80285 11.012 8.30919C10.5057 8.81554 9.8189 9.1 9.10281 9.1C8.38673 9.1 7.69997 8.81554 7.19362 8.30919C6.68728 7.80285 6.40281 7.11609 6.40281 6.4V4.6Z"/></svg>
+              <hdt-cart-count class="hdt-toolbar__count-box hdt-absolute hdt-absolute hdt-radius-full hdt-text-center hdt-text-xs hdt-font-medium">{{ cart.item_count }}</hdt-cart-count>
+            </span>
+            {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+          </a>
+        </div>
+      {%- when 'compare' -%}
+       {%- unless settings.compare_mode != "0" -%}{%- continue -%}{%- endunless -%}
+        <div class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative{% if request.page_type == 'search' and template.suffix == "compare" %} hdt-toolbar-item__active{% endif %}">
+          <hdt-compare-a class="hdt-contents">
+            <a href="{{ routes.search_url }}/?view=compare" class="hdt-toolbar-item-btn hdt-flex hdt-align-center hdt-justify-center hdt-flex-col">
+              <span class="hdt-toolbar-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="18" height="18" viewBox="0 0 18 18" fill="currentColor"><path d="M26.36,20.68,5.64,0,0,5.64,20.68,26.32ZM42,0l8.16,8.16L0,58.36,5.64,64l50.2-50.16L64,22V0Zm1.32,37.64-5.64,5.64L50.2,55.8,42,64H64V42l-8.16,8.16Z"/></svg>
+              </span>
+              {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+            </a>
+          </hdt-compare-a>
+        </div>
+      {%- when 'blog' -%}
+        <div class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative{% if request.page_type == 'blog' %} hdt-toolbar-item__active{% endif %}">
+          <a href="{{ blogs[block.settings.blog].url | default: request.path }}" class="hdt-toolbar-item-btn hdt-flex hdt-align-center hdt-justify-center hdt-flex-col">
+            <span class="hdt-toolbar-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="19" viewBox="0 0 21 19" fill="currentColor"><path d="M4.06893 12.4059H6.39335C6.82128 12.4059 7.16816 12.059 7.16816 11.6311C7.16816 11.2032 6.82128 10.8563 6.39335 10.8563H4.06893C3.641 10.8563 3.29412 11.2032 3.29412 11.6311C3.29412 12.059 3.641 12.4059 4.06893 12.4059ZM4.06893 9.30665H6.39335C6.82128 9.30665 7.16816 8.95977 7.16816 8.53185C7.16816 8.10392 6.82128 7.75704 6.39335 7.75704H4.06893C3.641 7.75704 3.29412 8.10392 3.29412 8.53185C3.29412 8.95977 3.641 9.30665 4.06893 9.30665ZM8.61864 11.6311C8.61864 12.059 8.96552 12.4059 9.39345 12.4059C11.0136 12.4059 12.5368 11.775 13.6824 10.6293L19.3486 4.96261C20.257 4.05427 20.2572 2.58387 19.3486 1.67537C18.4424 0.769079 16.9677 0.769079 16.0614 1.67537L10.3952 7.34209C9.24961 8.48776 8.61864 10.0109 8.61864 11.6311ZM17.1572 2.77114C17.4592 2.46905 17.9508 2.46905 18.2529 2.77114C18.5557 3.07386 18.5558 3.56404 18.2529 3.86688L12.5867 9.5336C11.939 10.1813 11.1291 10.6081 10.2486 10.7759C10.4165 9.89547 10.8432 9.0856 11.4909 8.43786L17.1572 2.77114Z"/><path d="M2.51931 18.6044C3.09097 18.6047 3.64264 18.394 4.06862 18.0128L5.13968 17.0547H13.0567C15.1929 17.0547 16.9307 15.3168 16.9307 13.1807V11.4427C16.9307 11.0148 16.5839 10.6679 16.1559 10.6679C15.728 10.6679 15.3811 11.0148 15.3811 11.4427V13.1807C15.3811 14.4624 14.3384 15.5051 13.0567 15.5051H4.84374C4.65314 15.5051 4.46923 15.5754 4.32717 15.7024L3.03565 16.8577C2.89366 16.9847 2.70981 17.0549 2.51931 17.0547C2.09208 17.0547 1.7445 16.7072 1.7445 16.2799V6.98223C1.7445 5.70054 2.78724 4.6578 4.06893 4.6578H10.5676C10.9955 4.6578 11.3424 4.31092 11.3424 3.88299C11.3424 3.45507 10.9955 3.10819 10.5676 3.10819H4.06893C1.93274 3.10819 0.194888 4.84608 0.194888 6.98223V16.2799C0.194888 17.5616 1.23763 18.6044 2.51931 18.6044Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M13.8216 10.7677C12.6392 11.95 11.0663 12.6015 9.39422 12.6015C8.85823 12.6015 8.42375 12.167 8.42375 11.6311C8.42375 9.959 9.07534 8.38609 10.2576 7.20373L15.9238 1.53702C16.9065 0.554323 18.5051 0.554304 19.4877 1.53701C20.4727 2.52192 20.4725 4.1162 19.4877 5.10094L13.8216 10.7677ZM17.2963 2.90947L11.63 8.57618C11.0834 9.12283 10.7017 9.78943 10.509 10.5163C11.2359 10.3236 11.9025 9.94188 12.4491 9.39524L18.1153 3.72852C18.3418 3.50212 18.3417 3.13582 18.1153 2.90949C17.8897 2.68381 17.5219 2.68381 17.2963 2.90947ZM10.4579 10.731C10.3889 10.7476 10.3186 10.7626 10.2486 10.7759C10.262 10.7059 10.2777 10.6364 10.2943 10.5673C10.4865 9.76774 10.8947 9.03412 11.4909 8.43786L17.1572 2.77114C17.4592 2.46905 17.9508 2.46905 18.2529 2.77114C18.5557 3.07386 18.5558 3.56404 18.2529 3.86688L12.5867 9.5336C11.9904 10.1299 11.2576 10.5388 10.4579 10.731ZM4.1975 15.5566C4.37543 15.3974 4.60578 15.3094 4.8445 15.3095H13.0575C14.2311 15.3095 15.1862 14.3543 15.1862 13.1807V11.4427C15.1862 10.9067 15.6207 10.4722 16.1567 10.4722C16.6927 10.4722 17.1272 10.9067 17.1272 11.4427V13.1807C17.1272 15.4249 15.3017 17.2504 13.0575 17.2504H5.21518L4.19986 18.1586C3.73798 18.5719 3.13981 18.8003 2.51997 18.8C2.51994 18.8 2.52001 18.8 2.51997 18.8C1.13028 18.7999 0 17.6696 0 16.2799V6.98221C0 4.73801 1.82545 2.91252 4.06969 2.91252H10.5684C11.1043 2.91252 11.5388 3.347 11.5388 3.88298C11.5388 4.41896 11.1043 4.85344 10.5684 4.85344H4.06969C2.89606 4.85344 1.94092 5.80858 1.94092 6.98221V16.2799C1.94092 16.5991 2.2009 16.8591 2.52008 16.8591C2.6624 16.8592 2.79989 16.8067 2.90597 16.7119L4.1975 15.5566ZM6.39412 12.6015H4.06969C3.53371 12.6015 3.09923 12.167 3.09923 11.6311C3.09923 11.0951 3.53371 10.6606 4.06969 10.6606H6.39412C6.9301 10.6606 7.36458 11.0951 7.36458 11.6311C7.36458 12.167 6.9301 12.6015 6.39412 12.6015ZM6.39412 9.50229H4.06969C3.53371 9.50229 3.09923 9.06781 3.09923 8.53183C3.09923 7.99585 3.53371 7.56137 4.06969 7.56137H6.39412C6.9301 7.56137 7.36458 7.99585 7.36458 8.53183C7.36458 9.06781 6.9301 9.50229 6.39412 9.50229ZM13.6824 10.6293C12.5368 11.775 11.0136 12.4059 9.39345 12.4059C8.96552 12.4059 8.61864 12.059 8.61864 11.6311C8.61864 10.0109 9.24961 8.48776 10.3952 7.34209L16.0614 1.67537C16.9677 0.769079 18.4424 0.769079 19.3486 1.67537C20.2572 2.58387 20.257 4.05427 19.3486 4.96261L13.6824 10.6293ZM6.39335 12.4059H4.06893C3.641 12.4059 3.29412 12.059 3.29412 11.6311C3.29412 11.2032 3.641 10.8563 4.06893 10.8563H6.39335C6.82128 10.8563 7.16816 11.2032 7.16816 11.6311C7.16816 12.059 6.82128 12.4059 6.39335 12.4059ZM6.39335 9.30665H4.06893C3.641 9.30665 3.29412 8.95977 3.29412 8.53185C3.29412 8.10392 3.641 7.75704 4.06893 7.75704H6.39335C6.82128 7.75704 7.16816 8.10392 7.16816 8.53185C7.16816 8.95977 6.82128 9.30665 6.39335 9.30665Z"/></svg>
+            </span>
+            {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+          </a>
+        </div>
+      {%- when 'home' -%}
+        <div class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative{% if request.page_type == 'index' %} hdt-toolbar-item__active{% endif %}">
+          <a href="{{ routes.root_url }}" class="hdt-toolbar-item-btn hdt-flex hdt-align-center hdt-justify-center hdt-flex-col">
+            <span class="hdt-toolbar-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+                <path d="M15.03 18H2.97C1.35 18 0 16.632 0 14.994V8.424C0 7.596 0.36 6.786 0.99 6.228L7.02 0.756C8.19 -0.252 9.81 -0.252 10.98 0.756L17.01 6.228C17.64 6.768 18 7.596 18 8.424V14.994C17.91 16.722 16.65 18 15.03 18ZM9 1.854C8.73 1.854 8.46 1.944 8.19 2.124L2.16 7.596C1.89 7.776 1.8 8.136 1.8 8.514V15.084C1.8 15.714 2.34 16.272 2.97 16.272H14.94C15.57 16.272 16.11 15.732 16.11 15.084V8.514C16.11 8.154 15.93 7.884 15.75 7.596L9.72 2.124C9.54 1.944 9.27 1.854 9 1.854Z"/>
+              </svg>
+            </span>
+            {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+          </a>
+        </div>
+      {%- when 'nav' -%}
+        <div class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative">
+          <a href="{{ routes.root_url }}" aria-controls="menu_mobile" class="hdt-toolbar-item-btn hdt-flex hdt-align-center hdt-justify-center hdt-flex-col">
+            <span class="hdt-toolbar-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 24 16" fill="currentColor">
+                <path d="M2.00056 2.28571H16.8577C17.1608 2.28571 17.4515 2.16531 17.6658 1.95098C17.8802 1.73665 18.0006 1.44596 18.0006 1.14286C18.0006 0.839753 17.8802 0.549063 17.6658 0.334735C17.4515 0.120408 17.1608 0 16.8577 0H2.00056C1.69745 0 1.40676 0.120408 1.19244 0.334735C0.978109 0.549063 0.857702 0.839753 0.857702 1.14286C0.857702 1.44596 0.978109 1.73665 1.19244 1.95098C1.40676 2.16531 1.69745 2.28571 2.00056 2.28571ZM0.857702 8C0.857702 7.6969 0.978109 7.40621 1.19244 7.19188C1.40676 6.97755 1.69745 6.85714 2.00056 6.85714H22.572C22.8751 6.85714 23.1658 6.97755 23.3801 7.19188C23.5944 7.40621 23.7148 7.6969 23.7148 8C23.7148 8.30311 23.5944 8.59379 23.3801 8.80812C23.1658 9.02245 22.8751 9.14286 22.572 9.14286H2.00056C1.69745 9.14286 1.40676 9.02245 1.19244 8.80812C0.978109 8.59379 0.857702 8.30311 0.857702 8ZM0.857702 14.8571C0.857702 14.554 0.978109 14.2633 1.19244 14.049C1.40676 13.8347 1.69745 13.7143 2.00056 13.7143H12.2863C12.5894 13.7143 12.8801 13.8347 13.0944 14.049C13.3087 14.2633 13.4291 14.554 13.4291 14.8571C13.4291 15.1602 13.3087 15.4509 13.0944 15.6653C12.8801 15.8796 12.5894 16 12.2863 16H2.00056C1.69745 16 1.40676 15.8796 1.19244 15.6653C0.978109 15.4509 0.857702 15.1602 0.857702 14.8571Z"/>
+              </svg>
+            </span>
+            {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+          </a>
+        </div>
+      {%- when 'filter' -%}
+        <div class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative hdt-hidden">
+          <a href="{{ request.path }}" aria-controls="hdt-filter_form" class="hdt-toolbar-item-btn hdt-flex hdt-align-center hdt-justify-center hdt-flex-col">
+            <span class="hdt-toolbar-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="currentColor"><path d="M10.7489 19C10.5867 19 10.4288 18.9474 10.2989 18.85L7.29893 16.6C7.20579 16.5301 7.13018 16.4395 7.07811 16.3354C7.02604 16.2313 6.99893 16.1164 6.99893 16V11.785L1.73693 5.86524C1.36322 5.44365 1.11922 4.9231 1.03424 4.36616C0.949268 3.80923 1.02694 3.2396 1.25793 2.72575C1.48891 2.21189 1.86338 1.77568 2.33632 1.46954C2.80926 1.16339 3.36055 1.00034 3.92393 0.999988H14.5739C15.1373 1.00065 15.6884 1.16397 16.1612 1.47032C16.6339 1.77667 17.0082 2.21302 17.2389 2.72693C17.4696 3.24084 17.5471 3.81044 17.4619 4.3673C17.3767 4.92415 17.1325 5.44456 16.7587 5.86599L11.4989 11.785V18.25C11.4989 18.4489 11.4199 18.6397 11.2793 18.7803C11.1386 18.921 10.9478 19 10.7489 19ZM8.49893 15.625L9.99893 16.75V11.5C9.99909 11.3164 10.0666 11.1392 10.1887 11.002L15.6397 4.86924C15.8214 4.6638 15.9401 4.41027 15.9813 4.13908C16.0225 3.86789 15.9845 3.59057 15.872 3.34041C15.7595 3.09025 15.5771 2.87788 15.3469 2.7288C15.1166 2.57973 14.8482 2.50028 14.5739 2.49999H3.92393C3.64977 2.5004 3.38155 2.5799 3.15144 2.72894C2.92132 2.87798 2.73909 3.09023 2.62659 3.34025C2.51409 3.59027 2.4761 3.86743 2.51718 4.1385C2.55826 4.40957 2.67666 4.66303 2.85818 4.86849L8.30993 11.002C8.43174 11.1393 8.49899 11.3165 8.49893 11.5V15.625Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M16.7587 5.86599L11.4989 11.785V18.25C11.4989 18.4489 11.4199 18.6397 11.2793 18.7803C11.1386 18.921 10.9478 19 10.7489 19C10.5867 19 10.4288 18.9474 10.2989 18.85L7.29893 16.6C7.20579 16.5301 7.13018 16.4395 7.07811 16.3354C7.02604 16.2313 6.99893 16.1164 6.99893 16V11.785L1.73693 5.86524C1.36322 5.44365 1.11922 4.9231 1.03424 4.36616C0.949268 3.80923 1.02694 3.2396 1.25793 2.72575C1.48891 2.21189 1.86338 1.77568 2.33632 1.46954C2.80926 1.16339 3.36055 1.00034 3.92393 0.999988H14.5739C15.1373 1.00065 15.6884 1.16397 16.1612 1.47032C16.6339 1.77667 17.0082 2.21302 17.2389 2.72693C17.4696 3.24084 17.5471 3.81044 17.4619 4.3673C17.3767 4.92415 17.1325 5.44456 16.7587 5.86599ZM6.79894 11.861L1.58745 5.99811C1.18819 5.54769 0.927318 4.99135 0.836534 4.39633C0.745749 3.80131 0.828733 3.19274 1.07551 2.64375C1.32229 2.09476 1.72236 1.62872 2.22764 1.30164C2.73292 0.974565 3.32191 0.800368 3.92381 0.799988L14.5739 0.799988C15.1758 0.800694 15.7649 0.97518 16.2699 1.30248C16.775 1.62977 17.1748 2.09596 17.4213 2.64501C17.6679 3.19406 17.7506 3.80261 17.6596 4.39754C17.5686 4.99247 17.3077 5.54846 16.9083 5.99871L11.6989 11.861V18.25C11.6989 18.5019 11.5988 18.7436 11.4207 18.9217C11.2425 19.0999 11.0009 19.2 10.7489 19.2C10.5434 19.2 10.3434 19.1333 10.1789 19.01L7.17894 16.76C7.06095 16.6715 6.96519 16.5568 6.89923 16.4248C6.83327 16.2929 6.79894 16.1475 6.79894 16V11.861ZM8.30993 11.002C8.43174 11.1393 8.49899 11.3165 8.49893 11.5V15.625L9.99893 16.75V11.5C9.99909 11.3164 10.0666 11.1392 10.1887 11.002L15.6397 4.86924C15.8214 4.6638 15.9401 4.41027 15.9813 4.13908C16.0225 3.86789 15.9845 3.59057 15.872 3.34041C15.7595 3.09025 15.5771 2.87788 15.3469 2.7288C15.1166 2.57973 14.8482 2.50028 14.5739 2.49999H3.92393C3.64977 2.5004 3.38155 2.5799 3.15144 2.72894C2.92132 2.87798 2.73909 3.09023 2.62659 3.34025C2.51409 3.59027 2.4761 3.86743 2.51718 4.1385C2.55826 4.40957 2.67666 4.66303 2.85818 4.86849L8.30993 11.002ZM3.00807 4.73607L8.45942 10.8691C8.6137 11.043 8.69899 11.2675 8.69894 11.5V15.525L9.79894 16.35V11.5C9.79913 11.2674 9.88462 11.0429 10.0392 10.8691L15.4899 4.73671C15.6461 4.56012 15.7481 4.34211 15.7835 4.10903C15.819 3.8759 15.7864 3.6375 15.6896 3.42245C15.5929 3.2074 15.4361 3.02484 15.2382 2.89669C15.0403 2.76856 14.8096 2.70026 14.5738 2.69999H3.92409M3.00807 4.73607C2.85213 4.55948 2.75022 4.34146 2.71492 4.10853C2.67961 3.87551 2.71227 3.63725 2.80898 3.42232C2.90569 3.20739 3.06235 3.02493 3.26016 2.8968C3.45794 2.76871 3.92409 2.69999 3.92409 2.69999"/></svg>
+            </span>
+            {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+          </a>
+        </div>
+      {%- when 'sidebar' -%}
+        <div class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative hdt-hidden">
+          <a href="{{ request.path }}" aria-controls="{% if request.page_type == 'product' %}drawer-sidebar-product{% elsif request.page_type == 'collection'%}hdt-shop-sidebar-drawer{% elsif request.page_type == 'blog'%}hdt-sidebar-main-blog{% elsif request.page_type == 'article'%}hdt-sidebar-blog{% endif %}" class="hdt-toolbar-item-btn hdt-flex hdt-align-center hdt-justify-center hdt-flex-col">
+            <span class="hdt-toolbar-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="currentColor"><path d="M11.4563 18.6043H6.54221C2.09499 18.6043 0.194888 16.7042 0.194888 12.257V7.34297C0.194888 2.89575 2.09499 0.995652 6.54221 0.995652H11.4563C15.9035 0.995652 17.8036 2.89575 17.8036 7.34297V12.257C17.8036 16.7042 15.9117 18.6043 11.4563 18.6043ZM6.54221 2.22417C2.76658 2.22417 1.4234 3.56734 1.4234 7.34297V12.257C1.4234 16.0327 2.76658 17.3758 6.54221 17.3758H11.4563C15.2319 17.3758 16.5751 16.0327 16.5751 12.257V7.34297C16.5751 3.56734 15.2319 2.22417 11.4563 2.22417H6.54221Z"/><path d="M5.7232 18.6043C5.38741 18.6043 5.10894 18.3259 5.10894 17.9901V1.60991C5.10894 1.27411 5.38741 0.995652 5.7232 0.995652C6.05899 0.995652 6.33746 1.27411 6.33746 1.60991V17.9901C6.33746 18.3259 6.06718 18.6043 5.7232 18.6043ZM11.4563 12.5109C11.3007 12.5109 11.145 12.4536 11.0222 12.3307L8.92552 10.2341C8.81129 10.1185 8.74723 9.96252 8.74723 9.8C8.74723 9.63748 8.81129 9.48152 8.92552 9.36592L11.0222 7.26926C11.2597 7.03175 11.6528 7.03175 11.8903 7.26926C12.1279 7.50677 12.1279 7.8999 11.8903 8.13741L10.2359 9.8L11.8985 11.4626C12.136 11.7001 12.136 12.0932 11.8985 12.3307C11.7757 12.4536 11.6201 12.5109 11.4563 12.5109Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M8.78794 10.3724L8.78712 10.3716C8.6367 10.2194 8.55234 10.014 8.55234 9.79999C8.55234 9.58598 8.6367 9.3806 8.78713 9.22838L8.78794 9.22756L10.8846 7.1309C11.1985 6.81698 11.7155 6.81698 12.0294 7.1309C12.3433 7.44473 12.3434 7.96153 12.0297 8.27547L11.8903 8.13741C12.1279 7.8999 12.1279 7.50677 11.8903 7.26926C11.6528 7.03175 11.2597 7.03175 11.0222 7.26926L8.92552 9.36592C8.81129 9.48152 8.74723 9.63748 8.74723 9.8C8.74723 9.96252 8.81129 10.1185 8.92552 10.2341L11.0222 12.3307C11.145 12.4536 11.3007 12.5109 11.4563 12.5109C11.6201 12.5109 11.7757 12.4536 11.8985 12.3307C12.136 12.0932 12.136 11.7001 11.8985 11.4626L10.2359 9.8L11.8903 8.13741L12.0297 8.27547M10.5131 9.79965L12.0376 11.3242C12.3516 11.6381 12.3516 12.1552 12.0376 12.4691C11.8752 12.6315 11.6685 12.7066 11.457 12.7066C11.2523 12.7066 11.0461 12.6305 10.8846 12.4691L8.78794 10.3724M6.25232 0.998422C6.34797 0.996565 6.44409 0.995652 6.54221 0.995652H11.4563C15.9035 0.995652 17.8036 2.89575 17.8036 7.34297V12.257C17.8036 16.7042 15.9117 18.6043 11.4563 18.6043H6.54221C6.44521 18.6043 6.35019 18.6034 6.25561 18.6016C6.1226 18.5991 5.99196 18.5947 5.86369 18.5885C5.81892 18.5989 5.7714 18.6043 5.7232 18.6043C5.64984 18.6043 5.57998 18.591 5.5144 18.5668C5.38097 18.5565 5.25027 18.5441 5.12226 18.5295C1.68777 18.1387 0.194888 16.198 0.194888 12.257V7.34297C0.194888 3.40201 1.68777 1.46125 5.12226 1.07047C5.25027 1.0559 5.38097 1.04349 5.5144 1.03321C5.57998 1.00893 5.64984 0.995652 5.7232 0.995652C5.77041 0.995652 5.81725 1.00114 5.86158 1.01154C5.98947 1.00536 6.11971 1.001 6.25232 0.998422ZM5.87788 0.814906C6.09346 0.804917 6.31515 0.799988 6.54297 0.799988H11.457C13.7031 0.799988 15.3525 1.27905 16.4367 2.36325C17.5209 3.44744 18 5.09689 18 7.34296V12.257C18 14.5029 17.5231 16.1524 16.4399 17.2367C15.3567 18.321 13.7071 18.8 11.457 18.8H6.54297C6.31583 18.8 6.09478 18.7951 5.87981 18.7852C5.82949 18.7949 5.77741 18.8 5.72396 18.8C5.63679 18.8 5.55263 18.7859 5.47364 18.7598C3.76488 18.6243 2.46748 18.141 1.56326 17.2367C0.479062 16.1525 0 14.5031 0 12.257V7.34296C0 5.09689 0.479062 3.44744 1.56326 2.36325C2.46748 1.45902 3.76487 0.975708 5.47363 0.840166C5.55261 0.814109 5.63679 0.799988 5.72396 0.799988C5.77652 0.799988 5.82798 0.80512 5.87788 0.814906ZM6.53387 17.3758C6.5369 17.3758 6.53917 17.3758 6.54221 17.3758H11.4563C15.2319 17.3758 16.5751 16.0327 16.5751 12.257V7.34297C16.5751 3.56734 15.2319 2.22417 11.4563 2.22417H6.54221C6.53917 2.22417 6.5369 2.22415 6.53387 2.22416C6.46791 2.22419 6.4027 2.22464 6.33822 2.22551V17.3745C6.4027 17.3753 6.46791 17.3758 6.53387 17.3758ZM6.53387 17.1802C6.5369 17.1802 6.53994 17.1802 6.54297 17.1802H11.457C13.331 17.1802 14.5431 16.8448 15.2939 16.0939C16.0448 15.3431 16.3802 14.131 16.3802 12.257V7.34296C16.3802 5.46895 16.0448 4.2569 15.2939 3.50604C14.5431 2.75518 13.331 2.41981 11.457 2.41981H6.54297C6.53994 2.41981 6.5369 2.41981 6.53387 2.41981V17.1802ZM4.91405 2.33161C2.37217 2.71585 1.4234 4.17101 1.4234 7.34297V12.257C1.4234 15.429 2.37217 16.8841 4.91405 17.2684C4.97825 17.2781 5.04347 17.2871 5.10971 17.2954V2.30454C5.04347 2.31289 4.97825 2.32191 4.91405 2.33161ZM4.91405 2.52954C3.92761 2.68268 3.2121 3 2.70605 3.50604C1.95519 4.2569 1.61982 5.46895 1.61982 7.34296V12.257C1.61982 14.131 1.95519 15.3431 2.70605 16.0939C3.2121 16.6 3.92761 16.9173 4.91405 17.0704V2.52954Z"/></svg>
+            </span>
+            {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+          </a>
+        </div>
+      {%- when 'link' -%}
+        <div class="hdt-toolbart-{{ block.type }} hdt-toolbar-item hdt-relative">
+          {%- assign image = block.settings.image -%}
+          <a href="{{ block.settings.link | default: routes.account_url }}" class="hdt-toolbar-item-btn hdt-flex hdt-align-center hdt-justify-center hdt-flex-col">
+            <span class="hdt-toolbar-icon">
+              {%- if image != blank %}
+                {{ block.settings.image | image_url: width: image.width | image_tag: loading: 'lazy', width: block.settings.image.width, height: block.settings.image.height, sizes: block.settings.icon_width, widths: '36,72,150,400,600,700,800,900,1000,1200,1400,1600' }}
+              {%- endif -%}
+            </span>
+            {%- if section.settings.show_txt -%}<span class="hdt-toolbar-label">{{ block.settings.title }}</span>{%- endif -%}
+          </a>
+        </div>
+    {%- endcase -%}
+  {%- endfor -%}
+</div>
+{{ hdt-drawer-shop }}
+<style>@media(max-width:1024px){.hdt-sticky-btn-atc{bottom:6.7rem;border-bottom:.1rem solid rgb(var(--color-line-border));-webkit-transform:translate3d(0,calc(100% + 6.7rem),0)!important;transform:translate3d(0,calc(100% + 6.7rem),0)!important}.sticky-shown back-to-top.hdt-back-to-top{bottom:calc(8rem + var(--hdt-sticky-atc-height, 0))}}.hdt-toolbar{z-index:24;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:0 5px;box-shadow:0 -4px 10px 0 rgba(0,0,0,.08);transform:none;transition:transform .25s}.hdt-toolbar .hdt-toolbar-item{-ms-flex:1 0 20%;flex:1 0 20%}.hdt-toolbar-item .hdt-toolbar-item-btn{width:100%;padding-right:10px;padding-left:10px;line-height:1;height:67px;gap:9px}.hdt-toolbar-label-false .hdt-toolbar-item .hdt-toolbar-item-btn{height:60px}.hdt-toolbar-item .hdt-toolbar-item-btn::before{background-color:rgb(var(--color-accent));position:absolute;content:'';top:0;left:0;width:0;height:3px;transition:all .3s ease}.hdt-toolbar-item__active>.hdt-toolbar-item-btn::before{width:100%}.hdt-toolbar-item__active .hdt-toolbar-icon{color:rgb(var(--color-accent))}.hdt-toolbar-label{overflow:hidden;text-align:center;text-overflow:ellipsis;white-space:nowrap;line-height:1;width:100%}.hdt-toolbar-icon svg{width:18px;height:18px}.hdt-toolbar__count-box{width:18px;height:18px;line-height:18px;letter-spacing:0;color:#fff;background-color:rgb(var(--color-accent));top:-6px;right:-12px}.hdt-toolbar-item .hdt-toolbar-item-btn img{max-height:18px;width:auto}@media(max-width:1024px){.hdt-toolbar-mobile{height:67px}}@media (min-width:1150px){.hdt-toolbar{display:none!important}}#hdt-shop-toolbar-mb::part(body){padding-top:0;padding-bottom:0}.hdt-back-to-top{--backtop-bottom:90px}</style>
+{%- endif -%}
+{% schema %}
+{
+  "name": "t:sections.toolbar_mobile.name",
+  "class": "hdt-section-group hdt-section-toolbar-mobile hdt-toolbar-mobile",
+  "limit": 1,
+  "enabled_on": {
+    "groups": [
+      "custom.system"
+    ]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_txt",
+      "label": "t:sections.toolbar_mobile.settings.show_txt.label",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "home",
+      "name": "Home",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Home"
+        }
+      ]
+    },
+    {
+      "type": "shop",
+      "name": "t:sections.toolbar_mobile.blocks.shop.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Shop"
+        },
+        {
+          "id": "collection_list",
+          "type": "collection_list",
+          "label": "t:sections.collection_list.settings.collection_list",
+          "info": "t:sections.collection_list.settings.collection_list_info"
+        },
+        {
+          "type": "link_list",
+          "id": "menu_categories",
+          "label": "t:sections.header.settings.header_categories.menu_categories"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.toolbar_mobile.blocks.shop.link.label"
+        }
+      ]
+    },
+    {
+      "type": "search",
+      "name": "Search",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Search"
+        }
+      ]
+    },
+    {
+      "type": "account",
+      "name": "Account",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Account"
+        }
+      ]
+    },
+    {
+      "type": "wishlist",
+      "name": "Wishlist",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Wishlist"
+        }
+      ]
+    },
+    {
+      "type": "cart",
+      "name": "Cart",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Cart"
+        }
+      ]
+    },
+    {
+      "type": "compare",
+      "name": "Compare",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Compare"
+        }
+      ]
+    },
+    {
+      "type": "blog",
+      "name": "Blog",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Blog"
+        },
+        {
+          "id": "blog",
+          "type": "blog",
+          "label": "t:sections.toolbar_mobile.blocks.blog.blog.label"
+        }
+      ]
+    },
+    {
+      "type": "filter",
+      "name": "Filter",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Filter"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.toolbar_mobile.blocks.filter.paragraph.label"
+        }
+      ]
+    },
+    {
+      "type": "sidebar",
+      "name": "Sidebar",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Sidebar"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:sections.toolbar_mobile.blocks.sidebar.paragraph.label"
+        }
+      ]
+    },
+    {
+      "type": "nav",
+      "name": "Menu",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "link",
+      "name": "Link Custom",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.toolbar_mobile.blocks.all.title.label",
+          "default": "Custom"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.toolbar_mobile.blocks.link.image.label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.toolbar_mobile.blocks.link.image.link",
+          "default": "/"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.toolbar_mobile.name"
+    }
+  ]
+}
+{% endschema %}

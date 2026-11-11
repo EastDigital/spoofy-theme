@@ -1,0 +1,32 @@
+<div class="hdt-cart-totals-discounts" {{ block.shopify_attributes }}>
+  {%- if cart.cart_level_discount_applications.size > 0 -%}
+    <ul class="hdt-discounts hdt-cart_discounts" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+      {%- for discount in cart.cart_level_discount_applications -%}
+        <li class="hdt-discounts__discount hdt-discounts__discount--end">
+          {%- render 'icon' with 'discount' -%} {{ discount.title }} (-<span class="hdt-money">{{ discount.total_allocated_amount | money }}</span>)
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+  <div class="hdt-mini-cart__totals hdt-flex hdt-align-center hdt-justify-between hdt-totals" role="status">
+    <h3 class="hdt-totals__total hdt-mini-cart__total hdt-text-2xl hdt-font-normal">{{ 'sections.cart.subtotal' | t }}</h3>
+    <span class="hdt-totals__total-value hdt-mini-cart__value hdt-text-2xl hdt-s-text hdt-font-semibold hdt-money">{{ cart.total_price | money_with_currency }}</span>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "t:sections.mini-cart.blocks.price.name",
+    "tag": null,
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "t:settings_schema.currency_format.settings.paragraph"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.mini-cart.blocks.price.name"
+      }
+    ]
+  }
+{% endschema %}

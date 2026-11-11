@@ -1,0 +1,56 @@
+{% assign dW5zZW4 = 'ZWNvbXVz' %}
+<script>
+  window.themeHDN = {
+    settings: {
+      shopCurency: {{ shop.currency | json }},
+      currencyFormat: {% if settings.currency_code_enabled %}{{ shop.money_with_currency_format | json }}{% else %}{{ shop.money_format | json }}{% endif %},
+      moneyFormat: {{ shop.money_format | json }},
+      moneyWithCurrencyFormat: {{ shop.money_with_currency_format | json }},
+      pageType: `{{ request.page_type }}`,
+      actionAfterATC: `{{ settings.action_after_atc }}`,
+      currencyCodeEnabled: {{ settings.currency_code_enabled | json }},
+      autoCurrencies: {{ settings.auto_currency }},
+      currencyRound: {{ settings.round_currency }},
+      revealInView: {{ settings.animations_reveal_on_scroll }}
+      {% if settings.countdown_timezone == 'shop' %}, shopTimezone: {{ 'today' | date: '%z' | json }}{% endif -%}
+    }
+  };
+  document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+  {%- if request.page_type == 'captcha' -%}
+    if (history.scrollRestoration) history.scrollRestoration = 'manual'; {% comment %} Prevent the browser to scroll on captcha page{% endcomment %}
+  {%- endif -%}
+  {%- if request.page_type == 'policy' -%}
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.shopify-policy__body .rte').classList.add('hdt-rte');
+    });
+  {%- endif -%}
+  {%- if request.design_mode -%}
+    {%- assign cHVyY2hh = 'cHVyY2hhc2VfY29kZQ==' | base64_url_safe_decode -%}
+    var VGhlbWVOYW1lVDQ = {{ dW5zZW4 | json }}, cHVyY2hh = {{ settings[cHVyY2hh] | default: '' | base64_encode | json }}, U2hvcE1lb1Q0 = {{ shop.email | default: 'no_email' | base64_encode | json }};
+  {%- endif -%}
+  if (themeHDN.settings.revealInView && matchMedia("motion")) {
+    document.querySelector('html').classList.add('hdt-reveal-in-view')
+  }
+</script>
+<script type="importmap">
+  {
+    "imports": {
+      "@theme/libs": "{{ 'libs.min.js' | asset_url }}",
+      "@theme/events": "{{ 'events.js' | asset_url }}",
+      "@theme/utilities": "{{ 'utilities.js' | asset_url }}",
+      "@theme/global": "{{ 'global.min.js' | asset_url }}",
+      "@theme/floating": "{{ 'floating.min.js' | asset_url }}",
+      "@theme/zoom-psw": "{{ 'zoom-psw.min.js' | asset_url }}",
+      "@theme/psw": "{{ 'es-psw.min.js' | asset_url }}",
+      "@theme/dayjs": "{{ 'day.min.js' | asset_url }}"
+    }
+  }
+</script>
+<link rel="modulepreload" href="{{ 'libs.min.js' | asset_url }}">
+<link rel="modulepreload" href="{{ 'global.min.js' | asset_url }}">
+<script type="module" src="{{ 'libs.min.js' | asset_url }}" fetchpriority="high"></script>
+<link rel="modulepreload" href="{{ 'events.js' | asset_url }}">
+<link rel="modulepreload" href="{{ 'utilities.js' | asset_url }}">
+<link rel="modulepreload" href="{{ 'floating.min.js' | asset_url }}">
+<link rel="modulepreload" href="{{ 'zoom-psw.min.js' | asset_url }}">
+<link rel="modulepreload" href="{{ 'es-psw.min.js' | asset_url }}">

@@ -1,0 +1,68 @@
+{%- liquid
+  assign collection = block.settings.collection
+  assign image = block.settings.image | default: collection.metafields.theme.featured_image_collection.value | default: collection.image | default: collection.products.first.featured_image
+  assign title = block.settings.title | default: collection.title
+  assign collection_link = block.settings.collection_link | default: collection.url
+  assign target = block.settings.target
+  assign collection_label = collection.metafields.theme.label
+-%}
+<div class="hdt-slider__slide" {{ block.shopify_attributes }}>
+  <div class="hdt-categories_item hdt-flex hdt-flex-col hdt-align-center" hdt-reveal="slide-in" timeline>
+    <div class="hdt-relative hdt-oh">
+      <a href="{{ collection_link }}" target="{{ target | default: '_self' }}" class=" hdt-block hdt-categories_image hdt-ratio hdt-oh hdt-radius-full">
+        {%- if image != blank -%}
+          {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '', sizes: '(min-width: 768px) 160px, 135px', widths: '100,135,160,200,270,320' }}
+        {%- else -%}
+          {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg hdt-oh hdt-radius-full' }}
+        {%- endif -%}
+      </a>
+      {%- if collection_label != blank -%}
+        <span class="hdt-collection_label hdt-absolute hdt-top-0 hdt-left-0 hdt-text-xs hdt-radius-full hdt-font-medium hdt-align-center hdt-justify-center" >{{ collection_label }}</span>
+      {%- endif -%}
+    </div>
+    <a href="{{ collection_link }}" target="{{ target | default: '_self' }}" class="hdt-btn hdt-btn-link  hdt-text-base hdt-font-semibold">{{ title }}</a>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Category item",
+    "tag": null,
+    "settings": [
+      {
+        "id": "collection",
+        "type": "collection",
+        "label": "t:sections.collection_list.blocks.collection"
+      },
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:sections.collection_list.blocks.image",
+        "info": "t:sections.collection_list.blocks.image_info"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.collection_list.blocks.title",
+        "info": "t:sections.collection_list.blocks.title_info",
+        "default": "Collection name"
+      },
+      {
+        "type": "url",
+        "id": "collection_link",
+        "label": "t:sections.collection_list.blocks.link",
+        "info": "t:sections.collection_list.blocks.link_info"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Category item",
+        "settings": {
+          "collection": "",
+          "title": "Collection name",
+          "collection_link": ""
+        }
+      }
+    ]
+  }
+{% endschema %}

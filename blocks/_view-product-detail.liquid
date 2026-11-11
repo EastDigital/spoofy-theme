@@ -1,0 +1,23 @@
+{% liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+%}
+<a class="hdt-product-info__item hdt-product__btn-details hdt-inline-flex hdt-justify-center hdt-align-center hdt-text-base hdt-font-semibold" href="{{ product.url }}" {{ block.shopify_attributes }}>
+  {{ 'products.product.view_products_details' | t }}
+  <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M0.861539 8L0 7.13846L5.90769 1.23077H0.615385V0H8V7.38462H6.76923V2.09231L0.861539 8Z" fill="currentColor"/></svg>
+</a>
+
+{% schema %}
+  {
+    "name": "View product detail",
+    "tag": null,
+    "settings": [
+    ],
+    "presets": [
+      {
+        "name": "View product detail",
+      }
+    ]
+  }
+{% endschema %}

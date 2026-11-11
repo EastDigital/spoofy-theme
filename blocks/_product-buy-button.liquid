@@ -1,0 +1,173 @@
+{% comment %} {%- assign has_form_atc = true -%} {% endcomment %}
+{%- comment -%}
+  Renders product buy-buttons.
+  Accepts:
+  - product: {Object} product object.
+  - selected_variant: {Object} (required)
+  - block: {Object} passing the block information.
+  - product_form_id: {String} product form id.
+  - section_id: {String} id of section to which this snippet belongs.
+  - show_pickup_availability: {Boolean} for the pickup availability. If true the pickup availability is rendered, false - not rendered (optional).
+
+  data-hide-errors: use if you want show hidden cart error
+
+  Usage:
+  {% render 'buy-buttons', block: block, product: product, product_form_id: product_form_id, section_id: section.id, show_pickup_availability: true %}
+{%- endcomment -%}
+{%- liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  if product == blank 
+    continue
+  endif
+  assign un_no_pick = true
+  if settings.pick_mode == 'no' and product.variants.size > 1
+    assign selected_variant = product.selected_variant
+    unless selected_variant
+      assign un_no_pick = false
+    endunless
+  elsif settings.pick_mode == 'first' and settings.hide_sold_out == false
+    assign selected_variant = product.selected_variant | default: product.variants.first
+  else
+    assign selected_variant = product.selected_or_first_available_variant
+  endif
+  assign product_form_id = 'product-form-'| append: section.id | append: product.id
+-%}
+<div class="hdt-product-info__item hdt-product__buy-button" data-type="{{ block.type }}" {{ block.shopify_attributes }} style="width:100%;">
+  {%- if product != blank -%}
+    {%- liquid
+      #assign selected_variant = product.selected_or_first_available_variant
+      if selected_variant.inventory_management == 'shopify' and selected_variant.inventory_quantity <= 0 and selected_variant.available
+        assign is_pre_order = true
+      else
+        assign is_pre_order = false
+      endif
+      assign gift_card_recipient_feature_active = false
+      if block.settings.show_gift_card_recipient and product.gift_card?
+        assign gift_card_recipient_feature_active = true
+      endif
+  
+      assign show_dynamic_checkout = false
+      if block.settings.show_dynamic_checkout and gift_card_recipient_feature_active == false
+        assign show_dynamic_checkout = true
+      endif
+  
+      assign check_against_inventory = true
+      if selected_variant.inventory_management != 'shopify' or selected_variant.inventory_policy == 'continue'
+        assign check_against_inventory = false
+      endif
+      if selected_variant.quantity_rule.min > selected_variant.inventory_quantity and check_against_inventory
+        assign quantity_rule_soldout = true
+      endif
+      assign variant_picker_block = section.blocks | where: 'type', 'variant_picker' | first
+
+      assign price = selected_variant.price | default: 1999
+      if settings.currency_code_enabled
+        assign money_price = price | money_with_currency
+      else
+        assign money_price = price | money
+      endif
+      if product == product and product.price_varies
+      assign money_price_clone = money_price
+      assign money_price = 'products.product.price.from_price_html' | t: price: money_price
+    endif
+    -%}
+    <wrapp-hdt-pr-frm class="hdt-contents">
+      {%- form 'product', product, id: product_form_id, class: 'hdt-main-product-form', data-gift-card-recipient: gift_card_recipient_feature_active -%}
+        <input type="hidden" name="id" value="{{ selected_variant.id }}"{% if variant_picker_block != blank and product.has_only_default_variant == false %} disabled{% endif %}>
+        {%- if gift_card_recipient_feature_active -%}
+          {%- render 'gift-card-recipient-form', product: product, form: form, section: section, form_id: product_form_id -%}
+        {%- endif -%}
+        <div class="hdt-form__message-wrapper hdt-form-message--error" role="alert" hidden>{% render 'icon' with 'error' %} <span class="hdt-error-message"></span></div>
+        <hdt-buy-buttons class="hdt-product-form__buttons" form="{{ product_form_id }}">
+          <div class="hdt-product-form__top-buttons hdt-flex">
+            <div class="hdt-flex hdt-product-form-buttons">
+              <button type="submit" name="add" class="hdt-product-form__submit hdt-btn hdt-oh hdt-btn-solid hdt-font-semibold hdt-relative hdt-truncate hdt-btn-loading__svg"{% if selected_variant.available == false or quantity_rule_soldout or un_no_pick == false %} disabled="true"{% endif %}>
+                <span class="hdt-btn-atc_text">{% if un_no_pick == false %}{{ 'products.product.choose_options' | t }}{% elsif is_pre_order %}{{ 'products.product.pre_order' | t }}{% elsif selected_variant.available == false or quantity_rule_soldout %}{{ 'products.product.sold_out' | t }}{% else %}{{ 'products.product.add_to_cart' | t }}{% endif %}</span> 
+                {%- if block.settings.show_price_variant -%}
+                  <hdt-qty-price variant-price="{{ price }}" class="hdt-qty-price"{% if un_no_pick == false %} hidden{% endif %} form="{{ product_form_id }}"><span style="display:inline-block;margin:0 2px;"> - </span><span class="hdt-money">{{ money_price_clone | default: money_price }}</span></hdt-qty-price>
+                {%- endif -%}
+                <span class="hdt-loading__spinner hdt-absolute" hidden>
+                  <svg width="16" height="16" class="hdt-svg-spinner" focusable="false" role="presentation" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle class="hdt-path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
+                </span>
+              </button>
+              {%- liquid
+                if block.settings.show_wishlist
+                  capture btn_wishlist_code
+                    if settings.wishlist_mode != '0'
+                      render 'btn-wishlist', class: 'hdt-product-form__btn-wishlist hdt-flex hdt-align-center hdt-justify-center hdt-relative hdt-s-text', placement: 'top'
+                    endif
+                  endcapture
+                  echo btn_wishlist_code | replace_first: '19041994', product.id | replace_first: 'handle_nt_94', product.handle
+                endif
+                if block.settings.show_compare and settings.compare_mode != "0"
+                  render 'btn-compare', product_id: product.id, product_handle: product.handle, class: 'hdt-product-form__btn-compare hdt-flex hdt-align-center hdt-justify-center hdt-relative hdt-s-text', placement: 'top'
+                endif
+              -%}
+            </div>
+            {%- if show_dynamic_checkout and product.available -%}
+              {{ form | payment_button }}
+              {%- comment -%}
+                {%- unless selected_variant.available -%}
+                  <style>#shopify-section-{{ section.id }} .shopify-payment-button {display: none; }</style>
+                {%- endunless -%}
+              {%- endcomment -%}
+            {%- endif -%}
+          </div>
+        </hdt-buy-buttons>
+      {%- endform -%}
+    </wrapp-hdt-pr-frm>
+  {%- else -%}
+    <div class="hdt-product-form">
+      <div class="hdt-product-form__buttons form">
+        <button type="submit" name="add" class="hdt-product-form__submit hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn hdt-oh hdt-btn-solid hdt-text-lg hdt-font-semibold" disabled="true">{{ 'products.product.sold_out' | t }}</button>
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.buy_buttons.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "default": true,
+      "label": "t:sections.main-product.blocks.buy_buttons.settings.show_dynamic_checkout.label",
+      "info": "t:sections.main-product.blocks.buy_buttons.settings.show_dynamic_checkout.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_gift_card_recipient",
+      "default": true,
+      "label": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.label",
+      "info": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "default": true,
+      "label": "t:sections.main-product.blocks.buy_buttons.settings.show_wishlist.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare",
+      "default": false,
+      "label": "t:sections.main-product.blocks.buy_buttons.settings.show_compare.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_variant",
+      "default": true,
+      "label": "t:sections.main-product.blocks.buy_buttons.settings.show_price_variant.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main-product.blocks.buy_buttons.name",
+    }
+  ]
+}
+{% endschema %}

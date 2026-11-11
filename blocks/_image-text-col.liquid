@@ -1,0 +1,112 @@
+<!-- blocks/image-text-col.liquid -->
+{% style %}
+  #{{ block.id }}{
+    padding: {{ block.settings.padding_v }}px {{ block.settings.padding_h }}px;
+  }
+  @media (max-width: 1149px){
+    #{{ block.id }}{
+      padding: {{ block.settings.padding_v | times: 0.75 }}px {{ block.settings.padding_h | times: 0.75 }}px;
+    }
+  }
+  @media (max-width: 767px){
+    #{{ block.id }}{
+      padding: {{ block.settings.padding_v_mb }}px {{ block.settings.padding_h_mb }}px;
+    }
+  }
+{% endstyle %}
+<div id="{{ block.id }}" class="hdt-image_text_column hdt-text-{{ block.settings.alignment_mb }} md:hdt-text-{{ block.settings.alignment }}{% if block.settings.align_center %} hdt-align-self-center{% endif %}" {% if block.settings.display_color %}color-scheme="{{ block.settings.color_scheme }}"{% endif %} {{ block.shopify_attributes }}>
+  {% content_for "blocks" %}
+</div>
+{% schema %}
+  {
+    "name": "Column",
+    "tag": null,
+    "blocks": [
+      {
+        "type": "heading"
+      },
+      {
+        "type": "text"
+      },
+      {
+        "type": "button"
+      },
+      {
+        "type": "_countdown"
+      },
+      {
+        "type": "spacer"
+      },
+      {
+        "type": "paragraph"
+      },
+      {
+        "type": "_socials"
+      }
+    ],
+    "settings": [
+      {
+        "type": "text_alignment",
+        "id": "alignment",
+        "label": "t:settings_schema.global.settings.text_alignment.label",
+      },
+      {
+        "type": "text_alignment",
+        "id": "alignment_mb",
+        "label": "Text alignment mobile",
+        "default": "center"
+      },
+      {
+        "type": "checkbox",
+        "id": "align_center",
+        "label": "Content align center",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "padding_h",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding horizontal",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_v",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding vertical",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_h_mb",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding horizontal mobile",
+        "default": 15
+      },
+      {
+        "type": "range",
+        "id": "padding_v_mb",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "px",
+        "label": "Padding vertical mobile",
+        "default": 15
+      },
+    ],
+    "presets": [
+      {
+        "name": "Column"
+      }
+    ]
+  }
+{% endschema %}

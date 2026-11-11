@@ -1,0 +1,66 @@
+<!-- blocks/image-text-column.liquid -->
+{%- style -%}
+  #{{ block.id }} .hdt-image-wrapper{
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+    column-gap: var(--spacing-x);
+  }
+  #{{ block.id }}::after{
+    padding-bottom: {{ block.settings.height }}%;
+    content:"";
+    display: block;
+  }
+{%- endstyle -%}
+<div id="{{ block.id }}" class="hdt-relative {{ block.settings.image_position }}" {{ block.shopify_attributes }}>
+  <div class="hdt-full-width-link hdt-grid hdt-image-wrapper">
+      {% content_for 'blocks' %}
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Column image",
+    "tag": null,
+    "blocks": [
+      {
+        "type": "_image-masonry"
+      }
+    ],
+    "settings": [
+      {
+        "type": "range",
+        "id": "height",
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "Max height image",
+        "default": 100
+      },
+      {
+        "type": "select",
+        "id": "image_position",
+        "label": "Image position on mobile",
+        "options": [
+          {
+            "value": "",
+            "label": "t:default"
+          },
+          {
+            "value": "md:hdt-order-last",
+            "label": "Image last"
+          },
+          {
+            "value": "md:hdt-order-first",
+            "label": "Image first"
+          }
+        ],
+        "default": ""
+      },
+    ],
+    "presets": [
+      {
+        "name": "Column image"
+      }
+    ]
+  }
+{% endschema %}

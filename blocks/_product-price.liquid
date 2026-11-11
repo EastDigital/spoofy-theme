@@ -1,0 +1,37 @@
+{%-liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  if product == null
+    assign product = null | default: title: "Example product title", price: 1999, compare_at_price: 2500, available: true, vendor: "Ecomus"
+  endif
+  assign product_form_id = 'product-form-' | append: section.id | append: product.id 
+  assign effect = ''
+  if section.id contains 'slideshow'
+    assign effect = 'reval'
+  endif  
+
+  assign un_no_pick = true
+  if settings.pick_mode == 'no' and product.variants.size > 1
+    assign selected_variant = product.selected_variant
+    unless selected_variant
+      assign un_no_pick = false
+    endunless
+  endif
+-%}
+<div {{ effect }} class="hdt-product-info__item hdt-product__price" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+  {%- render 'price', product: product, use_variant: true, form_id: product_form_id, show_badges: true, only_show_sale: true, show_volume_note: false, un_no_pick: un_no_pick -%}
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.price.name",
+  "tag": null,
+  "settings": [
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.price.name" ,
+    }
+  ]
+}
+{% endschema %}

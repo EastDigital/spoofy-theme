@@ -1,0 +1,42 @@
+{%- liquid
+  unless product  
+    assign product = section.settings.product
+  endunless
+  assign products = product.metafields.shopify--discovery--product_recommendation.complementary_products.value
+  if product == blank or products == blank
+    continue
+  endif
+-%}
+<div class="hdt-product-info__item hdt-product__price" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+  <div class="hdt-product-info__item hdt-product__complimentary" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+    <div class="hdt-product__complimentary-wrap">
+      <h3 class="hdt-text-2xl hdt-font-medium">{{ block.settings.text }}</h3>
+      <ul class="hdt-product__complimentary-list hdt-ratio--adapt_image">
+      {%- for product in product.metafields.shopify--discovery--product_recommendation.complementary_products.value -%}
+        <li class="hdt-product__complimentary-item">
+          {%- render 'pr_loop_item', section_id: block.id, product: product, sizes: "84px", widths: "84, 100, 180, 200" -%}
+        </li>
+      {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-product.blocks.complimentary_products.name",
+  "tag": null,
+  "settings":[
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "t:sections.main-product.blocks.complimentary_products.settings.text.label",
+      "default": "Pairs well with"
+    }
+  ],
+  "presets": [
+    { 
+      "name": "t:sections.main-product.blocks.complimentary_products.name",
+    }
+  ]
+}
+{% endschema %}

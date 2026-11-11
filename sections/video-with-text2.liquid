@@ -1,0 +1,923 @@
+<!-- sections/image-width-text.liquid -->
+{{ 'hdt-image-with-text.css' | asset_url | stylesheet_tag }}
+{{ 'hdt-countdown.css' | asset_url | stylesheet_tag }}
+{%- style -%}#shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}} #Video-{{section.id}}{ {%if section.settings.video_height=='fixed'%}--aspect-ratioapt-md:{{section.settings.fixed_height}}px;{%elsif section.settings.video_height=='adapt_image_first' and section.settings.video%}--aspect-ratioapt-md:{{section.settings.video.aspect_ratio}};{%endif%}{%if section.settings.video_height_mb=='fixed'%}--aspect-ratioapt:{{section.settings.fixed_height_mb}}px;{%elsif section.settings.video_height=='adapt_image_first' and section.settings.video%}--aspect-ratioapt:{{section.settings.video.aspect_ratio}};{%endif%}}{%- endstyle -%}
+<div
+  id="{{ section.id }}"
+  class="hdt-section-spacing"
+  style="--section-pt: {{ section.settings.padding_top }}px; --section-pb: {{ section.settings.padding_bottom }}px; --section-prate:{{ section.settings.padding_rate }};"
+  color-scheme="{{ section.settings.color_scheme }}"
+  hdt-reveal="fade-in"
+>
+  <div class="hdt-container">
+    <div class="hdt-row-grid hdt-s-gradient hdt-effect-lunc hdt-oh hdt-grid-cols-1 md:hdt-grid-cols-2 lg:hdt-grid-cols-2 hdt-radius hdt-oh ">
+      <div class="hdt-relative hdt-oh {{ section.settings.video_position }}">
+        {% if section.settings.video_option == '1' %}
+          <div class="hdt-row-grid hdt-row-grid--modify hdt-justify-center md:hdt-grid-cols-1 hdt-grid-cols-1">
+            <div
+              id="Video-{{ section.id }}"
+              class="hdt-col-video-content md:hdt-height--{{ section.settings.video_height }} hdt-height--{{ section.settings.video_height_mb }} is-video"
+              {% if section.index != 1 %}
+                hdt-reveal="fade-in"
+              {% endif %}
+            >
+              <div class="hdt-media-overlap-content">
+                {%- if section.settings.video -%}
+                  <hdt-video-player
+                    {% if section.settings.video_autoplay %}
+                      autoplay
+                    {% endif %}
+                  >
+                    {% if section.settings.video_autoplay %}
+                      {{-
+                        section.settings.video
+                        | video_tag:
+                          image_size: '1500x',
+                          playsinline: true,
+                          muted: true,
+                          loop: true,
+                          controls: false,
+                          preload: 'metadata'
+                      -}}
+                    {%- else -%}
+                      {{-
+                        section.settings.video
+                        | video_tag:
+                          image_size: '1500x',
+                          playsinline: true,
+                          loop: true,
+                          controls: true,
+                          preload: 'metadata'
+                      -}}
+                    {%- endif -%}
+                  </hdt-video-player>
+                {%- elsif section.settings.external_video_url != blank -%}
+                  <hdt-video-player host="{{ section.settings.external_video_url.type }}" type="background" autoplay>
+                    <template>
+                      {%- if section.settings.external_video_url.type == 'youtube' -%}
+                        <iframe
+                          id="iframe-{{ section.id }}"
+                          src="https://www.youtube.com/embed/{{ section.settings.external_video_url.id }}?playsinline=1&autoplay=1&controls=0&mute=1&loop=1&playlist={{ section.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}"
+                          allow="autoplay; encrypted-media"
+                          allowfullscreen="allowfullscreen"
+                        ></iframe>
+                      {%- elsif section.settings.external_video_url.type == 'vimeo' -%}
+                        <iframe
+                          src="https://player.vimeo.com/video/{{ section.settings.external_video_url.id }}?autoplay=1&autopause=1&background=1&loop=1&muted=1&transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.color_accent | remove_first: '#' }}"
+                          allow="autoplay; encrypted-media;"
+                          allowfullscreen="allowfullscreen"
+                        ></iframe>
+                      {%- endif -%}
+                    </template>
+                  </hdt-video-player>
+                {%- else -%}
+                  {{ section.settings.external_video_frame }}
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <div class="hdt-popup-video hdt-relative hdt-h-full">
+            <div class="hdt-popup-video-img hdt-h-full">
+              {{
+                section.settings.image
+                | image_url: width: section.settings.image.width
+                | image_tag:
+                  loading: 'lazy',
+                  width: section.settings.image.width,
+                  height: section.settings.image.height,
+                  class: 'hdt-object-cover hdt-object-center hdt-w-full hdt-h-full',
+                  sizes: sizes,
+                  widths: widths
+              }}
+            </div>
+            <button class="hdt-popup-video-btn hdt-relative hdt-absolute" aria-controls="Video-{{ section.id }}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="21" viewBox="0 0 18 21" fill="none">
+                <path d="M18 10.5L0.749999 20.4593L0.75 0.540707L18 10.5Z" fill="white"/>
+              </svg>
+            </button>
+            <hdt-modal id="Video-{{ section.id }}" class="hdt-modal hdt-popup-video-close hdt-hidden">
+              <div class="hdt-popup-video-content">
+                {%- if section.settings.external_video_url.type == 'youtube' -%}
+                  <iframe
+                    id="iframe-{{ section.id }}"
+                    class="hdt-w-full hdt-h-full"
+                    src="https://www.youtube.com/embed/{{ section.settings.external_video_url.id }}?playsinline=1&autoplay=0&controls=1&mute=1&loop=1&playlist={{ section.settings.external_video_url.id }}&enablejsapi=1&rel=0&modestbranding=1&origin={{ 'https://' | append: request.host | url_encode }}"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen="allowfullscreen"
+                  ></iframe>
+                {%- elsif section.settings.external_video_url.type == 'vimeo' -%}
+                  <iframe
+                    class="hdt-w-full hdt-h-full"
+                    src="https://player.vimeo.com/video/{{ section.settings.external_video_url.id }}?autoplay=0&controls=1&autopause=1&background=1&loop=1&muted=1&transparent=0&responsive=1&portrait=0&title=0&byline=0&color={{ settings.color_accent | remove_first: '#' }}"
+                    allow="autoplay; encrypted-media;"
+                    allowfullscreen="allowfullscreen"
+                  ></iframe>
+                {%- endif -%}
+              </div>
+            </hdt-modal>
+          </div>
+        {% endif %}
+      </div>
+      <div
+        class="hdt-content_wrap hdt-grid"
+      >
+        <div class="hdt-content hdt-place-self-{{ section.settings.content_position_mb }} hdt-text-{{ section.settings.alignment_mb }} md:hdt-place-self-center-start md:hdt-text-start lg:hdt-place-self-{{ section.settings.content_position }} lg:hdt-text-{{ section.settings.alignment }}">
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'label' -%}
+                {%- if block.settings.label != blank -%}
+                  <h5
+                    class="hdt-label hdt-font-bold hdt-text-{{ block.settings.label_fs }} hdt-s-text"
+                    hdt-reveal="slide-in"
+                    timeline
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.label }}
+                  </h5>
+                {%- endif -%}
+              {%- when 'heading' -%}
+                {%- if block.settings.heading != blank -%}
+                  <h2
+                    class="hdt-heading hdt-{{ block.settings.heading_fs }} hdt-s-text"
+                    hdt-reveal="slide-in"
+                    timeline
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.heading }}
+                  </h2>
+                {%- endif -%}
+              {%- when 'sub_heading' -%}
+                {%- if block.settings.sub_heading != blank -%}
+                  <p
+                    class="hdt-subheading hdt-text-{{ block.settings.sub_fs }} hdt-s-text2"
+                    hdt-reveal="slide-in"
+                    timeline
+                    {{ block.shopify_attributes }}
+                  >
+                    {{ block.settings.sub_heading }}
+                  </p>
+                {%- endif -%}
+              {%- when 'count_down' -%}
+                <hdt-countdown
+                  class="hdt-countdown hdt-block hdt-countdown-solid hdt-uppercase-{{ block.settings.uppercase }}"
+                  color-scheme="{{ block.settings.color_scheme }}"
+                  config='{"month":"{{ block.settings.month }}", "date":"{{ block.settings.day }}, {{ block.settings.year }} {{ block.settings.hour }}:{{ block.settings.minute }}", "hideTimerOnComplete": {{ block.settings.hide_on_complete }}, "hasZero": {{ block.settings.prepend_number }}, "hasTextPlural": true }'
+                  {{ block.shopify_attributes }}
+                >
+                  {%- if block.settings.title != blank -%}
+                    <p class="hdt-cd-heading hdt-s-text hdt-text-lg">{{ block.settings.title }}</p>
+                  {%- endif -%}
+                  <div class="hdt-countdown__inner" aria-hidden="true">
+                    <div class="hdt-countdown__item hdt-countdown--days" hdt-reveal="slide-in" timeline>
+                      <hdt-countdown-amount
+                        effect="{{ block.settings.effect_cd }}"
+                        class="hdt-countdown__amount"
+                        data-days
+                        >00</hdt-countdown-amount
+                      >
+                      <hdt-countdown-text
+                        singular="{{ 'sections.countdown_timmer.day' | t | escape }}"
+                        class="hdt-countdown__text hdt-grid"
+                      >
+                        {{- 'sections.countdown_timmer.day_plural' | t -}}
+                      </hdt-countdown-text>
+                    </div>
+                    <div class="hdt-countdown__item hdt-countdown--hours" hdt-reveal="slide-in" timeline>
+                      <hdt-countdown-amount
+                        effect="{{ block.settings.effect_cd }}"
+                        class="hdt-countdown__amount"
+                        data-hours
+                        >00</hdt-countdown-amount
+                      >
+                      <hdt-countdown-text
+                        singular="{{ 'sections.countdown_timmer.hr' | t | escape }}"
+                        class="hdt-countdown__text hdt-grid"
+                      >
+                        {{- 'sections.countdown_timmer.hr_plural' | t -}}
+                      </hdt-countdown-text>
+                    </div>
+                    <div class="hdt-countdown__item hdt-countdown--minutes" hdt-reveal="slide-in" timeline>
+                      <hdt-countdown-amount
+                        effect="{{ block.settings.effect_cd }}"
+                        class="hdt-countdown__amount"
+                        data-minutes
+                        >00</hdt-countdown-amount
+                      >
+                      <hdt-countdown-text
+                        singular="{{ 'sections.countdown_timmer.min' | t | escape }}"
+                        class="hdt-countdown__text hdt-grid"
+                      >
+                        {{- 'sections.countdown_timmer.min_plural' | t -}}
+                      </hdt-countdown-text>
+                    </div>
+                    <div class="hdt-countdown__item hdt-countdown--seconds" hdt-reveal="slide-in" timeline>
+                      <hdt-countdown-amount
+                        effect="{{ block.settings.effect_cd }}"
+                        class="hdt-countdown__amount"
+                        data-seconds
+                        >00</hdt-countdown-amount
+                      >
+                      <hdt-countdown-text
+                        singular="{{ 'sections.countdown_timmer.sec' | t | escape }}"
+                        class="hdt-countdown__text hdt-grid"
+                      >
+                        {{- 'sections.countdown_timmer.sec_plural' | t -}}
+                      </hdt-countdown-text>
+                    </div>
+                  </div>
+                  {%- if block.settings.mess_complete != blank %}
+                    <div class="hdt-countdown__message hdt-hidden hdt-s-text">{{ block.settings.mess_complete }}</div>
+                  {% endif -%}
+                </hdt-countdown>
+              {%- when 'button' -%}
+                {%- if block.settings.btn_label != blank -%}
+                  <a
+                    hdt-reveal="slide-in"
+                    timeline
+                    {% if block.settings.btn_link == blank %}
+                      role="link" disabled="true"
+                    {% else %}
+                      href="{{ block.settings.btn_link }}"
+                    {% endif %}
+                    target="{% if block.settings.target %}_blank{% else %}_self{% endif %}"
+                    class="hdt-btn hdt-mt-btn hdt-text-{{ block.settings.btn_size }} hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-{{ block.settings.btn_style }} hdt-font-{{ block.settings.btn_fw }}" {{ block.shopify_attributes }}
+                  >
+                    <span>{{ block.settings.btn_label }}</span>
+                    {%- if block.settings.btn_icon == '1' -%}
+                      <svg
+                        class="hdt-icon hdt-icon-1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="12"
+                        height="12"
+                        viewBox="0 0 64 64"
+                        fill="currentColor"
+                      >
+                        <path d="M12,56.43,36.48,32,12,7.52,19.53,0,51.61,32,19.53,64Z"/>
+                      </svg>
+                    {%- elsif block.settings.btn_icon == '2' -%}
+                      <svg
+                        class="hdt-icon hdt-icon-2"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="12"
+                        height="12"
+                        viewBox="0 0 64 64"
+                        fill="currentColor"
+                      >
+                        <path d="M6.89,64,0,57.11,47.26,9.85H4.92V0H64V59.08H54.15V16.74Z"/>
+                      </svg>
+                    {%- else -%}
+                    {%- endif -%}
+                  </a>
+                {%- endif -%}
+            {%- endcase -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div> 
+</div>
+{% schema %}
+{
+  "name": "t:sections.video.name-with-text2",
+  "tag": "section",
+  "class": "hdt-section hdt-image-with_text",
+  "disabled_on": {
+    "groups": ["*"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.video.settings.main_video"
+    },
+    {
+      "type": "select",
+      "id": "video_option",
+      "label": "Video Option",
+      "options": [
+        {
+          "value": "1",
+          "label": "Video"
+        },
+        {
+          "value": "2",
+          "label": "Popup Video"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "video_height",
+      "options": [
+        {
+          "value": "adapt_image_first",
+          "label": "t:sections.video.settings.video_height.adapt_video"
+        },
+        {
+          "value": "full",
+          "label": "t:sections.video.settings.video_height.full_screen"
+        },
+        {
+          "value": "fixed",
+          "label": "t:sections.video.settings.video_height.fixed"
+        }
+      ],
+      "default": "adapt_image_first",
+      "label": "t:sections.video.settings.video_height.label",
+      "info": "t:sections.video.settings.video_height.info"
+    },
+    {
+      "type": "range",
+      "id": "fixed_height",
+      "min": 200,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "label": "t:sections.video.settings.video_height.fixed",
+      "default": 860,
+      "visible_if": "{{ section.settings.video_height == 'fixed' }}"
+    },
+    {
+      "type": "select",
+      "id": "video_height_mb",
+      "options": [
+        {
+          "value": "adapt_image_first",
+          "label": "t:sections.video.settings.video_height.adapt_video"
+        },
+        {
+          "value": "full",
+          "label": "t:sections.video.settings.video_height.full_screen"
+        },
+        {
+          "value": "fixed",
+          "label": "t:sections.video.settings.video_height.fixed"
+        }
+      ],
+      "default": "adapt_image_first",
+      "label": "t:sections.video.settings.video_height.label_2"
+    },
+    {
+      "type": "range",
+      "id": "fixed_height_mb",
+      "min": 100,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "label": "t:sections.video.settings.video_height.fixed_2",
+      "default": 300,
+      "visible_if": "{{ section.settings.video_height_mb == 'fixed' }}"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.video.settings.paragraph"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "t:sections.video.settings.video.label",
+      "info": "t:sections.video.settings.video.info"
+    },
+    {
+      "type": "video_url",
+      "id": "external_video_url",
+      "accept": ["vimeo", "youtube"],
+      "label": "t:sections.video.settings.video.url",
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+    },
+    {
+      "type": "textarea",
+      "id": "external_video_frame",
+      "label": "t:sections.video.settings.video.frame"
+    },
+    {
+      "type": "select",
+      "id": "video_position",
+      "label": "t:sections.video.settings.video_position.label",
+      "info": "t:sections.video.settings.video_position.info",
+      "options": [
+        {
+          "value": "",
+          "label": "t:sections.video.settings.video_position.video_left"
+        },
+        {
+          "value": "md:hdt-order-last",
+          "label": "t:sections.video.settings.video_position.video_right"
+        }
+      ],
+      "default": "md:hdt-order-last"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "t:sections.video.settings.autoplay.label",
+      "info": "t:sections.video.settings.autoplay.info",
+      "visible_if": "{{ section.settings.video != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section_layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.image_text.settings.header.desktop"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_last",
+      "label": "t:sections.video.name-with-text.video_last",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "t:sections.all.content_position.label",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.all.content_position.options.start"
+        },
+        {
+          "value": "start-center",
+          "label": "t:sections.all.content_position.options.start_center"
+        },
+        {
+          "value": "start-end",
+          "label": "t:sections.all.content_position.options.start_end"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.all.content_position.options.center"
+        },
+        {
+          "value": "center-start",
+          "label": "t:sections.all.content_position.options.center_start"
+        },
+        {
+          "value": "center-end",
+          "label": "t:sections.all.content_position.options.center_end"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.all.content_position.options.end"
+        },
+        {
+          "value": "end-start",
+          "label": "t:sections.all.content_position.options.end_start"
+        },
+        {
+          "value": "end-center",
+          "label": "t:sections.all.content_position.options.end_center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "t:settings_schema.global.settings.text_alignment.label",
+      "default": "center"
+    },
+   
+    {
+      "type": "header",
+      "content": "t:sections.image_text.settings.header.mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "image_last_mb",
+      "label": "t:sections.image_text.settings.img_last",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "content_position_mb",
+      "label": "t:sections.all.content_position.label",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.all.content_position.options.start"
+        },
+        {
+          "value": "start-center",
+          "label": "t:sections.all.content_position.options.start_center"
+        },
+        {
+          "value": "start-end",
+          "label": "t:sections.all.content_position.options.start_end"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.all.content_position.options.center"
+        },
+        {
+          "value": "center-start",
+          "label": "t:sections.all.content_position.options.center_start"
+        },
+        {
+          "value": "center-end",
+          "label": "t:sections.all.content_position.options.center_end"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.all.content_position.options.end"
+        },
+        {
+          "value": "end-start",
+          "label": "t:sections.all.content_position.options.end_start"
+        },
+        {
+          "value": "end-center",
+          "label": "t:sections.all.content_position.options.end_center"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment_mb",
+      "label": "t:settings_schema.global.settings.text_alignment.label",
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "label",
+      "name": "t:sections.image_text.blocks.label.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "t:sections.image_text.blocks.label.settings.text.label"
+        },
+        {
+          "type": "select",
+          "id": "label_fs",
+          "label": "t:sections.image_text.blocks.label.settings.lb_fs.label",
+          "options": [
+            {
+              "value": "base",
+              "label": "t:sections.image_text.blocks.label.settings.lb_fs.options.option_1"
+            },
+            {
+              "value": "xl",
+              "label": "t:sections.image_text.blocks.label.settings.lb_fs.options.option_2"
+            }
+          ],
+          "default": "base"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "t:sections.image_text.blocks.heading.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:sections.image_text.blocks.heading.settings.text.label",
+          "default": "60% Discount"
+        },
+        {
+          "type": "select",
+          "id": "heading_fs",
+          "label": "t:sections.image_text.blocks.heading.settings.heading_fs.label",
+          "options": [
+            {
+              "value": "h4",
+              "label": "t:sections.image_text.blocks.heading.settings.heading_fs.options.option_2"
+            },
+            {
+              "value": "h3",
+              "label": "t:sections.image_text.blocks.heading.settings.heading_fs.options.option_1"
+            }
+          ],
+          "default": "h3"
+        }
+      ]
+    },
+    {
+      "type": "sub_heading",
+      "name": "t:sections.image_text.blocks.sub_heading.name",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "sub_heading",
+          "label": "t:sections.image_text.blocks.sub_heading.settings.text.label",
+          "default": "Shop our luxury silk button-up blouses made with ultra-soft, washable silk."
+        },
+        {
+          "type": "select",
+          "id": "sub_fs",
+          "label": "t:sections.image_text.blocks.sub_heading.settings.sub_fs.label",
+          "options": [
+            {
+              "value": "base",
+              "label": "t:sections.image_text.blocks.sub_heading.settings.sub_fs.options.option_1"
+            },
+            {
+              "value": "lg",
+              "label": "t:sections.image_text.blocks.sub_heading.settings.sub_fs.options.option_2"
+            }
+          ],
+          "default": "base"
+        }
+      ]
+    },
+    {
+      "type": "count_down",
+      "name": "t:sections.image_text.blocks.count_down.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "t:sections.our-store.settings.color"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:sections.image_text.blocks.count_down.settings.title.label",
+          "default": "Hurry up! Deals end in: "
+        },
+        {
+          "type": "number",
+          "id": "year",
+          "default": 2030,
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.year.label",
+          "info": "t:sections.countdown-bar.blocks.countdown.settings.year.info"
+        },
+        {
+          "type": "range",
+          "id": "month",
+          "min": 1,
+          "max": 12,
+          "step": 1,
+          "default": 4,
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.month.label"
+        },
+        {
+          "type": "range",
+          "id": "day",
+          "min": 1,
+          "max": 31,
+          "step": 1,
+          "default": 19,
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.day.label"
+        },
+        {
+          "type": "range",
+          "id": "hour",
+          "min": 0,
+          "max": 23,
+          "step": 1,
+          "default": 12,
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.hour.label"
+        },
+        {
+          "type": "range",
+          "id": "minute",
+          "min": 0,
+          "max": 59,
+          "step": 1,
+          "default": 0,
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.minute.label"
+        },
+        {
+          "type": "select",
+          "id": "effect_cd",
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.label",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__1.label"
+            },
+            {
+              "value": "move_top",
+              "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__2.label"
+            },
+            {
+              "value": "move_bottom",
+              "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__3.label"
+            },
+            {
+              "value": "scale",
+              "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__4.label"
+            },
+            {
+              "value": "rotate",
+              "label": "t:sections.countdown-bar.blocks.countdown.settings.animate_num.options__5.label"
+            }
+          ],
+          "default": "move_top"
+        },
+        {
+          "type": "checkbox",
+          "id": "uppercase",
+          "label": "t:sections.countdown_text.settings.uppercase_text.label",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "prepend_number",
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.prepend_number.label",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_on_complete",
+          "default": false,
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.hide_on_complete.label"
+        },
+        {
+          "type": "text",
+          "id": "mess_complete",
+          "label": "t:sections.countdown-bar.blocks.countdown.settings.mess_complete.label"
+        },
+        {
+          "type": "paragraph",
+          "content": "t:settings_schema.extras.settings.timezone_help.content"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "t:sections.all.button.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "btn_label",
+          "label": "t:sections.all.button.settings.text.label",
+          "default": "Shop now",
+          "info": "t:sections.all.button.settings.text.info"
+        },
+        {
+          "type": "url",
+          "id": "btn_link",
+          "label": "t:sections.all.button.settings.url.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "target",
+          "label": "t:sections.all.button.settings.target.label",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "btn_size",
+          "label": "t:sections.all.button.settings.font_size.label",
+          "options": [
+            {
+              "value": "xs",
+              "label": "t:sections.all.button.settings.font_size.options.xs"
+            },
+            {
+              "value": "sm",
+              "label": "t:sections.all.button.settings.font_size.options.sm"
+            },
+            {
+              "value": "base",
+              "label": "t:sections.all.button.settings.font_size.options.base"
+            },
+            {
+              "value": "lg",
+              "label": "t:sections.all.button.settings.font_size.options.lg"
+            },
+            {
+              "value": "xl",
+              "label": "t:sections.all.button.settings.font_size.options.xl"
+            }
+          ],
+          "default": "base"
+        },
+        {
+          "type": "select",
+          "id": "btn_style",
+          "label": "t:sections.all.button.settings.style.label",
+          "options": [
+            {
+              "value": "solid",
+              "label": "t:sections.all.button.settings.style.options.option_1"
+            },
+            {
+              "value": "outline",
+              "label": "t:sections.all.button.settings.style.options.option_2"
+            },
+            {
+              "value": "link",
+              "label": "t:sections.all.button.settings.style.options.option_4"
+            }
+          ],
+          "default": "solid"
+        },
+        {
+          "type": "select",
+          "id": "btn_fw",
+          "label": "t:sections.all.button.settings.font_weight.label",
+          "options": [
+            {
+              "value": "normal",
+              "label": "t:sections.all.button.settings.font_weight.options.option_1"
+            },
+            {
+              "value": "medium",
+              "label": "t:sections.all.button.settings.font_weight.options.option_2"
+            },
+            {
+              "value": "semibold",
+              "label": "t:sections.all.button.settings.font_weight.options.option_3"
+            },
+            {
+              "value": "bold",
+              "label": "t:sections.all.button.settings.font_weight.options.option_4"
+            }
+          ],
+          "default": "normal"
+        },
+        {
+          "type": "select",
+          "id": "btn_icon",
+          "label": "t:sections.all.button.settings.icon.label",
+          "options": [
+            {
+              "value": "none",
+              "label": "t:sections.all.button.settings.icon.options.option_0"
+            },
+            {
+              "value": "1",
+              "label": "t:sections.all.button.settings.icon.options.option_1"
+            },
+            {
+              "value": "2",
+              "label": "t:sections.all.button.settings.icon.options.option_2"
+            }
+          ],
+          "default": "1"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.video.name-with-text2",
+      "category": "t:sections_categories.02_banner.name",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "sub_heading"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

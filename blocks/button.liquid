@@ -1,0 +1,439 @@
+{% liquid
+  assign effect = 'hdt-reveal="slide-in" timeline'
+  if section.id contains 'slideshow'
+    assign effect = 'reval'
+  endif   
+%}
+<a {{ effect }} id="block-{{ block.id }}" {% if block.settings.link == blank %}role="link" aria-disabled="true"{% else %}href="{{ block.settings.link }}"{% endif %} class="hdt-button-block hdt-btn hdt-relative hdt-oh hdt-font-{{ block.settings.font_weight }} hdt-btn--size-{{ block.settings.font_size }} hdt-btn-{{ block.settings.style_class }}{% if block.settings.full_width %} hdt-btn-full-width{% endif %}{% if block.settings.icon != "none" %} hdt-btn--with-icon  hdt-btn--pos-icon-{{ block.settings.icon_position }}{% endif %}"{% if block.settings.icon != "none" %} style="--gap-btn-icon: {{ block.settings.icon_spacing }}px; --height-btn-icon: {{ block.settings.icon_height }}px"{% endif %} {% if block.settings.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif -%} {{ block.shopify_attributes }}>
+  {%- liquid
+  if block.settings.icon != 'none'
+    render 'icons', icon: block.settings.icon
+  endif
+  echo block.settings.label
+  -%}
+</a>
+{%- if block.settings.font_size == "custom custom-inline" -%}
+  {%- style -%}
+    #block-{{ block.id }} {
+      --padding-button: 5px {{ block.settings.padding_btn }}px; --height-button: {{ block.settings.min_height_btn }}px; --font-size-button: {{ block.settings.font_size_btn }}px;--min-width-btn: {{ block.settings.min_width_btn }}px; --min-width-btn-dt: {{ block.settings.min_width_dt_btn }}px;
+    }
+  {%- endstyle -%}
+{%- endif -%}
+{% schema %}
+{
+  "name": "t:blocks.button.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:blocks.button.settings.label",
+      "default": "t:blocks.button.settings.label"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:blocks.button.settings.link",
+      "visible_if": "{{ block.settings.label != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_in_new_tab",
+      "label": "t:blocks.button.settings.open_in_new_tab",
+      "default": false,
+      "visible_if": "{{ block.settings.link != blank }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:blocks.button.settings.full_width",
+      "default": false,
+      "visible_if": "{{ block.settings.label != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "style_class",
+      "label": "t:blocks.button.settings.button_style.label",
+      "options": [
+        {
+          "value": "solid",
+          "label": "t:blocks.button.settings.button_style.solid"
+        },
+        {
+          "value": "outline",
+          "label": "t:blocks.button.settings.button_style.outline"
+        },
+        {
+          "value": "link",
+          "label": "t:blocks.button.settings.button_style.link"
+        }/*,
+        {
+          "value": "3d",
+          "label": "3D"
+        }*/
+      ],
+      "default": "solid",
+      "visible_if": "{{ block.settings.label != blank }}"
+    },
+    
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "t:settings_schema.typography.settings.font_size.label",
+      "options": [
+        {
+          "value": "xs",
+          "label": "t:blocks.button.settings.button_size.options.xs"
+        },
+        {
+          "value": "s",
+          "label": "t:blocks.button.settings.button_size.options.s"
+        },
+        {
+          "value": "m",
+          "label": "t:blocks.button.settings.button_size.options.m"
+        },
+        {
+          "value": "l",
+          "label": "t:blocks.button.settings.button_size.options.l"
+        },
+        {
+          "value": "xl",
+          "label": "t:blocks.button.settings.button_size.options.xl"
+        },
+        {
+          "value": "custom hdt-btn--size-custom-1",
+          "label": "t:blocks.button.settings.button_size.options.custom_1"
+        },
+        {
+          "value": "custom custom-inline",
+          "label": "t:blocks.button.settings.button_size.options.custom_inline"
+        }
+      ],
+      "default": "m",
+      "visible_if": "{{ block.settings.label != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "t:settings_schema.typography.settings.font_weight.label",
+      "options": [
+        {
+          "value": "light",
+          "label": "t:settings_schema.typography.settings.font_weight.light"
+        },
+        {
+          "value": "normal",
+          "label": "t:settings_schema.typography.settings.font_weight.normal"
+        },
+        {
+          "value": "medium",
+          "label": "t:settings_schema.typography.settings.font_size.base"
+        },
+        {
+          "value": "semibold",
+          "label": "t:settings_schema.typography.settings.font_weight.semibold"
+        },
+        {
+          "value": "bold",
+          "label": "t:settings_schema.typography.settings.font_weight.bold"
+        },
+      ],
+      "default": "normal",
+      "visible_if": "{{ block.settings.label != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "t:blocks.text.custom_size_options.label",
+      "visible_if": "{{ block.settings.font_size == 'custom custom-inline' and block.settings.label != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "font_size_btn",
+      "min": 10,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.typography.settings.font_size.label",
+      "default": 14,
+      "visible_if": "{{ block.settings.font_size == 'custom custom-inline' and block.settings.label != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_btn",
+      "min": 5,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "label": "t:blocks.spacer.horizontal",
+      "default": 30,
+      "visible_if": "{{ block.settings.font_size == 'custom custom-inline' and block.settings.label != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "min_width_btn",
+      "min": 100,
+      "max": 300,
+      "step": 2,
+      "unit": "px",
+      "label": "t:settings_schema.button.settings.min_width",
+      "default": 100,
+      "visible_if": "{{ block.settings.font_size == 'custom custom-inline' and block.settings.label != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "min_width_dt_btn",
+      "min": 100,
+      "max": 300,
+      "step": 2,
+      "unit": "px",
+      "label": "t:settings_schema.button.settings.min_width_dt",
+      "default": 100,
+      "visible_if": "{{ block.settings.font_size == 'custom custom-inline' and block.settings.label != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "min_height_btn",
+      "min": 25,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:settings_schema.button.settings.min_height",
+      "default": 40,
+      "visible_if": "{{ block.settings.font_size == 'custom custom-inline' and block.settings.label != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "t:blocks.icon.name"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "t:blocks.icon.settings.icon.label",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:none"
+        },
+        {
+          "value": "arrow_right",
+          "label": "t:blocks.icon.settings.icon.arrow_right"
+        },
+        {
+          "value": "arrow_simple",
+          "label": "t:blocks.icon.settings.icon.arrow_simple"
+        },
+        {
+          "value": "arrow_bottom",
+          "label": "t:blocks.icon.settings.icon.arrow_bottom"
+        },
+        {
+          "value": "arrow_stretch",
+          "label": "t:blocks.icon.settings.icon.arrow_stretch"
+        },
+        {
+          "value": "car",
+          "label": "t:blocks.icon.settings.icon.car"
+        },
+        {
+          "value": "truck",
+          "label": "t:blocks.icon.settings.icon.truck"
+        },
+        {
+          "value": "diamond",
+          "label": "t:blocks.icon.settings.icon.diamond"
+        },
+        {
+          "value": "door-lock",
+          "label": "t:blocks.icon.settings.icon.door_lock"
+        },
+        {
+          "value": "gym",
+          "label": "t:blocks.icon.settings.icon.gym"
+        },
+        {
+          "value": "hammer",
+          "label": "t:blocks.icon.settings.icon.hammer"
+        },
+        {
+          "value": "headphones",
+          "label": "t:blocks.icon.settings.icon.headphones"
+        },
+        {
+          "value": "helm",
+          "label": "t:blocks.icon.settings.icon.helm"
+        },
+        {
+          "value": "hourglass",
+          "label": "t:blocks.icon.settings.icon.hourglass"
+        },
+        {
+          "value": "map",
+          "label": "t:blocks.icon.settings.icon.map"
+        },
+        {
+          "value": "piggy",
+          "label": "t:blocks.icon.settings.icon.piggy"
+        },
+        {
+          "value": "refesh",
+          "label": "t:blocks.icon.settings.icon.refresh"
+        },
+        {
+          "value": "rocket",
+          "label": "t:blocks.icon.settings.icon.rocket"
+        },
+        {
+          "value": "shield",
+          "label": "t:blocks.icon.settings.icon.shield"
+        },
+        {
+          "value": "shield2",
+          "label": "t:blocks.icon.settings.icon.shield_2"
+        },
+        {
+          "value": "smile",
+          "label": "t:blocks.icon.settings.icon.smile"
+        },
+        {
+          "value": "scissors",
+          "label": "t:blocks.icon.settings.icon.scissors"
+        },
+        {
+          "value": "shuffle",
+          "label": "t:blocks.icon.settings.icon.shuffle"
+        },
+        {
+          "value": "cloud_upload",
+          "label": "t:blocks.icon.settings.icon.cloud_upload"
+        },
+        {
+          "value": "cash",
+          "label": "t:blocks.icon.settings.icon.cash"
+        },
+        {
+          "value": "way",
+          "label": "t:blocks.icon.settings.icon.way"
+        },
+        {
+          "value": "wristwatch",
+          "label": "t:blocks.icon.settings.icon.wristwatch"
+        },
+        {
+          "value": "world",
+          "label": "t:blocks.icon.settings.icon.world"
+        },
+        {
+          "value": "wallet",
+          "label": "t:blocks.icon.settings.icon.wallet"
+        },
+        {
+          "value": "unlock",
+          "label": "t:blocks.icon.settings.icon.unlock"
+        },
+        {
+          "value": "umbrella",
+          "label": "t:blocks.icon.settings.icon.umbrella"
+        },
+        {
+          "value": "repeat",
+          "label": "t:blocks.icon.settings.icon.repeat"
+        },
+        {
+          "value": "refesh-2",
+          "label": "t:blocks.icon.settings.icon.refresh_2"
+        },
+        {
+          "value": "medal",
+          "label": "t:blocks.icon.settings.icon.medal"
+        },
+        {
+          "value": "portfolio",
+          "label": "t:blocks.icon.settings.icon.portfolio"
+        },
+        {
+          "value": "like",
+          "label": "t:blocks.icon.settings.icon.like"
+        },
+        {
+          "value": "plance",
+          "label": "t:blocks.icon.settings.icon.plance"
+        },
+        {
+          "value": "map-maker",
+          "label": "t:blocks.icon.settings.icon.map_maker"
+        },
+        {
+          "value": "help",
+          "label": "t:blocks.icon.settings.icon.help"
+        },
+        {
+          "value": "gift",
+          "label": "t:blocks.icon.settings.icon.gift"
+        },
+        {
+          "value": "cart",
+          "label": "t:blocks.icon.settings.icon.cart"
+        },
+        {
+          "value": "box",
+          "label": "t:blocks.icon.settings.icon.box"
+        },
+        {
+          "value": "back",
+          "label": "t:blocks.icon.settings.icon.back"
+        },
+        {
+          "value": "back2",
+          "label": "t:blocks.icon.settings.icon.back_2"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "icon_position",
+      "label": "t:blocks.icon.settings.icon_position.label",
+      "options": [
+        {
+          "value": "before",
+          "label": "t:blocks.icon.settings.icon_position.before"
+        },
+        {
+          "value": "after",
+          "label": "t:blocks.icon.settings.icon_position.after"
+        }
+      ],
+      "default": "after",
+      "visible_if": "{{ block.settings.icon != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "icon_height",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "t:blocks.icon.settings.icon_size.label",
+      "default": 14,
+      "visible_if": "{{ block.settings.icon != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "icon_spacing",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "t:blocks.icon.settings.icon_spacing.label",
+      "default": 5,
+      "visible_if": "{{ block.settings.icon != 'none' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.button.name"
+    }
+  ]
+}
+{% endschema %}

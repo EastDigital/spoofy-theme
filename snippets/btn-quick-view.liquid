@@ -1,0 +1,24 @@
+{%- comment -%}
+  Renders btn quick view
+
+  Accepts:
+  - product: {Object} Product Liquid object (required)
+  - section_id: {String} The ID of the section that contains this card. (required)
+  - class: {String} a list class. (optional)
+  - disable_sr_only: {Boolean} remove class sr_only (optional)
+  - placement: {String} position tooltip (optional)
+
+  Usage:
+  {%- render 'btn-quick-view', product: card_product, section_id: section_id -%}
+{%- endcomment -%}
+ {% liquid
+  if section.id contains 'quick-add' or section.id contains 'quick-view' or section.id contains 'search' or section.id contains 'cart-drawer' or section.id contains 'header'
+    assign inner_tooltip = true
+  endif 
+ %}
+<wrapp-hdt-open-modal-btn class="hdt-card-product__btn-qv" placement="{{ placement | default: 'none' }}" {% if inner_tooltip %} inner{% endif %}>
+  <button type="button" handle="{{ product.handle }}" aria-controls="hdt-quick-view-modal" aria-expanded="false" class="hdt-card-product__btn-quick-view {{ class }}" placement="{{ placement | default: 'none' }}" {{ attr }}>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false"><use xlink:href="#hdt-icon-quickview"></use></svg>
+    <span {% unless disable_sr_only %}class="sr-only"{% endunless %}>{{ 'products.product.quick_view' | t }}</span>
+  </button>
+</wrapp-hdt-open-modal-btn>

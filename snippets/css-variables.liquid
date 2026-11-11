@@ -1,0 +1,305 @@
+{%- liquid
+  assign badge_sale_brightness = settings.badge_sale | color_brightness
+  assign badge_new_brightness = settings.badge_new | color_brightness
+  assign badge_soldout_brightness = settings.badge_soldout | color_brightness
+  assign badge_preorder_brightness = settings.badge_preorder | color_brightness
+  assign badge_custom_brightness = settings.badge_custom | color_brightness
+  assign success_background = settings.color_success | color_mix: '#ffffff', 12
+  assign warning_background = settings.color_warning | color_mix: '#ffffff', 12
+  assign error_background = settings.color_error | color_mix: '#ffffff', 12
+%}
+
+{%- style -%}
+
+  {%- if settings.library_font == 'shopify' -%}
+    {%- for variant in settings.font_family_shopify_1.variants -%}
+      {{ variant | font_face: font_display: 'swap' }}
+    {%- endfor -%}
+    {%- if settings.font_family_shopify_2.family != settings.font_family_shopify_1.family -%}
+      {%- for variant in settings.font_family_shopify_2.variants -%}
+        {{ variant | font_face: font_display: 'swap' }}
+      {%- endfor -%}
+    {%- endif -%}
+    {%- if settings.font_family_shopify_3.family != settings.font_family_shopify_2.family and settings.font_family_shopify_3.family != settings.font_family_shopify_1.family -%}
+      {%- for variant in settings.font_family_shopify_3.variants -%}
+        {{ variant | font_face: font_display: 'swap' }}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  :root {
+    --aspect-ratiocus1: {{ settings.products_custom_ratio.aspect_ratio | default: 0.716 }};
+    --scrollbar-w: 0px;
+    /* Spacing */
+    --spacing-0-2: 0.2rem; /* 2px */
+    --spacing-0-4: 0.4rem; /* 4px */
+    --spacing-0-6: 0.6rem; /* 6px */
+    --spacing-0-8: 0.8rem; /* 8px */
+    --spacing-1: 1rem; /* 10px */
+    --spacing-1-2: 1.2rem; /* 12px */
+    --spacing-1-4: 1.4rem; /* 14px */
+    --spacing-1-6: 1.6rem; /* 16px */
+    --spacing-1-8: 1.8rem; /* 18px */
+    --spacing-2: 2rem; /* 20px */
+    --spacing-2-2: 2.2rem; /* 22px */
+    --spacing-2-4: 2.4rem; /* 24px */
+    --spacing-2-6: 2.6rem; /* 26px */
+    --spacing-2-8: 2.8rem; /* 28px */
+    --spacing-3: 3rem; /* 30px */
+    --spacing-3-2: 3.2rem; /* 32px */
+    --spacing-3-4: 3.4rem; /* 34px */
+    --spacing-3-6: 3.6rem; /* 36px */
+    --spacing-3-8: 3.8rem; /* 38px */
+    --spacing-4: 4rem; /* 40px */
+    --spacing-4-2: 4.2rem; /* 42px */
+    --spacing-4-4: 4.4rem; /* 44px */
+    --spacing-4-8: 4.8rem; /* 48px */
+    --spacing-5: 5rem; /* 50px */
+    --spacing-5-6: 5.6rem; /* 56px */
+    --spacing-6: 6rem; /* 60px */
+    --spacing-6-4: 6.4rem; /* 64px */
+    --spacing-7: 7rem; /* 70px */
+    --spacing-7-2: 7.2rem; /* 72px */
+    --spacing-8: 8rem; /* 80px */
+    --spacing-9: 9rem; /* 90px */
+    --spacing-10: 10rem; /* 100px */
+    /* Colors */
+    --color-base-background: {{ settings.color_background.rgb }};
+    --color-base-text: {{ settings.color_text.rgb }};
+    --color-focus: {{ settings.color_focus.rgb }};
+    --payment-terms-background-color: rgb({{ settings.color_background.rgb }});
+
+    /* Product badge colors */
+    --color-on-sale-badge-background: {{ settings.badge_sale.rgb }};
+    --color-on-sale-badge-text: {% if badge_sale_brightness < 168 %}255 255 255{% else %}0 0 0{% endif %};
+    --color-new-badge-background: {{ settings.badge_new.rgb }};
+    --color-new-badge-text: {% if badge_new_brightness < 168 %}255 255 255{% else %}0 0 0{% endif %};
+    --color-sold-out-badge-background: {{ settings.badge_soldout.rgb }};
+    --color-sold-out-badge-text: {% if badge_soldout_brightness < 168 %}255 255 255{% else %}0 0 0{% endif %};
+    --color-pre-order-badge-background: {{ settings.badge_preorder.rgb }};
+    --color-pre-order-badge-text: {% if badge_preorder_brightness < 168 %}255 255 255{% else %}0 0 0{% endif %};
+    --color-custom-badge-background: {{ settings.badge_custom.rgb }};
+    --color-custom-badge-text: {% if badge_custom_brightness < 168 %}255 255 255{% else %}0 0 0{% endif %};
+
+    /* Notices colors */
+    --color-tooltip-background: {{ settings.tooltip_bg.rgb }};
+    --color-tooltip-text: {{ settings.tooltip_text.rgb }};
+    --color-success-background: {{ success_background.rgb }};
+    --color-success-text: {{ settings.color_success.rgb }};
+    --color-warning-background: {{ warning_background.rgb }};
+    --color-warning-text: {{ settings.color_warning.rgb }};
+    --color-error-background: {{ error_background.rgb }};
+    --color-error-text: {{ settings.color_error.rgb }};
+
+    {%- if settings.library_font == 'google' and settings.rules_google_font != blank -%}
+    {%- assign rules_google_font = settings.rules_google_font | strip_newlines | split: ';' -%}
+    {%- for rule in rules_google_font -%}
+    --f_family_{{ forloop.index }}: {{ rule | split: ': ' | last | split: ',' | first }}, {{ rule | split: ': ' | last | split: ',' | last }};
+    {%- endfor -%}
+    {%- else -%}
+    --f_family_1: {{ settings.font_family_shopify_1.family }}, {{ settings.font_family_shopify_1.fallback_families }};
+    --f_family_2: {{ settings.font_family_shopify_2.family }}, {{ settings.font_family_shopify_2.fallback_families }};
+    --f_family_3: {{ settings.font_family_shopify_3.family }}, {{ settings.font_family_shopify_3.fallback_families }};
+    {%- endif -%}
+    {%- case settings.font_base -%}
+    {%- when '--f_family_1' -%}
+    --f_family: var(--f_family_1);
+    {%- when '--f_family_2' -%}
+    --f_family: var(--f_family_2);
+    {%- when '--f_family_3' -%}
+    --f_family: var(--f_family_3);
+    {%- endcase -%}
+    /* --bs-font-sans-serif: var(--f_family); */
+
+    --font-body-family: var(--f_family);
+    --font-body-weight: {{ settings.bd_fweight }};
+    --font-body-weight-bold: {{ settings.bd_fweight | plus: 300 | at_most: 900 }};
+
+    --font-heading-family: var({{ settings.font_custom_heading }});
+    --font-heading-weight: {{ settings.hd_fweight }};
+
+    --font-body-line-height: {{ settings.body_lh }};
+    --font-body-spacing: {{ settings.body_spacing | divided_by: 100.0 }}em;
+    --font-heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+    --font-heading-line-height: {{ settings.heading_lh }};
+    --font-heading-spacing: {{ settings.heading_spacing | divided_by: 100.0 }}em;
+    --button-line-height: 1.2;
+
+    --h0-size: {{ settings.h0_size | divided_by: 10.0 }}rem;
+    --h1-size: {{ settings.h1_size | divided_by: 10.0 }}rem;
+    --h2-size: {{ settings.h2_size | divided_by: 10.0 }}rem;
+    --h3-size: {{ settings.h3_size | divided_by: 10.0 }}rem;
+    --h4-size: {{ settings.h4_size | divided_by: 10.0 }}rem;
+    --h5-size: {{ settings.h5_size | divided_by: 10.0 }}rem;
+    --h6-size: {{ settings.h6_size | divided_by: 10.0 }}rem;
+
+    --h0-size-mb: {{ settings.h0_size_mb | divided_by: 10.0 }}rem;
+    --h1-size-mb: {{ settings.h1_size_mb | divided_by: 10.0 }}rem;
+    --h2-size-mb: {{ settings.h2_size_mb | divided_by: 10.0 }}rem;
+    --h3-size-mb: {{ settings.h3_size_mb | divided_by: 10.0 }}rem;
+    --h4-size-mb: {{ settings.h4_size_mb | divided_by: 10.0 }}rem;
+    --h5-size-mb: {{ settings.h5_size_mb | divided_by: 10.0 }}rem;
+    --h6-size-mb: {{ settings.h6_size_mb | divided_by: 10.0 }}rem;
+
+    /* Font sizes */
+    --text-xs: {{ settings.body_size | minus: 4 | at_least: 10 | divided_by: 10.0 }}rem;
+    --text-sm: {{ settings.body_size | minus: 2 | at_least: 11 | divided_by: 10.0 }}rem;
+    --text-base: {{ settings.body_size | divided_by: 10.0 }}rem;
+    --text-lg: {{ settings.body_size | plus: 2 | divided_by: 10.0 }}rem;
+    --text-xl: {{ settings.body_size | plus: 4 | divided_by: 10.0 }}rem;
+    --text-2xl: {{ settings.body_size | plus: 6 | divided_by: 10.0 }}rem;
+    --text-4xl: {{ settings.body_size | plus: 8 | divided_by: 10.0 }}rem;
+    --text-6xl: {{ settings.body_size | plus: 10 | divided_by: 10.0 }}rem;
+    --text-8xl: {{ settings.body_size | plus: 12 | divided_by: 10.0 }}rem;
+    --text-10xl: {{ settings.body_size | plus: 14 | divided_by: 10.0 }}rem;
+    --text-12xl: {{ settings.body_size | plus: 16 | divided_by: 10.0 }}rem;
+    /* Font Weight */
+    --font-light: {{ settings.bd_fweight | minus: 100 | at_least: 100 }};
+    --font-normal: {{ settings.bd_fweight }};
+    --font-medium: {{ settings.bd_fweight | plus: 100 | at_most: 900 }};
+    --font-semibold: {{ settings.bd_fweight | plus: 200 | at_most: 900 }};
+    --font-bold: {{ settings.bd_fweight | plus: 300 | at_most: 900 }};
+    --font-extrabold: {{ settings.bd_fweight | plus: 400 | at_most: 900 }};
+    --font-black: {{ settings.bd_fweight | plus: 500 | at_most: 900 }};
+    --spacing-x: {{ settings.spacing_grid_horizontal | divided_by: 2 }}px;
+    --spacing-y: {{ settings.spacing_grid_vertical | divided_by: 2 }}px;
+
+    --container-max-width: {{ settings.page_width | divided_by: 10 }}rem;
+    --container-max-width-padding-lg: {{ settings.page_width | plus: 100 | divided_by: 10 }}rem;
+    --container-max-width-padding-md: {{ settings.page_width | plus: 60 | divided_by: 10 }}rem;
+    --container-width-margin: {% if settings.page_width == '1600' %}2{% else %}0{% endif %}rem;
+    --spacing-sections-desktop: {{ settings.spacing_sections }}px;
+    --spacing-sections-mobile: {% if settings.spacing_sections < 24 %}{{ settings.spacing_sections }}{% else %}{{ settings.spacing_sections | times: 0.7 | round | at_least: 20 }}{% endif %}px;
+
+    /* Border Radius */
+    --radius-2xs: {{ settings.block_radius | divided_by: 6.0 | at_most: 4 | divided_by: 10.0 }}rem;
+    --radius-xs: {{ settings.block_radius | divided_by: 10.0 | divided_by: 4.0 }}rem;
+    --radius-sm: {{ settings.block_radius | divided_by: 10.0 | divided_by: 2.0 }}rem;
+    --radius: {{ settings.block_radius | divided_by: 10.0 }}rem;
+    --radius-lg: {{ settings.block_radius | divided_by: 10.0 | times: 2.0 }}rem;
+    --radius-full: 9999px;
+    --radius-button: {{ settings.button_radius | divided_by: 10.0 }}rem;
+    --radius-input: {{ settings.input_radius | divided_by: 10.0 }}rem;
+    --radius-product-card: {{ settings.pr_card_radius | divided_by: 10.0 }}rem;
+    --radius-product-media: {{ settings.pr_media_radius | divided_by: 10.0 }}rem;
+    --radius-collection-card: {{ settings.collection_card_radius | divided_by: 10.0 }}rem;
+    --radius-blog-card: {{ settings.blog_card_radius | divided_by: 10.0 }}rem;
+
+    --padding-block-input: var(--spacing-0-6);
+    --padding-inline-input: var(--spacing-1);
+    --height-input: var(--spacing-4-2);
+    --thickness-btn: {{ settings.thickness_btn | divided_by: 10.0 }}rem;
+
+    --cursor-zoom-in-icon: url({{ 'cursor-zoom-in.svg' | asset_url }});
+    --cursor-close-svg-url: url({{ 'cursor-close.svg' | asset_url }});
+
+    /* RTL support */
+    {%- if is_rtl %}
+      --value-logical-flip: -1;
+      --value-origin-start: right;
+      --value-origin-end: left;
+    {%- else %}
+      --value-logical-flip: 1;
+      --value-origin-start: left;
+      --value-origin-end: right;
+    {%- endif -%}
+  }
+
+  /* Color schemes */
+  {% for scheme in settings.color_schemes -%}
+    {%- liquid
+      assign body_color_brightness = scheme.settings.button_label | color_brightness
+      if body_color_brightness > 128
+        assign secondary_color = scheme.settings.button_label | color_darken: 25
+        assign secondary_bg = secondary_color | color_mix: '#000', 40
+        assign tertiary_color = scheme.settings.button_label | color_darken: 50
+        assign tertiary_bg = tertiary_color | color_mix: '#000', 40
+      else
+        assign secondary_color = scheme.settings.button_label | color_lighten: 25
+        assign secondary_bg = secondary_color | color_mix: '#fff', 20
+        assign tertiary_color = scheme.settings.button_label | color_lighten: 50
+        assign tertiary_bg = tertiary_color | color_mix: '#fff', 20
+      endif
+    -%}
+    [color-scheme="{{ scheme.id }}"] {
+      --color-background: {{ scheme.settings.background.rgb }};
+      --gradient-background: {% if scheme.settings.background_gradient != empty %}{{ scheme.settings.background_gradient }}{% else %}{{ scheme.settings.background }}{% endif %};
+      --color-background2: {{ scheme.settings.background2.rgb }};
+
+      --color-foreground: {{ scheme.settings.text.rgb }};
+      --color-foreground2: {{ scheme.settings.text2.rgb }};
+      --color-accent: {{ scheme.settings.accent_color.rgb }};
+      --color-secondary: {{ secondary_color.rgb }};
+      --color-tertiary: {{ tertiary_color.rgb }};
+
+      --color-button: {{ scheme.settings.button.rgb }};
+      --color-button-text: {{ scheme.settings.button_label.rgb }};
+      --color-button-border: {{ scheme.settings.button_border.rgb }};
+      --color-secondary-button: {{ scheme.settings.background.rgb }};
+      --color-secondary-button-text: {{ scheme.settings.secondary_button_label.rgb }};
+
+      --hdt-btn-secondary-color: {{ secondary_bg.rgb }};
+      --hdt-btn-secondary-bg: {{ secondary_color.rgb }};
+
+      --hdt-btn-tertiary-color: {{ tertiary_bg.rgb }};
+      --hdt-btn-tertiary-bg: {{ tertiary_color.rgb }};
+
+      {%- assign secondary_brightness = scheme.settings.secondary_button_label | color_brightness %}
+      --color-secondary-brightness: {% if secondary_brightness < 168 %}255 255 255{% else %}0 0 0{% endif %};
+      --color-link: {{ scheme.settings.secondary_button_label.rgb }};
+      --color-accent: {{ scheme.settings.accent_color.rgb }};
+      --color-line-border: {{ scheme.settings.line_border.rgb }};
+      --color-overlay: {{ scheme.settings.overlay.rgb }};
+      --payment-terms-background-color: rgb({{ scheme.settings.background.rgb }});
+      /* Product colors */
+      --color-pr-price: {{ scheme.settings.price.rgb }};
+      --color-pr-sale-price: {{ scheme.settings.sale_price.rgb }};
+      --color-pr-text: {{ scheme.settings.pr_text.rgb }};
+      --color-pr-rating: {{ scheme.settings.pr_rating.rgb }};
+      /* Input colors */
+      --color-input-primary: {{ scheme.settings.input_primary.rgb }};
+      --color-input-secondary: {{ scheme.settings.input_secondary.rgb }};
+    }
+  {% endfor %}
+
+  @media screen and (min-width: 768px) {
+    :root {
+    /* Font sizes */
+    --text-xs: {{ settings.body_size_md | minus: 4 | at_least: 10 | divided_by: 10.0 }}rem;
+    --text-sm: {{ settings.body_size_md | minus: 2 | at_least: 11 | divided_by: 10.0 }}rem;
+    --text-base: {{ settings.body_size_md | divided_by: 10.0 }}rem;
+    --text-lg: {{ settings.body_size_md | plus: 2 | divided_by: 10.0 }}rem;
+    --text-xl: {{ settings.body_size_md | plus: 4 | divided_by: 10.0 }}rem;
+    --text-2xl: {{ settings.body_size_md | plus: 6 | divided_by: 10.0 }}rem;
+    --text-4xl: {{ settings.body_size_md | plus: 8 | divided_by: 10.0 }}rem;
+    --text-6xl: {{ settings.body_size_md | plus: 10 | divided_by: 10.0 }}rem;
+    --text-8xl: {{ settings.body_size_md | plus: 12 | divided_by: 10.0 }}rem;
+    --text-10xl: {{ settings.body_size_md | plus: 14 | divided_by: 10.0 }}rem;
+    --text-12xl: {{ settings.body_size_md | plus: 16 | divided_by: 10.0 }}rem;
+    --spacing-x: {{ settings.spacing_grid_horizontal }}px;
+    --spacing-y: {{ settings.spacing_grid_vertical }}px;
+    }
+  }
+  .hdt-btn--size-custom-1 {
+    --padding-button: 5px {{ settings.padding_btn_1 }}px; --height-button: {{ settings.min_height_btn_1 }}px; --font-size-button: {{ settings.font_size_btn_1 }}px;--min-width-btn: {{ settings.min_width_btn_1 }}px; --min-width-btn-dt: {{ settings.min_width_dt_btn_1 }}px;
+  }
+{% endstyle %}
+
+{{ 'base.css' | asset_url | stylesheet_tag: preload: true }}
+
+{%- # theme-check-disable AssetPreload -%}
+{% comment %} {%- unless settings.type_body_font.system? -%}
+  <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+{%- endunless -%}
+{%- unless settings.type_header_font.system? -%}
+  <link rel="preload" as="font" href="{{ settings.type_header_font | font_url }}" type="font/woff2" crossorigin>
+{%- endunless -%} {% endcomment %}
+{%- # theme-check-enable AssetPreload -%}
+{% comment %} {%- if settings.predictive_search_enabled -%}
+  <link
+    rel="stylesheet"
+    href="{{ 'component-predictive-search.css' | asset_url }}"
+    media="print"
+    onload="this.media='all'"
+  >
+{%- endif -%} {% endcomment %}

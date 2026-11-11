@@ -1,0 +1,300 @@
+{%- comment -%}
+  https://shopify.dev/docs/themes/navigation-search/filtering/storefront-filtering
+  Renders facets (filtering and sorting)
+
+  Accepts:
+  - results: {Object} Collection or Search object (required)
+  - section_id: {String} The ID of the section that contains this card. (required)
+  - enable_render_on_change: {Boolean} enable render page when change
+
+  Usage:
+  {%- render 'facets', results: collection, enable_sorting: true -%}
+{%- endcomment -%}
+
+{%- liquid
+  assign color_list = 'products.theme_settings.color' | t | downcase | strip | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq
+  assign color_white = 'products.theme_settings.color_white' | t | downcase | strip
+  assign sort_by = results.sort_by | default: results.default_sort_by
+  if results.url
+    assign results_url = results.url
+    assign action = results_url
+  else
+    assign action = routes.search_url
+    assign terms = results.terms | escape
+    assign results_url = '?q=' | append: terms | append: '&options%5Bprefix%5D=last&sort_by=' | append: sort_by
+  endif
+-%}
+
+<hdt-drawer class="hdt-drawer hdt-filter hdt-contents" color-scheme="{{ settings.color_scheme_dialog }}">
+  <dialog id="hdt-filter_form" class="hdt-dialog hdt-dialog-drawer" scroll-lock pos="left">
+    <div class="hdt-dialog-drawer__header hdt-flex hdt-align-center">
+      <h6 class="hdt-inline-flex hdt-align-center hdt-filter-icon hdt-text-sm hdt-font-semibold">
+        <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 1C0 0.734784 0.105357 0.48043 0.292893 0.292893C0.48043 0.105357 0.734784 0 1 0H19C19.2652 0 19.5196 0.105357 19.7071 0.292893C19.8946 0.48043 20 0.734784 20 1C20 1.26522 19.8946 1.51957 19.7071 1.70711C19.5196 1.89464 19.2652 2 19 2H1C0.734784 2 0.48043 1.89464 0.292893 1.70711C0.105357 1.51957 0 1.26522 0 1ZM3 6C3 5.73478 3.10536 5.48043 3.29289 5.29289C3.48043 5.10536 3.73478 5 4 5H16C16.2652 5 16.5196 5.10536 16.7071 5.29289C16.8946 5.48043 17 5.73478 17 6C17 6.26522 16.8946 6.51957 16.7071 6.70711C16.5196 6.89464 16.2652 7 16 7H4C3.73478 7 3.48043 6.89464 3.29289 6.70711C3.10536 6.51957 3 6.26522 3 6ZM8 10C7.73478 10 7.48043 10.1054 7.29289 10.2929C7.10536 10.4804 7 10.7348 7 11C7 11.2652 7.10536 11.5196 7.29289 11.7071C7.48043 11.8946 7.73478 12 8 12H12C12.2652 12 12.5196 11.8946 12.7071 11.7071C12.8946 11.5196 13 11.2652 13 11C13 10.7348 12.8946 10.4804 12.7071 10.2929C12.5196 10.1054 12.2652 10 12 10H8Z" fill="currentColor"/>
+        </svg>
+        <span>{{- 'products.facets.filter_button' | t -}}</span>
+      </h6>
+      <button ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="hdt-filter_form" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+    </div>
+    <div class="hdt-dialog-drawer__inner hdt-current-scrollbar">
+      {%- if section.settings.widget_heading != blank -%}
+        <hdt-accordion class="hdt-contents">
+          <details class="hdt-widget hdt-widget-categories" aria-expanded="false" open>
+            <summary class="hdt-widget-title hdt-s-text hdt-flex hdt-align-center hdt-justify-between hdt-text-lg lg:hdt-text-2xl hdt-font-normal">
+              <span>{{ section.settings.widget_heading }}</span>
+              <span accordion-icon>
+                <svg class="hdt-facet-title_icon" xmlns="http://www.w3.org/2000/svg" width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M11 5.5L5.5 6.55868e-08L-6.55868e-08 5.5L0.97625 6.47625L5.5 1.9525L10.0238 6.47625L11 5.5Z" fill="currentColor"/></svg>
+              </span>
+            </summary>
+            <div class="hdt-widget-content hdt-current-scrollbar">
+              <div class="hdt-categories-list hdt-font-medium hdt-text-base">
+                {%- case section.settings.cat_source -%}
+                  {%- when '1' -%}
+                    {%- if collections.size > 0 -%}
+                       {%- for category in collections -%}
+                          {%- if category.products.size > 0 -%}
+                            <div class="hdt-cate-item hdt-relative{%- if collection.handle == category.handle %} hdt-current-cate{%- endif -%}">
+                              <a href="{{ category.url }}">{{ category.title }}
+                                {%- if section.settings.count -%}
+                                  <span class="hdt-count hdt-inline-flex">({{ category.all_products_count }})</span>
+                                {%- endif -%}
+                              </a>
+                            </div>
+                          {%- endif -%}
+                       {%- endfor -%}
+                    {%- endif -%}
+                  {%- else -%}
+                  {%- for link in linklists[section.settings.cat_link_list].links -%}
+                    {%- if link.type == 'collection_link' or link.type == 'catalog_link' -%}
+                      {%- if link.links != blank -%}
+                        <details aria-expanded="false" only-click-icon class="hdt-pr hdt-menu_nested hdt-cate-item hdt-relative hdt-relative">
+                          <summary id="hdt-menu-{{ link.handle }}" data-url="{{ link.url }}" class="has_cats_toggle hdt-flex hdt-align-center hdt-justify-between hdt-relative">
+                            <span class="hdt-link_sm hdt-relative{%- if link.active %} hdt-current-cate{%- endif -%}">
+                              {{ link.title }} {%- if section.settings.count == true -%} <span class="hdt-count">({{ link.object.all_products_count | default: shop.products_count }})</span>{%- endif -%}
+                            </span>
+                            {% if link.links != blank %}
+                              <span class="hdt-btn-open-sub hdt-relative" accordion-icon></span>
+                            {% endif %}
+                          </summary>
+                          <div class="hdt-sub-menu hdt-children">
+                            {%- for child_link in link.links -%}
+                              {%- if child_link.type == 'collection_link' or child_link.type == 'catalog_link' -%}
+                                {%- if child_link.links != blank -%}
+                                  <details aria-expanded="false" only-click-icon class="hdt-pr hdt-menu_nested2 hdt-cate-item hdt-relative">
+                                    <summary id="hdt-menu-{{ child_link.handle }}" data-url="{{ child_link.url }}" class="hdt-cat-count hdt-flex hdt-align-center hdt-justify-between hdt-relative">
+                                      <span class="hdt-link_sm hdt-relative{%- if child_link.active %} hdt-current-cate{%- endif -%}">
+                                        {{ child_link.title }} 
+                                      {%- if section.settings.count == true -%}  
+                                        <span class="hdt-count">({{ child_link.object.all_products_count | default: shop.products_count }})</span>
+                                      {%- endif -%}
+                                      </span>
+                                      {% if link.links != blank %}
+                                        <span class="hdt-btn-open-sub hdt-relative" accordion-icon></span>
+                                      {% endif %}
+                                    </summary>
+                                    <div class="hdt-sub-menu hdt-children">
+                                      {%- for third_link in child_link.links -%}
+                                        {%- if third_link.type == 'collection_link' or third_link.type == 'catalog_link' -%}
+                                          <a href="{{ third_link.url }}" class="hdt-link_sm hdt-relative{%- if third_link.active %} hdt-current-cate{%- endif -%}">{{ third_link.title }} 
+                                            {%- if section.settings.count == true -%} 
+                                              <span class="hdt-count">({{ third_link.object.all_products_count | default: shop.products_count }})</span> 
+                                            {%- endif -%}
+                                          </a>
+                                        {%- endif -%}
+                                      {%- endfor -%}
+                                    </div>
+                                  </details>
+                                {%- else -%}
+                                  <div class="hdt-cate-item hdt-relative{%- if child_link.active %} hdt-current-cate{%- endif -%}">
+                                    <a href="{{ child_link.url }}">{{ child_link.title }} {%- if section.settings.count == true -%} <span class="hdt-count">({{ child_link.object.all_products_count | default: shop.products_count }})</span> {%- endif -%}</a>
+                                  </div>
+                                {%- endif -%}
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </div>
+                        </details>
+                      {%- else -%} 
+                        <div class="hdt-cate-item hdt-relative{%- if link.active %} hdt-current-cate{%- endif -%}"><a href="{{ link.url }}">{{ link.title }} {%- if section.settings.count == true -%} <span class="hdt-count">({{ link.object.all_products_count | default: shop.products_count }})</span>{%- endif -%}</a></div>
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- endcase -%}
+              </div>
+            </div>
+          </details>
+        </hdt-accordion>
+      {%- endif -%}  
+      <hdt-facet-filters-form section-id="{{ section.id }}" {% if enable_render_on_change %} render-on-change{% endif %}>
+        <form id="hdt-facet-filters-form" method="GET" action="{{ action }}">
+          <input type="hidden" name="page" value="">
+          {%- unless enable_sorting %}<input type="hidden" name="sort_by" value="{{ sort_by }}">{% endunless -%}
+          {%- if results.current_vendor or results.current_type -%}
+            <input type="hidden" name="q" value="{{ results.current_vendor }}{{ results.current_type }}">
+          {%- endif -%}
+          {%- if results.terms -%}
+          <input type="hidden" name="q" value="{{ results.terms | escape }}">
+          <input type="hidden" name="type" value="product">
+          <input type="hidden" name="options[prefix]" value="last">
+          <input type="hidden" name="options[unavailable_products]" value="last">
+          {%- endif -%}
+          {%- for filter in results.filters -%}
+            <hdt-accordion class="hdt-contents">
+              <details class="hdt-filter-group" aria-expanded="false" open>
+                <summary class="hdt-filter-group-summary"{% if filter.type != 'price_range' %} aria-label="{{ filter.label }} ({{ 'products.facets.filters_selected.one' | t: count: filter.active_values.size }})"{% endif %}>
+                  <div class="hdt-facet-title hdt-text-lg lg:hdt-text-2xl hdt-font-normal hdt-s-text hdt-flex">
+                    <span class="hdt-inline-flex hdt-facet-title_group">
+                      <span>{{ filter.label }}</span>
+                      {% if filter.active_values.size > 0 %}
+                        <span class="hdt-hidden">
+                          ({{ filter.active_values.size }})
+                        </span>
+                      {% endif %}
+                    </span>
+                    <span>
+                      <svg class="hdt-facet-title_icon" xmlns="http://www.w3.org/2000/svg" width="11" height="7" viewBox="0 0 11 7" fill="currentColor">
+                        <path d="M11 5.5L5.5 6.55868e-08L-6.55868e-08 5.5L0.97625 6.47625L5.5 1.9525L10.0238 6.47625L11 5.5Z"/>
+                      </svg>
+                    </span>
+                  </div>
+                </summary>
+                <div class="hdt-filter-group__display">
+                  {%- if filter.type != 'price_range' -%}
+                  <div class="hdt-filter-group__header hdt-hidden">
+                    <span class="hdt-filter-group__header-selected hdt-base hdt-font-normal hdt-s-text">{{ 'products.facets.filters_selected' | t: count: filter.active_values.size }}</span>
+                    {%- if filter.active_values.size > 0 -%}
+                      <wrapp-hdt-facet-url>
+                        <a href="{{ filter.url_to_remove }}" class="hdt-filter-group__header-reset">{{ 'products.facets.reset' | t }}</a>
+                      </wrapp-hdt-facet-url>
+                    {%- endif -%}
+                  </div>
+                  {%- endif -%}
+                  {%- case filter.type -%}
+                    {%- when 'boolean' -%}
+                      <ul class="hdt-filter-group__list type_boolean">
+                        {%- for filter_value in filter.values -%}
+                          <li class="hdt-filter-group__list-item">
+                            <input class="" type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" id="Filter-{{ filter.param_name }}-{{ forloop.index }}"{% if filter_value.active %} checked{% endif %}{% if filter_value.count == 0 and filter_value.active == false %} disabled{% endif %}>
+                            <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">{{ filter_value.label }}</label>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                      {% comment %} <div class="hdt-filter-group__submit"><input type="submit" value="{{ 'products.facets.apply' | t }}"></div> {% endcomment %}
+        
+                    {%- comment %} {%- when 'boolean' or 'list' -%} {% endcomment -%}
+                    {%- when 'list' -%}
+                      {%- assign label_downcase = filter.label | downcase -%}
+                      {%- if color_list contains label_downcase -%}
+        
+                        {%- liquid
+                          assign colors = shop.metafields.ecomrise.colors.value
+                          assign color_values = shop.metaobjects.theme_swatch.values | first
+                          assign colors2 = color_values.colors.value
+                        -%}
+        
+                        <ul class="hdt-filter-group__list hdt-filter-group__list--color">
+                          {%- for filter_value in filter.values -%}
+        
+                            {%- liquid
+                            assign color_downcase = filter_value.label | downcase
+                            assign color_handle = filter_value.label | handle
+                            assign color_obj = colors[color_handle] | default: colors2[color_handle]
+                            assign color_style_inline = ''
+                            assign image = images[color_obj.imageName]
+                            if image != blank
+                              assign color_image = image | image_url: width: 80
+                              assign color_image_style = '--hdt-bg-image: url(' | append: color_image | append: ');'
+                            else
+                              assign color_image_style = nil
+                              assign color_style_inline = color_obj.colorsCSS
+                            endif -%}
+                            <li class="hdt-filter-group__list-item hdt-relative hdt-align-center">
+                              <input class="sr-only" type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" id="Filter-{{ filter.param_name }}-{{ forloop.index }}"{% if filter_value.active %} checked{% endif %}{% if filter_value.count == 0 and filter_value.active == false %} disabled{% endif %}>
+                              <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                                <span class="hdt-relative">
+                                  <span class="hdt-facets-checkbox-color hdt-filter-group__color{% if color_white == color_downcase %} hdt-bg-color-white{% endif %}"{% if color_image_style or color_style_inline.size > 0 %} style="{{ color_image_style }}{{ color_style_inline }}"{% endif %}>
+                                    <span class="sr-only">{{ filter_value.label }}</span>
+                                  </span>
+                                  <span class="hdt-facets-color-icon hdt-full-width-link hdt-flex hdt-align-center hdt-justify-center hdt-pe-none">
+                                    <svg focusable="false" width="24" height="24" viewBox="0 0 24 24" role="presentation"><path fill="currentColor" d="M9 20l-7-7 3-3 4 4L19 4l3 3z"></path></svg>
+                                  </span>
+                                </span>
+                                <span class="hdt-base hdt-font-normal hdt-filter-group__color-label"><span>{{ filter_value.label }}</span> <span> ({{ filter_value.count }})</span></span>
+                              </label>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- else -%}
+                        <ul class="hdt-filter-group__list">
+                          {%- for filter_value in filter.values -%}
+                            <li class="hdt-filter-group__list-item">
+                              <input class="sr-only" type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}" id="Filter-{{ filter.param_name }}-{{ forloop.index }}"{% if filter_value.active %} checked{% endif %}{% if filter_value.count == 0 and filter_value.active == false %} disabled{% endif %}>
+                              <label for="Filter-{{ filter.param_name }}-{{ forloop.index }}">
+                                <span class="hdt-facets-checkbox" >
+                                  <svg focusable="false" width="24" height="24" viewBox="0 0 24 24" role="presentation"><path fill="currentColor" d="M9 20l-7-7 3-3 4 4L19 4l3 3z"></path></svg>
+                                </span>
+                                <span class="hdt-facets-label hdt-base hdt-normal">
+                                  <span>{{ filter_value.label }}</span> <span> ({{ filter_value.count }})</span>
+                                </span>
+                              </label>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                      {%- comment %}<div class="hdt-filter-group__submit"><input type="submit" value="{{ 'products.facets.apply' | t }}"></div>{% endcomment -%}
+        
+                    {%- when 'price_range' -%}
+                      {%- liquid
+                        assign min_value = filter.min_value.value | default: 0 | divided_by: 100.0
+                        assign max_value = filter.max_value.value | default: filter.range_max | divided_by: 100.0
+                        assign step_value = 1
+                        assign min_value_ceil = min_value | ceil
+                        assign max_value_ceil = max_value | ceil
+                        assign range_max_ceil = filter.range_max | divided_by: 100.0 | ceil
+                        assign min_progress = min_value | divided_by: range_max_ceil | times: 100.0
+                        assign max_progress = max_value | divided_by: range_max_ceil | times: 100.0
+                        if section.settings.price_behavior == 'click'
+                          assign behavior = 'disable-change'
+                        else
+                          assign behavior = ''
+                        endif
+                      -%}
+                      <div class="hdt-price-range_wrap">
+                        <hdt-price-range class="hdt-price-range hdt-filter-group__price-range" style="--min-progress: {{ min_progress }}%; --max-progress: {{ 100.0 | minus: max_progress }}%">
+                          <div class="hdt-filter-group__range-slider">
+                            <div class="hdt-filter-group__range-progress">
+                              <div class="hdt-progress"></div>
+                            </div>
+                            <div class="hdt-filter-group__range-price hdt-relative">
+                              <input {{ behavior }} aria-label="{{ 'products.facets.from_price' | t | escape }}" type="range" step="{{ step_value }}" min="0" max="{{ range_max_ceil }}" value="{% if filter.min_value.value %}{{ min_value_ceil }}{% else %}0{% endif %}">
+                              <input {{ behavior }} aria-label="{{ 'products.facets.to_price' | t | escape }}" type="range" step="{{ step_value }}" min="0" max="{{ range_max_ceil }}" value="{% if filter.max_value.value %}{{ max_value_ceil }}{% else %}{{ range_max_ceil }}{% endif %}">
+                            </div>
+                          </div>
+                          <div class="hdt-filter-group__input-price-wrap hdt-flex hdt-justify-between hdt-align-center">
+                            <div class="hdt-filter-group__input-price hdt-flex hdt-align-center">
+                              <span>{{ 'products.facets.price' | t }}</span>
+                              <div class="hdt-filter-group__price-range-from hdt-flex hdt-align-center">
+                                <span>{{ cart.currency.symbol }}</span>
+                                <input {{ behavior }} aria-label="{{ 'products.facets.from_price' | t | escape }}" inputmode="numeric" name="{{ filter.min_value.param_name }}" type="number" step="{{ step_value }}" min="0" max="{{ range_max_ceil }}" {% if filter.min_value.value %}value="{{ min_value_ceil }}"{% else %}placeholder="0"{% endif %}>
+                              </div>
+                              <span class="hdt-inline-block">-</span>
+                              <div class="hdt-filter-group__price-range-to hdt-flex hdt-align-center">
+                                <span>{{ cart.currency.symbol }}</span>
+                                <input {{ behavior }} aria-label="{{ 'products.facets.to_price' | t | escape }}" inputmode="numeric" name="{{ filter.max_value.param_name }}" type="number" step="{{ step_value }}" min="0" max="{{ range_max_ceil }}" {% if filter.max_value.value %}value="{{ max_value_ceil }}"{% else %}placeholder="{{ range_max_ceil }}"{% endif %}>
+                              </div>
+                            </div>
+                            {%- if section.settings.price_behavior == 'click' %}<wrapp-hdt-btn-submit-filter><button class="hdt-btn hdt-btn-filter-price" type="submit">{{ 'products.facets.filter_button' | t | escape }}</button></wrapp-hdt-btn-submit-filter>{% endif -%}
+                          </div>
+                        </hdt-price-range>
+                        {%- comment %}<div class="hdt-filter-group__submit"><input type="submit" value="{{ 'products.facets.apply' | t }}"></div>{% endcomment -%}
+                      </div>
+        
+                  {%- endcase -%}
+                </div>
+              </details>
+            </hdt-accordion>
+          {%- endfor -%}
+        </form>
+      </hdt-facet-filters-form>
+    </div>
+  </dialog>
+</hdt-drawer>

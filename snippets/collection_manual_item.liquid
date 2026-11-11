@@ -1,0 +1,29 @@
+{%- liquid
+  assign image = block.settings.image | default: collection.metafields.theme.featured_image_collection | default: collection.image | default: collection.products.first.featured_image
+  assign title = block.settings.title | default: collection.title
+  assign collection_link = block.settings.collection_link | default: collection.url
+-%}
+{%- capture sizes -%}
+  (min-width: 1150px) calc({{ current_width }} * {{ block.settings.column_width }} / 12),(min-width: 768px) calc({{ current_width }} * {{ block.settings.column_width_tb }} / 12),  calc({{ current_width }} * {{ block.settings.column_width_mb }} / 12)
+{%- endcapture -%}
+
+<div class="hdt-collection-item hdt-collection-manual-item hdt-collection-style{{ section.settings.collection_des }}" {{ block.shopify_attributes }}>
+  <div class="hdt-collection-inner hdt-relative hdt-oh hdt-grid">
+    <div class="hdt-collection-img" style="--aspect-ratioapt: {{ image.aspect_ratio | default: 1.2 }};">
+        {%- if image != blank -%}
+          {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '' , sizes: sizes, widths: "160,320,360,400,600,800,1000,1200,1400,1440,1920,2000,2400,2800,3600" }}
+        {%- else -%}
+          {{ 'collection-apparel-' | append: current | placeholder_svg_tag: 'hdt-placeholder-svg hdt-object-cover' }}  
+        {%- endif -%}
+      <a data-pr-href class="hdt-full-width-link" href="{{ collection_link }}"></a>
+    </div>
+    {%- if title != blank -%}
+      <div class="hdt-collection-content hdt-absolute hdt-place-self-{{ section.settings.content_position }}">
+        <a class="hdt-collection-title hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-{{ section.settings.content_size }} hdt-font-{{ section.settings.content_weight }}" href="{{ collection_link }}">
+          <span class="hdt-collection-title-text hdt-truncate">{{ title }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.07692 10L0 8.92308L7.38462 1.53846H0.769231V0H10V9.23077H8.46154V2.61538L1.07692 10Z" fill="currentColor"/></svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div> 
+</div>

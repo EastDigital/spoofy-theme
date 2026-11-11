@@ -1,0 +1,56 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "heading": {
+      "type": "main-heading",
+      "blocks": {
+        "07a5aa24-dd2b-4a86-b317-574b7aeefd77": {
+          "type": "1",
+          "settings": {
+            "heading": "Register",
+            "hidden_on_mobile": false,
+            "heading_size": "h4",
+            "text_color": "hdt-s-text",
+            "font_size_heading_lg": 50,
+            "font_size_heading_md": 30,
+            "font_size_heading": 24,
+            "font_weight_heading": 600,
+            "letter_spacing_heading": 0
+          }
+        }
+      },
+      "block_order": [
+        "07a5aa24-dd2b-4a86-b317-574b7aeefd77"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/z4683181570507_46fb10fa21da971ae2af71e75431028c_f52f84e6-035f-4b0a-a139-3f31ae2a7614.webp",
+        "color_scheme": "",
+        "spacing_hd": 5,
+        "padding_top": 88,
+        "padding_bottom": 88,
+        "padding_rate": 75
+      }
+    },
+    "main": {
+      "type": "main-register",
+      "settings": {
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "padding_rate": 75
+      }
+    }
+  },
+  "order": [
+    "heading",
+    "main"
+  ]
+}

@@ -1,0 +1,397 @@
+{%- liquid
+  # Determine if lazy loading should be used
+  if request.design_mode or search.terms == "submenu" or section.index == null
+    assign lazy_mn = false
+  else
+    assign lazy_mn = section.settings.lazy_mn
+  endif
+
+  # Initialize variables
+  assign li_class = ""
+  assign mega_position = 'bottom'
+  assign link = null
+  assign index = 0
+
+  # Only proceed if block has a title
+  if block.settings.title != blank
+    # Split the title by " - " to handle different section types
+    # Format: "Brand - MenuItem" for e-commerce, "MenuItem" for standard
+    assign block_title_parts = block.settings.title | split: " - "
+    # Handle different section types
+    if section.id contains 'header_e_commerce'
+      # E-commerce specific logic - handles brand-based menu structure
+      capture brand
+        case template.name
+          when "search"
+            if request.design_mode or search.terms contains "homeHdt"
+            elsif search.terms contains "submenu"
+              echo search.terms | remove_first: ' OR ' | remove_first: 'submenu' | strip
+            endif
+          when "collection"
+            echo collection.metafields.theme.brand.value.name
+          when "product"
+            if product.metafields.theme.brand
+              echo product.metafields.theme.brand.value.name
+            else
+              for collection in product.collections
+                if collection.metafields.theme.brand
+                  echo collection.metafields.theme.brand.value.name
+                  break
+                endif
+              endfor
+            endif
+          when "page"
+            echo page.metafields.theme.brand.value.name
+          when "blog" or "article"
+            echo blog.metafields.theme.brand.value.name
+        endcase
+      endcapture
+      assign main_menu = null
+      assign key_brand = brand | default: 'homeHdt'
+      
+      # Find active brand and corresponding menu
+      # Look for active brand in theme_brands linklist
+      assign lv0_active = linklists.theme_brands.links | where: 'active', true | first
+      assign lv0_child_active = linklists.theme_brands.links | where: 'child_active', true | first
+      if lv0_active
+        assign key_brand = lv0_active.title
+      elsif search.terms contains "submenu OR "
+        # Extract brand from search terms if available
+        assign key_brand = search.terms | split: "submenu OR " | last
+      elsif lv0_child_active
+        assign key_brand = lv0_child_active.title
+      endif
+      # Find matching menu item in brand links
+      if section.settings.header_by_brand
+        assign main_menu = linklists.theme_brands.links | where: 'title', key_brand | first
+      
+        # For e-commerce, use the second part (menu item name) after the brand
+        assign block_title_parts = block_title_parts[0]
+      elsif key_brand == 'homeHdt'
+        assign main_menu = linklists.theme_brands.links[0]
+        assign block_title_parts = block_title_parts[1]
+      else
+        # Find matching menu item in brand links
+        for brand_link in linklists.theme_brands.links
+          assign brand_title_parts = brand_link.title | split: ' - '
+          # Match brand and menu item
+          if brand_title_parts[0] == block_title_parts[0] and brand_title_parts[0] == key_brand
+            assign main_menu = brand_link
+            break
+          endif
+        endfor
+      
+        # For e-commerce, use the second part (menu item name) after the brand
+        assign block_title_parts = block_title_parts[1]
+      endif
+      
+      # Build key_brand for lazy loading with URL encoding
+      assign key_brand = '%20OR%20' | append: key_brand | escape
+    else
+      # Standard menu logic - use the main menu from section settings
+      assign main_menu = section.settings.main_menu
+      
+      # For standard menus, use the first part (menu item name)
+      assign block_title_parts = block_title_parts[0]
+      
+    endif
+    
+    # Find the specific link in the menu by matching title
+    if main_menu
+      for menu_link in main_menu.links
+        # Split menu link title to handle labels in brackets [label1,label2]
+        assign link_title_parts = menu_link.title | split: '['
+        # Match the menu item name (before any labels)
+        if link_title_parts[0] == block_title_parts
+          assign link = menu_link
+          assign index = forloop.index0
+          break
+        endif
+      endfor
+    endif
+    
+    # Set up menu item properties if link found
+    if link and link.title != blank
+      # Parse the link title to extract name and labels
+      assign title_parts = link.title | split: '['
+      assign arr_title = title_parts[0]
+      assign arr_label = title_parts[1] | split: ',' | default: ''
+      assign li_class = "hdt-has-children"
+      assign mega_width = block.settings.mega_width
+      assign mega_custom_width = block.settings.mega_custom_width
+      assign mega_position = block.settings.mega_position | default: 'bottom'
+    else
+      # Skip rendering if no valid link found
+      break
+    endif
+  else
+    # Skip rendering if no title
+    break
+  endif
+-%}
+<li class="hdt-menu-item hdt-flex hdt-justify-center hdt-flex-col {{ li_class }}" data-index="{{ index | plus: 1 }}" {{ block.shopify_attributes }} style="order: {{ index | plus: 1 }};">
+  <hdt-header-menu class="hdt-contents" opened-able-click event="{{ section.settings.open_event }}" position="{{ mega_position }}" {{ block.shopify_attributes }}>
+    <details {% if mega_width == "full" or mega_width == "container" %} not-need-calc {% elsif mega_width == "custom" %} style="--mega-width: {{ mega_custom_width }}px;" position="{{ mega_position }}" {% endif %}>
+      <summary data-url="{{ link.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-{{ section.settings.menu_size }} hdt-font-{{ section.settings.menu_weight }}{% if link.current and section.settings.active_link %} hdt-menu-link--active{% endif %}">
+        <span class="hdt-menu-link-text hdt-block{% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title[0].size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+          <span class="hdt-block hdt-line-clamp">{{ arr_title }}</span>
+          {%- if arr_label.size > 0 -%}
+            <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs">
+              {%- for label in arr_label limit: 2 -%}
+                {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+              {%- endfor -%}
+            </span>
+          {%- endif -%}
+        </span>
+        
+        {%- if li_class != "" and section.settings.dropdown_arrow -%}
+          <svg class="hdt-menu-item-arrow" xmlns="http://www.w3.org/2000/svg" width="10" height="7" viewBox="0 0 10 7" fill="none"><path d="M10 1.24243L5 6.24243L-2.18557e-07 1.24243L0.8875 0.354932L5 4.46743L9.1125 0.354931L10 1.24243Z" fill="currentColor"/></svg>
+        {%- endif -%}
+      </summary>
+      {%- if lazy_mn -%}
+        <hdt-lazy-submenu id="sub-{{ block.id }}" key="{{ key_brand }}" data-section="{{ section.id }}" class="hdt-sub-menu hdt-mega-menu hdt-absolute hdt-section--custom" color-scheme="{{ block.settings.mega_menu_colors }}"> </hdt-lazy-submenu>
+      {%- else -%}
+        <div id="sub-{{ block.id }}" class="hdt-sub-menu hdt-mega-menu hdt-absolute hdt-section--custom" color-scheme="{{ block.settings.mega_menu_colors }}">
+          {% if mega_width == "container" %}{{ '<div class="hdt-container">' }}{% endif %}
+          <div class="hdt-grid-system hdt-grid-system-10" style="--spacing-dk: {{ block.settings.item_spacing }}px;">
+            {% content_for 'blocks' %}
+          </div>
+          {% if mega_width == "container" %}{{ '</div>' }}{% endif %}
+        </div>
+      {%- endif -%}
+    </details>
+  </hdt-header-menu>
+</li>
+{% schema %}
+  {
+    "name": "Mega Block Column (10)",
+    "tag": null,
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Menu item name (level 1) of main menu"
+      },
+      {
+        "type": "color_scheme",
+        "id": "mega_menu_colors",
+        "label": "t:sections.all.colors.label"
+      },
+      {
+        "type": "radio",
+        "id": "mega_width",
+        "label": "t:sections.header.blocks.mega_width.label",
+        "default": "full",
+        "options": [
+          {
+            "label": "t:sections.header.blocks.mega_width.full",
+            "value": "full"
+          },
+          {
+            "label": "t:sections.header.blocks.mega_width.container",
+            "value": "container"
+          },
+          {
+            "label": "t:sections.header.blocks.mega_width.custom",
+            "value": "custom"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "mega_position",
+        "label": "t:sections.header.blocks.mega_position.label",
+        "default": "bottom",
+        "options": [
+          {
+            "label": "t:sections.header.blocks.mega_position.default",
+            "value": "bottom"
+          },
+          {
+            "label": "t:sections.header.blocks.mega_position.center",
+            "value": "center_on_screen"
+          }
+        ],
+        "visible_if": "{{ block.settings.mega_width == 'custom' }}"
+      },
+      {
+        "type": "range",
+        "id": "mega_custom_width",
+        "label": "t:sections.header.blocks.mega_custom_width",
+        "min": 600,
+        "max": 1600,
+        "step": 10,
+        "unit": "px",
+        "default": 1200,
+        "visible_if": "{{ block.settings.mega_width == 'custom' }}"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.spacing"
+      },
+      {
+        "type": "range",
+        "id": "item_spacing",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.space_items.desktop",
+        "default": 30
+      }
+    ],
+    "blocks": [
+      {
+        "type": "_multi_column_2",
+      }
+    ],
+    "presets": [
+      {
+        "name": "Mega Block Column(10)",
+        "blocks": [
+          {
+            "type": "_multi_column_2",
+            "settings": {
+              "column_dk": "5",
+              "column_tb": "5",
+              "column_mb": "10",
+              "spacing_h_dk": 30,
+              "spacing_v_dk": 30,
+              "spacing_h_tb": 30,
+              "spacing_v_tb": 30,
+              "spacing_h_mb": 15,
+              "spacing_v_mb": 15,
+              "content_position": "center",
+              "content_position_mb": "center",
+              "alignment": "center",
+              "alignment_mb": "center",
+              "background_color": "#d2a2a2",
+              "rounded": "none"
+            },
+            "blocks": [
+              {
+                "type": "heading",
+                "settings": {
+                  "heading": "<p>Heading</p>",
+                  "hidden_br_mobile": false,
+                  "hidden_on_mobile": false,
+                  "heading_size": "h2",
+                  "text_color": "hdt-s-text",
+                  "font_size_heading_lg": 50,
+                  
+                  "font_size_heading": 24,
+                  
+                  "letter_spacing_heading": 0
+                }
+              },
+              {
+                "type": "spacer",
+                "settings": {
+                  "direction": false,
+                  "space_lg": 10,
+                  "space_md": 10,
+                  "space": 10
+                }
+              },
+              {
+                "type": "text",
+                "settings": {
+                  "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+                  "hidden_br_mobile": false,
+                  "hidden_on_mobile": false,
+                  "text_size": "base",
+                  "text_color": "hdt-s-text",
+                  "font_size_text_lg": 16,
+                  "font_size_text": 14,
+                  "letter_spacing_text": 0
+                }
+              },
+              {
+                "type": "spacer",
+                "settings": {
+                  "direction": false,
+                  "space_lg": 20,
+                  "space_md": 20,
+                  "space": 20
+                }
+              },
+              {
+                "type": "button",
+                "settings": {
+                  "label": "Button label",
+                  "link": "",
+                  "open_in_new_tab": false,
+                  "full_width": false,
+                  "font_weight": "normal",
+                  "font_size_btn": 14,
+                  "padding_btn": 30,
+                  "min_width_btn": 100,
+                  "min_width_dt_btn": 100,
+                  "min_height_btn": 40,
+                  "icon": "none",
+                  "icon_position": "after",
+                  "icon_height": 14,
+                  "icon_spacing": 5
+                }
+              }
+            ]
+          },
+          {
+            "type": "_multi_column_2",
+            "settings": {
+              "column_dk": "5",
+              "column_tb": "5",
+              "column_mb": "10",
+              "spacing_h_dk": 30,
+              "spacing_v_dk": 30,
+              "spacing_h_tb": 30,
+              "spacing_v_tb": 30,
+              "spacing_h_mb": 15,
+              "spacing_v_mb": 15,
+              "content_position": "center",
+              "content_position_mb": "center",
+              "alignment": "center",
+              "alignment_mb": "center",
+              "background_color": "#d2a2a2",
+              "rounded": "none"
+            },
+            "blocks": [
+              {
+                "type": "heading",
+                "settings": {
+                  "heading": "<p>Newsletter</p>",
+                  "hidden_br_mobile": false,
+                  "hidden_on_mobile": false,
+                  "heading_size": "h4",
+                  "text_color": "hdt-s-text",
+                  "font_size_heading_lg": 50,
+                  
+                  "font_size_heading": 24,
+                  
+                  "letter_spacing_heading": 0
+                }
+              },
+              {
+                "type": "spacer",
+                "settings": {
+                  "direction": false,
+                  "space_lg": 20,
+                  "space_md": 20,
+                  "space": 20
+                }
+              },
+              {
+                "type": "_newsletter",
+                "settings": {
+                  "des_newsletter": "1",
+                  "button_lb": "Subscribe"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

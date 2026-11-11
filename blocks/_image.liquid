@@ -1,0 +1,128 @@
+<a href="{{ block.settings.url | default: '#' }}" class="hdt-eff-{{ block.settings.b_effect }} hdt-eff-img-{{ block.settings.img_effect }} hdt-eff hdt-oh hdt-relative" {{ block.shopify_attributes }}>
+  {%-liquid
+    if block.settings.image != blank
+      assign img_class = 'hdt-object-pos-mb hdt-obj-eff '
+      echo '<picture class="hdt-media-wrapper">'
+      if block.settings.image_mb != blank and block.settings.image_mb != block.settings.image
+        assign srcset = block.settings.image_mb | image_url: width: block.settings.image_mb.width | image_tag: widths: '200,400,600,800,1000', alt: null | split: 'srcset="' | last
+        unless srcset contains 'src='
+          echo '<source media="(max-width: 767px)" srcset="' | append: srcset | replace_first: 'style=', 'data-none='
+        endunless
+      endif
+      echo block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: 'eager', class: img_class, widths: '100,200,300,400,600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200,3400,3600'
+      echo '</picture>'
+    else
+      capture current
+        cycle 1, 2 , 3
+      endcapture
+      echo '<div class="hdt-media-wrapper">'
+      echo 'hero-apparel-' | append: current | placeholder_svg_tag: 'placeholder-svg hdt-placeholder hdt-w-full'
+      echo '</div>'
+    endif
+  -%}
+</a>
+{% schema %}
+{
+  "name": "Image",
+  "tag": null,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mb",
+      "label": "Image Mobile",
+      "visible_if": "{{ block.settings.image != blank }}"
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": "URL",
+      "visible_if": "{{ block.settings.image != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "img_effect",
+      "label": "t:sections.all.image_effect.image_hover_eff.label",
+      "info": "t:sections.all.image_effect.image_hover_eff.info",
+      "default": "none",
+      "visible_if": "{{ block.settings.image != blank }}",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.all.image_effect.image_hover_eff.options.none"
+        },
+        {
+          "value": "zoom",
+          "label": "t:sections.all.image_effect.image_hover_eff.options.zoom"
+        },
+        {
+          "value": "rotate",
+          "label": "t:sections.all.image_effect.image_hover_eff.options.rotate"
+        },
+        {
+          "value": "translateToTop",
+          "label": "t:sections.all.image_effect.image_hover_eff.options.translateToTop"
+        },
+        {
+          "value": "translateToRight",
+          "label": "t:sections.all.image_effect.image_hover_eff.options.translateToRight"
+        },
+        {
+          "value": "translateToBottom",
+          "label": "t:sections.all.image_effect.image_hover_eff.options.translateToBottom"
+        },
+        {
+          "value": "translateToLeft",
+          "label": "t:sections.all.image_effect.image_hover_eff.options.translateToLeft"
+        },
+        {
+          "value": "filter",
+          "label": "t:sections.all.image_effect.image_hover_eff.options.filter"
+        },
+        {
+          "value": "bounceIn",
+          "label": "t:sections.all.image_effect.image_hover_eff.options.bounceIn"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "b_effect",
+      "label": "t:sections.all.image_effect.item_eff.label",
+      "default": "none",
+      "visible_if": "{{ block.settings.image != blank }}",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.all.image_effect.item_eff.options.none"
+        },
+        {
+          "value": "border-run",
+          "label": "t:sections.all.image_effect.item_eff.options.border_run"
+        },
+        {
+          "value": "pervasive-circle",
+          "label": "t:sections.all.image_effect.item_eff.options.pervasive_circle"
+        },
+        {
+          "value": "plus-zoom-overlay",
+          "label": "t:sections.all.image_effect.item_eff.options.plus_zoom_overlay"
+        },
+        {
+          "value": "overlay",
+          "label": "t:sections.all.image_effect.item_eff.options.overlay"
+        }
+      ]
+    },
+  ],
+  "presets": [
+    {
+      "name": "Image"
+    }
+  ]
+}
+{% endschema %}

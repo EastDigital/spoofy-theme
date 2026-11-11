@@ -1,0 +1,148 @@
+<!-- section/form_contact-with-text.liquid -->
+{{ 'hdt-contact.css' | asset_url | stylesheet_tag }}
+
+{% style %}
+  #shopify-section-{{ section.id }}{
+    --section-pt: {{ section.settings.padding_top }}px;
+    --section-pb: {{ section.settings.padding_bottom }}px; 
+    --section-prate: {{ section.settings.padding_rate }};
+  }
+{% endstyle %}
+{%-liquid
+  assign formID = 'contact-' | append: section.id  
+-%}
+<div class="hdt-s-gradient hdt-section-spacing" color-scheme="{{ section.settings.color_scheme }}" hdt-reveal="fade-in">
+  <div class="hdt-container" >
+    <div class="hdt-section-spacing hdt-justify-center hdt-row-grid--modify hdt-row-grid hdt-grid-cols-1 lg:hdt-grid-cols-2 {% if section.blocks.size == 0 %}hdt-text-center{% endif %}" style="--spacing-y:30px;">
+        {%- if section.blocks.size > 0 -%}
+            <div class="hdt-content">
+              {% content_for 'blocks' %}
+            </div>
+          {%- endif -%}
+          <div class="hdt-form_contact">
+            {%- if section.settings.heading != blank -%}
+              <h3 class="hdt-heading hdt-h5 hdt-s-text" hdt-reveal="slide-in" timeline>{{ section.settings.heading }}</h3>
+            {%- endif -%}
+            {%- if section.settings.sub_heading != blank -%}
+              <p class="hdt-s-text2 hdt-sub_heading" hdt-reveal="slide-in" timeline>
+                {{ section.settings.sub_heading }}
+              </p>
+            {%- endif -%}
+            <div class="hdt-form">
+              {%- form 'contact', id: formID, class: 'hdt-contact_form_wrap' -%}
+                <div class="hdt-input_group">
+                  <input id="form-name" name="contact[name]" type="text" class="hdt-input hdt-inline-flex hdt-f_name" required placeholder="{{ 'templates.contact.form.name' | t }}" hdt-reveal="slide-in" timeline>
+                  <input id="form-email" name="contact[email]" type="email" placeholder="{{ 'templates.contact.form.email' | t }}" class="hdt-input hdt-inline-flex hdt-f_email" required hdt-reveal="slide-in" timeline>
+                  <textarea name="contact[message]" id="form-message" class="hdt-input hdt-f_message" placeholder="{{ 'templates.contact.form.message' | t }}" hdt-reveal="slide-in" timeline></textarea>
+                </div>
+                <button type="submit" class="hdt-btn-contact hdt-oh hdt-btn-full_{{ section.settings.btn_full }} hdt-btn hdt-btn-solid hdt-inline-flex hdt-justify-center hdt-align-center hdt-relative" hdt-reveal="slide-in" timeline><span>{{ 'templates.contact.form.send' | t }}</span></button>
+                {%- if form.posted_successfully? -%}
+                  <div class="hdt-form-success hdt-form-response" hdt-reveal="slide-in" timeline>
+                    <p>{{ 'templates.contact.form.post_success' | t }}</p>
+                  </div>
+                {%- elsif form.errors -%}
+                  <div class="hdt-form-error hdt-form-response" hdt-reveal="slide-in" timeline>
+                    <p>{{ 'templates.contact.form.error_heading' | t }} {{ form.errors | default_errors }}</p>
+                  </div>
+                {%- endif -%}
+              {%- endform -%}
+            </div>
+          </div>
+    </div>
+    
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.contact.form_with_text.name",
+  "tag": "section",
+  "class": "hdt-section hdt-form-with_text",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.contact.color.label"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:sections.contact.form_with_text.heading.label",
+      "default": "Get in Touch"
+    },
+    {
+      "type": "textarea",
+      "id": "sub_heading",
+      "label": "t:sections.contact.form_with_text.sub_heading.label",
+      "default": "If you’ve got great products your making or looking to work with us then drop us a line."
+    },
+    {
+      "type": "checkbox",
+      "id": "btn_full",
+      "label": "t:sections.contact.form_with_text.btn_full",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "spacer" 
+    },
+    {
+      "type": "_socials"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.contact.form_with_text.name",
+      "category": "t:sections_categories.05_section.name"
+    }
+  ]
+}
+{% endschema %}

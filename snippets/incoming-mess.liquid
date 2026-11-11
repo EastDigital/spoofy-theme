@@ -1,0 +1,32 @@
+{%- comment -%}
+  Renders incoming-mess
+
+  Accepts:
+  - product: {Object} Product Liquid object (required)
+  - selected_variant: {Object} (required)
+  - product_form_id: {String} (required)
+  - block: {Object} (required)
+
+  Usage:
+  {%- render 'incoming-mess', product: product, block: block, product_form_id: product_form_id, selected_variant: selected_variant -%}
+{%- endcomment -%}
+{%- assign incoming_dates = product.variants | where: 'incoming' | where: 'next_incoming_date' -%}
+
+{%- if incoming_dates.size > 0 -%}
+  {%- assign format_date = selected_variant.next_incoming_date | date: block.settings.date -%}
+  {%- capture date_obj -%}
+    {%- if product.variants.size > 1 -%}
+    { {%- for variant in incoming_dates -%}
+      "{{ variant.id }}":"{{ variant.next_incoming_date | date: block.settings.date }}"{% unless forloop.last %},{% endunless -%}
+    {%- endfor -%} }
+    {%- endif -%}
+  {%- endcapture -%}
+
+<hdt-incoming-mess class="hdt-s-text hdt-font-medium" form="{{ product_form_id }}" data-obj='{{ date_obj }}' {% if product.has_only_default_variant %}is-pr-default{% endif %}{% unless selected_variant and format_date != blank %} hidden{% endunless %}>
+  {%- if product.variants.size == 1 -%}
+    {%- if selected_variant.available and selected_variant.requires_shipping %}<span>{{ 'products.product.will_not_ship_until_html' | t: date: format_date }}</span>{% else %}<span>{{ 'products.product.will_be_in_stock_after_html' | t: date: format_date }}</span>{% endif -%}
+  {%- else -%}
+    <span {% unless selected_variant.available and selected_variant.requires_shipping %}hidden{% endunless %}>{{ 'products.product.will_not_ship_until_html' | t: date: format_date }}</span><span {% if selected_variant.available %}hidden{% endif %}>{{ 'products.product.will_be_in_stock_after_html' | t: date: format_date }}</span>
+  {%- endif -%}
+</hdt-incoming-mess>
+{%- endif -%}

@@ -1,0 +1,52 @@
+{% if block.settings.menu != blank %}
+  <ul class="hdt-menu-list{% if block.settings.menu_inline %} hdt-flex hdt-flex-wrap{% endif %}" style="gap:10px" hdt-reveal="slide-in" timeline>
+    {% for link in block.settings.menu.links %}
+      <li> <a href="{{ link.url }}" class="hdt--menu_item hdt-s-text2 {{ block.settings.text_size }}"> {{ link.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% schema %}
+  {
+    "name": "Menu",
+    "class": "hdt-menu",
+    "settings": [
+      {
+        "type":"checkbox",
+        "id":"menu_inline",
+        "label":"Menu inline",
+        "default": false
+      },
+      {
+        "type": "link_list",
+        "id": "menu",
+        "default": "footer",
+        "label": "t:sections.footer.menu.settings.menu"
+      },
+      {
+        "type": "select",
+        "id": "text_size",
+        "label": "t:sections.footer.settings.text_size.label",
+        "default": "hdt-text-base",
+        "options": [
+          {
+            "value": "hdt-text-base",
+            "label": "t:sections.footer.settings.text_size.option_1"
+          },
+          {
+            "value": "hdt-text-lg",
+            "label": "t:sections.footer.settings.text_size.option_2"
+          },
+          {
+            "value": "hdt-text-xl",
+            "label": "t:sections.footer.settings.text_size.option_3"
+          }
+        ]
+      }
+    ],
+    "presets":[
+      {
+        "name":"Menu"
+      }
+    ]
+  }
+{% endschema %}

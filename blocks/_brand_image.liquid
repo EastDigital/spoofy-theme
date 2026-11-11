@@ -1,0 +1,114 @@
+{%- liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  if product.vendor == blank
+    continue
+  endif
+  assign vendor_name = product.vendor
+  assign vendor_handle = vendor_name | handle
+  if settings.use_url_collection_vendor and collections[vendor_handle] != blank
+    assign vendor_url = collections[vendor_handle].url
+  else
+    assign vendor_url = vendor_name | url_for_vendor
+  endif
+  assign brand_image = block.settings.brand_image
+-%}
+
+<div class="hdt-brand-image-wrapper" {{ block.shopify_attributes }}>
+  {%- if vendor_url != blank -%}
+    <a href="{{ vendor_url }}" class="hdt-brand-image-link hdt-inline-block" title="{{ vendor_name | escape }}">
+  {%- endif -%}
+
+  {%- if brand_image != blank -%}
+    <div class="hdt-brand-image hdt-flex hdt-align-center">
+      {%- liquid
+        assign img_width = block.settings.image_width | default: 120
+        assign img_height = img_width | divided_by: brand_image.aspect_ratio | round
+        assign img_class = 'hdt-brand-logo-img'
+        if block.settings.image_fit
+          assign img_class = img_class | append: ' hdt-object-' | append: block.settings.image_fit
+        endif
+      -%}
+      {%- capture img_sizes -%}(min-width: 768px) {{ img_width }}px, {{ img_width | divided_by: 2 }}px{%- endcapture -%}
+      {{
+        brand_image
+        | image_url: width: img_width
+        | image_tag:
+          loading: 'lazy',
+          width: img_width,
+          height: img_height,
+          class: img_class,
+          alt: vendor_name,
+          sizes: img_sizes,
+          widths: '60,80,100,120,160,200,240'
+      }}
+    </div>
+  {%- else -%}
+    <div class="hdt-brand-text hdt-flex hdt-align-center">
+      <span class="hdt-brand-name">{{ vendor_name | escape }}</span>
+    </div>
+  {%- endif -%}
+
+  {%- if vendor_url != blank -%}
+    </a>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Brand image",
+  "tag": "section",
+  "class": "hdt-brand-image-block",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Brand Image Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "brand_image",
+      "label": "Brand logo image",
+      "info": "Upload brand logo image"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 40,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo width",
+      "default": 120
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Image fit",
+      "options": [
+        {
+          "value": "contain",
+          "label": "Contain"
+        },
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "fill",
+          "label": "Fill"
+        }
+      ],
+      "default": "contain"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand image",
+      "settings": {
+        "image_width": 120
+      }
+    }
+  ]
+}
+{% endschema %}

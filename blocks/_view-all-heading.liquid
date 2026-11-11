@@ -1,0 +1,156 @@
+<div class="hdt-pagination-wrapper hdt-prs-footer hdt-nav-btns-simple hdt-pagination-view_all hdt-flex hdt-align-center hdt-justify-{{ block.settings.paginate_pos }}" style="gap:15px;" timeline hdt-reveal="slide-in" {% if block.settings.use_color_block %}color-scheme="{{ block.settings.color_scheme }}"{% endif %}>
+  {%- if section.settings.use_carousel -%}
+    <button aria-controls="Slider-{{ section.id }}" class="hdt-slider__button hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--prev {{ class }}" type="button" name="previous" style="display: flex">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 14 12" fill="none"><path d="M5.25 11.25L6.475 9.98125L3.36875 6.875H14V5.125H3.36875L6.475 2.01875L5.25 0.75L0 6L5.25 11.25Z" fill="currentColor"></path></svg>
+    </button>
+  {%- endif -%}
+  
+  <a class="hdt-view-all-btn hdt-btn hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-{{ block.settings.btn_style }} hdt-btn--size-{{ block.settings.size }} hdt-font-{{ block.settings.btn_fw }}" href="{{ block.settings.btn_url | default: block.settings.collection.url | default: routes.all_products_collection_url }}" hdt-reveal="slide-in" timeline>
+    {% assign view_all_df = 'general.pagination.view_all' | t %}
+    <span>{{ block.settings.btn_label | default: view_all_df | escape }}</span>
+  </a>
+  
+  {%- if section.settings.use_carousel -%}
+    <button aria-controls="Slider-{{ section.id }}" class="hdt-slider__button hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--next {{ class }}" type="button" name="next" style="display: flex">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 14 12" fill="none"><path d="M8.75 11.25L7.525 9.98125L10.6312 6.875H0V5.125H10.6312L7.525 2.01875L8.75 0.75L14 6L8.75 11.25Z" fill="currentColor"></path></svg>
+    </button>
+  {%- endif -%}
+</div>
+{% schema %}
+  {
+    "name": "View all",
+    "tag": null,
+    "settings": [
+      {
+        "id": "collection",
+        "type": "collection",
+        "label": "t:sections.collection_products.settings.collection"
+      },
+      /*{
+        "type": "select",
+        "id": "paginate_pos",
+        "label": "t:sections.all.pagination.paginate_pos.label",
+        "default": "center",
+        "options": [
+          {
+            "value": "start",
+            "label": "t:sections.all.pagination.paginate_pos.option_1.label"
+          },
+          {
+            "value": "center",
+            "label": "t:sections.all.pagination.paginate_pos.option_2.label"
+          },
+          {
+            "value": "end",
+            "label": "t:sections.all.pagination.paginate_pos.option_3.label"
+          },
+          {
+            "value": "top_head",
+            "label": "t:sections.all.pagination.paginate_pos.option_4.label"
+          }
+        ]
+      },*/
+      {
+        "type": "text",
+        "id": "btn_label",
+        "label": "t:sections.collection_products.settings.btn_label.label",
+        "info": "t:sections.collection_products.settings.btn_label.info",
+        "default": "View all"
+      },
+      {
+        "type": "url",
+        "id": "btn_url",
+        "label": "Url"
+      },
+      {
+        "type": "select",
+        "id": "btn_style",
+        "label": "t:sections.all.button.settings.style.label",
+        "options": [
+          {
+            "value": "solid",
+            "label": "t:sections.all.button.settings.style.options.option_1"
+          },
+          {
+            "value": "outline",
+            "label": "t:sections.all.button.settings.style.options.option_2"
+          },
+          {
+            "value": "link",
+            "label": "Link"
+          }
+        ],
+        "default": "solid"
+      },
+      {
+        "type": "select",
+        "id": "size",
+        "label": "Size",
+        "options": [
+          {
+            "value": "xs",
+            "label": "t:blocks.button.settings.button_size.options.xs"
+          },
+          {
+            "value": "s",
+            "label": "t:blocks.button.settings.button_size.options.s"
+          },
+          {
+            "value": "m",
+            "label": "t:blocks.button.settings.button_size.options.m"
+          },
+          {
+            "value": "l",
+            "label": "t:blocks.button.settings.button_size.options.l"
+          },
+          {
+            "value": "xl",
+            "label": "t:blocks.button.settings.button_size.options.xl"
+          },
+          {
+            "value": "custom hdt-btn--size-custom-1",
+            "label": "t:blocks.button.settings.button_size.options.custom_1"
+          },
+          {
+            "value": "custom custom-inline",
+            "label": "t:blocks.button.settings.button_size.options.custom_inline"
+          }
+        ],
+        "default": "m"
+      },
+      {
+        "type": "select",
+        "id": "btn_fw",
+        "label": "t:sections.all.button.settings.font_weight.label",
+        "options": [
+          {
+            "value": "light",
+            "label": "t:sections.all.button.settings.font_weight.options.option_0"
+          },
+          {
+            "value": "normal",
+            "label": "t:sections.all.button.settings.font_weight.options.option_1"
+          },
+          {
+            "value": "medium",
+            "label": "t:sections.all.button.settings.font_weight.options.option_2"
+          },
+          {
+            "value": "semibold",
+            "label": "t:sections.all.button.settings.font_weight.options.option_3"
+          },
+          {
+            "value": "bold",
+            "label": "t:sections.all.button.settings.font_weight.options.option_4"
+          }
+        ],
+        "default": "medium"
+      }
+    ],
+    "presets": [
+      {
+        "name": "View all",
+      }
+    ]
+  }
+{% endschema %}

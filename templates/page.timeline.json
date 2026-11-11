@@ -1,0 +1,398 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "heading": {
+      "type": "main-heading",
+      "blocks": {
+        "5ecb9555-19e4-433b-8817-1ccaa3a41384": {
+          "type": "1",
+          "settings": {
+            "heading": "Timeline",
+            "hidden_on_mobile": false,
+            "heading_size": "h3",
+            "text_color": "hdt-s-text",
+            "font_size_heading_lg": 50,
+            "font_size_heading_md": 30,
+            "font_size_heading": 24,
+            "font_weight_heading": 600,
+            "letter_spacing_heading": 0
+          }
+        }
+      },
+      "block_order": [
+        "5ecb9555-19e4-433b-8817-1ccaa3a41384"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/z4683181570507_46fb10fa21da971ae2af71e75431028c.webp",
+        "color_scheme": "",
+        "spacing_hd": 0,
+        "padding_top": 80,
+        "padding_bottom": 86,
+        "padding_rate": 75
+      }
+    },
+    "timeline_YmQC8X": {
+      "type": "timeline",
+      "blocks": {
+        "time_line_Vqz6ja": {
+          "type": "_time-line",
+          "settings": {
+            "time": "1980",
+            "image": "shopify://shop_images/timeline1.webp",
+            "content_position": "end"
+          },
+          "blocks": {
+            "heading_Rp7PeK": {
+              "type": "heading",
+              "settings": {
+                "heading": "<h3><strong>PHASE 1</strong></h3>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "heading_size": "base",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 50,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            "spacer_XJ9Dwr": {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 8,
+                "space_md": 6,
+                "space": 6
+              }
+            },
+            "heading_KeCEzH": {
+              "type": "heading",
+              "settings": {
+                "heading": "<h3>Inception and Brand Establishment</h3>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "heading_size": "h3",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 50,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            "spacer_KW3rXL": {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 10,
+                "space_md": 10,
+                "space": 10
+              }
+            },
+            "text_YqDhYY": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Inception, in the context of brand establishment, refers to the initial phase of creating and introducing a brand to the market. It involves laying down the foundational elements that will define the brand's identity, values, and positioning in the minds of consumers.</p>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "text_size": "base",
+                "text_color": "hdt-text-secondary",
+                "font_size_text_lg": 16,
+                "font_size_text_md": 14,
+                "font_size_text": 14,
+                "font_weight_text": 400,
+                "letter_spacing_text": 0
+              }
+            }
+          },
+          "block_order": [
+            "heading_Rp7PeK",
+            "spacer_XJ9Dwr",
+            "heading_KeCEzH",
+            "spacer_KW3rXL",
+            "text_YqDhYY"
+          ]
+        },
+        "time_line_Rd9pWc": {
+          "type": "_time-line",
+          "settings": {
+            "time": "2000",
+            "image": "shopify://shop_images/timeline2.webp",
+            "content_position": "start"
+          },
+          "blocks": {
+            "heading_cTJJDR": {
+              "type": "heading",
+              "settings": {
+                "heading": "<h3><strong>PHASE 2</strong></h3>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "heading_size": "base",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 50,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            "spacer_pMFAnq": {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 8,
+                "space_md": 6,
+                "space": 6
+              }
+            },
+            "heading_RAHyG9": {
+              "type": "heading",
+              "settings": {
+                "heading": "<h3>Debut Collection and Market Entry</h3>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "heading_size": "h3",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 50,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            "spacer_CCWnkc": {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 10,
+                "space_md": 10,
+                "space": 10
+              }
+            },
+            "text_APmhWp": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Entering the market with a debut collection requires careful planning, creativity, and perseverance. By following these steps and staying true to your vision, you can increase your chances of success in the fashion industry.</p>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "text_size": "base",
+                "text_color": "hdt-text-secondary",
+                "font_size_text_lg": 16,
+                "font_size_text_md": 14,
+                "font_size_text": 14,
+                "font_weight_text": 400,
+                "letter_spacing_text": 0
+              }
+            }
+          },
+          "block_order": [
+            "heading_cTJJDR",
+            "spacer_pMFAnq",
+            "heading_RAHyG9",
+            "spacer_CCWnkc",
+            "text_APmhWp"
+          ]
+        },
+        "time_line_TKjidP": {
+          "type": "_time-line",
+          "settings": {
+            "time": "2010",
+            "image": "shopify://shop_images/timeline3.webp",
+            "content_position": "end"
+          },
+          "blocks": {
+            "heading_37eTtz": {
+              "type": "heading",
+              "settings": {
+                "heading": "<h3><strong>PHASE 3</strong></h3>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "heading_size": "base",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 50,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            "spacer_pxJbAq": {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 8,
+                "space_md": 6,
+                "space": 6
+              }
+            },
+            "heading_CRTPw6": {
+              "type": "heading",
+              "settings": {
+                "heading": "<h3>Growth and Recognition</h3>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "heading_size": "h3",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 50,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            "spacer_kXyEQJ": {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 10,
+                "space_md": 10,
+                "space": 10
+              }
+            },
+            "text_M4wxeN": {
+              "type": "text",
+              "settings": {
+                "text": "<p>During the Growth and Recognition phase of a brand's journey, several key elements come into play to propel its expansion and solidify its position in the market. Here's an outline of what typically occurs during this phase</p>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "text_size": "base",
+                "text_color": "hdt-text-secondary",
+                "font_size_text_lg": 16,
+                "font_size_text_md": 14,
+                "font_size_text": 14,
+                "font_weight_text": 400,
+                "letter_spacing_text": 0
+              }
+            }
+          },
+          "block_order": [
+            "heading_37eTtz",
+            "spacer_pxJbAq",
+            "heading_CRTPw6",
+            "spacer_kXyEQJ",
+            "text_M4wxeN"
+          ]
+        },
+        "time_line_R3DKTr": {
+          "type": "_time-line",
+          "settings": {
+            "time": "2025",
+            "image": "shopify://shop_images/timeline4.webp",
+            "content_position": "start"
+          },
+          "blocks": {
+            "heading_pKpV6i": {
+              "type": "heading",
+              "settings": {
+                "heading": "<h3><strong>PHASE 4</strong></h3>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "heading_size": "base",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 50,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            "spacer_Ey7xFd": {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 8,
+                "space_md": 6,
+                "space": 6
+              }
+            },
+            "heading_NDQwXR": {
+              "type": "heading",
+              "settings": {
+                "heading": "<h3>Sustainable Initiatives</h3>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "heading_size": "h3",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 50,
+                "font_size_heading_md": 30,
+                "font_size_heading": 24,
+                "font_weight_heading": 600,
+                "letter_spacing_heading": 0
+              }
+            },
+            "spacer_CbJX8c": {
+              "type": "spacer",
+              "settings": {
+                "direction": false,
+                "space_lg": 10,
+                "space_md": 10,
+                "space": 10
+              }
+            },
+            "text_gyYD6P": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Sustainable initiatives play a crucial role in the growth and development of a brand, especially in today's environmentally conscious and socially responsible market landscape. Here are some examples of sustainable initiatives that brands may undertake</p>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "text_size": "base",
+                "text_color": "hdt-text-secondary",
+                "font_size_text_lg": 16,
+                "font_size_text_md": 14,
+                "font_size_text": 14,
+                "font_weight_text": 400,
+                "letter_spacing_text": 0
+              }
+            }
+          },
+          "block_order": [
+            "heading_pKpV6i",
+            "spacer_Ey7xFd",
+            "heading_NDQwXR",
+            "spacer_CbJX8c",
+            "text_gyYD6P"
+          ]
+        }
+      },
+      "block_order": [
+        "time_line_Vqz6ja",
+        "time_line_Rd9pWc",
+        "time_line_TKjidP",
+        "time_line_R3DKTr"
+      ],
+      "settings": {
+        "content_width": 1170,
+        "line_style": "dotted",
+        "section_fullwidth": false,
+        "color_scheme": "",
+        "padding_top": 85,
+        "padding_bottom": 70,
+        "padding_rate": 75
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "section_fullwidth": false,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 52,
+        "padding_rate": 75
+      }
+    }
+  },
+  "order": [
+    "heading",
+    "timeline_YmQC8X",
+    "main"
+  ]
+}

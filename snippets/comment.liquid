@@ -1,0 +1,9 @@
+{%- assign gavatar = comment.email | remove: ' ' | strip_newlines | downcase | md5 -%}
+<div class="hdt-flex hdt-comment-metas">
+	<div class=" hdt-col_avatar_cm"><img alt="hdt-avatar" width= "80" height="80" class="hdt-radius-sm hdt-oh" src="https://www.gravatar.com/avatar/{{ gavatar }}?s=80&d=mm&r=g" loading="lazy" srcset="https://www.gravatar.com/avatar/{{ gavatar }}?s=80&d=mm&r=g"><span class="lazyloadhdt-loader"></span></div>
+	<div class="hdt-comment-info hdt-row-flex">
+		<h5 class="hdt-comment__author hdt-h6 hdt-s-text hdt-font-medium">{{ comment.author }}</h5>
+		<div class="hdt-comment__content hdt-s-text2 hdt-text-base hdt-font-normal">{{ comment.content }}</div>
+		<div class="hdt-comment__date hdt-s-text2 hdt-text-base">{{ comment.created_at | date: '%B %e, %Y at %R%P' }}</div>
+	</div>
+</div>	

@@ -1,0 +1,20 @@
+
+{%- liquid
+  if settings.social_facebook_link == blank and settings.social_twitter_link == blank and settings.social_instagram_link == blank and settings.social_threads_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_pinterest_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank and settings.social_snapchat_link == blank and settings.social_whatsapp_link == blank and settings.social_linked_in_link == blank and settings.social_wechat_link == blank and settings.social_reddit_link == blank and settings.social_line_link == blank and settings.social_spotify_link == blank and settings.social_discord_link == blank and settings.social_kick_link == blank and settings.social_twitch_link == blank
+    assign use_social = false 
+  endif
+-%}
+{%- unless use_social -%}
+  {{ 'hdt-icon-social.css' | asset_url | stylesheet_tag }}
+  {%- assign socials = "social_facebook_link social_twitter_link social_instagram_link social_threads_link social_youtube_link social_tiktok_link social_pinterest_link social_tumblr_link social_vimeo_link social_snapchat_link social_whatsapp_link social_linked_in_link social_wechat_link social_reddit_link social_line_link social_spotify_link social_discord_link social_kick_link social_twitch_link" | split: ' ' -%}
+  {%- assign socials_icon = "facebook twitter instagram threads youtube tiktok pinterest tumblr vimeo snapchat whatsapp linked_in wechat reddit line spotify discord kick twitch" | split: ' ' -%}
+  <ul class="hdt-socials__list hdt-socials__style-{{ socials_style }} hdt-socials__size-{{ socials_size }}"> 
+    {%- for social_link in socials -%} 
+      {%- if settings[social_link] != blank -%}
+        <li class="hdt-socials__item hdt-inline-block">
+          <a href="{{ settings[social_link] | escape }}" class="hdt-social-{{ socials_icon[forloop.index0] }} hdt-flex hdt-align-center hdt-justify-center">{%- render 'icon_socials', icon_name: socials_icon[forloop.index0] -%}<span class="sr-only">{{ 'general.social.links.' | append: socials_icon[forloop.index0] | t }}</span></a>
+        </li>
+      {%- endif -%} 
+    {%- endfor -%}
+  </ul>
+{%- endunless -%}

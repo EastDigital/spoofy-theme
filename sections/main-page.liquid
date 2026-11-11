@@ -1,0 +1,91 @@
+<!-- sections/main-page.liquid -->
+{% style %}
+  #shopify-section-{{ section.id }}{
+    --section-pt: {{ section.settings.padding_top }}px;
+    --section-pb: {{ section.settings.padding_bottom }}px; 
+    --section-prate: {{ section.settings.padding_rate }};
+  }
+{% endstyle %}
+<div timeline hdt-reveal="slide-in" class="hdt-main-page hdt-relative hdt-s-gradient" color-scheme="{{ section.settings.color_scheme }}">
+  <div class="hdt-container{%- if section.settings.section_fullwidth -%}-full{% endif %} hdt-section-spacing">
+    {%- if section.settings.image_bg != blank -%}
+      <div class="hdt-main-page_imagebg hdt-h-full hdt-w-full hdt-absolute hdt-left-0 hdt-top-0">
+        {{ section.settings.image_bg | image_url: width: section.settings.image_bg.width | image_tag: loading: 'lazy', width: section.settings.image_bg.width, height: section.settings.image_bg.height, class: 'hdt-w-full hdt-h-full hdt-object-cover', sizes: "100vw", widths: "375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840" }}
+      </div>
+    {%- endif -%}
+    {%- if page.content != blank -%}
+      <div class="hdt-main-area hdt-rte hdt-relative">
+      {{ page.content }}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.main-page.name",
+  "class": "hdt-section hdt-section-main-page",
+  "tag": "section",
+  "enabled_on": {
+    "templates": [
+      "page"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "section_fullwidth",
+      "label": "t:sections.all.section_fullwidth",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_bg",
+      "label": "t:sections.main-page.image.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 100
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.main-page.name"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,69 @@
+<div class="hdt-col-slider hdt-g-col hdt-g-col-12 lg:hdt-g-col-8">
+  <hdt-slideshow {% if section.settings.is_fade %}isfade {% endif %}id="Slider-{{ section.id }}" autoheight class="hdt-slider hdt-relative hdt-slideshow hdt-slides-1 hdt-relative {% unless section.settings.full_width %}{{ block.settings.rounded }}{% endunless %} hdt-oh" config='{"loop": {{ section.settings.loop }}, "navUI": {{ section.settings.navUI }}, "dotUI": {{ section.settings.dotUI }}, "autoPlay": {{ section.settings.auto_play | times: 1000 }}, "pauseOnHover": {{ section.settings.pause_hover }}, "align": "center", "classNames": true, "autoHeight": true, "slidesToScroll": 1 }'>
+    <div class="hdt-slider__viewport md:hdt-height--{{ section.settings.image_height }} hdt-height--{{ section.settings.image_height_mb }}">
+      <div class="hdt-slider__container">
+        {% content_for "blocks" %}
+      </div>
+    </div>
+    {%- if section.settings.navUI == true -%}
+      <div class="hdt-prev-next_wrap hdt-nav-{{ section.settings.nav_des }} hdt-full-width-link hdt-container-full hdt-pe-none hdt-flex hdt-justify-between hdt-align-center" color-scheme="{{ section.settings.color_scheme }}">
+        <button aria-controls="Slider-{{ section.id }}" class="hdt-slider__button hdt-slider__button--prev hdt-inline-flex hdt-align-center hdt-justify-center{% if section.settings.nav_rounded_full %} hdt-radius-full{% endif %} hdt-absolute hdt-left-0" name="previous"><svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="currentColor">
+          <path d="M5.5 11L0 5.5L5.5 0L6.47625 0.97625L1.9525 5.5L6.47625 10.0238L5.5 11Z"/>
+        </svg></button>
+        <button aria-controls="Slider-{{ section.id }}" class="hdt-slider__button hdt-slider__button--next hdt-inline-flex hdt-align-center hdt-justify-center{% if section.settings.nav_rounded_full %} hdt-radius-full{% endif %} hdt-absolute hdt-right-0" name="next"><svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="currentColor">
+          <path d="M1.5 11L7 5.5L1.5 0L0.52375 0.97625L5.0475 5.5L0.52375 10.0238L1.5 11Z"/>
+        </svg></button>
+      </div>
+    {%- endif -%}
+    {%- if section.settings.dotUI == true -%}
+      <div hdt-slider-dots aria-controls="Slider-{{ section.id }}" class="hdt-slider__dots hdt-slideshow-dots {% if section.settings.dot_vertical == false and section.settings.full_width == true %}hdt-container {% else %} hdt-px-15 md:hdt-px-30 lg:hdt-px-40 {% endif %} {% if section.settings.dot_vertical %} hdt-dots-vertical{% endif %} hdt-left-0 hdt-right-0 hdt-slider__dots-{{ section.settings.dot_style }} hdt-pe-none hdt-inline-flex hdt-justify-{{ section.settings.dot_align }} hdt-absolute hdt-bottom-0" color-scheme="{{ section.settings.color_scheme }}" style="--dot-space:{{ section.settings.dot_space }}px;"></div>
+    {%- endif -%}
+  </hdt-slideshow>
+</div>
+{% schema %}
+  {
+    "name": "Slide Wrap",
+    "tag": null,
+    "settings": [
+      {
+        "type": "select",
+        "id": "rounded",
+        "label": "Rounded",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:none"
+          },
+          {
+            "value": "hdt-radius-xs",
+            "label": "t:settings_schema.typography.settings.font_size.xs"
+          },
+          {
+            "value": "hdt-radius-sm",
+            "label": "t:settings_schema.typography.settings.font_size.sm"
+          },
+          {
+            "value": "hdt-radius",
+            "label": "t:settings_schema.typography.settings.font_size.base"
+          },
+          {
+            "value": "hdt-radius-lg",
+            "label": "t:settings_schema.typography.settings.font_size.lg"
+          },
+          {
+            "value": "hdt-radius-full",
+            "label": "Full"
+          }
+        ],
+        "default": "none",
+        "info": "Not work for full width",
+        "visible_if": "{{ section.settings.full_width == false }}"
+      },
+    ],
+    "blocks": [
+      {
+        "type": "_slide-item"
+      }
+    ]
+  }
+{% endschema %}

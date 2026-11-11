@@ -1,0 +1,29 @@
+<!-- snippets/pin-product.liquid -->
+
+{%- liquid
+  assign pin_id = 'pin-id-' | append: index | append: block.id | append: product.id
+  assign attr = 'close-dialog="' | append: pin_id | append: '"'
+-%}
+<div class="hdt-pin-item hdt-absolute" style="--top-pos:{{ pos_top }}%;--left-pos:{{ pos_left }}%;">
+  <button class="hdt-pin_btn hdt-radius-full" aria-controls="{{ pin_id }}"><span></span></button>
+  <hdt-popover class="hdt-popover hdt-hidden hdt-lookbook_pin" id="{{ pin_id }}" placement="{{ placement }}" color-scheme="{{ settings.color_scheme_dialog }}" config='{"appendToBody": true}'>
+    <div class="hdt-pr_wrap hdt-flex hdt-product hdt-align-center">
+      <div class="hdt-pr_thumb hdt-oh hdt-radius-xs">
+        <a href="{{ product.url }}">
+          {%- if product.featured_media -%}
+            {{ product.featured_media | image_url: width: product.featured_media.width | image_tag: loading: 'lazy', width: product.featured_media.width, height: product.featured_media.height, class: 'hdt-h-full hdt-w-full hdt-object-cover hdt-object-center', sizes: '(min-width: 788px) 120px, 80px', widths: '60,80,120,140,180,240' }}
+          {%- else -%}
+            
+          {%- endif -%}
+        </a>
+      </div>
+      <div class="hdt-pr_content hdt-truncate hdt-text-start">
+        <a href="{{ product.url }}" class="hdt-text-lg hdt-pr_title hdt-product-title hdt-font-normal">{{ product.title }}</a>
+        <div class="hdt-pr_price">{%- render 'card-price', product: product, show_volume_note: true, price_class: 'hdt-font-semibold' -%}</div>
+      </div>
+      <div class="hdt-pr_btn hdt-flex hdt-align-center hdt-justify-center">
+        {%- render 'btn-quick-view', product: product, section_id: block.id, class: 'hdt-quickview hdt-lookbook_qv hdt-radius-full hdt-flex hdt-align-center hdt-justify-center', placement: 'top', attr: attr -%}
+      </div>
+    </div>
+  </hdt-popover>
+</div>

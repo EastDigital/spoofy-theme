@@ -1,0 +1,63 @@
+
+{%- liquid
+  unless form_id
+    assign form_id = 'newsletter'
+  endunless
+  unless s_id
+    assign s_id = section.id    
+  endunless
+-%}
+ {% comment %} {%- capture conditions_mail -%}
+ <div class="hdt-clearfix"></div>
+ {%- assign page_url = pages[settings.link_mail].url -%}
+ <div class="hdt-agree-email__checkbox hdt-flex hdt-justify-center hdt-align-center hdt-relative hdt-inline-block {{ margin }}">
+    <div class="hdt-checkbox-email-wrapp hdt-inline-grid hdt-relative hdt-oh">
+      <input type="checkbox" data-agreeMail-checkbox id="hdt-agree_{{ form_id }}" name="hdt-agree_{{ form_id }}" required="required" class="hdt-grid-1x1">
+      <svg class="hdt-grid-1x1 hdt-pe-none" width="12" height="12" viewBox="0 0 24 24"><path d="M9 20l-7-7 3-3 4 4L19 4l3 3z"></path></svg>
+    </div>
+    <label for="hdt-agree_{{ form_id }}">{% if page_url != blank %}{{ 'sections.agree_mail.link_conditions_html' | t: link: page_url }}{% else %}{{ 'sections.agree_mail.link_conditions_emty' | t }}{% endif %}</label>
+  </div>
+{%- endcapture -%}   {% endcomment %}
+{% if button_lb == blank %}
+  {% assign button_lb = 'sections.newsletter_form.submit' | t %}
+{% endif %}
+{%- assign form_id = 'hdt-form-' | append: form_id -%}
+<div class="hdt-newsletter-parent hdt-w-full hdt-inline-block">
+  {%- form 'customer', class: 'hdt-pr hdt-z-100 hdt-newsletter__form', id: form_id, data-form-mail-agree: '', data-id: s_id -%}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <div class="hdt-newsletter__fields">
+       <div class="hdt-newsletter__inner hdt-flex hdt-oh hdt-justify-center {{ attr }}">
+          <div class="{{ class_email }} is--col-email hdt-flex">
+           <input type="email" name="contact[email]" placeholder="{{ 'sections.newsletter_form.email_placeholder' | t }}"  value="{% if customer %}{{ customer.email }}{% endif %}" class="{{ class_ip }} hdt-newsletter__email hdt-flex hdt-align-center hdt-input" required="required">
+         </div>
+          <div class="{{ class_btn }} is--col-btn hdt-b hdt-flex ">
+            <button {{ aria_label_btn }} data-agreeMail-btn type="submit" class="hdt-w-100 hdt-newsletter__submit hdt-truncate hdt-btn-loading__svg hdt-flex hdt-align-center hdt-btn hdt-btn-solid hdt-button hdt-font-{{ btn_fw }} hdt-oh hdt-relative">
+              <span class="hdt-newsletter__text">{{ button_lb }}</span>
+              {%- if show_icon == true -%}
+                <span class="hdt-loading__spinner hdt-dn">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M0.861539 8L0 7.13846L5.90769 1.23077H0.615385V0H8V7.38462H6.76923V2.09231L0.861539 8Z" /></svg>
+                </span>
+              {%- endif -%}
+            </button>
+          </div>
+       </div>
+        {% comment %} {{- conditions_mail -}}   {% endcomment %}
+        <div class="hdt-agree_email ">
+          {% if agree_form == true %}
+            <hdt-block-required detect="checked" event="change" class="hdt-newsletter-checkbox hdt-flex hdt-align-center" {{ block.shopify_attributes }}>
+              <div class="hdt-checkbox-wrapp hdt-inline-grid hdt-relative hdt-oh">
+                <input form="{{ form_id }}" class="hdt-grid-1x1" type="checkbox" id="{{ form_id }}_agree" required name="agree_checkbox">
+              </div>
+              <label for="{{ form_id }}_agree">{{ content }}</label>
+            </hdt-block-required>
+          {% endif %}
+        </div>
+    </div>
+    <div data-hdt-response-form data-new-response-form class="hdt-newsletter__response">
+      {%- if form.posted_successfully? -%}
+      <div class="hdt-newsletter__success"><svg width="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor"><path d="M443.3 100.7C449.6 106.9 449.6 117.1 443.3 123.3L171.3 395.3C165.1 401.6 154.9 401.6 148.7 395.3L4.686 251.3C-1.562 245.1-1.562 234.9 4.686 228.7C10.93 222.4 21.06 222.4 27.31 228.7L160 361.4L420.7 100.7C426.9 94.44 437.1 94.44 443.3 100.7H443.3z"/></svg>{{ 'sections.newsletter_form.confirmation' | t }}</div>
+      {%- elsif form.errors -%}
+      <div class="hdt-newsletter__error">{{ form.errors | default_errors }}</div>{%- endif -%}
+    </div>
+  {%- endform -%}
+</div>

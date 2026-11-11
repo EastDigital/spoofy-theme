@@ -1,0 +1,86 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "heading": {
+      "type": "heading-collection",
+      "blocks": {
+        "9a1347b4-da62-490d-9fd4-427a03686ac2": {
+          "type": "heading",
+          "settings": {
+            "heading": "<p>Your wishlist</p>",
+            "hidden_br_mobile": false,
+            "hidden_on_mobile": false,
+            "heading_size": "h3",
+            "text_color": "hdt-s-text",
+            "font_size_heading_lg": 50,
+            "font_size_heading_md": 30,
+            "font_size_heading": 24,
+            "font_weight_heading": 600,
+            "letter_spacing_heading": 0
+          }
+        }
+      },
+      "block_order": [
+        "9a1347b4-da62-490d-9fd4-427a03686ac2"
+      ],
+      "settings": {
+        "spacing_hd": 10,
+        "image": "shopify://shop_images/z4683181570507_46fb10fa21da971ae2af71e75431028c_f52f84e6-035f-4b0a-a139-3f31ae2a7614.webp",
+        "color_scheme": "",
+        "padding_top": 83,
+        "padding_bottom": 83,
+        "padding_rate": 75
+      }
+    },
+    "main": {
+      "type": "main-wishlist",
+      "blocks": {
+        "a87a8e46-14c7-424f-9903-f7c75cdb6a7b": {
+          "type": "btn",
+          "settings": {
+            "title": "Return to shop",
+            "url": "shopify://collections",
+            "btn_style": "solid",
+            "btn_fw": "semibold",
+            "btn_icon": "none"
+          }
+        }
+      },
+      "block_order": [
+        "a87a8e46-14c7-424f-9903-f7c75cdb6a7b"
+      ],
+      "settings": {
+        "product_list": [],
+        "enable_num_cols_selector": true,
+        "image_ratio": "asos",
+        "image_size": true,
+        "show_vendor": false,
+        "pr_border": "none",
+        "products_count": 12,
+        "col_dk": "4",
+        "col_tb": "3",
+        "col_mb": "2",
+        "pagination_type": "links",
+        "paginate_pos": "center",
+        "dis_pagination": 60,
+        "section_fullwidth": false,
+        "color_scheme": "scheme-2",
+        "padding_top": 30,
+        "padding_bottom": 60,
+        "padding_rate": 75
+      }
+    }
+  },
+  "order": [
+    "heading",
+    "main"
+  ]
+}

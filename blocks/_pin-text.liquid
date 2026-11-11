@@ -1,0 +1,194 @@
+<!-- blocks/pin-text.liquid -->
+{%- liquid
+  assign pin_id = 'pin-id-' | append: block.id | append: product.id
+-%}
+{% style %}
+#{{ block.id }}{
+  top: {{ block.settings.top }}%;
+  left: {{ block.settings.left }}%;
+  transform: translateY(-{{ block.settings.top }}%) translateX(-{{ block.settings.left }}%);
+}
+{% endstyle %}
+<div id="{{ block.id }}" class="hdt-pin-item hdt-absolute" {{ block.shopify_attributes }} color-scheme="{{ block.settings.color_scheme }}">
+  <button class="hdt-pin_btn hdt-radius-full hdt-pin-size-{{ block.settings.pin_size }} hdt-pin-type-{{ block.settings.pin_type }}" aria-controls="{{ pin_id }}">
+    <span class="hdt-zoompin"></span>
+    {% if block.settings.pin_type == 'showtext' and block.settings.text != blank %}
+      <span class="hdt-pin-text">{{ block.settings.text }}</span> 
+    {% else %}
+      <span class="hdt-pin-icon"></span>
+    {% endif %}
+  </button>
+  <hdt-append-body -desktop>
+    <hdt-popover data-change="Slider-{{ section.id }}" data-auto-close="desktop" placement="{{ block.settings.placement }}" color-scheme="{{ settings.color_scheme_dialog }}">
+      <dialog id="{{ pin_id }}" class="hdt-popover hdt-lookbook_pin hdt-lookbook_pintext" scroll-lock>
+        <div class="hdt-popover__arrow"></div>
+        <div class="hdt-popover__body">
+          <div class="hdt-popover__inner hdt-current-scrollbar hdt-pin-text">
+            <div class="hdt-pin-text">
+              {% if block.settings.title != blank %}
+                <h5 class="hdt-pin-title hdt-s-text hdt-text-lg hdt-font-medium hdt-px-15 hdt-p-10">{{ block.settings.title }}</h5>
+              {% endif %}
+              {% if block.settings.content != blank %}
+                <div class="hdt-rte hdt-s-text2 hdt-p-15 hdt-pin-content">
+                  {{ block.settings.content }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </dialog>
+    </hdt-popover>
+    </hdt-append-body>
+</div>
+{% schema %}
+  {
+    "name": "t:blocks.pin_text.name",
+    "tag": null,
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label"
+      },
+      {
+        "type": "select",
+        "id": "placement",
+        "label": "t:sections.all.placement.label",
+        "options": [
+          {
+            "value": "top-start",
+            "label": "t:sections.all.placement.options.top-start"
+          },
+          {
+            "value": "top",
+            "label": "t:sections.all.placement.options.top"
+          },
+          {
+            "value": "top-end",
+            "label": "t:sections.all.placement.options.top-end"
+          },
+          {
+            "value": "bottom-start",
+            "label": "t:sections.all.placement.options.bottom-start"
+          },
+          {
+            "value": "bottom",
+            "label": "t:sections.all.placement.options.bottom"
+          },
+          {
+            "value": "bottom-end",
+            "label": "t:sections.all.placement.options.bottom-end"
+          },
+          {
+            "value": "left-start",
+            "label": "t:sections.all.placement.options.left-start"
+          },
+          {
+            "value": "left",
+            "label": "t:sections.all.placement.options.left"
+          },
+          {
+            "value": "left-end",
+            "label": "t:sections.all.placement.options.left-end"
+          },
+          {
+            "value": "right-start",
+            "label": "t:sections.all.placement.options.right-start"
+          },
+          {
+            "value": "right",
+            "label": "t:sections.all.placement.options.right"
+          },
+          {
+            "value": "right-end",
+            "label": "t:sections.all.placement.options.right-end"
+          }
+        ],
+        "default": "top"
+      },
+      {
+        "type": "range",
+        "id": "left",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:blocks.pin_product.settings.left.label",
+        "default": 50
+      },
+      {
+        "type": "range",
+        "id": "top",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:blocks.pin_product.settings.top.label",
+        "default": 50
+      },
+      {
+        "type": "select",
+        "id": "pin_size",
+        "label": "t:blocks.pin_product.settings.pin_size.label",
+        "options": [
+          {
+            "value": "small",
+            "label": "t:blocks.pin_product.settings.pin_size.options.small"
+          },
+          {
+            "value": "medium",
+            "label": "t:blocks.pin_product.settings.pin_size.options.medium"
+          },
+          {
+            "value": "large",
+            "label": "t:blocks.pin_product.settings.pin_size.options.large"
+          }
+        ],
+        "default": "medium"
+      },
+      {
+        "type": "select",
+        "id": "pin_type",
+        "label": "t:blocks.pin_product.settings.pin_type.label",
+        "options": [
+          {
+            "value": "1",
+            "label": "t:blocks.pin_product.settings.pin_type.options.icon_1"
+          },
+          {
+            "value": "2",
+            "label": "t:blocks.pin_product.settings.pin_type.options.icon_2"
+          },
+          {
+            "value": "showtext",
+            "label": "t:blocks.pin_product.settings.pin_type.options.show_text"
+          }
+        ],
+        "default": "1"
+      },
+      {
+        "type": "text",
+        "id": "text",
+        "label": "t:blocks.pin_product.settings.text.label",
+        "default": "$59"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "t:blocks.pin_text.settings.title.label",
+        "default": "01 - Water Resistance"
+      },
+      {
+        "type": "richtext",
+        "id": "content",
+        "label": "t:blocks.pin_text.settings.content.label",
+        "default": "<p>With groundbreaking water resistant capabilities, The Mission has the highest waterproof rating of any smartwatch on the market.</p>"
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:blocks.pin_text.name"
+      }
+    ]
+  }
+{% endschema %}

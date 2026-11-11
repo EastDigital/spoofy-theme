@@ -1,0 +1,17 @@
+{%- liquid
+  assign horizontal_alignment = settings.horizontal_alignment
+  assign vertical_alignment = settings.vertical_alignment
+  
+  unless settings.content_direction == 'row'
+    assign horizontal_alignment = settings.horizontal_alignment_flex_direction_column
+    assign vertical_alignment = settings.vertical_alignment_flex_direction_column
+  endunless
+
+  assign vertical_alignment_mobile = vertical_alignment
+-%}
+--flex-direction: {{ settings.content_direction | default: 'column' }};
+--flex-wrap:nowrap;
+--gap: {{ settings.gap }}px;
+--horizontal-alignment: {{ horizontal_alignment }};
+--vertical-alignment: {{ vertical_alignment }};
+--vertical-alignment-mobile: {{ vertical_alignment_mobile }};

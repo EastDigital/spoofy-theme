@@ -1,0 +1,20 @@
+{% unless nav_id %}
+  {% assign nav_id = section.id %}
+{% endunless %}
+{% unless nav_icon %}
+  {%- assign nav_icon = block.settings.nav_icon -%}
+{% endunless %}
+<button aria-controls="Slider-{{ nav_id }}" class="hdt-slider__button hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--prev {{ class }}" type="button" name="previous">
+  {%- if nav_icon == 'chrvon' -%}
+    <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M5.5 11L0 5.5L5.5 0L6.47625 0.97625L1.9525 5.5L6.47625 10.0238L5.5 11Z" fill="currentColor"/></svg>
+  {%- else -%}
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 14 12" fill="none"><path d="M5.25 11.25L6.475 9.98125L3.36875 6.875H14V5.125H3.36875L6.475 2.01875L5.25 0.75L0 6L5.25 11.25Z" fill="currentColor"></path></svg>
+  {%- endif -%}
+</button>
+<button aria-controls="Slider-{{ nav_id }}" class="hdt-slider__button hdt-inline-flex hdt-align-center hdt-justify-center hdt-slider__button--next {{ class }}" type="button" name="next">
+  {%- if nav_icon == 'chrvon' -%}
+    <svg xmlns="http://www.w3.org/2000/svg" width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1.5 11L7 5.5L1.5 0L0.52375 0.97625L5.0475 5.5L0.52375 10.0238L1.5 11Z" fill="currentColor"/></svg>
+  {%- else -%}
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="12" viewBox="0 0 14 12" fill="none"><path d="M8.75 11.25L7.525 9.98125L10.6312 6.875H0V5.125H10.6312L7.525 2.01875L8.75 0.75L14 6L8.75 11.25Z" fill="currentColor"></path></svg>
+  {%- endif -%}
+</button>

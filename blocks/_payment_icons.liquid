@@ -1,0 +1,48 @@
+<div class="hdt-payments-wrap">
+  {%- assign arr = block.settings.svg | remove: ' ' | split: "," -%}
+  <div class="hdt-pr hdt-row-flex" style="--height-img:{{ block.settings.height }}px; gap:10px;">
+    {%- for img in arr -%}
+      {%- if img contains 'cust4__' -%}
+        {%- assign getIMG = img | remove_first: "cust4__" -%}
+        {%- assign image = images[getIMG] -%}
+        {%- if image == blank %}{% continue %}{% endif -%}
+        <img loading="lazy" class="lazyloadhdt hdt-icon-payment" src="https://cdn.shopify.com/s/assets/payment_icons/generic-dfdcaf09b6731ca14dd7441354c0ad8bc934184eb15ae1fda6a6b9e307675485.svg" data-src="{{ image | image_url: width: 100 }}" width="{{ image.width }}" height="{{ image.height }}"  alt="{{ image.alt | escape }}" />
+      {%- else -%}
+        {% comment %} <img loading="lazy" class="lazyloadhdt" src="{{ img | payment_type_img_url }}" width="{{ img.width }}" height="{{ img.height }}"  alt="{{ img | replace: '_', ' ' }}" /> {% endcomment %}
+        {{ img | payment_type_svg_tag: class: 'hdt-icon-payment hdt-inline-block' }}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+<style>
+.hdt-payments-wrap .hdt-icon-payment{
+ height:var(--height-img);
+}
+</style>
+{% schema %}
+  {
+    "name": "Payment icons",
+    "class": "hdt-payment-icons",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "svg",
+        "label": "t:sections.footer.settings.svg.label",
+        "default": "amazon_payments,american_express,apple_pay,bitcoin",
+        "info": "t:sections.footer.settings.svg.info"
+      },
+      {
+        "type": "number",
+        "id": "height",
+        "label": "t:sections.footer.settings.height",
+        "default": 30,
+        "visible_if": "{{ block.settings.svg != blank }}"
+      }
+    ],
+    "presets":[
+      {
+        "name":"Payment icon"
+      }
+    ]
+  }
+{% endschema %}

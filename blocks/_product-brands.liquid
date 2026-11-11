@@ -1,0 +1,31 @@
+{%- liquid
+	unless product	
+		assign product = section.settings.product
+	endunless
+	assign image = block.settings.image
+	assign pr_vendor_url = product.vendor | url_for_vendor
+	if settings.use_url_collection_vendor
+		assign pr_vendor_handle = product.vendor | handle
+		assign collection_vendor = collections[pr_vendor_handle]
+		assign pr_vendor_url = collection_vendor.url | default: pr_vendor_url
+	endif
+-%}
+<div class="hdt-product-info__item hdt-product__vendor{% if image != blank %} hdt-has-img__vendor{% endif %}" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+	{{ 'products.product.vendor' | t }}
+	<a href="{{ pr_vendor_url }}" class="hdt-inline-block">
+		{{ product.vendor | escape }}
+	</a>
+</div>
+{% schema %}
+	{
+		"name": "t:sections.main-product.blocks.vendor.name",
+		"tag": null,
+    "settings": [
+    ],
+		"presets": [
+			{ 
+				"name": "t:sections.main-product.blocks.vendor.name",
+			}
+		]
+	}
+{% endschema %}

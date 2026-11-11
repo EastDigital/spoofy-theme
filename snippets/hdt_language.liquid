@@ -1,0 +1,12 @@
+{%- liquid
+  assign current_locale = request.locale
+  assign current_locale_iso_code = current_locale.iso_code 
+-%}
+<div data-locale-wrap class="hdt-languages hdt-inline-block">
+  <button aria-controls="popover-languages">
+    <span class="hdt-inline-block">
+      <span data-flagshdt="{{ sz }}" data-current class="hdt-inline-block lazyloadhdt flagshdt-{{ current_locale_iso_code }}">{% if settings.show_short_label %}{{ current_locale_iso_code | upcase }}{% else %}{{ current_locale.endonym_name }}{% endif %}</span>
+    </span>
+    <svg class="hdt-icon-select-arrow hdt-inline-block" role="presentation" viewBox="0 0 19 12" width="10"><polyline fill="none" stroke="currentColor" points="17 2 9.5 10 2 2" fill-rule="evenodd" stroke-width="2" stroke-linecap="square"></polyline></svg>
+  </button>
+</div>

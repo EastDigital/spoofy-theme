@@ -1,0 +1,242 @@
+<!-- sections/image_text.liquid -->
+{{ 'hdt-image-with-text.css' | asset_url | stylesheet_tag }}
+{% style %}
+  #{{ section.id }}{
+    --section-pt: {{ section.settings.padding_top }}px;
+    --section-pb: {{ section.settings.padding_bottom }}px; 
+    --section-prate: {{ section.settings.padding_rate }};
+  }
+{% endstyle %}
+<div id="{{ section.id }}" class="hdt-imt-wrapper hdt-section-spacing hdt-relative">
+  <div class="hdt-container{% if section.settings.full_width %}-full{% endif %}" color-scheme="{{ section.settings.color_scheme }}">
+    {% content_for "block", type: "section-heading", id: "image-text-heading" %}
+  </div>
+  <div class="hdt-container{% if section.settings.full_width %}-full{% endif %}" color-scheme="{{ section.settings.color_scheme }}" hdt-reveal="fade-in">
+    {%- if section.settings.section_background != blank -%}
+      {%- assign se_bg = section.settings.section_background -%}
+      {{ se_bg | image_url: width: se_bg.width | image_tag: width: se_bg.width, height: se_bg.height, widths:'300,400,500,600,700,800,900,1000,1200,1400,1600,1800,1900,2000,2200,2400,2600,2800,3000,3200,3400,3600', class: 'hdt-absolute hdt-top-0 hdt-left-0 hdt-w-full hdt-h-full hdt-object-cover', loading: 'lazy' }}
+    {%- endif -%}
+    <div class="hdt-row-grid hdt-grid-cols-1 md:hdt-grid-cols-2 hdt-s-gradient {{ section.settings.rounded }} hdt-oh">
+      {% content_for "blocks" %}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "t:sections.image_text.name",
+    "class": "hdt-image-text hdt-image-with_text",
+    "disabled_on": {
+      "groups": [
+        "*"
+      ]
+    },
+    "max_blocks": 2,
+    "blocks": [
+      {
+        "type": "_image-text-col"
+      },
+      {
+        "type": "_image-text-column"
+      }
+    ],
+    "settings": [
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label"
+      },
+      {
+        "type": "select",
+        "id": "rounded",
+        "label": "Rounded",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:none"
+          },
+          {
+            "value": "hdt-radius-xs",
+            "label": "t:settings_schema.typography.settings.font_size.xs"
+          },
+          {
+            "value": "hdt-radius-sm",
+            "label": "t:settings_schema.typography.settings.font_size.sm"
+          },
+          {
+            "value": "hdt-radius",
+            "label": "t:settings_schema.typography.settings.font_size.base"
+          },
+          {
+            "value": "hdt-radius-lg",
+            "label": "t:settings_schema.typography.settings.font_size.lg"
+          },
+          {
+            "value": "hdt-radius-full",
+            "label": "Full"
+          }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "checkbox",
+        "id": "full_width",
+        "label": "t:sections.all.full_width.label",
+        "default": false
+      },
+      {
+        "type": "image_picker",
+        "id": "section_background",
+        "label": "t:sections.all.bg_img"
+      },
+      {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      },
+      {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 200,
+        "step": 2,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 52
+      },
+      {
+        "type": "range",
+        "id": "padding_rate",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "label": "t:sections.all.padding.padding_rate",
+        "default": 75
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.image_text.name",
+        "category": "t:sections_categories.02_banner.name",
+        "blocks": [
+          {
+            "type": "_image-text-column",
+            "blocks": [
+              {
+                "type": "_image-masonry",
+                "settings": {
+                  "column_start": 1,
+                  "column_end": 13,
+                  "row_start": 1,
+                  "row_end": 13,
+                  "rounded": "hdt-radius"
+                }
+              }
+            ]
+          },
+          {
+            "type": "_image-text-col",
+            "settings": {
+              "align_center": true
+            },
+            "blocks": [
+              {
+                "type": "heading",
+                "settings": {
+                  "heading": "<h5>Established - 1995</h5>",
+                  "heading_size": "h4",
+                  "font_size_heading_lg": 50,
+                  "font_size_heading_md": 30,
+                  "font_size_heading": 24,
+                  "font_weight_heading": 600,
+                  "letter_spacing_heading": 0
+                }
+              },
+              {
+                "type": "spacer",
+                "settings": {
+                  "space_lg": 10,
+                  "space_md": 10,
+                  "space": 10,
+                }
+              },
+              {
+                "type": "text",
+                "settings": {
+                  "text": "<p>Ecomus was founded in 1995 by Jane Smith, a fashion lover with apassion for timeless style. Jane had always been drawn to classicpieces that could be worn season after season, and she believed thatthere was a gap in the market for a store that focused solely on classicwomen's clothing. She opened the first store in a small town in NewEngland, where it quickly became a local favorite.</p>",
+                  "text_size": "base",
+                  "font_size_text_lg": 16,
+                  "font_size_text_md": 14,
+                  "font_size_text": 14,
+                  "font_weight_text": 400,
+                  "letter_spacing_text": 0
+                }
+              },
+              {
+                "type": "spacer",
+                "settings": {
+                  "space_lg": 10,
+                  "space_md": 10,
+                  "space": 10,
+                }
+              },
+              {
+                "type": "_countdown",
+                "settings": {
+                  "color_scheme": "scheme-1",
+                  "cd_style": "outline",
+                  "year": 2030,
+                  "month": 4,
+                  "day": 19,
+                  "hour": 12,
+                  "minute": 0,
+                  "effect_cd": "rotate",
+                  "uppercase": true,
+                  "prepend_number": true,
+                  "hide_on_complete": true,
+                  "mess_complete": ""
+                }
+              },
+              {
+                "type": "spacer",
+                "settings": {
+                  "space_lg": 10,
+                  "space_md": 10,
+                  "space": 10,
+                }
+              },
+              {
+                "type": "button",
+                "settings": {
+                  "label": "Shop now",
+                  "link": "#",
+                  "open_in_new_tab": true,
+                  "full_width": false,
+                  "style_class": "solid",
+                  "font_size_btn": 14,
+                  "padding_btn": 30,
+                  "min_width_btn": 100,
+                  "min_width_dt_btn": 100,
+                  "min_height_btn": 40,
+                  "icon": "none",
+                  "icon_position": "after",
+                  "icon_height": 10,
+                  "icon_spacing": 5
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

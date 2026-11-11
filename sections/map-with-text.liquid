@@ -1,0 +1,163 @@
+<!-- section/map-with-text.liquid -->
+{{ 'hdt-contact.css' | asset_url | stylesheet_tag }}
+{%- style -%}#shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}}{%- endstyle -%}
+<div class="hdt-container{% if section.settings.full_width %}-full{% endif %} hdt-s-gradient hdt-section-spacing" color-scheme="{{ section.settings.color_scheme }}" hdt-reveal="fade-in">
+  <div class="hdt-row-grid" style="--spacing-x:0">
+    <div class="hdt-justify-center hdt-row-grid hdt-grid-cols-1 {% if section.blocks.size > 0 %}lg:hdt-grid-cols-2{% endif %}" style="--spacing-y:30px;">
+      {%- if section.settings.map != blank -%}
+        <div class="hdt-map-api hdt-oh">
+          {{ section.settings.map }}
+        </div>
+      {%- endif -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="hdt-content">
+          <div class="hdt-content-sticky">
+            {% content_for "blocks" %}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "t:sections.contact.map_with_text.name",
+  "tag": "section",
+  "class": "hdt-section hdt-map-with_text",
+  "disabled_on": {
+    "groups": [
+      "*"
+    ]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:sections.contact.full_width.label",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.contact.color.label"
+    },
+    {
+      "type": "liquid",
+      "id": "map",
+      "label": "t:sections.contact.map_with_text.map.label",
+      "info": "[You can get the map at here](https://www.google.com/maps),need to use iframes"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+  { "type": "heading" },
+  { "type": "text" },
+  { "type": "_socials" },
+  { "type": "spacer" },
+  ],
+  "presets": [
+   {
+      "name": "Map with text",
+      "category": "t:sections_categories.05_section.name",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "<h2>Heading</h2>",
+            "hidden_br_mobile": false,
+            "hidden_on_mobile": false,
+            "heading_size": "h2",
+            "text_color": "",
+            "font_size_heading_lg": 50,
+            "font_size_heading_md": 30,
+            "font_size_heading": 24,
+            "font_weight_heading": 600,
+            "letter_spacing_heading": 0
+          }
+        },
+       {
+          "type": "spacer",
+          "settings": {
+            "direction": false,
+            "space_lg": 10,
+            "space_md": 10,
+            "space": 10
+          }
+        },
+        {
+          "type": "_socials",
+          "settings": {
+            "socials_style": "default",
+            "socials_size": "medium"
+          }
+        },
+        {
+          "type": "spacer",
+          "settings": {
+            "direction": false,
+            "space_lg": 10,
+            "space_md": 10,
+            "space": 10
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "hidden_br_mobile": false,
+            "hidden_on_mobile": false,
+            "text_size": "base",
+            "text_color": "",
+            "font_size_text_lg": 16,
+            "font_size_text_md": 14,
+            "font_size_text": 14,
+            "font_weight_text": 400,
+            "letter_spacing_text": 0
+          }
+        }
+      ],
+      "settings": {
+        "full_width": false,
+        "color_scheme": "",
+        "map": "<div style=\"overflow:hidden;resize:none;max-width:100%;width:1920px;height:800px;\"><div id=\"embedded-map-display\" style=\"height:100%; width:100%;max-width:100%;\"><iframe style=\"height:100%;width:100%;border:0;\" frameborder=\"0\" src=\"https://www.google.com/maps/embed/v1/place?q=London,+Vương+Quốc+Anh&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8\"></iframe></div><a class=\"my-codefor-googlemap\" href=\"https://www.bootstrapskins.com/themes\" id=\"authmaps-data\">premium bootstrap themes</a><style>#embedded-map-display img{max-height:none;max-width:none!important;background:none!important;}</style></div>",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "padding_rate": 75
+      }
+    },
+  ]
+}
+{% endschema %}

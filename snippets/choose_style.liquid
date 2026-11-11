@@ -1,0 +1,53 @@
+<style>  .hdt-pr-choose__item{    padding: var(--spacing-0-6);    border: 0.1rem solid rgb(var(--color-line-border));  }  .hdt-pr-choose__item,  .hdt-pr-choose__img{    border-radius:var(--radius-input);  }  .hdt-pr-choose__item.is--choose{    border-color:rgb(var(--color-foreground));  }  .hdt-pr-choose__snap{    --spacing-x:var(--spacing-1-4);    margin-top:var(--spacing-1-4);    margin-bottom:var(--spacing-2-4);  }  .hdt-pr-info{margin-top:var(--spacing-0-8)}  .hdt-pr-choose-progress{    width: 100%;    height: var(--spacing-0-4);    background-color: rgb(var(--color-line-border));    margin-bottom:var(--spacing-2);  }</style>
+<div class="hdt-pr-choose__style hdt-oh">
+  <h4 class="hdt-pr-choose__title hdt-text-base hdt-truncate">Choose style: <strong>Men's Long Sleeve Rash Guard</strong></h4>
+  <hdt-scrollsnap class="hdt-pr-choose__list hdt-ratio--adapt_image">
+    <div id="Scroller-pr-choose" class="hdt-pr-choose__snap hdt-scroll-snap hdt-row-flex lg:hdt-flex-cols-5 md:hdt-flex-cols-4 hdt-flex-cols-3 hdt-snap-flex hdt-snap-x" style="--aspect-ratioapt:0.8384539147670962">
+      <div id="Scroll-pr-choose1" class="hdt-pr-choose__item hdt-col is--choose">
+        <div class="hdt-pr-choose__img hdt-ratio">
+          {{ 'image' | placeholder_svg_tag: 'hdt-placeholder-svg hdt-svg-bg1' }}
+        </div>
+        <div class="hdt-pr-info hdt-truncate hdt-text-sm hdt-font-semibold">Men's Long Sleeve Rash Guard</div>
+      </div>
+      <div id="Scroll-pr-choose2" class="hdt-pr-choose__item hdt-col">
+        <div class="hdt-pr-choose__img hdt-ratio">
+          {{ 'image' | placeholder_svg_tag: 'hdt-placeholder-svg hdt-svg-bg1' }}
+        </div>
+        <div class="hdt-pr-info hdt-truncate hdt-text-sm hdt-font-semibold">Men's Long Sleeve Rash Guard</div>
+      </div>
+      <div id="Scroll-pr-choose3" class="hdt-pr-choose__item hdt-col">
+        <div class="hdt-pr-choose__img hdt-ratio">
+          {{ 'image' | placeholder_svg_tag: 'hdt-placeholder-svg hdt-svg-bg1' }}
+        </div>
+        <div class="hdt-pr-info hdt-truncate hdt-text-sm hdt-font-semibold">Men's Long Sleeve Rash Guard</div>
+      </div>
+      <div id="Scroll-pr-choose4" class="hdt-pr-choose__item hdt-col">
+        <div class="hdt-pr-choose__img hdt-ratio">
+          {{ 'image' | placeholder_svg_tag: 'hdt-placeholder-svg hdt-svg-bg1' }}
+        </div>
+        <div class="hdt-pr-info hdt-truncate hdt-text-sm hdt-font-semibold">Men's Long Sleeve Rash Guard</div>
+      </div>
+      <div id="Scroll-pr-choose5" class="hdt-pr-choose__item hdt-col">
+        <div class="hdt-pr-choose__img hdt-ratio">
+          {{ 'image' | placeholder_svg_tag: 'hdt-placeholder-svg hdt-svg-bg1' }}
+        </div>
+        <div class="hdt-pr-info hdt-truncate hdt-text-sm hdt-font-semibold">Men's Long Sleeve Rash Guard</div>
+      </div>
+      <div id="Scroll-pr-choose6" class="hdt-pr-choose__item hdt-col">
+        <div class="hdt-pr-choose__img hdt-ratio">
+          {{ 'image' | placeholder_svg_tag: 'hdt-placeholder-svg hdt-svg-bg1' }}
+        </div>
+        <div class="hdt-pr-info hdt-truncate hdt-text-sm hdt-font-semibold">Men's Long Sleeve Rash Guard</div>
+      </div>
+      <div id="Scroll-pr-choose7" class="hdt-pr-choose__item hdt-col">
+        <div class="hdt-pr-choose__img hdt-ratio">
+          {{ 'image' | placeholder_svg_tag: 'hdt-placeholder-svg hdt-svg-bg1' }}
+        </div>
+        <div class="hdt-pr-info hdt-truncate hdt-text-sm hdt-font-semibold">Men's Long Sleeve Rash Guard</div>
+      </div>
+    </div>
+  </hdt-scrollsnap>
+  <hdt-scrollbar observes="Scroller-pr-choose" class="hdt-scrollbar hdt-pr-choose-progress hdt-radius-full">
+    <div class="hdt-radius-full" style="background-color:rgb(var(--color-foreground));width:calc(var(--scrollbar-progress) * 100%);height: 100%;transition: width 1s;"></div>
+  </hdt-scrollbar>
+</div>

@@ -1,0 +1,846 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "heading": {
+      "type": "main-heading",
+      "blocks": {
+        "5ecb9555-19e4-433b-8817-1ccaa3a41384": {
+          "type": "1",
+          "settings": {
+            "heading": "",
+            "hidden_on_mobile": false,
+            "heading_size": "h3",
+            "text_color": "hdt-s-text",
+            "font_size_heading_lg": 50,
+            "font_size_heading_md": 30,
+            "font_size_heading": 24,
+            "font_weight_heading": 600,
+            "letter_spacing_heading": 0
+          }
+        }
+      },
+      "block_order": [
+        "5ecb9555-19e4-433b-8817-1ccaa3a41384"
+      ],
+      "custom_css": [],
+      "settings": {
+        "image": "shopify://shop_images/z4683181570507_46fb10fa21da971ae2af71e75431028c.png",
+        "color_scheme": "",
+        "spacing_hd": 0,
+        "padding_top": 80,
+        "padding_bottom": 86,
+        "padding_rate": 75
+      }
+    },
+    "custom_section_6XnRzR": {
+      "type": "custom-section",
+      "blocks": {
+        "multi_row_W4Jxze": {
+          "type": "_multi_row",
+          "settings": {
+            "rounded": "none"
+          },
+          "blocks": {
+            "multi_column_QPyjDE": {
+              "type": "_multi_column",
+              "settings": {
+                "column_dk": "6",
+                "column_tb": "6",
+                "column_mb": "12",
+                "spacing_h_dk": 0,
+                "spacing_v_dk": 22,
+                "spacing_h_tb": 0,
+                "spacing_v_tb": 0,
+                "spacing_h_mb": 0,
+                "spacing_v_mb": 0,
+                "content_position": "start-center",
+                "content_position_mb": "center",
+                "alignment": "center",
+                "alignment_mb": "center",
+                "background_color": "rgba(0,0,0,0)",
+                "rounded": "none"
+              },
+              "blocks": {
+                "image_JwVyr8": {
+                  "type": "_image",
+                  "settings": {
+                    "image": "shopify://shop_images/ourstore_9b075ce0-bc3e-4678-951c-411e1ae7c0aa.png",
+                    "img_effect": "none",
+                    "b_effect": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "image_JwVyr8"
+              ]
+            },
+            "multi_column_iKRWVm": {
+              "type": "_multi_column",
+              "settings": {
+                "column_dk": "6",
+                "column_tb": "6",
+                "column_mb": "12",
+                "spacing_h_dk": 93,
+                "spacing_v_dk": 22,
+                "spacing_h_tb": 0,
+                "spacing_v_tb": 0,
+                "spacing_h_mb": 0,
+                "spacing_v_mb": 0,
+                "content_position": "end-start",
+                "content_position_mb": "center-start",
+                "alignment": "left",
+                "alignment_mb": "left",
+                "background_color": "rgba(0,0,0,0)",
+                "rounded": "none"
+              },
+              "blocks": {
+                "heading_GcmcQE": {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "<p>Ecomus Paris</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "heading_size": "h5",
+                    "text_color": "hdt-s-text",
+                    "font_size_heading_lg": 50,
+                    "font_size_heading_md": 30,
+                    "font_size_heading": 24,
+                    "font_weight_heading": 600,
+                    "letter_spacing_heading": 0
+                  }
+                },
+                "spacer_FdP6gh": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 24,
+                    "space_md": 24,
+                    "space": 14
+                  }
+                },
+                "text_JAtQdn": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Address</strong></p><p>Pl. de la Bastille, 75004 Paris</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_ELRjpE": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "text_bdy7JB": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Phone</strong></p><p>(623) 934-2400</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_PRXKbG": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "text_dbjADh": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Email</strong></p><p>EComposer@example.com</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_ydYRhx": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "text_bVmbJ3": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Open Time</strong></p><p>Our store has re-opened for shopping,</p><p>exchange. Every day 11am to 7pm</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_JY4ax7": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "socials_cQyKRF": {
+                  "type": "_socials",
+                  "settings": {
+                    "socials_style": "simple",
+                    "socials_size": "large"
+                  }
+                },
+                "spacer_WJV88k": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 32,
+                    "space_md": 24,
+                    "space": 20
+                  }
+                },
+                "button_rBjm7a": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Get Directions",
+                    "link": "shopify://pages/store-locations",
+                    "open_in_new_tab": false,
+                    "full_width": false,
+                    "style_class": "outline",
+                    "font_size": "m",
+                    "font_weight": "normal",
+                    "font_size_btn": 14,
+                    "padding_btn": 30,
+                    "min_width_btn": 100,
+                    "min_width_dt_btn": 100,
+                    "min_height_btn": 40,
+                    "icon": "arrow_simple",
+                    "icon_position": "after",
+                    "icon_height": 10,
+                    "icon_spacing": 5
+                  }
+                }
+              },
+              "block_order": [
+                "heading_GcmcQE",
+                "spacer_FdP6gh",
+                "text_JAtQdn",
+                "spacer_ELRjpE",
+                "text_bdy7JB",
+                "spacer_PRXKbG",
+                "text_dbjADh",
+                "spacer_ydYRhx",
+                "text_bVmbJ3",
+                "spacer_JY4ax7",
+                "socials_cQyKRF",
+                "spacer_WJV88k",
+                "button_rBjm7a"
+              ]
+            }
+          },
+          "block_order": [
+            "multi_column_QPyjDE",
+            "multi_column_iKRWVm"
+          ]
+        }
+      },
+      "block_order": [
+        "multi_row_W4Jxze"
+      ],
+      "custom_css": [
+        "@media (min-width: 1350px) {.hdt-section-spacing {--section-pt: 122px !important; }}",
+        "@media (min-width: 1150px) {.hdt-section--custom .hdt-column {padding-bottom: 0px; }}"
+      ],
+      "settings": {
+        "item_spacing": 30,
+        "item_spacing_tb": 50,
+        "item_spacing_mb": 30,
+        "full_width": false,
+        "color_scheme": "",
+        "padding_top": 100,
+        "padding_bottom": 52,
+        "padding_rate": 75
+      }
+    },
+    "custom_section_mmVeeT": {
+      "type": "custom-section",
+      "blocks": {
+        "multi_row_dCt3qf": {
+          "type": "_multi_row",
+          "settings": {
+            "rounded": "none"
+          },
+          "blocks": {
+            "multi_column_JdjKrz": {
+              "type": "_multi_column",
+              "settings": {
+                "column_dk": "1",
+                "column_tb": "0",
+                "column_mb": "0",
+                "spacing_h_dk": 30,
+                "spacing_v_dk": 30,
+                "spacing_h_tb": 30,
+                "spacing_v_tb": 30,
+                "spacing_h_mb": 15,
+                "spacing_v_mb": 15,
+                "content_position": "center",
+                "content_position_mb": "center",
+                "alignment": "center",
+                "alignment_mb": "center",
+                "background_color": "#ffffff",
+                "rounded": "none"
+              }
+            },
+            "multi_column_fMx7eJ": {
+              "type": "_multi_column",
+              "settings": {
+                "column_dk": "5",
+                "column_tb": "6",
+                "column_mb": "12",
+                "spacing_h_dk": 0,
+                "spacing_v_dk": 0,
+                "spacing_h_tb": 0,
+                "spacing_v_tb": 0,
+                "spacing_h_mb": 0,
+                "spacing_v_mb": 0,
+                "content_position": "center-start",
+                "content_position_mb": "center-start",
+                "alignment": "left",
+                "alignment_mb": "left",
+                "background_color": "#ffffff",
+                "rounded": "none"
+              },
+              "blocks": {
+                "heading_ryWtny": {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "<p>Ecomus London</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "heading_size": "h5",
+                    "text_color": "hdt-s-text",
+                    "font_size_heading_lg": 50,
+                    "font_size_heading_md": 30,
+                    "font_size_heading": 24,
+                    "font_weight_heading": 600,
+                    "letter_spacing_heading": 0
+                  }
+                },
+                "spacer_cWV3mc": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 24,
+                    "space_md": 24,
+                    "space": 14
+                  }
+                },
+                "text_kHnYya": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Address</strong></p><p>Horley, Gatwick RH6 0NP, London</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_c7HtgD": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "text_RDRt3t": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Phone</strong></p><p>(623) 934-2400</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_zJNbRD": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "text_T6AjgR": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Email</strong></p><p>EComposer@example.com</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_bWtQFW": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "text_i34Xaa": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Open Time</strong></p><p>Our store has re-opened for shopping,</p><p>exchange. Every day 11am to 7pm</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_LJzQCi": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "socials_b76gVY": {
+                  "type": "_socials",
+                  "settings": {
+                    "socials_style": "simple",
+                    "socials_size": "large"
+                  }
+                },
+                "spacer_dLCJVw": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 32,
+                    "space_md": 24,
+                    "space": 20
+                  }
+                },
+                "button_Ax3ntw": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Get Directions",
+                    "link": "shopify://pages/store-locations",
+                    "open_in_new_tab": false,
+                    "full_width": false,
+                    "style_class": "outline",
+                    "font_size": "m",
+                    "font_weight": "normal",
+                    "font_size_btn": 14,
+                    "padding_btn": 30,
+                    "min_width_btn": 100,
+                    "min_width_dt_btn": 100,
+                    "min_height_btn": 40,
+                    "icon": "arrow_simple",
+                    "icon_position": "after",
+                    "icon_height": 10,
+                    "icon_spacing": 5
+                  }
+                }
+              },
+              "block_order": [
+                "heading_ryWtny",
+                "spacer_cWV3mc",
+                "text_kHnYya",
+                "spacer_c7HtgD",
+                "text_RDRt3t",
+                "spacer_zJNbRD",
+                "text_T6AjgR",
+                "spacer_bWtQFW",
+                "text_i34Xaa",
+                "spacer_LJzQCi",
+                "socials_b76gVY",
+                "spacer_dLCJVw",
+                "button_Ax3ntw"
+              ]
+            },
+            "multi_column_tEkycr": {
+              "type": "_multi_column",
+              "settings": {
+                "column_dk": "6",
+                "column_tb": "6",
+                "column_mb": "12",
+                "spacing_h_dk": 0,
+                "spacing_v_dk": 0,
+                "spacing_h_tb": 0,
+                "spacing_v_tb": 0,
+                "spacing_h_mb": 0,
+                "spacing_v_mb": 0,
+                "content_position": "start-center",
+                "content_position_mb": "center",
+                "alignment": "center",
+                "alignment_mb": "center",
+                "background_color": "rgba(0,0,0,0)",
+                "rounded": "none"
+              },
+              "blocks": {
+                "image_FaWNMB": {
+                  "type": "_image",
+                  "settings": {
+                    "image": "shopify://shop_images/ourstore2.png",
+                    "img_effect": "none",
+                    "b_effect": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "image_FaWNMB"
+              ]
+            }
+          },
+          "block_order": [
+            "multi_column_JdjKrz",
+            "multi_column_fMx7eJ",
+            "multi_column_tEkycr"
+          ]
+        }
+      },
+      "block_order": [
+        "multi_row_dCt3qf"
+      ],
+      "settings": {
+        "item_spacing": 30,
+        "item_spacing_tb": 50,
+        "item_spacing_mb": 30,
+        "full_width": false,
+        "color_scheme": "",
+        "padding_top": 52,
+        "padding_bottom": 56,
+        "padding_rate": 75
+      }
+    },
+    "custom_section_kYhJtt": {
+      "type": "custom-section",
+      "blocks": {
+        "multi_row_XQHJfj": {
+          "type": "_multi_row",
+          "settings": {
+            "rounded": "none"
+          },
+          "blocks": {
+            "multi_column_8TirPV": {
+              "type": "_multi_column",
+              "settings": {
+                "column_dk": "6",
+                "column_tb": "6",
+                "column_mb": "12",
+                "spacing_h_dk": 0,
+                "spacing_v_dk": 0,
+                "spacing_h_tb": 0,
+                "spacing_v_tb": 0,
+                "spacing_h_mb": 0,
+                "spacing_v_mb": 0,
+                "content_position": "start-center",
+                "content_position_mb": "center",
+                "alignment": "center",
+                "alignment_mb": "center",
+                "background_color": "rgba(0,0,0,0)",
+                "rounded": "none"
+              },
+              "blocks": {
+                "image_9QRmYD": {
+                  "type": "_image",
+                  "settings": {
+                    "image": "shopify://shop_images/ourstore3_70fe43f1-db8a-4653-bb38-32be5d96abb9.png",
+                    "img_effect": "none",
+                    "b_effect": "none"
+                  }
+                }
+              },
+              "block_order": [
+                "image_9QRmYD"
+              ]
+            },
+            "multi_column_aar39j": {
+              "type": "_multi_column",
+              "settings": {
+                "column_dk": "6",
+                "column_tb": "6",
+                "column_mb": "12",
+                "spacing_h_dk": 93,
+                "spacing_v_dk": 0,
+                "spacing_h_tb": 0,
+                "spacing_v_tb": 0,
+                "spacing_h_mb": 0,
+                "spacing_v_mb": 0,
+                "content_position": "center-start",
+                "content_position_mb": "center-start",
+                "alignment": "left",
+                "alignment_mb": "left",
+                "background_color": "#ffffff",
+                "rounded": "none"
+              },
+              "blocks": {
+                "heading_6mztgh": {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "<p>Ecomus Paris</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "heading_size": "h5",
+                    "text_color": "hdt-s-text",
+                    "font_size_heading_lg": 50,
+                    "font_size_heading_md": 30,
+                    "font_size_heading": 24,
+                    "font_weight_heading": 600,
+                    "letter_spacing_heading": 0
+                  }
+                },
+                "spacer_fGfzQg": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 24,
+                    "space_md": 24,
+                    "space": 14
+                  }
+                },
+                "text_9QHaHr": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Address</strong></p><p>Downtown Dubai - Dubai</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_mkaKhF": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "text_YPjtL8": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Phone</strong></p><p>(623) 934-2400</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_gJKryN": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "text_bXfhMw": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Email</strong></p><p>EComposer@example.com</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_3d6tMB": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "text_gwggia": {
+                  "type": "text",
+                  "settings": {
+                    "text": "<p><strong>Open Time</strong></p><p>Our store has re-opened for shopping,</p><p>exchange. Every day 11am to 7pm</p>",
+                    "hidden_br_mobile": false,
+                    "hidden_on_mobile": false,
+                    "text_size": "base",
+                    "text_color": "hdt-text-secondary",
+                    "font_size_text_lg": 16,
+                    "font_size_text_md": 14,
+                    "font_size_text": 14,
+                    "font_weight_text": 400,
+                    "letter_spacing_text": 0
+                  }
+                },
+                "spacer_VRJtCd": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 22,
+                    "space_md": 22,
+                    "space": 16
+                  }
+                },
+                "socials_zAXqwd": {
+                  "type": "_socials",
+                  "settings": {
+                    "socials_style": "simple",
+                    "socials_size": "large"
+                  }
+                },
+                "spacer_YmHAUn": {
+                  "type": "spacer",
+                  "settings": {
+                    "direction": false,
+                    "space_lg": 32,
+                    "space_md": 24,
+                    "space": 20
+                  }
+                },
+                "button_8RbmkT": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Get Directions",
+                    "link": "shopify://pages/store-locations",
+                    "open_in_new_tab": false,
+                    "full_width": false,
+                    "style_class": "outline",
+                    "font_size": "m",
+                    "font_weight": "normal",
+                    "font_size_btn": 14,
+                    "padding_btn": 30,
+                    "min_width_btn": 100,
+                    "min_width_dt_btn": 100,
+                    "min_height_btn": 40,
+                    "icon": "arrow_simple",
+                    "icon_position": "after",
+                    "icon_height": 10,
+                    "icon_spacing": 5
+                  }
+                }
+              },
+              "block_order": [
+                "heading_6mztgh",
+                "spacer_fGfzQg",
+                "text_9QHaHr",
+                "spacer_mkaKhF",
+                "text_YPjtL8",
+                "spacer_gJKryN",
+                "text_bXfhMw",
+                "spacer_3d6tMB",
+                "text_gwggia",
+                "spacer_VRJtCd",
+                "socials_zAXqwd",
+                "spacer_YmHAUn",
+                "button_8RbmkT"
+              ]
+            }
+          },
+          "block_order": [
+            "multi_column_8TirPV",
+            "multi_column_aar39j"
+          ]
+        }
+      },
+      "block_order": [
+        "multi_row_XQHJfj"
+      ],
+      "settings": {
+        "item_spacing": 30,
+        "item_spacing_tb": 50,
+        "item_spacing_mb": 30,
+        "full_width": false,
+        "color_scheme": "",
+        "padding_top": 56,
+        "padding_bottom": 96,
+        "padding_rate": 75
+      }
+    }
+  },
+  "order": [
+    "heading",
+    "custom_section_6XnRzR",
+    "custom_section_mmVeeT",
+    "custom_section_kYhJtt"
+  ]
+}

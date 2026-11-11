@@ -1,0 +1,29 @@
+<!-- snippets/compare-offcanvas.liquid -->
+<link href="{{ 'hdt-compare.css' | asset_url }}" rel="stylesheet" media="print" onload="this.media='all'">
+<hdt-drawer class="hdt-drawer hdt-contents" color-scheme="{{ settings.color_scheme_dialog }}">
+  <dialog id="drawerCompare" class="hdt-dialog hdt-dialog-drawer" scroll-lock pos="bottom">
+    <button ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="drawerCompare" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+    <div class="hdt-dialog-drawer__inner">
+      <div class="hdt-dialog-drawer__body">
+        <div class="hdt-container">
+          <div class="hdt-compare-list hdt-flex hdt-align-center">
+            <div slot="header" class="hdt-compare-head hdt-flex hdt-align-center">
+              <h3 class="hdt-compare-head__title">{{ 'compare_popup.title' | t }}</h3>
+            </div>
+            <offcanvas-compare class="hdt-compare-offcanvas hdt-compare-products hdt-flex hdt-current-scrollbar hdt-ratio--adapt_image"></offcanvas-compare>
+            <div class="hdt-compare-buttons hdt-flex hdt-align-center">
+              <div class="hdt-compare-buttons-wrap">
+                <hdt-compare-a>
+                  <a href="{{ routes.search_url }}/?view=compare" class="hdt-compapre-button__view-page hdt-btn hdt-text-base hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-solid hdt-font-semibold">{{ 'compare_popup.viewpage' | t }}</a>
+                </hdt-compare-a>
+                <div class="hdt-compapre-button__clear-all">
+                  <hdt-clear-all class="hdt-btn hdt-text-base hdt-oh hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn-link hdt-font-semibold" of-fn="compare">{{ 'compare_popup.clear' | t }}</hdt-clear-all>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</hdt-drawer>

@@ -1,0 +1,386 @@
+{%- liquid
+  # Determine if lazy loading should be used
+  if request.design_mode or search.terms == "submenu" or section.index == null
+    assign lazy_mn = false
+  else
+    assign lazy_mn = section.settings.lazy_mn
+  endif
+
+  # Initialize variables
+  assign li_class = ""
+  assign mega_position = 'bottom'
+  assign link = null
+  assign index = 0
+
+  # Only proceed if block has a title
+  if block.settings.title != blank
+    # Split the title by " - " to handle different section types
+    # Format: "Brand - MenuItem" for e-commerce, "MenuItem" for standard
+    assign block_title_parts = block.settings.title | split: " - "
+    # Handle different section types
+    if section.id contains 'header_e_commerce'
+      # E-commerce specific logic - handles brand-based menu structure
+      capture brand
+        case template.name
+          when "search"
+            if request.design_mode or search.terms contains "homeHdt"
+            elsif search.terms contains "submenu"
+              echo search.terms | remove_first: ' OR ' | remove_first: 'submenu' | strip
+            endif
+          when "collection"
+            echo collection.metafields.theme.brand.value.name
+          when "product"
+            if product.metafields.theme.brand
+              echo product.metafields.theme.brand.value.name
+            else
+              for collection in product.collections
+                if collection.metafields.theme.brand
+                  echo collection.metafields.theme.brand.value.name
+                  break
+                endif
+              endfor
+            endif
+          when "page"
+            echo page.metafields.theme.brand.value.name
+          when "blog" or "article"
+            echo blog.metafields.theme.brand.value.name
+        endcase
+      endcapture
+      assign main_menu = null
+      assign key_brand = brand | default: 'homeHdt'
+      
+      # Find active brand and corresponding menu
+      # Look for active brand in theme_brands linklist
+      assign lv0_active = linklists.theme_brands.links | where: 'active', true | first
+      assign lv0_child_active = linklists.theme_brands.links | where: 'child_active', true | first
+      if lv0_active
+        assign key_brand = lv0_active.title
+      elsif search.terms contains "submenu OR "
+        # Extract brand from search terms if available
+        assign key_brand = search.terms | split: "submenu OR " | last
+      elsif lv0_child_active
+        assign key_brand = lv0_child_active.title
+      endif
+      # Find matching menu item in brand links
+      if section.settings.header_by_brand
+        assign main_menu = linklists.theme_brands.links | where: 'title', key_brand | first
+      
+        # For e-commerce, use the second part (menu item name) after the brand
+        assign block_title_parts = block_title_parts[0]
+      elsif key_brand == 'homeHdt'
+        assign main_menu = linklists.theme_brands.links[0]
+        assign block_title_parts = block_title_parts[1]
+      else
+        # Find matching menu item in brand links
+        for brand_link in linklists.theme_brands.links
+          assign brand_title_parts = brand_link.title | split: ' - '
+          # Match brand and menu item
+          if brand_title_parts[0] == block_title_parts[0] and brand_title_parts[0] == key_brand
+            assign main_menu = brand_link
+            break
+          endif
+        endfor
+      
+        # For e-commerce, use the second part (menu item name) after the brand
+        assign block_title_parts = block_title_parts[1]
+      endif
+      
+      # Build key_brand for lazy loading with URL encoding
+      assign key_brand = '%20OR%20' | append: key_brand | escape
+    else
+      # Standard menu logic - use the main menu from section settings
+      assign main_menu = section.settings.main_menu
+      
+      # For standard menus, use the first part (menu item name)
+      assign block_title_parts = block_title_parts[0]
+      
+    endif
+    
+    # Find the specific link in the menu by matching title
+    if main_menu
+      for menu_link in main_menu.links
+        # Split menu link title to handle labels in brackets [label1,label2]
+        assign link_title_parts = menu_link.title | split: '['
+        # Match the menu item name (before any labels)
+        if link_title_parts[0] == block_title_parts
+          assign link = menu_link
+          assign index = forloop.index0
+          break
+        endif
+      endfor
+    endif
+    
+    # Set up menu item properties if link found
+    if link and link.title != blank
+      # Parse the link title to extract name and labels
+      assign title_parts = link.title | split: '['
+      assign arr_title = title_parts[0]
+      assign arr_label = title_parts[1] | split: ',' | default: ''
+      assign li_class = "hdt-has-children"
+      assign mega_width = block.settings.mega_width
+      assign mega_custom_width = block.settings.mega_custom_width
+      assign mega_position = block.settings.mega_position | default: 'bottom'
+    else
+      # Skip rendering if no valid link found
+      break
+    endif
+  else
+    # Skip rendering if no title
+    break
+  endif
+-%}
+<li class="hdt-menu-item hdt-flex hdt-justify-center hdt-flex-col {{ li_class }}" data-index="{{ index | plus: 1 }}" {{ block.shopify_attributes }} style="order: {{ index | plus: 1 }};">
+  <hdt-header-menu class="hdt-contents" opened-able-click event="{{ section.settings.open_event }}" position="{{ mega_position }}" {{ block.shopify_attributes }}>
+    <details {% if block.settings.mega_presets == "mega_dropdown" %} position="{{ mega_position }}" {% elsif mega_width == "full" %} not-need-calc {% elsif mega_width == "custom" %} style="--mega-width: {{ mega_custom_width }}px;" position="{{ mega_position }}" {% endif %}>
+      <summary data-url="{{ link.url }}" class="hdt-menu-link hdt-flex hdt-align-center hdt-justify-between hdt-relative hdt-text-{{ section.settings.menu_size }} hdt-font-{{ section.settings.menu_weight }}{% if link.current and section.settings.active_link %} hdt-menu-link--active{% endif %}">
+        <span class="hdt-menu-link-text hdt-block{% if arr_label.size > 0 %} hdt-relative hdt-title_size-{{ arr_title.size | at_most: 20 }} hdt-has-{{ arr_label.size | at_most: 2 }}label{% endif %}">
+          <span class="hdt-block hdt-line-clamp">{{ arr_title }}</span>
+          {%- if arr_label.size > 0 -%}
+            <span class="hdt_label_menu hdt-absolute hdt-inline-flex hdt-align-center hdt-justify-center hdt-text-xs">
+              {%- for label in arr_label limit: 2 -%}
+                {%- assign label_text = label | remove: 'label_' | remove: ','  | remove: ']' | strip -%}
+                <span class="hdt_label_{{ label_text | handleize }} hdt-flex hdt-align-center hdt-justify-center">{{ label_text }}</span>
+              {%- endfor -%}
+            </span>
+          {%- endif -%}
+        </span>
+        
+        {%- if li_class != "" and section.settings.dropdown_arrow -%}
+          <svg class="hdt-menu-item-arrow" xmlns="http://www.w3.org/2000/svg" width="10" height="7" viewBox="0 0 10 7" fill="none"><path d="M10 1.24243L5 6.24243L-2.18557e-07 1.24243L0.8875 0.354932L5 4.46743L9.1125 0.354931L10 1.24243Z" fill="currentColor"/></svg>
+        {%- endif -%}
+      </summary>
+      {%- if lazy_mn and block.settings.mega_presets != "mega_dropdown" -%}
+        <hdt-lazy-submenu id="sub-{{ block.id }}" key="{{ key_brand }}" data-section="{{ section.id }}" class="hdt-sub-menu hdt-mega-menu hdt-absolute" color-scheme="{{ block.settings.mega_menu_colors }}"> </hdt-lazy-submenu>
+      {%- else -%}
+        {%- render 'mega_menu_theme_blocks', link: link -%}
+      {%- endif -%}
+    </details>
+  </hdt-header-menu>
+  {%- if block.settings.mega_presets == "html" and block.settings.page.metafields.home.menu.value != blank -%}
+    {%- if block.settings.page.metafields.home.menu.value.count > 12 -%}
+      {%- assign demos = block.settings.page.metafields.home.menu.value -%}
+      {%- paginate demos by 100 -%}
+      <hdt-modal class="hdt-modal hdt-modal-demos hdt-contents hdt-text-center" color-scheme="{{ block.settings.mega_menu_colors }}">
+        <dialog id="modal-{{ block.id }}" class="hdt-dialog hdt-dialog-modal" scroll-lock>
+          <div class="hdt-dialog-modal__header hdt-text-center">
+            <h5 class="hdt-demos-title hdt-font-medium hdt-text-center">{{ 'general.demos.demos_full_heading' | t }}</h5>
+            <button ref="closeButton" class="hdt-s-text hdt-dialog-btn__close" aria-controls="modal-{{ block.id }}" aria-label="{{ 'accessibility.close' | t | escape }}">{%- render 'icon' with 'close' -%}</button>
+          </div>
+          <div class="hdt-dialog-modal__inner hdt-current-scrollbar">
+            <div class="hdt-row-grid hdt-row-grid--modify hdt-grid-cols-1 lg:hdt-grid-cols-6 hdt-justify-center hdt-row-demos">
+              {%- for item in block.settings.page.metafields.home.menu.value -%}
+                {% assign image = item.image %}
+                <div class="hdt-col hdt-demo-item hdt-text-center">
+                  <a href="{{ item.url }}" title="{{ item.name }}">
+                    {%- if image != blank -%}
+                      <div class="hdt-demo-image hdt-relative hdt-block">
+                        <img src="{{ image | image_url: width: 300 }}" width="600" height="657" srcset="{{ image | image_url: width: 300 }} 1x, {{ image | image_url: width: 600 }} 2x" sizes="300px" loading='lazy'>
+                        {% if item.label.value.size > 0 %}
+                          <div class="hdt-demo-label hdt-flex hdt-absolute">
+                            {%- for label in item.label.value -%}
+                              <span class="hdt-demo_{{ label | handle }} hdt-flex hdt-align-center hdt-justify-center hdt-text-xs hdt-font-medium">{{ label | escape }}</span>
+                            {%- endfor -%}
+                          </div>
+                        {% endif %}
+                      </div>
+                    {%- endif -%}
+                    <span class="hdt-demo-name hdt-text-base hdt-font-semibold">{{ item.name }}</span>
+                  </a>
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        </dialog>
+      </hdt-modal>
+    {%- endpaginate -%}
+    {%- endif -%}
+  {%- endif -%}
+</li>
+{% schema %}
+  {
+    "name": "Mega Block",
+    "tag": null,
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Menu item name (level 1) of main menu"
+      },
+      {
+        "type": "color_scheme",
+        "id": "mega_menu_colors",
+        "label": "t:sections.all.colors.label",
+        "visible_if": "{{ block.settings.mega_presets != 'mega_dropdown' }}"
+      },
+      {
+        "type": "radio",
+        "id": "mega_width",
+        "label": "t:sections.header.blocks.mega_width.label",
+        "default": "full",
+        "options": [
+          {
+            "label": "t:sections.header.blocks.mega_width.full",
+            "value": "full"
+          },
+          {
+            "label": "t:sections.header.blocks.mega_width.custom",
+            "value": "custom"
+          }
+        ],
+        "visible_if": "{{ block.settings.mega_presets != 'mega_dropdown' }}"
+      },
+      {
+        "type": "select",
+        "id": "mega_position",
+        "label": "t:sections.header.blocks.mega_position.label",
+        "default": "bottom",
+        "options": [
+          {
+            "label": "t:sections.header.blocks.mega_position.default",
+            "value": "bottom"
+          },
+          {
+            "label": "t:sections.header.blocks.mega_position.center",
+            "value": "center_on_screen"
+          }
+        ],
+        "visible_if": "{{ block.settings.mega_width == 'custom' }}"
+      },
+      {
+        "type": "range",
+        "id": "mega_custom_width",
+        "label": "t:sections.header.blocks.mega_custom_width",
+        "min": 600,
+        "max": 1600,
+        "step": 10,
+        "unit": "px",
+        "default": 1200,
+        "visible_if": "{{ block.settings.mega_width == 'custom' }}"
+      },
+      {
+        "type": "select",
+        "id": "mega_presets",
+        "label": "Mega Menu Presets",
+        "default": "html",
+        "options": [
+          {
+            "label": "HTML",
+            "value": "html"
+          },
+          {
+            "label": "Product",
+            "value": "mega_product"
+          },
+          {
+            "label": "Shop",
+            "value": "mega_shop"
+          },
+          {
+            "label": "Page",
+            "value": "mega_page"
+          },
+          {
+            "label": "Dropdown",
+            "value": "mega_dropdown"
+          }
+        ]
+      },
+      {
+        "type": "html",
+        "id": "html",
+        "label": "t:sections.header.blocks.html.name",
+        "visible_if": "{{ block.settings.mega_presets == 'html' }}"
+      },
+      {
+        "type": "page",
+        "id": "page",
+        "label": "t:sections.header.blocks.html.page.label",
+        "info": "t:sections.header.blocks.html.page.info",
+        /* "visible_if": "{{ block.settings.mega_presets == 'html' }}" */
+      },
+      {
+        "type": "product_list",
+        "id": "product_list",
+        "label": "t:sections.header.blocks.mega_product.product_list",
+        "info": "Only visible if mega menu presets is product."
+        /* "visible_if": "{{ block.settings.mega_presets == 'mega_product' }}" */
+      },
+      {
+        "type": "collection_list",
+        "id": "collection_list",
+        "label": "t:sections.header.blocks.mega_shop.collection_list",
+        "limit": 4,
+        "info": "Only visible if mega menu presets is shop."
+        /* "visible_if": "{{ block.settings.mega_presets == 'mega_shop' }}" */
+      },
+      {
+        "type": "select",
+        "id": "image_ratio",
+        "options": [
+          {
+            "value": "adapt_image",
+            "label": "t:sections.all.images.ratio.adapt_image.label"
+          },
+          {
+            "value": "square",
+            "label": "t:sections.all.images.ratio.square.label"
+          },
+          {
+            "value": "portrait",
+            "label": "t:sections.all.images.ratio.portrait.label"
+          },
+          {
+            "value": "asos",
+            "label": "t:sections.all.images.ratio.asos.label"
+          },
+          {
+            "value": "landscape",
+            "label": "t:sections.all.images.ratio.landscape.label"
+          }
+        ],
+        "label": "t:sections.all.images.ratio.label",
+        "default": "adapt_image",
+        "visible_if": "{{ block.settings.mega_presets == 'mega_shop' or block.settings.mega_presets == 'mega_product' }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "image_size",
+        "label": "t:sections.all.images.size.cover",
+        "default": true,
+        "visible_if": "{{ block.settings.mega_presets == 'mega_shop' or block.settings.mega_presets == 'mega_product' }}"
+      },
+      {
+        "type": "checkbox",
+        "id": "navUI",
+        "label": "t:blocks.carousel.settings.navigation.use_navigation",
+        "default": true,
+        "visible_if": "{{ block.settings.mega_presets == 'mega_product' }}"
+      },
+      {
+        "type": "color_scheme",
+        "id": "collection_colors",
+        "label": "t:sections.header.blocks.mega_shop.collection_colors",
+        "visible_if": "{{ block.settings.mega_presets == 'mega_shop' }}"
+      },
+      {
+        "type": "text",
+        "id": "product_list_title",
+        "label": "t:sections.header.blocks.product_list_title",
+        "default": "BEST SELLER",
+        "visible_if": "{{ block.settings.mega_presets == 'mega_product' }}"
+      },
+      {
+        "type": "link_list",
+        "id": "child_menu",
+        "label": "Child menu",
+        "info": "Only visible if mega menu presets is dropdown.",
+        "visible_if": "{{ block.settings.mega_presets == 'mega_dropdown' }}"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Mega Block"
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,59 @@
+{%- comment -%}
+  Renders a form back instock
+
+  Accepts:
+  - product: {Object} product object.
+  - block: {Object} passing the block information.
+  - product_form_id: {String} Id of the product form to which the variant picker is associated.
+  - section_id
+  - toogle_hidden
+  Usage:
+  {% render 'back-instock', product: product, product_form_id: product_form_id, section_id: section.id %}
+{%- endcomment -%}
+
+{%- assign unavailable_variants = product.variants | where: 'available', false -%}
+
+{%- if unavailable_variants.size > 0 -%}
+
+{%- liquid
+  assign form_notify_id = 'ContactFormNotify' | append: section_id | append: product.id
+  assign selected_variant = product.selected_or_first_available_variant
+  if selected_variant and selected_variant.available == false
+    assign unavailable_variant_fist = selected_variant
+  else
+    assign unavailable_variant_fist = unavailable_variants.first
+  endif
+  -%}
+
+<hdt-back-instock form="{{ product_form_id }}" class="hdt-back-instock hdt-product__notify-stock hdt-block"{% if product.has_only_default_variant %} is-pr-default{% endif %}{% if toogle_hidden %} toogle-hidden{% if selected_variant and selected_variant.available %} hidden{% endif %}{% endif %}>
+  {%- form 'contact', id: form_notify_id -%}
+    {%- if form.posted_successfully? -%}
+      <div class="hdt-form__message hdt-icon__color-success">
+        {% render 'icon' with 'success' %} {{ 'products.product.back_in_stock.success' | t }}
+      </div>
+    {%- elsif form.errors -%}
+      <div class="hdt-form__message hdt-icon__color-error">
+        {% render 'icon' with 'error' %} {{ form.errors.translated_fields.email | capitalize }}: {{ form.errors.messages.email }}
+      </div>
+    {%- endif -%}
+    <h3 class="hdt-product__notify-stock-heading hdt-flex hdt-align-center">
+      <svg class="hdt-product__notify-stock-icon hdt-inline-block" xmlns="http://www.w3.org/2000/svg" width="12" height="16" viewBox="0 0 12 16" fill="currentColor"><path d="M10.4469 13.5031H1.55885C1.25179 13.5069 0.950612 13.4188 0.694007 13.2501C0.437401 13.0815 0.237091 12.8399 0.118811 12.5565C0.000529919 12.2731 -0.0303184 11.9608 0.0302289 11.6598C0.0907762 11.3587 0.239953 11.0827 0.458595 10.867C0.785717 10.5474 1.04574 10.1657 1.22342 9.74433C1.40111 9.32293 1.49287 8.87029 1.49334 8.41296V6.442C1.51097 5.25855 1.99347 4.12954 2.8366 3.29888C3.67973 2.46821 4.8158 2.00259 5.99938 2.00259C7.18297 2.00259 8.31904 2.46821 9.16217 3.29888C10.0053 4.12954 10.4878 5.25855 10.5054 6.442V8.41396C10.5059 8.87121 10.5977 9.32376 10.7754 9.74508C10.9531 10.1664 11.2131 10.548 11.5402 10.8675C11.7582 11.0828 11.907 11.3582 11.9677 11.6585C12.0284 11.9588 11.9981 12.2703 11.8807 12.5533C11.7633 12.8363 11.5642 13.0778 11.3088 13.247C11.0534 13.4162 10.7533 13.5054 10.4469 13.5031ZM6.00288 3.0007C5.87025 3.0007 5.74304 2.94801 5.64925 2.85422C5.55546 2.76043 5.50277 2.63322 5.50277 2.50058V0.500116C5.50277 0.367477 5.55546 0.240271 5.64925 0.146481C5.74304 0.0526907 5.87025 0 6.00288 0C6.13552 0 6.26273 0.0526907 6.35652 0.146481C6.45031 0.240271 6.503 0.367477 6.503 0.500116V2.50058C6.503 2.63322 6.45031 2.76043 6.35652 2.85422C6.26273 2.94801 6.13552 3.0007 6.00288 3.0007ZM8.12338 14.5034C7.9677 14.9412 7.68029 15.3202 7.30061 15.5882C6.92093 15.8561 6.46761 16 6.00288 16C5.53816 16 5.08484 15.8561 4.70516 15.5882C4.32548 15.3202 4.03807 14.9412 3.88239 14.5034H8.12338Z"/></svg>
+      <span class="hdt-s-text hdt-text-xl hdt-font-semibold"> {{ 'products.product.back_in_stock.title' | t }}</span>
+    </h3>
+    <p class="hdt-product__notify-stock-subtitle hdt-s-text">{{ 'products.product.back_in_stock.sub_title' | t }}</p>
+    <textarea rows="1" name="contact[product]" class="hdt-hidden">{{ product.title }}{% unless product.has_only_default_variant %} ( {{ unavailable_variant_fist.title }} ){% endunless %} - {{ request.origin }}{{ unavailable_variant_fist.url }}</textarea>
+    <textarea rows="1" name="contact[message]" class="hdt-hidden">{{ 'products.product.back_in_stock.please_notify' | t }}</textarea>
+    {%- unless product.has_only_default_variant -%}
+    <textarea rows="1" back-instock-text class="hdt-hidden">{{ product.title }}{% unless product.has_only_default_variant %} ( nt94_name ){% endunless %} - {{ request.origin }}{{ product.url }}?variant=nt94_vid</textarea>
+    <select back-instock-select class="hdt-select" form="{{ product_form_id }}">
+      {%- for variant in unavailable_variants -%}
+        <option value="{{ variant.id }}"{% if unavailable_variant_fist.id == variant.id %} selected{% endif %}>{{ variant.title }}</option>
+      {%- endfor -%}
+    </select>
+    {%- endunless -%}
+    <input class="hdt-input" type="email" name="contact[email]" autocomplete="email" autocorrect="off" autocapitalize="off" required="required" placeholder="{{ 'products.product.back_in_stock.email' | t }}">
+    <button type="submit" class="hdt-product-notify__submit hdt-inline-flex hdt-align-center hdt-justify-center hdt-relative hdt-btn hdt-oh hdt-btn-solid hdt-font-semibold">{{ 'products.product.back_in_stock.submit' | t }}</button>
+  {%- endform -%}
+</hdt-back-instock>
+
+{%- endif -%}

@@ -1,0 +1,319 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+ {
+  "sections": {
+    "heading": {
+      "type": "main-heading",
+      "blocks": {
+        "f5e0a175-c884-4746-b826-b312e2b772cb": {
+          "type": "1",
+          "settings": {
+            "heading": "Shopping Cart",
+            "hidden_on_mobile": false,
+            "heading_size": "h3",
+            "text_color": "hdt-s-text",
+            "font_size_heading_lg": 50,
+            "font_size_heading_md": 30,
+            "font_size_heading": 24,
+            "font_weight_heading": 600,
+            "letter_spacing_heading": 0
+          }
+        }
+      },
+      "block_order": [
+        "f5e0a175-c884-4746-b826-b312e2b772cb"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/z4683181570507_46fb10fa21da971ae2af71e75431028c_f52f84e6-035f-4b0a-a139-3f31ae2a7614.webp",
+        "color_scheme": "",
+        "spacing_hd": 5,
+        "padding_top": 80,
+        "padding_bottom": 86,
+        "padding_rate": 75
+      }
+    },
+    "main": {
+      "type": "main-cart",
+      "blocks": {
+        "estimate_QTR3Yc": {
+          "type": "estimate",
+          "settings": {}
+        },
+        "line_r33qDh": {
+          "type": "line",
+          "settings": {}
+        },
+        "discount_afHtUM": {
+          "type": "discount",
+          "settings": {
+            "discount_error_message": "Enter a valid discount code"
+          }
+        },
+        "line_96FqYJ": {
+          "type": "line",
+          "settings": {}
+        },
+        "gift_EcKUVX": {
+          "type": "gift",
+          "settings": {}
+        },
+        "subtotal_x7wRXy": {
+          "type": "subtotal",
+          "settings": {}
+        },
+        "tax_k3XQn8": {
+          "type": "tax",
+          "settings": {}
+        },
+        "agree_rbJhgw": {
+          "type": "agree",
+          "settings": {
+            "content": "I agree with the <a href=\"/policies/terms-of-service\" title=\"Terms of Service\"><strong>terms and conditions</strong></a>"
+          }
+        },
+        "btn_checkout_r6dKHQ": {
+          "type": "btn_checkout",
+          "settings": {
+            "style_class": "",
+            "size": "m",
+            "icon": "none",
+            "icon_position": "before",
+            "icon_height": 16,
+            "icon_spacing": 5
+          }
+        },
+        "img_trust_rieJGw": {
+          "type": "img_trust",
+          "settings": {
+            "mess": "Guarantee Safe Checkout",
+            "source": "1",
+            "wimg": 350,
+            "svg": "visa,paypal,master,american_express,amazon_payments",
+            "height": 25
+          }
+        }
+      },
+      "block_order": [
+        "estimate_QTR3Yc",
+        "line_r33qDh",
+        "discount_afHtUM",
+        "line_96FqYJ",
+        "gift_EcKUVX",
+        "subtotal_x7wRXy",
+        "tax_k3XQn8",
+        "agree_rbJhgw",
+        "btn_checkout_r6dKHQ",
+        "img_trust_rieJGw"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "show_cart_note": true,
+        "show_free_shipping_bar": true,
+        "use_countdown_cart": true,
+        "countdown_cart_minutes": 10,
+        "countdown_cart_text": "[icon] These products are limited, checkout within [time]",
+        "padding_top": 92,
+        "padding_bottom": 75,
+        "padding_rate": 50
+      }
+    },
+    "testimonials_8JzFUn": {
+      "type": "testimonials",
+      "blocks": {
+        "quote_Lmqebx": {
+          "type": "_quote",
+          "settings": {
+            "heading": "Best Online Fashion Site",
+            "content": "<p>“I always find something stylish and affordable on this web fashion site”</p>",
+            "author": "Robert Smith",
+            "pos": "Customer from USA",
+            "enable_verify": false,
+            "product": "jersey-thong-body",
+            "rating": 5
+          },
+          "blocks": {}
+        },
+        "quote_bwFf6Q": {
+          "type": "_quote",
+          "settings": {
+            "heading": "Great Selection and Quality",
+            "content": "<p>\"I love the variety of styles and the high-quality clothing on this web fashion site.\"</p>",
+            "author": "Allen Lyn",
+            "pos": "Customer from France",
+            "enable_verify": false,
+            "product": "cotton-jersey-top",
+            "rating": 5
+          },
+          "blocks": {}
+        },
+        "quote_TynxPh": {
+          "type": "_quote",
+          "settings": {
+            "heading": "Best Customer Service",
+            "content": "<p>\"I finally found a web fashion site with stylish and flattering options in my size.\"</p>",
+            "author": "Peter Rope",
+            "pos": "Customer from USA",
+            "enable_verify": false,
+            "product": "ribbed-modal-t-shirt",
+            "rating": 5
+          },
+          "blocks": {}
+        },
+        "quote_HiHtAA": {
+          "type": "_quote",
+          "settings": {
+            "heading": "Great Selection and Quality",
+            "content": "<p>\"I love the variety of styles and the high-quality clothing on this web fashion site.\"</p>",
+            "author": "Hellen Ase",
+            "pos": "Customer from Japan",
+            "enable_verify": false,
+            "product": "ribbed-tank-top",
+            "rating": 5
+          },
+          "blocks": {}
+        },
+        "testimonials": {
+          "type": "section-heading",
+          "static": true,
+          "settings": {
+            "alignment": "center",
+            "row_gap": 15,
+            "margin_bottom": 45
+          },
+          "blocks": {
+            "heading_bCPcDE": {
+              "type": "heading",
+              "settings": {
+                "heading": "<h3>Happy Clients</h3>",
+                "hidden_br_mobile": false,
+                "hidden_on_mobile": false,
+                "heading_size": "h3",
+                "text_color": "hdt-s-text",
+                "font_size_heading_lg": 42,
+                "font_size_heading_md": 30,
+                "font_size_heading": 32,
+                "font_weight_heading": 400,
+                "letter_spacing_heading": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "heading_bCPcDE"
+          ]
+        }
+      },
+      "block_order": [
+        "quote_Lmqebx",
+        "quote_bwFf6Q",
+        "quote_TynxPh",
+        "quote_HiHtAA"
+      ],
+      "settings": {
+        "content_align": "start",
+        "testimonial_des": "1",
+        "col_dk": "3",
+        "col_tb": "2",
+        "col_mb": "1",
+        "navUI": true,
+        "nav_pos": "middle_out",
+        "nav_des": "outline",
+        "dotUI": false,
+        "dis_dot": 61,
+        "color_scheme": "scheme-2",
+        "pr_rating": "#ff7b54",
+        "section_fullwidth": false,
+        "padding_top": 0,
+        "padding_bottom": 80,
+        "padding_rate": 75
+      }
+    },
+    "related": {
+      "type": "related-products",
+      "settings": {
+        "sec_heading": "You may also like",
+        "heading_tag": "h3",
+        "heading_size": "h3",
+        "text_color": "hdt-s-text",
+        "heading_align": "center",
+        "sec_subheading": "",
+        "subheading_size": "lg",
+        "heading_reverse": false,
+        "heading_gap": 18,
+        "sec_heading_spacing": 50,
+        "limit": 10,
+        "product_des": "1",
+        "image_ratio": "adapt_image",
+        "image_size": true,
+        "show_vendor": false,
+        "col_dk": "4",
+        "col_tb": "3",
+        "col_mb": "2",
+        "navUI": true,
+        "btn_vi": "hover",
+        "nav_des": "default",
+        "nav_shape": "rounded",
+        "nav_size": "small",
+        "nav_pos": "middle_in",
+        "nav_icon": "chrvon",
+        "dotUI": false,
+        "color_scheme": "scheme-2",
+        "full_width": false,
+        "padding_top": 0,
+        "padding_bottom": 80,
+        "padding_rate": 75
+      }
+    },
+    "recently": {
+      "type": "recently-products",
+      "disabled": true,
+      "settings": {
+        "sec_heading": "Recently Viewed",
+        "heading_tag": "h3",
+        "heading_size": "h4",
+        "text_color": "hdt-s-text",
+        "heading_align": "center",
+        "sec_subheading": "",
+        "subheading_size": "lg",
+        "heading_reverse": false,
+        "heading_gap": 18,
+        "sec_heading_spacing": 45,
+        "limit": 10,
+        "product_des": "1",
+        "image_ratio": "custom-pr",
+        "image_size": true,
+        "show_vendor": false,
+        "col_dk": "4",
+        "col_tb": "3",
+        "col_mb": "2",
+        "navUI": true,
+        "btn_vi": "hover",
+        "nav_des": "default",
+        "nav_shape": "rounded",
+        "nav_size": "small",
+        "nav_pos": "middle_in",
+        "nav_icon": "chrvon",
+        "dotUI": false,
+        "color_scheme": "scheme-2",
+        "full_width": false,
+        "padding_top": 0,
+        "padding_bottom": 100,
+        "padding_rate": 75
+      }
+    }
+  },
+  "order": [
+    "heading",
+    "main",
+    "testimonials_8JzFUn",
+    "related",
+    "recently"
+  ]
+}

@@ -1,0 +1,185 @@
+.hdt-newsletter-parent ::-webkit-input-placeholder {
+  color: inherit;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  line-height: inherit;
+  height: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.hdt-newsletter-parent :-moz-placeholder {
+  color: inherit;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  line-height: inherit;
+  height: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+.hdt-newsletter-parent ::-moz-placeholder {
+  color: inherit;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  line-height: inherit;
+  height: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+.hdt-newsletter-parent :-ms-input-placeholder {
+  color: inherit;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  line-height: inherit;
+  height: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+.hdt-newsletter-parent input[type="text"],
+input[type="email"],
+.hdt-newsletter-parent textarea,
+.hdt-newsletter-parent input[type="password"],
+.hdt-newsletter-parent input[type="tel"],
+.hdt-newsletter-parent input[type="search"],
+.hdt-newsletter-parent input[type="text"],
+input[type="email"]:hover,
+.hdt-newsletter-parent textarea,
+.hdt-newsletter-parent input[type="password"]:hover,
+.hdt-newsletter-parent input[type="tel"]:hover,
+.hdt-newsletter-parent input[type="search"]:hover,
+.hdt-newsletter-parent input[type="text"],
+input[type="email"]:focus,
+.hdt-newsletter-parent textarea,
+.hdt-newsletter-parent input[type="password"]:focus,
+.hdt-newsletter-parent input[type="tel"]:focus,
+.hdt-newsletter-parent input[type="search"]:focus {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  outline: none;
+}
+.hdt-newsletter-parent input:focus::placeholder {
+  color: transparent;
+}
+.hdt-newsletter-parent > div,
+.hdt-newsletter-parent .hdt-newsletter__success,
+.hdt-newsletter-parent .hdt-newsletter__error {
+  position: static;
+  z-index: 2;
+  bottom: calc(100% + 8px);
+  left: 0;
+  background-color: transparent;
+  padding: 5px 10px;
+  color: var(--text-color);
+  border-radius: 20px;
+  text-align: start;
+  margin: 10px 0;
+  font-size: 13px;
+}
+.hdt-newsletter-parent .hdt-newsletter__success {
+  color: rgb(var(--color-success-text));
+  background-color: rgb(var(--color-success-background));
+}
+.hdt-newsletter-parent > div svg,
+.hdt-newsletter-parent .hdt-newsletter__success svg {
+  margin-right: 5px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 12px;
+  fill: currentColor;
+}
+.hdt-newsletter-parent .hdt-newsletter__error {
+  color: rgb(var(--color-error-text));
+  background-color: rgb(var(--color-error-background));
+}
+.hdt-newsletter-parent .hdt-newsletter__error::before {
+  border-bottom: solid 1px rgb(var(--color-error-text));
+  border-right: solid 1px rgb(var(--color-error-text));
+}
+.hdt-newsletter-parent .hdt-newsletter__email {
+  --hdt-pd-y: var(--spacing-1-2);
+  --hdt-pd-x: var(--spacing-2-2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  --hdt-border-w: 1px;
+  --hdt-border-color: rgb(var(--color-line-border));
+  color: rgb(var(--color-button-text));
+}
+.hdt-newsletter-parent .hdt-newsletter__submit {
+  --hdt-pd-y: var(--spacing-1-2);
+  --hdt-pd-x: var(--spacing-1);
+  --hdt-border-color: rgb(var(--color-button-border));
+}
+.hdt-newsletter-parent .hdt-newsletter__inner input {
+  --height-input: var(--spacing-4-4);
+  color:rgb(var(--color-input-secondary));
+  background-color: rgb(var(--color-input-primary));
+}
+.hdt-newsletter-parent .hdt-newsletter__inner .is--col-email {
+  width: 100%;
+  flex-grow: 1;
+  margin-inline-end: 9px;
+}
+.hdt-newsletter-parent .hdt-newsletter__inner .hdt-loading__spinner {
+  margin-inline-start: 6px;
+}
+.hdt-newsletter-parent .hdt-newsletter__inner .hdt-btn-solid {
+   --hdt-border-w: 0px;
+}
+.hdt-checkbox-email-wrapp{
+  min-width: 15px;
+  place-items: center;
+}
+.hdt-agree-email__checkbox{
+  margin-top: var(--spacing-1-2);
+}
+.hdt-checkbox-email-wrapp input{
+  -webkit-appearance: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: var(--radius-full);
+  display: block;
+  border: 1px solid rgb(var(--color-line-border));
+  transition: .2s ease-in-out;
+  background-color: rgb(var(--color-secondary-button));
+}
+.hdt-agree-email__checkbox label{
+  margin-inline-start: var(--spacing-0-8);
+}
+.hdt-checkbox-email-wrapp svg{
+  color: rgb(var(--color-secondary-button));
+  fill: currentColor;
+  transform: scale(0);
+  transition: .25s ease-in-out;
+}
+.hdt-checkbox-email-wrapp input:checked+svg {
+  transform: scale(1);
+}
+.hdt-newsletter-checkbox{
+  margin-top: var(--spacing-1);
+}
+.hdt-newsletter-checkbox label{
+  padding-inline-start: var(--spacing-1);
+}
+.hdt-newsletter-checkbox label a {
+  text-decoration: underline;
+  text-underline-offset: .2rem;
+}
+@media (min-width: 768px) {
+}
+@media (min-width: 1150px) {
+  .hdt-newsletter-parent .hdt-newsletter__email {
+    --hdt-pd-y: var(--spacing-1-2);
+    --hdt-pd-x: var(--spacing-2-6);
+  }
+  .hdt-newsletter-parent .hdt-newsletter__submit {
+    --hdt-pd-y: var(--spacing-1-4);
+    --hdt-pd-x: var(--spacing-2-4);
+  }
+  .hdt-newsletter-parent .hdt-newsletter__inner input,
+  .hdt-newsletter__inner button {
+    --height-input: var(--spacing-4-8);
+  }
+}

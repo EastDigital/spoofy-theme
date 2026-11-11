@@ -1,0 +1,73 @@
+<div class="hdt-group-button-block hdt-button-group hdt-flex hdt-flex-block  hdt-justify-{{ block.settings.alignment }} hdt-align-center" id="block-{{ block.id }}" {{ block.shopify_attributes }} style="gap: var(--spacing-{{ block.settings.spacing }});">{% content_for 'blocks' %}</div>
+
+{% schema %}
+{
+  "name": "Button Group",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "Right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "spacing",
+      "label": "Spacing",
+      "options": [
+        {
+          "value": "1",
+          "label": "10px"
+        },
+        {
+          "value": "2",
+          "label": "20px"
+        },
+        {
+          "value": "3",
+          "label": "30px"
+        },
+        {
+          "value": "4",
+          "label": "40px"
+        },
+        {
+          "value": "5",
+          "label": "50px"
+        },
+      ],
+      "default": "2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "button"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Button Group",
+      "blocks": [
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

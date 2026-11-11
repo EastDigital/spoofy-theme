@@ -1,0 +1,96 @@
+<!-- blocks/incoming-mess.liquid -->
+{% liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  if settings.pick_mode == 'no' and product.variants.size > 1
+    assign selected_variant = product.selected_variant
+  elsif settings.pick_mode == 'first' and settings.hide_sold_out == false
+    assign selected_variant = product.selected_variant | default: product.variants.first
+  else
+    assign selected_variant = product.selected_or_first_available_variant
+  endif
+  assign incoming_dates = product.variants | where: 'incoming' | where: 'next_incoming_date'
+  assign product_form_id = 'product-form-' | append: section.id | append: product.id
+%}
+{%- if incoming_dates.size > 0 -%}
+  {%- assign format_date = selected_variant.next_incoming_date | date: block.settings.date -%}
+  {%- capture date_obj -%}
+    {%- if product.variants.size > 1 -%}
+    { {%- for variant in incoming_dates -%}
+      "{{ variant.id }}":"{{ variant.next_incoming_date | date: block.settings.date }}"{% unless forloop.last %},{% endunless -%}
+    {%- endfor -%} }
+    {%- endif -%}
+  {%- endcapture -%}
+
+<hdt-incoming-mess class="hdt-s-text hdt-font-medium" form="{{ product_form_id }}" data-obj='{{ date_obj }}' {% if product.has_only_default_variant %}is-pr-default{% endif %}{% unless selected_variant and format_date != blank %} hidden{% endunless %} {{ block.shopify_attributes }}>
+  {%- if product.variants.size == 1 -%}
+    {%- if selected_variant.available and selected_variant.requires_shipping %}<span>{{ 'products.product.will_not_ship_until_html' | t: date: format_date }}</span>{% else %}<span>{{ 'products.product.will_be_in_stock_after_html' | t: date: format_date }}</span>{% endif -%}
+  {%- else -%}
+    <span {% unless selected_variant.available and selected_variant.requires_shipping %}hidden{% endunless %}>{{ 'products.product.will_not_ship_until_html' | t: date: format_date }}</span><span {% if selected_variant.available %}hidden{% endif %}>{{ 'products.product.will_be_in_stock_after_html' | t: date: format_date }}</span>
+  {%- endif -%}
+</hdt-incoming-mess>
+{%- endif -%}
+
+{% schema %}
+  {
+    "name": "Incoming mess",
+    "tag": null,
+    "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.main-product.blocks.incoming_mess.settings.paragraph.content"
+        },
+        {
+          "type": "select",
+          "id": "date",
+          "label": "t:sections.main-product.blocks.incoming_mess.settings.date.label",
+          "info": "t:sections.main-product.blocks.incoming_mess.settings.date.info",
+          "default": "%d\/%m\/%Y",
+          "options": [
+            {
+              "value": "%B %d, %Y",
+              "label": "April 09, 1994 - MMM dd, yyyy"
+            },
+            {
+              "value": "%d\/%m\/%y",
+              "label": "09\/04\/94 - dd\/MM\/yy"
+            },
+            {
+              "value": "%d\/%m\/%Y",
+              "label": "09\/04\/1994 - dd\/MM\/yyyy"
+            },
+            {
+              "value": "%e\/%m\/%Y",
+              "label": "9\/04\/1994 - d\/MM\/yyyy"
+            },
+            {
+              "value": "%b %y",
+              "label": "Apr 94 - MMM yy"
+            },
+            {
+              "value": "%b %d",
+              "label": "Apr 09 - MMM dd"
+            },
+            {
+              "value": "%m\/%d\/%Y",
+              "label": "04\/09\/1994 - MM\/dd\/yyyy"
+            },
+            {
+              "value": "%A %d\/%m\/%Y",
+              "label": "Tuesday 09\/04\/1994 - aa dd\/MM\/yyyy"
+            },
+            {
+              "value": "%a %d\/%m\/%Y",
+              "label": "Tue 09\/04\/1994 - a dd\/MM\/yyyy"
+            }
+          ]
+        }
+    ],
+    "presets": [
+      {
+        "name": "Incoming mess",
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,297 @@
+<!-- section/map-pin-info.liquid -->
+
+{%- liquid
+  unless section.settings.full_width
+    assign stt_round = 'hdt-radius hdt-rd-f'
+    assign sizes = 'min(' | append: settings.page_width | append: 'px, calc(100vw - 30px))'
+  else
+    assign sizes = '100vw'
+  endunless
+-%}
+{%- style -%}#shopify-section-{{section.id}}{--section-pt:{{section.settings.padding_top}}px;--section-pb:{{section.settings.padding_bottom}}px;--section-prate:{{section.settings.padding_rate}}}#shopify-section-{{section.id}}{--aspect-ratioapt:{{section.settings.custom_h_mb}}px}.hdt-map-pin-info iframe{width:100%;user-select:auto;pointer-events:auto;filter:grayscale({{section.settings.filter_map}}%)}.hdt-map-pin-info .hdt-content{padding-top:var(--spacing-2-4)}.hdt-map-pin-info *+.hdt-subtext{margin-top:var(--spacing-1-6)}.hdt-map-pin-info *+.hdt-heading{margin-top:var(--spacing-1-4)}.hdt-map-pin-info *+.hdt-btn{margin-top:var(--spacing-2)}.hdt-map-pin-info .hdt-content-inner{padding:var(--spacing-2) var(--spacing-2)}@media (min-width:768px){#shopify-section-{{section.id}}{--aspect-ratioapt-md:{{section.settings.custom_h_tb}}px}.hdt-map-pin-info *+.hdt-subtext{margin-top:var(--spacing-2-2)}.hdt-map-pin-info *+.hdt-heading{margin-top:var(--spacing-2)}.hdt-map-pin-info *+.hdt-btn{margin-top:var(--spacing-3)}.hdt-map-pin-info .hdt-content-inner{padding:var(--spacing-2) var(--spacing-2) var(--spacing-2);min-width:350px}}@media (min-width:1025px){.hdt-map-pin-info .hdt-content-inner{padding:var(--spacing-4) var(--spacing-4) var(--spacing-4-8);min-width:460px}}@media (min-width:1150px){#shopify-section-{{section.id}}{--aspect-ratioapt-md:{{section.settings.custom_h_dk}}px}.hdt-map-pin-info .hdt-content{position:absolute;top:0;right:0;left:0;bottom:0}.hdt-map-pin-info .hdt-content-inner{margin-inline-start:calc(var(--spacing-5) + var(--spacing-2-2))}}@media (max-width:767px){.hdt-map-pin-info .hdt-media-overlap-content>:is(picture,.hdt-media-wrapper){display:block}.hdt-map-pin-info .hdt-media-overlap-content{display:flex;flex-direction:column}.hdt-map-pin-info .hdt-grid.hdt-px-15{padding-inline-start:0;padding-inline-end:0}.hdt-map-pin-info .hdt-grid.hdt-h-full.hdt-pe-none>div{width:100%}}{%- endstyle -%}
+<div class="hdt-section-spacing">
+  <div
+    class="hdt-container{% if section.settings.full_width %}-full{% endif %} {{ stt_round }}"
+    color-scheme="{{ section.settings.color_scheme }}"
+    hdt-reveal="fade-in"
+  >
+    <div class="hdt-height--fixed md:hdt-height--fixed hdt-relative hdt-media-overlap-content">
+      {%- if section.settings.use_map == true and section.settings.map != blank -%}
+        {{ section.settings.map }}
+      {%- elsif section.settings.use_map == false and section.settings.image != blank -%}
+        {%- liquid
+          if section.settings.image != blank
+            echo '<picture class="hdt-media-wrapper hdt-radius">'
+            if section.settings.image_mb != blank and section.settings.image_mb != section.settings.image
+              assign srcset = section.settings.image_mb | image_url: width: section.settings.image_mb.width | image_tag: widths: '200,400,600,800,1000', alt: null | split: 'srcset="' | last
+              unless srcset contains 'src='
+                echo '<source media="(max-width: 767px)" srcset="' | append: srcset | replace_first: 'style=', 'data-none='
+              endunless
+            endif
+            echo section.settings.image | image_url: width: section.settings.image.width | image_tag: loading: 'lazy', sizes: sizes, class: 'hdt-object-pos-mb', widths: '400,600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200'
+            echo '</picture>'
+          else
+            echo '<div class="hdt-media-wrapper">'
+            echo 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg hdt-placeholder'
+            echo '</div>'
+          endif
+        -%}
+      {%- else -%}
+        <div class="hdt-media-wrapper">
+          {{ 'blog-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
+      {%- endif -%}
+      <div class="hdt-block md:hdt-grid hdt-h-full{% unless request.design_mode %} hdt-pe-none{% endunless %}">
+        {%- if section.blocks.size > 0 -%}
+          <div class="md:hdt-place-self-{{ section.settings.content_position }}">
+            <div class="hdt-oh hdt-grid {% if section.settings.full_width == true %}hdt-px-15 lg:hdt-px-0{% endif %}">
+              <div class="hdt-content-inner hdt-text-center md:hdt-text-start hdt-s-gradient hdt-radius hdt-oh">
+              {% content_for 'blocks' %}
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Map pin info",
+  "tag": "section",
+  "class": "hdt-section hdt-map-pin-info",
+  "disabled_on": {
+    "groups": ["*"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:sections.contact.full_width.label",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.contact.color.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_map",
+      "label": "Use map",
+      "default": true
+    },
+    {
+      "type": "liquid",
+      "id": "map",
+      "label": "t:sections.contact.map_with_text.map.label",
+      "info": "[You can get the map at here](https://www.google.com/maps), need to use iframes",
+      "visible_if": "{{ section.settings.use_map }}"
+    },
+    {
+      "type": "range",
+      "id": "filter_map",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Filter gray scale source map",
+      "default": 0,
+      "visible_if": "{{ section.settings.use_map }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.slideshow.blocks.slide.settings.image.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mb",
+      "label": "t:sections.slideshow.blocks.slide.settings.image_mb.label"
+    },
+    {
+      "type": "number",
+      "id": "custom_h_dk",
+      "label": "Custom height",
+      "default": 600,
+    },
+    {
+      "type": "number",
+      "id": "custom_h_tb",
+      "label": "Custom height (tablet)",
+      "default": 450,
+    },
+    {
+      "type": "number",
+      "id": "custom_h_mb",
+      "label": "Custom height (mobile)",
+      "default": 300,
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "t:sections.all.content_position.label",
+      "options": [
+        {
+          "value": "start",
+          "label": "t:sections.all.content_position.options.start"
+        },
+        {
+          "value": "start-center",
+          "label": "t:sections.all.content_position.options.start_center"
+        },
+        {
+          "value": "start-end",
+          "label": "t:sections.all.content_position.options.start_end"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.all.content_position.options.center"
+        },
+        {
+          "value": "center-start",
+          "label": "t:sections.all.content_position.options.center_start"
+        },
+        {
+          "value": "center-end",
+          "label": "t:sections.all.content_position.options.center_end"
+        },
+        {
+          "value": "end",
+          "label": "t:sections.all.content_position.options.end"
+        },
+        {
+          "value": "end-start",
+          "label": "t:sections.all.content_position.options.end_start"
+        },
+        {
+          "value": "end-center",
+          "label": "t:sections.all.content_position.options.end_center"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_rate",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "t:sections.all.padding.padding_rate",
+      "default": 75
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading"
+    },
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
+    },
+    {
+      "type": "spacer"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Map pin info",
+      "category": "t:sections_categories.05_section.name",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "<h2>Heading</h2>",
+            "hidden_br_mobile": false,
+            "hidden_on_mobile": false,
+            "heading_size": "h2",
+            "text_color": "",
+            "font_size_heading_lg": 50,
+            "font_size_heading_md": 30,
+            "font_size_heading": 24,
+            "font_weight_heading": 600,
+            "letter_spacing_heading": 0
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers.</p>",
+            "hidden_br_mobile": false,
+            "hidden_on_mobile": false,
+            "text_size": "base",
+            "text_color": "",
+            "font_size_text_lg": 16,
+            "font_size_text_md": 14,
+            "font_size_text": 14,
+            "font_weight_text": 400,
+            "letter_spacing_text": 0
+          }
+        },
+        {
+          "type": "button",
+          "settings": {
+            "label": "Button label",
+            "link": "",
+            "open_in_new_tab": false,
+            "full_width": false,
+            "style_class": "solid",
+            "font_size": "m",
+            "font_weight": "normal",
+            "font_size_btn": 14,
+            "padding_btn": 30,
+            "min_width_btn": 100,
+            "min_width_dt_btn": 100,
+            "min_height_btn": 40,
+            "icon": "none",
+            "icon_position": "after",
+            "icon_height": 14,
+            "icon_spacing": 5
+          }
+        }
+      ],
+      "settings": {
+      "full_width": true,
+      "color_scheme": "",
+      "use_map": true,
+      "map": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d925134.3210715873!2d54.568041327437584!3d25.0745656650172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43496ad9c645%3A0xbde66e5084295162!2zRHViYWkgLSBDw6FjIHRp4buDdSBWxrDGoW5nIHF14buRYyDhuqIgcuG6rXAgVGjhu5FuZyBuaOG6pXQ!5e0!3m2!1svi!2s!4v1740811647754!5m2!1svi!2s\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>",
+      "filter_map": 0,
+      "custom_h_dk": 600,
+      "custom_h_tb": 450,
+      "custom_h_mb": 300,
+      "content_position": "center-start",
+      "padding_top": 40,
+      "padding_bottom": 40,
+      "padding_rate": 75
+      }
+    }
+  ]
+}
+{% endschema %}

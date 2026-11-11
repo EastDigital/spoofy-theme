@@ -1,0 +1,26 @@
+{% liquid
+  assign product = block.settings.product | default: product
+%}
+<div class="product-description hdt-rte">
+  {%- if product != blank -%}
+    {{ product.description }}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Product Description",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select product"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Description"
+    }
+  ]
+}
+{% endschema %}

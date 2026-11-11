@@ -1,0 +1,8 @@
+
+{%- if enable_list and col_mobile == 0 or col_tablet == 0 or col_desktop == 0 -%}
+  40vw
+{%- elsif full_width -%}
+  (max-width: 767px) calc(100vw / {{ col_mobile }}), (max-width: 1149px) calc(100vw / {{ col_tablet }}), calc((100vw - 100px) / {{ col_desktop }} - (30px / {{ col_desktop }} * {{ col_desktop | minus: 1 }}))
+{%- else -%}
+  (max-width: 767px) calc(100vw / {{ col_mobile }} - 30px), (max-width: 1149px) calc(100vw / {{ col_tablet }} - 60px), calc(min(100vw - 100px, {{ settings.page_width }}px) / {{ col_desktop }} - (24px / {{ col_desktop }} * {{ col_desktop | minus: 1 }}))
+{%- endif -%}

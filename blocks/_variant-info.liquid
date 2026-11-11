@@ -1,0 +1,52 @@
+{%-
+  liquid
+  unless product
+    assign product = section.settings.product
+  endunless
+  assign selected_variant = product.selected_or_first_available_variant
+  assign product_form_id = 'product-form-' | append: section.id | append: product.id
+  if block.settings.show_first_media
+    assign image = product.featured_media.preview_image
+  else
+    assign image = selected_variant.featured_image | default: product.featured_image
+  endif
+  assign un_no_pick = true
+  if settings.pick_mode == 'no' and product.variants.size > 1
+    assign selected_variant = product.selected_variant
+    unless selected_variant
+      assign un_no_pick = false
+    endunless
+  endif
+-%}
+<div class="hdt-product-info__item hdt-quick-add-infos hdt-flex hdt-align-center" data-type="{{ block.type }}" {{ block.shopify_attributes }}>
+  {%- if image != blank -%}
+    <hdt-variant-preview-img form="{{ product_form_id }}" class="hdt-quick-add-pr-img">
+      {{ image | image_url: width: 160 | image_tag: sizes: '(max-width: 767px) 60px, 80px', widths: '60,80,120,160' }}
+    </hdt-variant-preview-img>
+  {%- endif -%}
+  <div class="hdt-quick-add-info hdt-flex hdt-flex-col">
+    <a class="hdt-quick-add-info-title hdt-block hdt-s-text" href="{{ product.url }}"><h1 class="hdt-font-normal">{{ product.title | escape }}</h1></a>
+    <div class="hdt-product__price">
+      {%- render 'price', product: product, use_variant: true, form_id: product_form_id, show_badges: true, only_show_sale: true, show_volume_note: false, un_no_pick: un_no_pick -%}
+    </div>
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "Variant info",
+    "tag":null,
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_first_media",
+        "label": "Show first media",
+        "default": false
+      },
+    ],
+    "presets": [
+      {
+        "name": "Variant info",
+      }
+    ]
+  }
+{% endschema %}

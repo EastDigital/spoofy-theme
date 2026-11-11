@@ -1,0 +1,319 @@
+<div class="hdt-product__delivery-return" {{ block.shopify_attributes }}>
+  <div class="hdt-row-grid hdt-grid-cols-1 lg:hdt-grid-cols-2 hdt-inline-block hdt-s-text hdt-text-center">
+    {%- if block.settings.content_devivery != blank -%}
+      <div class="hdt-product__delivery">
+        {%- if block.settings.icon_delivery != 'none' -%}
+          <div class="hdt-product__delivery-icon">
+            {%- render 'icon_theme_svg', icon_svg: block.settings.icon_delivery -%}
+          </div>
+        {%- endif -%}
+        <div class="hdt-product__delivery-content">{{ block.settings.content_devivery }}</div>
+      </div>
+    {%- endif -%}
+    {%- if block.settings.content_return != blank -%}
+      <div class="hdt-product__return">
+        {%- if block.settings.icon_return != 'none' -%}
+          {%- render 'icon_theme_svg', icon_svg: block.settings.icon_return -%}
+        {%- endif -%}
+        <div class="hdt-product__delivery-content">{{ block.settings.content_return }}</div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Delivery Return",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Delivery content"
+    },
+    {
+      "type": "select",
+      "id": "icon_delivery",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__1.label"
+        },
+        {
+          "value": "box",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__2.label"
+        },
+        {
+          "value": "box2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__3.label"
+        },
+        {
+          "value": "payment",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__4.label"
+        },
+        {
+          "value": "payment2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__5.label"
+        },
+        {
+          "value": "return",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__6.label"
+        },
+        {
+          "value": "return2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__7.label"
+        },
+        {
+          "value": "support",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__8.label"
+        },
+        {
+          "value": "wave",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__9.label"
+        },
+        {
+          "value": "plants",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__10.label"
+        },
+        {
+          "value": "flowerpot",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__11.label"
+        },
+        {
+          "value": "leaf",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__12.label"
+        },
+        {
+          "value": "leaf2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__13.label"
+        },
+        {
+          "value": "smile",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__14.label"
+        },
+        {
+          "value": "smile2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__15.label"
+        },
+        {
+          "value": "delicious",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__16.label"
+        },
+        {
+          "value": "health",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__17.label"
+        },
+        {
+          "value": "energy",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__18.label"
+        },
+        {
+          "value": "skin",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__19.label"
+        },
+        {
+          "value": "crescent_moon",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__20.label"
+        },
+        {
+          "value": "diamond",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__21.label"
+        },
+        {
+          "value": "various_sizes",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__22.label"
+        },
+        {
+          "value": "dividing_icon",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__23.label"
+        },
+        {
+          "value": "arrow_up",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__24.label"
+        },
+        {
+          "value": "flash",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__25.label"
+        },
+        {
+          "value": "flash2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__26.label"
+        },
+        {
+          "value": "ship",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__27.label"
+        },
+        {
+          "value": "clock",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__28.label"
+        },
+        {
+          "value": "fire",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__29.label"
+        },
+        {
+          "value": "delivery",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__30.label"
+        },
+        {
+          "value": "return_order",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__31.label"
+        }
+      ],
+      "default": "ship",
+      "label": "Icon"
+    },
+    {
+      "type": "richtext",
+      "id": "content_devivery",
+      "label": "Content",
+      "default": "<p>Estimate delivery times:<strong> 12-26 days</strong> (International),<strong> 3-6 days</strong> (United States).</p>"
+    },
+    {
+      "type": "header",
+      "content": "Return content"
+    },
+    {
+      "type": "select",
+      "id": "icon_return",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__1.label"
+        },
+        {
+          "value": "box",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__2.label"
+        },
+        {
+          "value": "box2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__3.label"
+        },
+        {
+          "value": "payment",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__4.label"
+        },
+        {
+          "value": "payment2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__5.label"
+        },
+        {
+          "value": "return",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__6.label"
+        },
+        {
+          "value": "return2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__7.label"
+        },
+        {
+          "value": "support",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__8.label"
+        },
+        {
+          "value": "wave",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__9.label"
+        },
+        {
+          "value": "plants",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__10.label"
+        },
+        {
+          "value": "flowerpot",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__11.label"
+        },
+        {
+          "value": "leaf",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__12.label"
+        },
+        {
+          "value": "leaf2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__13.label"
+        },
+        {
+          "value": "smile",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__14.label"
+        },
+        {
+          "value": "smile2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__15.label"
+        },
+        {
+          "value": "delicious",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__16.label"
+        },
+        {
+          "value": "health",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__17.label"
+        },
+        {
+          "value": "energy",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__18.label"
+        },
+        {
+          "value": "skin",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__19.label"
+        },
+        {
+          "value": "crescent_moon",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__20.label"
+        },
+        {
+          "value": "diamond",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__21.label"
+        },
+        {
+          "value": "various_sizes",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__22.label"
+        },
+        {
+          "value": "dividing_icon",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__23.label"
+        },
+        {
+          "value": "arrow_up",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__24.label"
+        },
+        {
+          "value": "flash",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__25.label"
+        },
+        {
+          "value": "flash2",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__26.label"
+        },
+        {
+          "value": "ship",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__27.label"
+        },
+        {
+          "value": "clock",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__28.label"
+        },
+        {
+          "value": "fire",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__29.label"
+        },
+        {
+          "value": "delivery",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__30.label"
+        },
+        {
+          "value": "return_order",
+          "label": "t:sections.icon-box.blocks.item.icon_svg.options__31.label"
+        }
+      ],
+      "default": "return_order",
+      "label": "Icon"
+    },
+    {
+      "type": "richtext",
+      "id": "content_return",
+      "label": "Content",
+      "default": "<p>Return within <strong>30 days</strong> of purchase. Duties &amp; taxes are non-refundable.</p>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Delivery Return"
+    }
+  ]
+}
+{% endschema %}

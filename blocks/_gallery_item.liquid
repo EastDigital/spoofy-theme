@@ -1,0 +1,78 @@
+{%- liquid
+    assign image = block.settings.image
+    assign product = block.settings.product_item
+    assign space_item = section.settings.spacing_items
+    assign current_width = settings.page_width | append: 'px'
+    assign current_width_tb = '100vw'
+    assign current_width_mb = '100vw'
+    
+    if section.settings.section_fullwidth
+      if section.settings.boxed_fullwidth
+        assign current_width = '100vw - 80px'
+        assign current_width_tb = '100vw - 40px'
+        assign current_width_mb = '100vw - 10px'
+      else
+        assign current_width = '100vw'
+      endif
+    endif
+    assign image_action = section.settings.image_action
+    capture current 
+        cycle 1, 2, 3 
+    endcapture 
+-%}
+
+{%- capture sizes -%}
+  (min-width: 1150px) calc(({{ current_width }} -  ({{ space_item }} * ( {{ section.settings.col_dk }} - 1 ))) * 1 / {{ section.settings.col_dk }}),(min-width: 768px) calc( ({{ current_width_tb }} - ({{ space_item }} * ( {{ section.settings.col_tb }} - 1 ))) * 1 / {{ section.settings.col_tb }}), calc( ({{ current_width_mb }} - ({{ space_item }} * ( {{ section.settings.col_mb }} - 1 ) )) * 1 / {{ section.settings.col_mb }})
+{%- endcapture -%}
+
+<div class="hdt-slider__slide{% unless image_action == 'go_link'  %}{% unless request.design_mode %} hdt-pe-none{% endunless %}{% endunless %}" {{ block.shopify_attributes }}>
+    <div class="hdt-gallery-item" hdt-reveal="slide-in" timeline>
+        <div  calc-nav class="hdt-gallery-inner hdt-relative hdt-oh hdt-radius">
+        <div class="hdt-gallery-img" style="--aspect-ratioapt: {{ image.aspect_ratio | default: 1.2 }};">
+            <span class="hdt-ratio">
+            {%- if image != blank -%}
+                {{ image | image_url: width: image.width | image_tag: loading: 'lazy', width: image.width, height: image.height, class: '', sizes: sizes, widths: '220, 285, 350, 385, 400' }}
+            {%- else -%}
+                {{ 'hero-apparel-' | append: current | placeholder_svg_tag: 'hdt-placeholder-svg' }}  
+            {%- endif -%}
+            </span>
+            {% if block.settings.item_link != blank and image_action == 'go_link' %}<a class="hdt-full-width-link" href="{{ block.settings.item_link }}"></a>{% endif %}
+        </div>
+        {%- if product != blank and image_action == 'go_link' -%}
+            {%- if settings.show_ultra_btn %}{% render 'btn-ultra', class: 'hdt-pr_btn hdt-gallery-product hdt-inline-flex hdt-align-center hdt-justify-center', product: product, product_url: product.url, section_id: block.id, placement: 'top' %}{% endif -%}
+        {%- endif -%}
+        </div> 
+    </div>      
+</div>
+
+
+{% schema %}
+  {   
+    "name": "t:sections.gallery.blocks.gallery_item.label",
+    "tag": null,
+    "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.gallery.blocks.gallery_item.image"
+    },
+    {
+      "type": "url",
+      "id": "item_link",
+      "label": "t:sections.gallery.blocks.gallery_item.link"
+    },
+    {
+      "type": "product",
+      "id": "product_item",
+      "label": "t:sections.gallery.blocks.gallery_item.product"
+    }
+  ],
+    "presets": [
+      {
+        "name": "Gallery item",
+        "settings": {
+        }
+      }
+    ]
+  }
+{% endschema %}

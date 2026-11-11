@@ -1,0 +1,208 @@
+.hdt-media-overlap-content .hdt-hero-image__content-wrap {
+  height: 100%;
+}
+.hdt-section-image-banner .hdt-hero-image__content-wrap {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.hdt-hero-image__content-bg--true>.hdt-hero-image__content-box {
+  padding: 2rem 1.5rem;
+  background: rgb(var(--color-background));
+  background: var(--gradient-background);
+  border-radius: var(--radius)
+}
+.hdt-hero-image__content-wrap>.hdt-group-block {
+  border-radius: var(--radius)
+}
+
+.hdt-hero-image__overlay--true:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: rgb(var(--color-overlay));
+  opacity: 0.2;
+}
+
+.hdt-infinite-loop-slider-section .hdt-row-flex .hdt-col{
+  width: calc(100vw / var(--cols) - (var(--spacing-x, 0px) * calc(var(--cols) - 1) / var(--cols)));
+}
+.hdt-infinite-loop-slider-section .hdt-media-overlap-content{
+  --media-overlap-content-gap-c:0px;
+  --media-overlap-content-gap-r:0px;
+}
+.hdt-infinite-loop-slider-section .hdt-row-flex{
+  --spacing-x:0px;
+  --spacing-y:0px;
+  flex-wrap: nowrap;
+}
+.hdt-infinite-loop-slider-section .hdt-media-overlap-content hdt-marquee{
+  width: 100%;
+  max-width: 100%;
+  text-align: inherit;
+  line-height: 0;
+}
+.hdt-infinite-loop-slider-section .hdt-media-wrapper svg,
+.hdt-infinite-loop-slider-section .hdt-media-wrapper img{
+  grid-area: full-r-start / full-c-start / full-r-end / full-c-end;
+  height: var(--media-overlap-content-h, auto);
+  min-height: 100%;
+  max-height: 100%;
+  min-width: 100%;
+  overflow-wrap: anywhere;
+  object-fit: cover;
+  object-position: center;
+  border-radius: inherit;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+.hdt-infinite-loop-slider-section .hdt-media-wrapper{
+  display: contents;
+}
+.hdt-infinite-loop-slider-section .hdt-hero-image__content-wrap{
+  padding-top:min(5vw, 50px);
+  padding-bottom: min(5vw, 50px);
+} 
+
+/* Image banner content positions */
+.content-top-left {
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.content-top-center {
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.content-top-right {
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.content-middle-left {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.content-middle-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.content-middle-right {
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.content-bottom-left {
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+.content-bottom-center {
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.content-bottom-right {
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+@media(max-width: 767px) {
+  .hdt-infinite-loop-slider-section.md\:hdt-height--adapt_image .hdt-media-overlap-content :is(img,svg),
+  .hdt-infinite-loop-slider-section.md\:hdt-height--adapt_image_first .hdt-media-overlap-content :is(img,svg){
+    aspect-ratio: var(--aspect-ratioapt, auto);
+  }
+  .hdt-infinite-loop-slider-section.md\:hdt-height--adapt_image .hdt-media-overlap-content :is(img,svg){
+    min-height: auto;
+  }
+}
+
+@media(min-width: 768px) {
+  .hdt-hero-image__inner.hdt-media-overlap-content {
+      --container-max-width: var(--container-max-width-padding-md);
+  }
+  .hdt-infinite-loop-slider-section.md\:hdt-height--adapt_image .hdt-media-overlap-content :is(img,svg),
+  .hdt-infinite-loop-slider-section.md\:hdt-height--adapt_image_first .hdt-media-overlap-content :is(img,svg){
+    aspect-ratio: var(--aspect-ratioapt-md, auto);
+  }
+  .hdt-infinite-loop-slider-section.md\:hdt-height--adapt_image .hdt-media-overlap-content :is(img,svg){
+    min-height: auto;
+  }
+  .hdt-hero-image__content-bg--true>.hdt-hero-image__content-box {
+    padding: 4rem 2rem;
+  }
+  .hdt-hero-image__content-bg--true>.hdt-hero-image__content-box {
+    width: auto;
+    max-width: 70.5rem;
+    min-width: 45rem;
+  }
+
+  /* Image banner content positions */
+  .md\:hdt-content-top-left {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .md\:hdt-content-top-center {
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .md\:hdt-content-top-right {
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+
+  .md\:hdt-content-middle-left {
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .md\:hdt-content-middle-center {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .md\:hdt-content-middle-right {
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .md\:hdt-content-bottom-left {
+    justify-content: flex-start;
+    align-items: flex-end;
+  }
+
+  .md\:hdt-content-bottom-center {
+    justify-content: center;
+    align-items: flex-end;
+  }
+
+  .md\:hdt-content-bottom-right {
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+  
+}
+
+@media(min-width: 1150px) {
+  .hdt-hero-image__content-bg--true>.hdt-hero-image__content-box {
+    padding: 8rem 4.4rem;
+    min-width: 54.6rem;
+  }
+  .hdt-hero-image__inner.hdt-media-overlap-content {
+      --container-max-width: var(--container-max-width-padding-lg);
+      --media-overlap-content-gap-c: 0;
+  }
+}
+
+

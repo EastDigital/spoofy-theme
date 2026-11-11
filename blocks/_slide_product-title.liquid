@@ -1,0 +1,43 @@
+
+{%- liquid
+	if block.settings.product == blank
+		continue
+	endif
+  assign product_form_id = 'product-form-' | append: section.id | append: product.id 
+  assign product = block.settings.product
+  assign un_no_pick = true
+  if settings.pick_mode == 'no' and product.variants.size > 1
+    assign selected_variant = product.selected_variant
+    unless selected_variant
+      assign un_no_pick = false
+    endunless
+  endif
+
+-%}
+<a reval href="{{ product.url }}" class="hdt-product__title hdt-h6 hdt-s-text hdt-block" style="margin-bottom:10px;">{{ block.settings.title | default: product.title }}</a>
+<div reval class="hdt-h6 hdt-pr_price">
+  {%- render 'price', product: product, use_variant: true, form_id: product_form_id, show_badges: false, only_show_sale: false, show_volume_note: false, un_no_pick: un_no_pick -%}
+</div>
+{% schema %}
+	{
+		"name": "Product info",
+    "settings":[
+      {
+        "type": "product",
+        "id": "product",
+        "label": "Product"
+      },
+      {
+        "type": "html",
+        "id": "title",
+        "label": "Title",
+        "info": "Use product title when blank",
+      },
+    ],
+		"presets": [
+      { 
+        "name": "Product info",
+      }
+    ]
+	}
+{% endschema %}
