@@ -54,12 +54,12 @@
        <label class="hdt-quantity__label hdt-s-text hdt-font-semibold" for="Variant-{{ variant.id }}">{{ 'products.product.quantity.label' | t }} <span class="hdt-quantity__rules-cart no-js-hidden"{% if cart_qty == 0 %} hidden{% endif %}>({{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}})</span></label>
         <hdt-quantity-wrapp class="hdt-quantity-wrapp hdt-product__form-qty hdt-s-text hdt-text-center hdt-relative hdt-inline-block">
           <button class="hdt-quantity__button no-js-hidden disabled is--minus hdt-absolute hdt-p-0 hdt-top-0 hdt-left-0 hdt-text-start" name="minus" type="button">
-            <span class="sr-only">{{ 'products.product.quantity.decrease' | t: produc: product.title }}</span>
+            <span class="sr-only">{{ 'products.product.quantity.decrease' | t: product: product.title }}</span>
             {%- render 'icon' with 'minus' -%}
           </button>
           <input form="Variant-form-{{ variant.id }}" class="hdt-quantity__input hdt-text-center hdt-text-sm hdt-font-medium" type="number" name="updates[{{ variant.id }}]" id="Quantity-{{ variant.id }}" data-quantity-variant-id="{{ variant.id }}" data-cart-quantity="{{ cart_qty }}" min="{{ quantity_rule.min }}" max="{{ max_qty }}" step="{{ quantity_rule.increment }}" value="{{ cart_qty | default: 0 }}" data-index="{{ variant.id }}">
           <button class="hdt-quantity__button no-js-hidden is--plus hdt-absolute hdt-p-0 hdt-top-0 hdt-right-0 hdt-text-end" name="plus" type="button">
-            <span class="sr-only">{{ 'products.product.quantity.increase' | t: produc: product.title }}</span>
+            <span class="sr-only">{{ 'products.product.quantity.increase' | t: product: product.title }}</span>
             {%- render 'icon' with 'plus' -%}
           </button>
         </hdt-quantity-wrapp>
