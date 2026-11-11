@@ -1,0 +1,134 @@
+{%- liquid
+  assign s = section.settings
+  assign sp_sort = collection.sort_by | default: collection.default_sort_by
+  assign sp_has_filters = false
+  if s.show_filters and collection.filters.size > 0
+    assign sp_has_filters = true
+  endif
+-%}
+<div class="sp-section sp-section--flush sp-coll-hero">
+  <div class="sp-wrap">
+    <nav class="sp-crumbs" aria-label="Breadcrumb">
+      <a href="{{ routes.root_url }}">Home</a><span aria-hidden="true">/</span><span aria-current="page">{{ collection.title | escape }}</span>
+    </nav>
+    <div class="sp-head">
+      {%- if s.eyebrow != blank -%}<span class="sp-eyebrow">{{ s.eyebrow | escape }}</span>{%- endif -%}
+      <h1 class="sp-title">{{ collection.title | escape }}</h1>
+    </div>
+    {%- if s.show_description and collection.description != blank -%}
+      <div class="sp-coll-hero__desc">{{ collection.description }}</div>
+    {%- endif -%}
+  </div>
+</div>
+
+<div class="sp-section sp-section--flush sp-coll">
+  <div class="sp-wrap">
+    {%- paginate collection.products by s.per_page -%}
+      <div class="sp-coll__bar">
+        <div>
+          {%- if sp_has_filters -%}
+            <button type="button" class="sp-btn sp-btn--ghost sp-filters__toggle" data-sp-filters-toggle aria-controls="SpoofyFilters" aria-expanded="false">Filter</button>
+          {%- endif -%}
+          <span>{{ collection.products_count }} {% if collection.products_count == 1 %}product{% else %}products{% endif %}</span>
+        </div>
+        {%- if s.show_sort -%}
+          <label>
+            <span class="sp-vh">Sort by</span>
+            <select class="sp-select" data-sp-sort aria-label="Sort by">
+              {%- for option in collection.sort_options -%}
+                <option value="{{ option.value }}"{% if option.value == sp_sort %} selected{% endif %}>{{ option.name | escape }}</option>
+              {%- endfor -%}
+            </select>
+          </label>
+        {%- endif -%}
+      </div>
+
+      <div class="sp-coll__layout{% if sp_has_filters %} sp-coll__layout--filters{% endif %}">
+        {%- if sp_has_filters -%}
+          <aside class="sp-filters" id="SpoofyFilters" data-sp-filters aria-label="Filters">
+            <form method="get" action="{{ collection.url }}">
+              {%- if collection.sort_by != blank -%}<input type="hidden" name="sort_by" value="{{ collection.sort_by }}">{%- endif -%}
+              {%- for filter in collection.filters -%}
+                <details{% if forloop.index <= 3 or filter.active_values.size > 0 %} open{% endif %}>
+                  <summary>{{ filter.label | escape }}</summary>
+                  {%- case filter.type -%}
+                    {%- when 'price_range' -%}
+                      <div class="sp-range">
+                        <label class="sp-vh" for="SpoofyFilter-{{ forloop.index }}-min">Minimum price</label>
+                        <input id="SpoofyFilter-{{ forloop.index }}-min" type="number" inputmode="numeric" name="{{ filter.min_value.param_name }}" placeholder="Min" min="0" {% if filter.min_value.value %}value="{{ filter.min_value.value | divided_by: 100 }}"{% endif %}>
+                        <span aria-hidden="true">–</span>
+                        <label class="sp-vh" for="SpoofyFilter-{{ forloop.index }}-max">Maximum price</label>
+                        <input id="SpoofyFilter-{{ forloop.index }}-max" type="number" inputmode="numeric" name="{{ filter.max_value.param_name }}" placeholder="Max" min="0" {% if filter.max_value.value %}value="{{ filter.max_value.value | divided_by: 100 }}"{% endif %}>
+                      </div>
+                    {%- else -%}
+                      <div class="sp-filters__list">
+                        {%- for value in filter.values -%}
+                          <label class="sp-check{% if value.count == 0 and value.active == false %} sp-check--off{% endif %}">
+                            <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value | escape }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
+                            <span>{{ value.label | escape }} ({{ value.count }})</span>
+                          </label>
+                        {%- endfor -%}
+                      </div>
+                  {%- endcase -%}
+                </details>
+              {%- endfor -%}
+              <div class="sp-filters__actions">
+                <button type="submit" class="sp-btn">Apply</button>
+                <a class="sp-btn sp-btn--ghost" href="{{ collection.url }}{% if collection.sort_by != blank %}?sort_by={{ collection.sort_by }}{% endif %}">Clear</a>
+              </div>
+            </form>
+          </aside>
+        {%- endif -%}
+
+        <div>
+          {%- if collection.products.size > 0 -%}
+            <div class="sp-grid{% unless sp_has_filters %} sp-grid--4{% endunless %}">
+              {%- for product in collection.products -%}
+                {%- assign sp_card_lazy = true -%}
+                {%- if forloop.index <= 4 -%}{%- assign sp_card_lazy = false -%}{%- endif -%}
+                {%- render 'spoofy-card', product: product, lazy: sp_card_lazy, show_vendor: s.show_vendor, quick_add: s.quick_add -%}
+              {%- endfor -%}
+            </div>
+          {%- else -%}
+            <div class="sp-empty">
+              {%- render 'spoofy-head', eyebrow: 'oh no', title: 'Nothing here yet', tag: 'p' -%}
+              <a class="sp-btn" href="{{ collection.url }}">Clear filters</a>
+            </div>
+          {%- endif -%}
+
+          {%- if paginate.pages > 1 -%}
+            <nav class="sp-pager" aria-label="Pagination">
+              {%- if paginate.previous -%}<a href="{{ paginate.previous.url }}" rel="prev">&larr;<span class="sp-vh">Previous page</span></a>{%- endif -%}
+              {%- for part in paginate.parts -%}
+                {%- if part.is_link -%}
+                  <a href="{{ part.url }}"><span class="sp-vh">Page </span>{{ part.title }}</a>
+                {%- elsif part.title == paginate.current_page -%}
+                  <span class="is-current" aria-current="page"><span class="sp-vh">Page </span>{{ part.title }}</span>
+                {%- else -%}
+                  <span>{{ part.title }}</span>
+                {%- endif -%}
+              {%- endfor -%}
+              {%- if paginate.next -%}<a href="{{ paginate.next.url }}" rel="next">&rarr;<span class="sp-vh">Next page</span></a>{%- endif -%}
+            </nav>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Spoofy product grid",
+  "class": "sp-collection-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Script line", "default": "shop" },
+    { "type": "checkbox", "id": "show_description", "label": "Show collection description", "default": true },
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 12, "max": 48, "step": 4, "default": 24 },
+    { "type": "checkbox", "id": "show_filters", "label": "Show filters", "default": true },
+    { "type": "checkbox", "id": "show_sort", "label": "Show sorting", "default": true },
+    { "type": "checkbox", "id": "show_vendor", "label": "Show brand", "default": true },
+    { "type": "checkbox", "id": "quick_add", "label": "Show add to cart button", "default": true }
+  ]
+}
+{% endschema %}

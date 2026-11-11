@@ -1,0 +1,17 @@
+{%- comment -%}
+  Price display. Accepts: price, compare (both in cents), show_save (boolean)
+{%- endcomment -%}
+<span class="sp-price">
+  {%- if compare != blank and compare > price -%}
+    <span class="sp-vh">{{ 'products.product.price.sale_price' | t }}</span>
+    <span class="sp-price__now sp-price__now--sale">{{ price | money }}</span>
+    <span class="sp-vh">{{ 'products.product.price.regular_price' | t }}</span>
+    <s class="sp-price__compare">{{ compare | money }}</s>
+    {%- if show_save -%}
+      {%- assign sp_saving = compare | minus: price | times: 100.0 | divided_by: compare | round -%}
+      <span class="sp-price__save">Save {{ sp_saving }}%</span>
+    {%- endif -%}
+  {%- else -%}
+    <span class="sp-price__now">{{ price | money }}</span>
+  {%- endif -%}
+</span>

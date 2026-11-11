@@ -1,93 +1,19 @@
 {
   "sections": {
-    "heading": {
-      "type": "heading-collection",
-      "blocks": {
-        "9a1347b4-da62-490d-9fd4-427a03686ac2": {
-          "type": "heading",
-          "settings": {
-            "heading": "",
-            "hidden_br_mobile": false,
-            "hidden_on_mobile": false,
-            "heading_size": "h4",
-            "text_color": "hdt-s-text",
-            "font_size_heading_lg": 50,
-            "font_size_heading_md": 30,
-            "font_size_heading": 24,
-            "font_weight_heading": 600,
-            "letter_spacing_heading": 0
-          }
-        },
-        "6df762d7-beda-4452-bcf6-1242b294077c": {
-          "type": "description",
-          "settings": {
-            "description": "",
-            "short_des": false,
-            "limit_words": 15
-          }
-        }
-      },
-      "block_order": [
-        "9a1347b4-da62-490d-9fd4-427a03686ac2",
-        "6df762d7-beda-4452-bcf6-1242b294077c"
-      ],
-      "settings": {
-        "spacing_hd": 10,
-        "color_scheme": "",
-        "padding_top": 65,
-        "padding_bottom": 65,
-        "padding_rate": 75
-      }
-    },
-    "custom_liquid_PaRbxa": {
-      "type": "custom-liquid",
-      "disabled": true,
-      "name": "t:sections.custom-liquid.presets.name",
-      "settings": {
-        "section_fullwidth": false,
-        "custom_liquid": "<style>\n.mega-cat-wrapper {\n  overflow: hidden;\n  width: 100%;\n  padding: 30px 20px;\n}\n\n.mega-cat-track {\n  display: flex;\n  gap: 60px;\n  width: max-content;\n  animation: autoScroll 25s linear infinite;\n}\n\n/* Pause on hover */\n.mega-cat-wrapper:hover .mega-cat-track {\n  animation-play-state: paused;\n}\n\n@keyframes autoScroll {\n  0% { transform: translateX(0); }\n  100% { transform: translateX(-50%); }\n}\n\n.mega-cat-item {\n  flex: 0 0 auto;\n  text-decoration: none;\n  text-align: center;\n}\n\n.mega-cat-item img {\n  width: 110px;\n  height: 110px;\n  object-fit: contain;\n  transition: transform 0.35s ease;\n}\n\n.mega-cat-item:hover img {\n  transform: scale(1.1);\n}\n\n.mega-cat-item div {\n  margin-top: 12px;\n  font-weight: 700;\n  color: #000;\n}\n</style>\n\n<div class=\"mega-cat-wrapper\">\n  <div class=\"mega-cat-track\">\n\n    <!-- ORIGINAL ITEMS -->\n    <a href=\"/collections/Golden-Retriever\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_10.png?v=1774980891&width=200\">\n      <div>Golden Retriever</div>\n    </a>\n\n    <a href=\"/collections/German-Shepherd\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_8.png?v=1774980891&width=200\">\n      <div>German Shepherd</div>\n    </a>\n\n    <a href=\"/collections/Labrador\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_2.png?v=1774980891&width=200\">\n      <div>Labrador</div>\n    </a>\n\n    <a href=\"/collections/Rottweiler\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_9.png?v=1774980891&width=200\">\n      <div>Rottweiler</div>\n    </a>\n\n    <a href=\"/collections/Beagle\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_7.png?v=1774980891&width=200\">\n      <div>Beagle</div>\n    </a>\n\n    <a href=\"/collections/Shih-Tzu\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_1.png?v=1774980891&width=200\">\n      <div>Shih Tzu</div>\n    </a>\n\n    <a href=\"/collections/Boxer\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_6.png?v=1774980891&width=200\">\n      <div>Boxer</div>\n    </a>\n\n    <a href=\"/collections/Pug\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_3.png?v=1774980891&width=200\">\n      <div>Pug</div>\n    </a>\n\n    <a href=\"/collections/Husky\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_5.png?v=1774980891&width=200\">\n      <div>Husky</div>\n    </a>\n\n    <a href=\"/collections/Doberman\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_4.png?v=1774980891&width=200\">\n      <div>Doberman</div>\n    </a>\n\n    <!-- DUPLICATE (for infinite smooth scroll) -->\n    <a href=\"/collections/Golden-Retriever\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_10.png?v=1774980891&width=200\">\n      <div>Golden Retriever</div>\n    </a>\n\n    <a href=\"/collections/German-Shepherd\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_8.png?v=1774980891&width=200\">\n      <div>German Shepherd</div>\n    </a>\n\n    <a href=\"/collections/Labrador\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_2.png?v=1774980891&width=200\">\n      <div>Labrador</div>\n    </a>\n\n    <a href=\"/collections/Rottweiler\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_9.png?v=1774980891&width=200\">\n      <div>Rottweiler</div>\n    </a>\n\n    <a href=\"/collections/Beagle\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_7.png?v=1774980891&width=200\">\n      <div>Beagle</div>\n    </a>\n\n    <a href=\"/collections/Shih-Tzu\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_1.png?v=1774980891&width=200\">\n      <div>Shih Tzu</div>\n    </a>\n\n    <a href=\"/collections/Boxer\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_6.png?v=1774980891&width=200\">\n      <div>Boxer</div>\n    </a>\n\n    <a href=\"/collections/Pug\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_3.png?v=1774980891&width=200\">\n      <div>Pug</div>\n    </a>\n\n    <a href=\"/collections/Husky\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_5.png?v=1774980891&width=200\">\n      <div>Husky</div>\n    </a>\n\n    <a href=\"/collections/Doberman\" class=\"mega-cat-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0844/2816/1381/files/spoofy_breed_4.png?v=1774980891&width=200\">\n      <div>Doberman</div>\n    </a>\n\n  </div>\n</div>",
-        "color_scheme": "scheme-4f7d5921-8567-40ac-8211-ef87792674d6",
-        "padding_top": 0,
-        "padding_bottom": 0,
-        "padding_rate": 75
-      }
-    },
     "main": {
-      "type": "main-collection",
+      "type": "spoofy-collection",
       "settings": {
-        "product_des": "4",
-        "image_ratio": "asos",
-        "image_size": true,
+        "eyebrow": "shop",
+        "show_description": true,
+        "per_page": 24,
+        "show_filters": true,
+        "show_sort": true,
         "show_vendor": true,
-        "pr_border": "in_image",
-        "products_count": 32,
-        "col_dk": "6",
-        "col_tb": "4",
-        "col_mb": "2",
-        "pagination_type": "infinite",
-        "paginate_pos": "center",
-        "dis_pagination": 40,
-        "enable_sorting": true,
-        "enable_filtering": true,
-        "price_behavior": "auto",
-        "enable_num_cols_selector": true,
-        "widget_heading": "Product categories",
-        "cat_source": "1",
-        "cat_link_list": "",
-        "count": false,
-        "section_fullwidth": false,
-        "color_scheme": "scheme-1",
-        "sidebar_position": "left",
-        "sidebar_size": "medium",
-        "padding_top": 30,
-        "padding_bottom": 50,
-        "padding_rate": 75
+        "quick_add": true
       }
     }
   },
   "order": [
-    "heading",
-    "custom_liquid_PaRbxa",
     "main"
   ]
 }

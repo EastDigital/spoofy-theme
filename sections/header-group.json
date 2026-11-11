@@ -1,1 +1,110 @@
-{"type":"header","name":"Header Group","sections":{"top":{"type":"top-bar","blocks":{"4e4868cb-7e32-4be5-b72a-6597eee26df0":{"type":"link_list","settings":{"menu_link":"explore","hide":true}},"f8313b43-d393-4ff3-ba8e-1743f04ec3cd":{"type":"text","disabled":true,"settings":{"text1":"Spring Fashion Sale: Time to refresh your wardrobe.. <a href=\"\/collections\" title=\"All collections\">Shop now[icon_arrow]<\/a>","text2":"","text3":"","icon_svg":"","adding_border":true,"au_time":3.5,"pause_when_hover":false,"hide":false}},"cc756577-3a45-43a4-9740-aa0421715990":{"type":"cur","settings":{"html":"Need help? <span class=\"hdt-font-bold\">Whatsapp: <a href=\"https:\/\/wa.me\/+919711611625\" style=\"text-decoration: underline;\n\">+919711611625<\/a><\/span>","show_currency":false,"show_language":false,"hide":false}}},"block_order":["4e4868cb-7e32-4be5-b72a-6597eee26df0","f8313b43-d393-4ff3-ba8e-1743f04ec3cd","cc756577-3a45-43a4-9740-aa0421715990"],"custom_css":[],"settings":{"color_scheme":"scheme-67a7ca9f-3333-4245-b79f-2e9849d7e615","show_line_separator":false,"fullwidth":false}},"253a0bf7-ad2a-40ac-8e9b-5702c6e4db50":{"type":"header-menu-bottom","blocks":{"mega_page_brE7fg":{"type":"mega_page","settings":{"title":"Cats","mega_menu_colors":"","mega_position":"center_on_screen","mega_width":"full","mega_custom_width":1200}},"mega_page_8EDpFT":{"type":"mega_page","settings":{"title":"Dogs","mega_menu_colors":"","mega_position":"center_on_screen","mega_width":"full","mega_custom_width":1200}},"html_dEQ9Ft":{"type":"html","settings":{"title":"Shop by Breed","html":"<style>\n.mega-cat-wrapper {\n  overflow: hidden;\n  width: 100%;\n  padding: 30px 20px;\n}\n\n.mega-cat-track {\n  display: flex;\n  gap: 60px;\n  width: max-content;\n  animation: autoScroll 25s linear infinite;\n}\n\n\/* Pause on hover *\/\n.mega-cat-wrapper:hover .mega-cat-track {\n  animation-play-state: paused;\n}\n\n@keyframes autoScroll {\n  0% { transform: translateX(0); }\n  100% { transform: translateX(-50%); }\n}\n\n.mega-cat-item {\n  flex: 0 0 auto;\n  text-decoration: none;\n  text-align: center;\n}\n\n.mega-cat-item img {\n  width: 110px;\n  height: 110px;\n  object-fit: contain;\n  transition: transform 0.35s ease;\n}\n\n.mega-cat-item:hover img {\n  transform: scale(1.1);\n}\n\n.mega-cat-item div {\n  margin-top: 12px;\n  font-weight: 700;\n  color: #000;\n}\n<\/style>\n\n<div class=\"mega-cat-wrapper\">\n  <div class=\"mega-cat-track\">\n\n    <!-- ORIGINAL ITEMS -->\n    <a href=\"\/collections\/golden-retriever\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_10.png?v=1774980891&amp;width=200\">\n      <div>Golden Retriever<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/german-shepherd\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_8.png?v=1774980891&amp;width=200\">\n      <div>German Shepherd<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/labrador\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_2.png?v=1774980891&amp;width=200\">\n      <div>Labrador<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/rottweiler\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_9.png?v=1774980891&amp;width=200\">\n      <div>Rottweiler<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/beagle\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_7.png?v=1774980891&amp;width=200\">\n      <div>Beagle<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/shih-tzu\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_1.png?v=1774980891&amp;width=200\">\n      <div>Shih Tzu<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/boxer\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_6.png?v=1774980891&amp;width=200\">\n      <div>Boxer<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/pug\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_3.png?v=1774980891&amp;width=200\">\n      <div>Pug<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/husky\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_5.png?v=1774980891&amp;width=200\">\n      <div>Husky<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/doberman\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_4.png?v=1774980891&amp;width=200\">\n      <div>Doberman<\/div>\n    <\/a>\n\n    <!-- DUPLICATE (for infinite smooth scroll) -->\n    <a href=\"\/collections\/golden-retriever\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_10.png?v=1774980891&amp;width=200\">\n      <div>Golden Retriever<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/german-shepherd\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_8.png?v=1774980891&amp;width=200\">\n      <div>German Shepherd<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/labrador\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_2.png?v=1774980891&amp;width=200\">\n      <div>Labrador<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/rottweiler\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_9.png?v=1774980891&amp;width=200\">\n      <div>Rottweiler<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/beagle\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_7.png?v=1774980891&amp;width=200\">\n      <div>Beagle<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/shih-tzu\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_1.png?v=1774980891&amp;width=200\">\n      <div>Shih Tzu<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/boxer\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_6.png?v=1774980891&amp;width=200\">\n      <div>Boxer<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/pug\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_3.png?v=1774980891&amp;width=200\">\n      <div>Pug<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/husky\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_5.png?v=1774980891&amp;width=200\">\n      <div>Husky<\/div>\n    <\/a>\n\n    <a href=\"\/collections\/doberman\" class=\"mega-cat-item\">\n      <img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0844\/2816\/1381\/files\/spoofy_breed_4.png?v=1774980891&amp;width=200\">\n      <div>Doberman<\/div>\n    <\/a>\n\n  <\/div>\n<\/div>","page":"","mega_menu_colors":"","mega_position":"default","mega_width":"full","mega_custom_width":1200}}},"block_order":["mega_page_brE7fg","mega_page_8EDpFT","html_dEQ9Ft"],"custom_css":[".hdt-search_form .hdt-search_input {outline: 0;}"],"settings":{"header_layout":"logo_left","header_fullwidth":false,"logo":"shopify:\/\/shop_images\/Final_Spoofy_logo_new.png","logo_width":160,"header_height":60,"header_colors":"scheme-1","enabled_user":true,"enabled_compare":false,"enabled_wishlist":false,"search_only_product":true,"header_bottom_height":60,"main_menu":"new-main","lazy_mn":true,"menu_position":"start","menu_size":"lg","menu_weight":"bold","text_transform":true,"dropdown_arrow":true,"active_link":false,"spacing_nav":30,"open_event":"hover","header_menu_colors":"scheme-1","header_categories":true,"title_categories":"Browse All Categories","menu_categories":"categories","other_content":"<div class=\"hdt-flex hdt-align-center\" style=\" gap:18px;\">\n<div class=\"hdt-icon\"><svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"28\" height=\"28\" viewbox=\"0 0 28 28\" fill=\"none\">\n<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M2.21989 13.7008C2.19942 13.7199 2.18295 13.743 2.17143 13.7685C2.1599 13.7941 2.15354 13.8217 2.15272 13.8497V18.5857C2.15272 19.4124 2.83298 20.0926 3.65962 20.0926H5.5256C5.64874 20.0926 5.74087 20.0005 5.74087 19.8774V13.8497C5.73977 13.793 5.71674 13.7389 5.6766 13.6987C5.63647 13.6586 5.58235 13.6356 5.5256 13.6345H2.36799C2.3118 13.6361 2.25855 13.66 2.21989 13.7008ZM0 13.8497C0.00339224 13.2228 0.253966 12.6224 0.697317 12.1791C1.14067 11.7357 1.74101 11.4851 2.36799 11.4817H5.5256C6.15335 11.4827 6.75513 11.7324 7.19902 12.1763C7.64291 12.6202 7.89268 13.222 7.89359 13.8497V19.8774C7.89428 20.1885 7.83349 20.4967 7.71473 20.7844C7.59597 21.072 7.42157 21.3333 7.20154 21.5533C6.98152 21.7733 6.7202 21.9477 6.4326 22.0665C6.14499 22.1852 5.83676 22.246 5.5256 22.2453H3.65962C1.64468 22.2453 0 20.6007 0 18.5857V13.8497Z\" fill=\"#253D4E\"><\/path>\n<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M13.9927 2.15272C12.8144 2.1517 11.6476 2.38302 10.5588 2.83344C9.47008 3.28386 8.48083 3.94455 7.64769 4.77769C6.81455 5.61083 6.15387 6.60007 5.70345 7.68882C5.25303 8.77756 5.02171 9.94444 5.02273 11.1227V12.5719C5.02273 12.8574 4.90933 13.1311 4.70747 13.333C4.50561 13.5348 4.23184 13.6482 3.94637 13.6482C3.6609 13.6482 3.38712 13.5348 3.18527 13.333C2.98341 13.1311 2.87001 12.8574 2.87001 12.5719V11.1227C2.87001 4.97451 7.84451 0 13.9927 0C20.1409 0 25.1154 4.97451 25.1154 11.1227V12.5581C25.1154 12.8436 25.002 13.1174 24.8001 13.3192C24.5982 13.5211 24.3245 13.6345 24.039 13.6345C23.7535 13.6345 23.4798 13.5211 23.2779 13.3192C23.076 13.1174 22.9626 12.8436 22.9626 12.5581V11.1227C22.9626 6.16281 18.9525 2.15272 13.9927 2.15272ZM24.107 20.1133C24.2457 20.1411 24.3775 20.1959 24.495 20.2746C24.6124 20.3534 24.7132 20.4545 24.7916 20.5722C24.87 20.6899 24.9244 20.8219 24.9517 20.9607C24.979 21.0994 24.9788 21.2422 24.9509 21.3808C24.1914 25.1601 20.859 28 16.8627 28H15.4281C15.1426 28 14.8689 27.8866 14.667 27.6847C14.4652 27.4829 14.3518 27.2091 14.3518 26.9236C14.3518 26.6382 14.4652 26.3644 14.667 26.1625C14.8689 25.9607 15.1426 25.8473 15.4281 25.8473H16.8627C18.2705 25.8473 19.635 25.3603 20.7245 24.4688C21.8141 23.5773 22.5617 22.3362 22.8404 20.9563C22.8967 20.6766 23.0617 20.4307 23.2992 20.2726C23.5367 20.1146 23.8273 20.0572 24.107 20.1133Z\" fill=\"#253D4E\"><\/path>\n<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M22.3117 13.7008C22.2912 13.7199 22.2747 13.743 22.2632 13.7685C22.2517 13.7941 22.2453 13.8217 22.2445 13.8497V19.8774C22.2445 19.9936 22.3444 20.0926 22.4598 20.0926H24.2543C25.124 20.0926 25.8326 19.3831 25.8326 18.5134V13.8497C25.8315 13.793 25.8085 13.7389 25.7684 13.6987C25.7282 13.6586 25.6741 13.6356 25.6174 13.6345H22.4598C22.4036 13.6361 22.3503 13.66 22.3117 13.7008ZM20.0918 13.8497C20.0952 13.2228 20.3457 12.6224 20.7891 12.1791C21.2324 11.7357 21.8328 11.4851 22.4598 11.4817H25.6174C26.2451 11.4827 26.8469 11.7324 27.2908 12.1763C27.7347 12.6202 27.9845 13.222 27.9854 13.8497V18.5134C27.9847 19.5028 27.5914 20.4515 26.8918 21.1512C26.1923 21.8509 25.2437 22.2444 24.2543 22.2453H22.4598C21.832 22.2444 21.2302 21.9947 20.7863 21.5508C20.3425 21.1069 20.0927 20.5051 20.0918 19.8774V13.8497Z\" fill=\"#253D4E\"><\/path>\n<\/svg><\/div>\n<div class=\"hdt-number hdt-flex hdt-flex-col\">\n<a href=\"tel:\" style=\" font-size:28px; font-weight:700; color:rgb(var(--color-accent)); line-height:28px;\">8826611289<\/a>\n<span style=\" font-size:14px; font-weight:500;color: rgb(var(--color-foreground))\">Support Center<\/span>\n<\/div>\n<\/div>","header_border":"top_bottom","header_height_mb":60,"logo_width_mb":130,"main_menu_mobile":"main-menu","lazy_mn_mb":true,"only_click_icon":false,"header_mobile_colors":"scheme-2","note_mobile":"<span class=\"hdt-inline-flex hdt-text-base hdt-font-medium\" style=\"color: rgb(var(--color-foreground));border-bottom: solid 1px rgb(var(--color-foreground));margin-bottom: 11px;\"><a href=\"https:\/\/demo-ecomus-global.myshopify.com\/pages\/contact-1\">Need help ?<\/a><\/span><span class=\"hdt-flex hdt-flex-col hdt-text-base hdt-font-normal\" style=\"line-height: 24px;\"><span>Address: Spoofy, 12-S, Peacock court, Wave City Centre, Sector 32, Noida, Uttar Pradesh 201307\u2028<\/span><span>Email: <b>info@fashionshop.com\u2028<\/b><\/span><span>Phone: <b>(212) 555-1234<\/b><\/span><\/span>","sticky_type":"on_scroll_up","sticky_glass":false}}},"order":["top","253a0bf7-ad2a-40ac-8e9b-5702c6e4db50"]}
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "spoofy_announcement": {
+      "type": "spoofy-announcement",
+      "blocks": {
+        "cod": {
+          "type": "message",
+          "settings": {
+            "text": "Cash on Delivery Available",
+            "link": ""
+          }
+        },
+        "help": {
+          "type": "message",
+          "settings": {
+            "text": "Need help? WhatsApp +919711611625",
+            "link": "https://wa.me/+919711611625"
+          }
+        }
+      },
+      "block_order": [
+        "cod",
+        "help"
+      ],
+      "settings": {
+        "repeat": 4
+      }
+    },
+    "spoofy_header": {
+      "type": "spoofy-header",
+      "blocks": {
+        "dogs": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Dogs",
+            "link": "shopify://collections/dogs",
+            "menu": ""
+          }
+        },
+        "cats": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Cats",
+            "link": "shopify://collections/cats",
+            "menu": ""
+          }
+        },
+        "shop": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Shop",
+            "link": "shopify://collections/all",
+            "menu": "categories"
+          }
+        },
+        "spa": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Spa & Cafe",
+            "link": "shopify://pages/spoofy-cafe",
+            "menu": ""
+          }
+        },
+        "story": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Our Story",
+            "link": "shopify://pages/about-us",
+            "menu": ""
+          }
+        },
+        "blog": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Blog",
+            "link": "shopify://blogs/news",
+            "menu": ""
+          }
+        },
+        "contact": {
+          "type": "nav_item",
+          "settings": {
+            "label": "Contact",
+            "link": "shopify://pages/contact",
+            "menu": ""
+          }
+        }
+      },
+      "block_order": [
+        "dogs",
+        "cats",
+        "shop",
+        "spa",
+        "story",
+        "blog",
+        "contact"
+      ],
+      "settings": {
+        "logo": "shopify://shop_images/Final_Spoofy_logo_new.png",
+        "help_text": ""
+      }
+    }
+  },
+  "order": [
+    "spoofy_announcement",
+    "spoofy_header"
+  ]
+}

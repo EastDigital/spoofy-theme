@@ -50,11 +50,12 @@
       render 'css-variables', is_rtl: is_rtl
       echo 'theme.css' | asset_url | stylesheet_tag
       echo 'hdt-product-card.scss.css' | asset_url | stylesheet_tag
-      echo 'spoofy-boutique.css' | asset_url | stylesheet_tag
+      echo 'spoofy.css' | asset_url | stylesheet_tag
       if request.page_type == "policy"
       echo 'hdt-policy.css' | asset_url | stylesheet_tag
       endif
     -%}
+    <script src="{{ 'spoofy.js' | asset_url }}" defer></script>
     {{ content_for_header }}
     {%- endunless -%}
 

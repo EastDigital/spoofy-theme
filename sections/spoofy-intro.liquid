@@ -1,0 +1,40 @@
+{%- assign s = section.settings -%}
+<div class="sp-section sp-intro{% if s.background == 'sand' %} sp-section--sand{% endif %}">
+  <div class="sp-wrap">
+    {%- render 'spoofy-head', eyebrow: s.eyebrow, title: s.title, text: s.text, tag: s.heading_tag -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="sp-actions">
+        {%- for block in section.blocks -%}
+          <a class="sp-btn{% if block.settings.style == 'ghost' %} sp-btn--ghost{% endif %}" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Spoofy intro text",
+  "class": "sp-intro-section",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Script line", "default": "welcome to" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Spoofy" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "select", "id": "heading_tag", "label": "Heading level", "options": [{ "value": "h2", "label": "H2" }, { "value": "p", "label": "Paragraph" }], "default": "h2" },
+    { "type": "select", "id": "background", "label": "Background", "options": [{ "value": "ivory", "label": "Ivory" }, { "value": "sand", "label": "Sand" }], "default": "ivory" }
+  ],
+  "blocks": [
+    {
+      "type": "button",
+      "name": "Button",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Shop now" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "select", "id": "style", "label": "Style", "options": [{ "value": "solid", "label": "Solid" }, { "value": "ghost", "label": "Outline" }], "default": "solid" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Spoofy intro text", "blocks": [{ "type": "button" }] }]
+}
+{% endschema %}

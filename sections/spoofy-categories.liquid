@@ -1,0 +1,55 @@
+{%- assign s = section.settings -%}
+<div class="sp-section{% if s.background == 'sand' %} sp-section--sand{% endif %}">
+  <div class="sp-wrap">
+    {%- render 'spoofy-head', eyebrow: s.eyebrow, title: s.title -%}
+    <div class="sp-cats" style="--sp-cat-cols: {{ section.blocks.size | at_most: 8 | at_least: 1 }};">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign b = block.settings
+          assign sp_coll = b.collection
+          if s.hide_empty and sp_coll != blank and sp_coll.all_products_count == 0
+            continue
+          endif
+          assign sp_img = b.image | default: sp_coll.featured_image
+          assign sp_name = b.title | default: sp_coll.title
+        -%}
+        <a class="sp-cat" href="{{ sp_coll.url | default: '#' }}" {{ block.shopify_attributes }}>
+          <span class="sp-cat__img">
+            {%- render 'spoofy-img', image: sp_img, sizes: '150px', alt: '', placeholder: 'collection-2' -%}
+          </span>
+          <span class="sp-cat__name">{{ sp_name | escape }}</span>
+          {%- if s.show_count and sp_coll != blank -%}
+            <span class="sp-cat__count">{{ sp_coll.all_products_count }} items</span>
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Spoofy categories",
+  "class": "sp-categories-section",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Script line", "default": "shop by" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Category" },
+    { "type": "checkbox", "id": "show_count", "label": "Show number of items", "default": false },
+    { "type": "checkbox", "id": "hide_empty", "label": "Hide categories with no products", "default": true },
+    { "type": "select", "id": "background", "label": "Background", "options": [{ "value": "ivory", "label": "Ivory" }, { "value": "sand", "label": "Sand" }], "default": "ivory" }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Optional. Defaults to the collection image." },
+        { "type": "text", "id": "title", "label": "Name", "info": "Optional. Defaults to the collection title." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Spoofy categories", "blocks": [{ "type": "category" }, { "type": "category" }, { "type": "category" }, { "type": "category" }] }]
+}
+{% endschema %}

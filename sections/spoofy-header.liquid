@@ -1,0 +1,160 @@
+{%- liquid
+  assign sp_logo = section.settings.logo
+-%}
+<header class="sp-header">
+  <div class="sp-wrap">
+    <div class="sp-header__bar">
+      <div class="sp-header__side">
+        <button type="button" class="sp-icon-btn sp-header__menu-btn" data-sp-drawer-open aria-controls="SpoofyMenu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5h18M3 12h18M3 17.5h18"/></svg>
+          <span class="sp-vh">Menu</span>
+        </button>
+        <button type="button" class="sp-icon-btn" data-sp-search-toggle aria-controls="SpoofySearch" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6"/></svg>
+          <span class="sp-vh">{{ 'general.search.search' | t | default: 'Search' }}</span>
+        </button>
+        {%- if section.settings.help_text != blank -%}
+          <span class="sp-header__help">{{ section.settings.help_text }}</span>
+        {%- endif -%}
+      </div>
+
+      <a class="sp-header__logo" href="{{ routes.root_url }}">
+        {%- if sp_logo != blank -%}
+          {%- assign sp_logo_alt = sp_logo.alt | default: shop.name -%}
+          {{ sp_logo | image_url: width: 440 | image_tag: loading: 'eager', widths: '170, 220, 340, 440', sizes: '220px', alt: sp_logo_alt }}
+        {%- else -%}
+          <span class="sp-header__logo-text">{{ shop.name | escape }}</span>
+        {%- endif -%}
+      </a>
+
+      <div class="sp-header__side sp-header__side--end">
+        {%- if shop.customer_accounts_enabled -%}
+          <a class="sp-icon-btn" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20.5c1.4-3.6 4.4-5.5 8-5.5s6.6 1.9 8 5.5"/></svg>
+            <span class="sp-vh">Account</span>
+          </a>
+        {%- endif -%}
+        <a class="sp-icon-btn" href="{{ routes.cart_url }}"{% if request.page_type != 'cart' %} aria-controls="CartDrawer"{% endif %}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12.5H6L5 8z"/><path d="M9 8V6.5a3 3 0 016 0V8"/></svg>
+          <span class="sp-vh">Cart</span>
+          <hdt-cart-count class="sp-cart-count" data-sp-cart-count aria-hidden="true">{{ cart.item_count }}</hdt-cart-count>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="sp-nav" aria-label="Main">
+    <div class="sp-wrap">
+      <ul class="sp-nav__list" role="list">
+        {%- for block in section.blocks -%}
+          {%- assign sp_menu = block.settings.menu -%}
+          <li class="sp-nav__item" {{ block.shopify_attributes }}>
+            {%- if sp_menu != blank and sp_menu.links.size > 0 -%}
+              <a class="sp-nav__link" href="{{ block.settings.link | default: '#' }}" aria-haspopup="true">
+                {{- block.settings.label | escape -}}
+                <svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+              </a>
+              <div class="sp-nav__panel">
+                <div class="sp-wrap">
+                  <ul class="sp-nav__cols" role="list">
+                    {%- for link in sp_menu.links -%}
+                      <li>
+                        {%- if link.links.size > 0 -%}
+                          <a class="sp-nav__group-title" href="{{ link.url }}">{{ link.title | escape }}</a>
+                          <ul role="list">
+                            {%- for child in link.links -%}
+                              <li><a href="{{ child.url }}">{{ child.title | escape }}</a></li>
+                            {%- endfor -%}
+                          </ul>
+                        {%- else -%}
+                          <a href="{{ link.url }}">{{ link.title | escape }}</a>
+                        {%- endif -%}
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                  {%- if block.settings.link != blank -%}
+                    <div class="sp-nav__all"><a class="sp-link" href="{{ block.settings.link }}">{{ block.settings.all_label | default: 'Shop all' | escape }}</a></div>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- else -%}
+              <a class="sp-nav__link" href="{{ block.settings.link | default: '#' }}">{{ block.settings.label | escape }}</a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </nav>
+
+  <div class="sp-search" id="SpoofySearch" data-sp-search>
+    <div class="sp-wrap">
+      <form action="{{ routes.search_url }}" method="get" role="search">
+        <label class="sp-vh" for="SpoofySearchInput">Search products</label>
+        <input id="SpoofySearchInput" type="search" name="q" placeholder="Search for food, toys, treats…" autocomplete="off">
+        <input type="hidden" name="type" value="product">
+        <button type="submit" class="sp-btn">Search</button>
+      </form>
+    </div>
+  </div>
+</header>
+
+<div class="sp-drawer" id="SpoofyMenu" data-sp-drawer aria-hidden="true">
+  <button type="button" class="sp-drawer__scrim" data-sp-drawer-close tabindex="-1"><span class="sp-vh">Close menu</span></button>
+  <div class="sp-drawer__panel sp-header" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="sp-drawer__top">
+      <span class="sp-drawer__title">Menu</span>
+      <button type="button" class="sp-icon-btn" data-sp-drawer-close>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        <span class="sp-vh">Close menu</span>
+      </button>
+    </div>
+    {%- for block in section.blocks -%}
+      {%- assign sp_menu = block.settings.menu -%}
+      {%- if sp_menu != blank and sp_menu.links.size > 0 -%}
+        <details>
+          <summary>{{ block.settings.label | escape }}</summary>
+          <ul role="list">
+            {%- if block.settings.link != blank -%}
+              <li><a href="{{ block.settings.link }}">{{ block.settings.all_label | default: 'Shop all' | escape }}</a></li>
+            {%- endif -%}
+            {%- for link in sp_menu.links -%}
+              <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              {%- for child in link.links -%}
+                <li><a href="{{ child.url }}">{{ child.title | escape }}</a></li>
+              {%- endfor -%}
+            {%- endfor -%}
+          </ul>
+        </details>
+      {%- else -%}
+        <a class="sp-drawer__link" href="{{ block.settings.link | default: '#' }}">{{ block.settings.label | escape }}</a>
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if section.settings.help_text != blank -%}
+      <div class="sp-drawer__foot">{{ section.settings.help_text }}</div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Spoofy header",
+  "class": "sp-header-section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "inline_richtext", "id": "help_text", "label": "Help text", "info": "Shown next to search on desktop and at the bottom of the mobile menu." }
+  ],
+  "blocks": [
+    {
+      "type": "nav_item",
+      "name": "Menu item",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Shop" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "link_list", "id": "menu", "label": "Dropdown menu", "info": "Optional. Its links appear in a dropdown under this item." },
+        { "type": "text", "id": "all_label", "label": "Label for the view-all link", "default": "Shop all" }
+      ]
+    }
+  ]
+}
+{% endschema %}

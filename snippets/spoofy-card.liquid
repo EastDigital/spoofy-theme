@@ -1,0 +1,62 @@
+{%- comment -%}
+  Product card. Accepts: product, lazy (default true), show_vendor, quick_add
+{%- endcomment -%}
+{%- liquid
+  assign sp_lazy = 'lazy'
+  if lazy == false
+    assign sp_lazy = 'eager'
+  endif
+  assign sp_variant = product.selected_or_first_available_variant
+  assign sp_alt = product.featured_media.alt | default: product.title
+  assign sp_on_sale = false
+  if product.compare_at_price > product.price
+    assign sp_on_sale = true
+  endif
+-%}
+<article class="sp-card{% unless product.available %} is-soldout{% endunless %}">
+  <div class="sp-card__media">
+    {%- if product.featured_media -%}
+      {%- assign sp_has_alt = false -%}
+      {%- if product.media.size > 1 and product.media[1].media_type == 'image' -%}{%- assign sp_has_alt = true -%}{%- endif -%}
+      {{ product.featured_media | image_url: width: 900 | image_tag: loading: sp_lazy, widths: '200, 300, 400, 600, 900', sizes: '(min-width: 1100px) 300px, (min-width: 768px) 30vw, 46vw', alt: sp_alt, class: 'sp-card__img--main' }}
+      {%- if sp_has_alt -%}
+        {{ product.media[1] | image_url: width: 900 | image_tag: loading: 'lazy', widths: '200, 300, 400, 600, 900', sizes: '(min-width: 1100px) 300px, (min-width: 768px) 30vw, 46vw', alt: '', class: 'sp-card__img--alt' }}
+      {%- endif -%}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag }}
+    {%- endif -%}
+    <div class="sp-badges">
+      {%- if product.available == false -%}
+        <span class="sp-badge sp-badge--soldout">{{ 'products.product.sold_out' | t }}</span>
+      {%- elsif sp_on_sale -%}
+        {%- assign sp_pct = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
+        <span class="sp-badge sp-badge--sale">-{{ sp_pct }}%</span>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="sp-card__body">
+    {%- if show_vendor != false and product.vendor != blank -%}
+      <span class="sp-card__vendor">{{ product.vendor | escape }}</span>
+    {%- endif -%}
+    <h3 class="sp-card__title"><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
+    {%- render 'spoofy-price', price: product.price, compare: product.compare_at_price -%}
+    {%- if quick_add != false -%}
+      <div class="sp-card__cta">
+        {%- if product.available == false -%}
+          <a class="sp-btn sp-btn--ghost" href="{{ product.url }}">{{ 'products.product.sold_out' | t }}</a>
+        {%- elsif product.has_only_default_variant -%}
+          <form method="post" action="{{ routes.cart_add_url }}" data-sp-add>
+            <input type="hidden" name="id" value="{{ sp_variant.id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="sp-btn sp-btn--ghost">
+              {{- 'products.product.add_to_cart' | t -}}
+              <span class="sp-vh">: {{ product.title | escape }}</span>
+            </button>
+          </form>
+        {%- else -%}
+          <a class="sp-btn sp-btn--ghost" href="{{ product.url }}">Choose options</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</article>

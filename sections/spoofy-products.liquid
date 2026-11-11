@@ -1,0 +1,55 @@
+{%- liquid
+  assign s = section.settings
+  assign sp_coll = s.collection
+  assign sp_shown = 0
+-%}
+<div class="sp-section{% if s.background == 'sand' %} sp-section--sand{% endif %}">
+  <div class="sp-wrap">
+    {%- render 'spoofy-head', eyebrow: s.eyebrow, title: s.title -%}
+    <div class="sp-rail" data-sp-rail>
+      <div class="sp-rail__nav">
+        <button type="button" class="sp-rail__btn" data-sp-rail-btn="prev"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2L4 8l6 6"/></svg><span class="sp-vh">Previous products</span></button>
+        <button type="button" class="sp-rail__btn" data-sp-rail-btn="next"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2l6 6-6 6"/></svg><span class="sp-vh">Next products</span></button>
+      </div>
+      <div class="sp-rail__track" data-sp-rail-track tabindex="0" role="group" aria-label="{{ s.title | default: 'Products' | escape }}">
+        {%- if sp_coll != blank -%}
+          {%- for product in sp_coll.products limit: 24 -%}
+            {%- if s.hide_soldout and product.available == false -%}{%- continue -%}{%- endif -%}
+            {%- if sp_shown >= s.limit -%}{%- break -%}{%- endif -%}
+            {%- assign sp_shown = sp_shown | plus: 1 -%}
+            {%- render 'spoofy-card', product: product, show_vendor: s.show_vendor, quick_add: s.quick_add -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..4) -%}
+            <article class="sp-card">
+              <div class="sp-card__media">{{ 'product-1' | placeholder_svg_tag }}</div>
+              <div class="sp-card__body"><h3 class="sp-card__title">Product title</h3><span class="sp-price">{{ 1999 | money }}</span></div>
+            </article>
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+    {%- if s.button_label != blank and sp_coll != blank -%}
+      <div class="sp-center"><a class="sp-btn sp-btn--ghost" href="{{ sp_coll.url }}">{{ s.button_label | escape }}</a></div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Spoofy product row",
+  "class": "sp-products-section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Script line", "default": "most loved" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Best sellers" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    { "type": "range", "id": "limit", "label": "Products to show", "min": 4, "max": 12, "step": 1, "default": 8 },
+    { "type": "checkbox", "id": "hide_soldout", "label": "Skip sold-out products", "default": true },
+    { "type": "checkbox", "id": "show_vendor", "label": "Show brand", "default": true },
+    { "type": "checkbox", "id": "quick_add", "label": "Show add to cart button", "default": true },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "View all" },
+    { "type": "select", "id": "background", "label": "Background", "options": [{ "value": "ivory", "label": "Ivory" }, { "value": "sand", "label": "Sand" }], "default": "ivory" }
+  ],
+  "presets": [{ "name": "Spoofy product row" }]
+}
+{% endschema %}

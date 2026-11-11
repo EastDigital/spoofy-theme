@@ -1,0 +1,45 @@
+{%- liquid
+  assign s = section.settings
+  assign sp_bg = ''
+  if s.background == 'sand'
+    assign sp_bg = ' sp-section--sand'
+  elsif s.background == 'navy'
+    assign sp_bg = ' sp-section--ink'
+  endif
+-%}
+<div class="sp-section{{ sp_bg }}">
+  <div class="sp-wrap">
+    <div class="sp-split{% if s.flip %} sp-split--flip{% endif %}">
+      <div class="sp-split__media">
+        {%- render 'spoofy-img', image: s.image, sizes: '(min-width: 900px) 50vw, 100vw', alt: s.title, placeholder: 'lifestyle-1' -%}
+      </div>
+      <div class="sp-split__body">
+        {%- render 'spoofy-head', eyebrow: s.eyebrow, title: s.title -%}
+        {%- if s.text != blank -%}<div class="sp-split__text">{{ s.text }}</div>{%- endif -%}
+        {%- if s.button_label != blank -%}
+          <div class="sp-actions">
+            <a class="sp-btn{% if s.background == 'navy' %} sp-btn--light{% endif %}" href="{{ s.link | default: '#' }}">{{ s.button_label | escape }}</a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Spoofy image with text",
+  "class": "sp-split-section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "checkbox", "id": "flip", "label": "Image on the right", "default": false },
+    { "type": "text", "id": "eyebrow", "label": "Script line", "default": "more than a store" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Spoofy Spa & Cafe" },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Visit us" },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "select", "id": "background", "label": "Background", "options": [{ "value": "ivory", "label": "Ivory" }, { "value": "sand", "label": "Sand" }, { "value": "navy", "label": "Navy" }], "default": "sand" }
+  ],
+  "presets": [{ "name": "Spoofy image with text" }]
+}
+{% endschema %}
