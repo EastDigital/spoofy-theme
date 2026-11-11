@@ -206,6 +206,23 @@
       t.addEventListener('click', function () { showMedia(t.getAttribute('data-sp-thumb')); });
     });
 
+    /* Click or tap the main photo to zoom in on the spot you pressed */
+    if (stage) {
+      stage.addEventListener('click', function (e) {
+        var r = stage.getBoundingClientRect();
+        stage.style.setProperty('--sp-zoom-x', ((e.clientX - r.left) / r.width * 100) + '%');
+        stage.style.setProperty('--sp-zoom-y', ((e.clientY - r.top) / r.height * 100) + '%');
+        stage.classList.toggle('is-zoomed');
+      });
+      stage.addEventListener('mousemove', function (e) {
+        if (!stage.classList.contains('is-zoomed')) return;
+        var r = stage.getBoundingClientRect();
+        stage.style.setProperty('--sp-zoom-x', ((e.clientX - r.left) / r.width * 100) + '%');
+        stage.style.setProperty('--sp-zoom-y', ((e.clientY - r.top) / r.height * 100) + '%');
+      });
+      stage.addEventListener('mouseleave', function () { stage.classList.remove('is-zoomed'); });
+    }
+
     function currentVariant() {
       var groups = $$('[data-sp-option]', root);
       if (!groups.length) return variants[0];
